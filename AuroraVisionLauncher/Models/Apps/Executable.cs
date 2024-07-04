@@ -66,10 +66,10 @@ public abstract record Executable
         {
             "aurora vision studio" => new AuroraStudioExecutable(fvinfo),
             "adaptive vision studio" => new AdaptiveStudioExecutable(fvinfo),
-            "fabimage studio" => new AuroraStudioExecutable(fvinfo),
+        "fabimage studio" => new FabStudioExecutable(fvinfo),
             "aurora vision executor" => new AuroraStudioExecutable(fvinfo),
             "adaptive vision executor" => new AdaptiveRuntimeExecutable(fvinfo),
-            "fabimage runtime" => new AuroraStudioExecutable(fvinfo),
+        "fabimage runtime" => new FabRuntimeExecutable(fvinfo),
             _ => throw new InvalidOperationException($"Unsupported product type: {fvinfo.ProductName}")
         };
     }
