@@ -11,7 +11,9 @@
         <conv:FileToIconConverter x:Key="FileIconConverter"/>
     </UserControl.Resources>
     <DockPanel x:Name="Root">
-        <Image Source="{Binding Item.ExePath,Converter={StaticResource FileIconConverter}}" DockPanel.Dock="Left" Margin="0,0,8,0"/>
+        <Grid DockPanel.Dock="Left">
+            <Image Source="{Binding Item.ExePath,Converter={StaticResource FileIconConverter}}"  Margin="0,0,8,0"/>
+        </Grid>
         <StackPanel TextBlock.FontSize="18">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding Item.Name}"/>

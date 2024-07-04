@@ -13,28 +13,22 @@ public enum Compatibility
     Outdated,
     Supported,
 }
-public enum ReleaseType
-{
-    Public,
-    Development
-}
 public abstract record Executable
 {
     public string ExePath { get; }
     public Version Version { get; }
     public string Name { get; }
-    public ReleaseType ReleaseType { get; }
+    public bool IsDevelopmentBuild => Version.Build >= 1000;
     public Compatibility Compatibility { get; private set; } = Compatibility.Unknown;
     protected abstract ReadOnlyCollection<ProgramType> SupportedAppTypes { get; }
     protected Executable(FileVersionInfo fvinfo)
     {
         ExePath = fvinfo.FileName;
-        Version = ParseVersion(fvinfo, out ReleaseType type);
-        ReleaseType=type;
+        Version = ParseVersion(fvinfo);
         Name = fvinfo.ProductName ?? "N/A";
     }
     private static Version PlaceholderVersion => new Version(0, 0);
-    protected static Version ParseVersion(FileVersionInfo fvinfo, out ReleaseType releaseVersion)
+    protected static Version ParseVersion(FileVersionInfo fvinfo)
     {
         string? productVersion = fvinfo.ProductVersion;
         if (string.IsNullOrWhiteSpace(productVersion))
@@ -46,11 +40,6 @@ public abstract record Executable
             productVersion = productVersion.Split(' ', StringSplitOptions.TrimEntries)[0];
         }
         Version ver = Version.Parse(productVersion);
-        releaseVersion = ReleaseType.Public;
-        if (ver.Build >= 1000)
-        {
-            releaseVersion = ReleaseType.Development;
-        }
         return ver;
     }
     protected Executable()
