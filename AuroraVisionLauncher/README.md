@@ -17,6 +17,7 @@ Bugs and feature requests should be filed at https://aka.ms/templatestudio.
 - Proper support for parsing and comparing trunk versions
     - Trunk version have buld version >=1000
     - Build versions mean a change in the interface and/or filter signatures (and that means the older older versions may no be ale to read it)
+- Mark executables that are already running (those cannot be launched)
 - Fix runtime exes
 - Show executables that are currently running
 - Add context menu to executables
