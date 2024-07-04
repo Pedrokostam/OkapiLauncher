@@ -24,10 +24,6 @@ public partial class MainViewModel : ObservableRecipient, IRecipient<FileRequest
         _appProvider = appProvider;
         _navigationService = navigationService;
         OnActivated();
-        foreach (var executable in _appProvider.Executables)
-        {
-            Apps.Add(executable);
-        }
     }
 
 
