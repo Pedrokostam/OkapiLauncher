@@ -115,17 +115,17 @@ public abstract record Executable
         {
             return -1;
         }
-        List<double> weights= new List<double>(executables.Count);
+        List<double> weights = new List<double>(executables.Count);
         foreach (Executable executable in executables)
         {
-            double weight =0;
-            bool isProgramRuntime =info.Type==ProgramType.AuroraVisionRuntime|| info.Type==ProgramType.FabImageRuntime;
+            double weight = 0;
+            bool isProgramRuntime = info.Type == ProgramType.AuroraVisionRuntime || info.Type == ProgramType.FabImageRuntime;
             if ((isProgramRuntime && executable is not RuntimeExecutable) || (!isProgramRuntime && executable is RuntimeExecutable))
             {
                 weight = -1e21;
             }
-            double programVersionTransformed = info.Version.Major*1e12 + info.Version.Minor*1e9 + info.Version.Build*1e6 +info.Version.Revision;
-            double executableVersionTransformed = executable.Version.Major*1e12 + executable.Version.Minor*1e9 + executable.Version.Build*1e6 +executable.Version.Revision;
+            double programVersionTransformed = info.Version.Major * 1e12 + info.Version.Minor * 1e9 + info.Version.Build * 1e6 + info.Version.Revision;
+            double executableVersionTransformed = executable.Version.Major * 1e12 + executable.Version.Minor * 1e9 + executable.Version.Build * 1e6 + executable.Version.Revision;
             weight += executableVersionTransformed - programVersionTransformed;
             weights.Add(Math.Abs(weight));
         }
