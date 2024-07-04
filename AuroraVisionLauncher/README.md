@@ -15,6 +15,8 @@ Bugs and feature requests should be filed at https://aka.ms/templatestudio.
 ## TODO
 
 - Proper support for parsing and comparing trunk versions
+    - Trunk version have buld version >=1000
+    - Build versions mean a change in the interface and/or filter signatures (and that means the older older versions may no be ale to read it)
 - Fix runtime exes
 - Add registry file associations
 
