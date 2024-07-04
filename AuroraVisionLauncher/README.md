@@ -1,6 +1,4 @@
-﻿*Recommended Markdown Viewer: [Markdown Editor](https://marketplace.visualstudio.com/items?itemName=MadsKristensen.MarkdownEditor2)*
-
-## Getting Started
+﻿## Getting Started
 
 Browse and address `TODO:` comments in `View -> Task List` to learn the codebase and understand next steps for turning the generated code into production code.
 
@@ -13,3 +11,13 @@ See [releases](https://github.com/microsoft/TemplateStudio/releases) and [milest
 ## Feedback
 
 Bugs and feature requests should be filed at https://aka.ms/templatestudio.
+
+## TODO
+
+- Proper support for parsing and comparing trunk versions
+    - Trunk version have buld version >=1000
+    - Build versions mean a change in the interface and/or filter signatures (and that means the older older versions may no be ale to read it)
+- Fix runtime exes
+- Add registry file associations
+
+
