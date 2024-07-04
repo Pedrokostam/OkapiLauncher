@@ -23,7 +23,18 @@ public abstract record Executable
     protected Executable(FileVersionInfo fvinfo)
     {
         ExePath = fvinfo.FileName;
-        Version = new Version(fvinfo.ProductVersion ?? "0.0.0.0");
+        if (Version.TryParse(fvinfo.ProductVersion ?? "0.0.0.0", out Version? ver))
+        {
+            Version = ver;
+        }
+        else if (Version.TryParse(fvinfo.FileVersion ?? "0.0.0.0", out ver))
+        {
+            Version = ver;
+        }
+        else
+        {
+            Version = new Version();
+        }
         Name = fvinfo.ProductName ?? "N/A";
     }
     protected Executable()
@@ -66,10 +77,10 @@ public abstract record Executable
         {
             "aurora vision studio" => new AuroraStudioExecutable(fvinfo),
             "adaptive vision studio" => new AdaptiveStudioExecutable(fvinfo),
-        "fabimage studio" => new FabStudioExecutable(fvinfo),
+            "fabimage studio" => new FabStudioExecutable(fvinfo),
             "aurora vision executor" => new AuroraStudioExecutable(fvinfo),
             "adaptive vision executor" => new AdaptiveRuntimeExecutable(fvinfo),
-        "fabimage runtime" => new FabRuntimeExecutable(fvinfo),
+            "fabimage runtime" => new FabRuntimeExecutable(fvinfo),
             _ => throw new InvalidOperationException($"Unsupported product type: {fvinfo.ProductName}")
         };
     }
