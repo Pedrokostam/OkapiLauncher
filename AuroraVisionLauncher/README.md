@@ -18,6 +18,10 @@ Bugs and feature requests should be filed at https://aka.ms/templatestudio.
     - Trunk version have buld version >=1000
     - Build versions mean a change in the interface and/or filter signatures (and that means the older older versions may no be ale to read it)
 - Fix runtime exes
+- Show executables that are currently running
+- Add context menu to executables
+    - Open containing folder
+    - Launch without program
 - Add registry file associations
 
 
