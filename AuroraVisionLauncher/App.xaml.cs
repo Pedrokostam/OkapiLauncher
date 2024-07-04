@@ -12,7 +12,9 @@ using AuroraVisionLauncher.Models.Messages;
 using AuroraVisionLauncher.Services;
 using AuroraVisionLauncher.ViewModels;
 using AuroraVisionLauncher.Views;
+
 using CommunityToolkit.Mvvm.Messaging;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -86,11 +88,12 @@ public partial class App : Application
         services.AddSingleton<IInstalledAppsProviderService, InstalledAppsProviderService>();
 
         // Views and ViewModels
-        services.AddTransient<IShellWindow, ShellWindow>();
-        services.AddTransient<ShellViewModel>();
+        services.AddSingleton<IShellWindow, ShellWindow>();
+        services.AddSingleton<ShellViewModel>();
 
-        services.AddTransient<MainViewModel>();
-        services.AddTransient<MainPage>();
+        services.AddSingleton<MainViewModel>();
+        services.AddSingleton<MainPage>();
+
 
         services.AddTransient<BlankViewModel>();
         services.AddTransient<BlankPage>();
@@ -100,6 +103,9 @@ public partial class App : Application
 
         services.AddTransient<IShellDialogWindow, ShellDialogWindow>();
         services.AddTransient<ShellDialogViewModel>();
+
+        services.AddTransient<InstalledAppsViewModel>();
+        services.AddTransient<InstalledAppsPage>();
 
         // Configuration
         services.Configure<AppConfig>(context.Configuration.GetSection(nameof(AppConfig)));

@@ -1,0 +1,59 @@
+﻿<Page
+    x:Class="AuroraVisionLauncher.Views.InstalledAppsPage"
+    Style="{DynamicResource MahApps.Styles.Page}"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:vms="clr-namespace:AuroraVisionLauncher.ViewModels"
+    xmlns:controls="clr-namespace:AuroraVisionLauncher.Controls"
+    xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type={x:Type vms:InstalledAppsViewModel}}"
+    d:DesignHeight="450" d:DesignWidth="800">
+	<Page.Resources>
+		<CollectionViewSource x:Key="CustomViewSource" Source="{Binding Executables}" IsLiveGroupingRequested="True">
+			<CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="Name" />
+			</CollectionViewSource.GroupDescriptions>
+			<!--<CollectionViewSource.SortDescriptions>
+                <componentModel:SortDescription PropertyName="YourPropertyForOrdering" />
+            </CollectionViewSource.SortDescriptions>-->
+		</CollectionViewSource>
+	</Page.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="48" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+		<TextBlock
+            Style="{StaticResource PageTitleStyle}"
+            Margin="{StaticResource MediumLeftMargin}"
+            Text="{x:Static properties:Resources.InstalledAppsPageTitle}" />
+		<Grid
+            Grid.Row="1"
+            Margin="{StaticResource MediumLeftRightMargin}"
+            Background="{DynamicResource MahApps.Brushes.Gray10}">
+			<!--
+            The Mahapps Gray10 color represents where you should place your content.
+            Place your content here.
+            -->
+			<ListView ItemsSource="{Binding Source={StaticResource CustomViewSource}}"  >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <controls:ExecutableDisplayControl Item="{Binding}"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+				<ListView.GroupStyle>
+					<GroupStyle>
+						<GroupStyle.HeaderTemplate>
+							<DataTemplate >
+								<TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="14"/>
+							</DataTemplate>
+						</GroupStyle.HeaderTemplate>
+					</GroupStyle>
+				</ListView.GroupStyle>
+			</ListView>
+		</Grid>
+	</Grid>
+</Page>

@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
+    <data name="ShellMenuItemViewsInstalledAppsPageHeader" xml:space="preserve">
+		    <value>InstalledApps</value>
+    </data>
+    <data name="InstalledAppsPageTitle" xml:space="preserve">
+		    <value>InstalledApps</value>
+    </data>
+
   <!-- 
     Microsoft ResX Schema 
     

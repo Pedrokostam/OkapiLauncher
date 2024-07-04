@@ -6,6 +6,7 @@
     xmlns:conv ="clr-namespace:AuroraVisionLauncher.Converters"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:controls="clr-namespace:AuroraVisionLauncher.Controls"
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     x:Class="AuroraVisionLauncher.Views.MainPage"
@@ -21,17 +22,7 @@
                     <TextBlock Text="Tooltip test"/>
                 </Grid.ToolTip>
                 <Rectangle Fill="Transparent"/>
-                <DockPanel>
-                    <Image Source="{Binding ExePath,Converter={StaticResource FileIconConverter}}" DockPanel.Dock="Left" Margin="0,0,8,0"/>
-                    <StackPanel TextBlock.FontSize="18">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Name}"/>
-                            <TextBlock Text=" - "/>
-                            <TextBlock Text="{Binding Version}"/>
-                        </StackPanel>
-                        <TextBlock Text="{Binding ExePath}"/>
-                    </StackPanel>
-                </DockPanel>
+                <controls:ExecutableDisplayControl Item="{Binding}"/>
             </Grid>
         </DataTemplate>
         <CollectionViewSource x:Key="CustomViewSource" Source="{Binding Apps}" IsLiveGroupingRequested="True">

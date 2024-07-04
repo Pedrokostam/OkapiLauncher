@@ -239,5 +239,27 @@ namespace AuroraVisionLauncher.Properties {
                 return ResourceManager.GetString("ShellMenuViewsHeader", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to InstalledApps.
+        /// </summary>
+        public static string InstalledAppsPageTitle
+        {
+            get
+            {
+                return ResourceManager.GetString("InstalledAppsPageTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to MenuItemViewsInstalledAppsPageHeader.
+        /// </summary>
+        public static string ShellMenuItemViewsInstalledAppsPageHeader
+        {
+            get
+            {
+                return ResourceManager.GetString("ShellMenuItemViewsInstalledAppsPageHeader", resourceCulture);
+            }
+        }
     }
 }

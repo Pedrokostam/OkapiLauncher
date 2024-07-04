@@ -23,6 +23,7 @@ public class ShellViewModel : ObservableObject
 
     private RelayCommand _goBackCommand;
     private ICommand _menuFileSettingsOpenProjectCommand;
+    private ICommand _menuViewsInstalledAppsCommand;
     private ICommand _menuFileSettingsCommand;
     private ICommand _menuViewsBlankCommand;
     private ICommand _menuViewsMainCommand;
@@ -33,7 +34,7 @@ public class ShellViewModel : ObservableObject
     public RelayCommand GoBackCommand => _goBackCommand ??= new RelayCommand(OnGoBack, CanGoBack);
 
     public ICommand MenuFileSettingsOpenProjectCommand => _menuFileSettingsOpenProjectCommand ?? new RelayCommand(OnMenuFileOpenProject);
-
+    public ICommand MenuViewsInstalledAppsCommand => _menuViewsInstalledAppsCommand ??= new RelayCommand(OnMenuViewsInstalledApps);
     public ICommand MenuFileSettingsCommand => _menuFileSettingsCommand ??= new RelayCommand(OnMenuFileSettings);
 
     public ICommand MenuFileExitCommand => _menuFileExitCommand ??= new RelayCommand(OnMenuFileExit);
@@ -87,12 +88,15 @@ public class ShellViewModel : ObservableObject
     private void OnMenuFileSettings()
         => _rightPaneService.OpenInRightPane(typeof(SettingsViewModel).FullName);
 
+    private void OnMenuViewsInstalledApps()
+        => _navigationService.NavigateTo(typeof(InstalledAppsViewModel).FullName, null, true);
     private void OnMenuFileOpenProject()
     {
         var dialog = new Microsoft.Win32.OpenFileDialog();
         dialog.Filter = "All Files (*.*)|*.*|Aurora Vision Files|*.avproj;*.avexe|FabImage Files|*.fiproj;*.fiexe|Project Files|*.avproj;*.fiproj|Runtime Files|*.avexe;*.fiexe";
         dialog.Multiselect = false;
         var result = dialog.ShowDialog();
+        _navigationService.NavigateTo(typeof(MainViewModel).FullName!);
         if (result == true)
         {
             OpenProject(dialog.FileName);

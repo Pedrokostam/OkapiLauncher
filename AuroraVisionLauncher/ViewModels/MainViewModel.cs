@@ -16,10 +16,13 @@ namespace AuroraVisionLauncher.ViewModels;
 
 public partial class MainViewModel : ObservableRecipient, IRecipient<FileRequestedMessage>
 {
-    readonly    IInstalledAppsProviderService _appProvider;
-    public MainViewModel(IMessenger messenger, IInstalledAppsProviderService appProvider) : base(messenger)
+    private readonly IInstalledAppsProviderService _appProvider;
+    private readonly INavigationService _navigationService;
+
+    public MainViewModel(IMessenger messenger, IInstalledAppsProviderService appProvider, INavigationService navigationService) : base(messenger)
     {
         _appProvider = appProvider;
+        _navigationService = navigationService;
         OnActivated();
         foreach (var executable in _appProvider.Executables)
         {
