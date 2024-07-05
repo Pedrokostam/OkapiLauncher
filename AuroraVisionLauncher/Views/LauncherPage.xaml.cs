@@ -4,9 +4,9 @@ using AuroraVisionLauncher.ViewModels;
 
 namespace AuroraVisionLauncher.Views;
 
-public partial class MainPage : Page
+public partial class LauncherPage : Page
 {
-    public MainPage(MainViewModel viewModel)
+    public LauncherPage(LauncherViewModel viewModel)
     {
         InitializeComponent();
         DataContext = viewModel;

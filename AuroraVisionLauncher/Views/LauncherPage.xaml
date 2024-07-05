@@ -8,10 +8,10 @@
     xmlns:controls="clr-namespace:AuroraVisionLauncher.Controls"
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-    x:Class="AuroraVisionLauncher.Views.MainPage"
+    x:Class="AuroraVisionLauncher.Views.LauncherPage"
     Style="{DynamicResource MahApps.Styles.Page}"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type={x:Type vms:MainViewModel}}"
+    d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type={x:Type vms:LauncherViewModel}}"
     d:DesignHeight="450" d:DesignWidth="800">
     <Page.Resources>
         <conv:FileToIconConverter x:Key="FileIconConverter"/>

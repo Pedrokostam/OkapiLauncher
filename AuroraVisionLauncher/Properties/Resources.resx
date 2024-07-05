@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-    <data name="ShellMenuItemViewsInstalledAppsPageHeader" xml:space="preserve">
-		    <value>InstalledApps</value>
-    </data>
-    <data name="InstalledAppsPageTitle" xml:space="preserve">
-		    <value>InstalledApps</value>
-    </data>
-
   <!-- 
     Microsoft ResX Schema 
     
@@ -124,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ShellMenuItemViewsInstalledAppsPageHeader" xml:space="preserve">
+    <value>Installed _applications</value>
+  </data>
+  <data name="InstalledAppsPageTitle" xml:space="preserve">
+    <value>InstalledApps</value>
+  </data>
   <data name="ShellMenuItemFileSettingsPageHeader" xml:space="preserve">
     <value>_Settings</value>
   </data>
@@ -154,14 +153,11 @@
   <data name="SettingsPageRadioButtonWindowsDefaultTheme" xml:space="preserve">
     <value>Default</value>
   </data>
-  <data name="ShellMenuItemViewsBlankPageHeader" xml:space="preserve">
-    <value>Blank</value>
-  </data>
   <data name="BlankPageTitle" xml:space="preserve">
     <value>Blank</value>
   </data>
-  <data name="ShellMenuItemViewsMainPageHeader" xml:space="preserve">
-    <value>Main</value>
+  <data name="ShellMenuItemViewsLauncherPageHeader" xml:space="preserve">
+    <value>_Launcher</value>
   </data>
   <data name="MainPageTitle" xml:space="preserve">
     <value>Opening project</value>

@@ -15,12 +15,12 @@ using AuroraVisionLauncher.Models;
 
 namespace AuroraVisionLauncher.ViewModels;
 
-public partial class MainViewModel : ObservableRecipient, IRecipient<FileRequestedMessage>
+public partial class LauncherViewModel : ObservableRecipient, IRecipient<FileRequestedMessage>
 {
     private readonly IInstalledAppsProviderService _appProvider;
     private readonly INavigationService _navigationService;
 
-    public MainViewModel(IMessenger messenger, IInstalledAppsProviderService appProvider, INavigationService navigationService) : base(messenger)
+    public LauncherViewModel(IMessenger messenger, IInstalledAppsProviderService appProvider, INavigationService navigationService) : base(messenger)
     {
         _appProvider = appProvider;
         _navigationService = navigationService;

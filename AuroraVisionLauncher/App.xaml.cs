@@ -91,8 +91,8 @@ public partial class App : Application
         services.AddSingleton<IShellWindow, ShellWindow>();
         services.AddSingleton<ShellViewModel>();
 
-        services.AddSingleton<MainViewModel>();
-        services.AddSingleton<MainPage>();
+        services.AddSingleton<LauncherViewModel>();
+        services.AddSingleton<LauncherPage>();
 
         services.AddTransient<SettingsViewModel>();
         services.AddTransient<SettingsPage>();

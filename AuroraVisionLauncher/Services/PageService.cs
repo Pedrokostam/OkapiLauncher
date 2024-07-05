@@ -16,7 +16,7 @@ public class PageService : IPageService
     public PageService(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
-        Configure<MainViewModel, MainPage>();
+        Configure<LauncherViewModel, LauncherPage>();
         Configure<SettingsViewModel, SettingsPage>();
         Configure<InstalledAppsViewModel, InstalledAppsPage>();
     }

@@ -79,6 +79,15 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to InstalledApps.
+        /// </summary>
+        public static string InstalledAppsPageTitle {
+            get {
+                return ResourceManager.GetString("InstalledAppsPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Opening project.
         /// </summary>
         public static string MainPageTitle {
@@ -214,20 +223,20 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Blank.
+        ///   Looks up a localized string similar to Installed _applications.
         /// </summary>
-        public static string ShellMenuItemViewsBlankPageHeader {
+        public static string ShellMenuItemViewsInstalledAppsPageHeader {
             get {
-                return ResourceManager.GetString("ShellMenuItemViewsBlankPageHeader", resourceCulture);
+                return ResourceManager.GetString("ShellMenuItemViewsInstalledAppsPageHeader", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Main.
+        ///   Looks up a localized string similar to _Launcher.
         /// </summary>
-        public static string ShellMenuItemViewsMainPageHeader {
+        public static string ShellMenuItemViewsLauncherPageHeader {
             get {
-                return ResourceManager.GetString("ShellMenuItemViewsMainPageHeader", resourceCulture);
+                return ResourceManager.GetString("ShellMenuItemViewsLauncherPageHeader", resourceCulture);
             }
         }
         
@@ -237,28 +246,6 @@ namespace AuroraVisionLauncher.Properties {
         public static string ShellMenuViewsHeader {
             get {
                 return ResourceManager.GetString("ShellMenuViewsHeader", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to InstalledApps.
-        /// </summary>
-        public static string InstalledAppsPageTitle
-        {
-            get
-            {
-                return ResourceManager.GetString("InstalledAppsPageTitle", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to MenuItemViewsInstalledAppsPageHeader.
-        /// </summary>
-        public static string ShellMenuItemViewsInstalledAppsPageHeader
-        {
-            get
-            {
-                return ResourceManager.GetString("ShellMenuItemViewsInstalledAppsPageHeader", resourceCulture);
             }
         }
     }
