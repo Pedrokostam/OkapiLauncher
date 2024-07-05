@@ -16,9 +16,9 @@ public class PageService : IPageService
     public PageService(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
-        Configure<MainViewModel, MainPage>();
-        Configure<BlankViewModel, BlankPage>();
+        Configure<LauncherViewModel, LauncherPage>();
         Configure<SettingsViewModel, SettingsPage>();
+        Configure<InstalledAppsViewModel, InstalledAppsPage>();
     }
 
     public Type GetPageType(string key)

@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AuroraVisionLauncher.Models.Apps;
+using AuroraVisionLauncher.Core.Models.Apps;
 
-namespace AuroraVisionLauncher.Models
+namespace AuroraVisionLauncher.Core.Models
 {
     public record VisionProgram(string Name, Version Version, string Path, ProgramType Type)
     {

@@ -1,0 +1,38 @@
+﻿using System.Collections.ObjectModel;
+using System.Windows.Threading;
+using AuroraVisionLauncher.Contracts.Services;
+using AuroraVisionLauncher.Core.Models.Apps;
+using AuroraVisionLauncher.Models;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+
+namespace AuroraVisionLauncher.ViewModels;
+
+public class InstalledAppsViewModel : ObservableObject
+{
+    private readonly IInstalledAppsProviderService _appProvider;
+    private DispatcherTimer _timer;
+    public InstalledAppsViewModel(IInstalledAppsProviderService appsProviderService)
+    {
+        _appProvider = appsProviderService;
+        foreach (var exe in _appProvider.Executables)
+        {
+            Executables.Add(new(exe));
+        }
+        _timer = new DispatcherTimer();
+        UpdateRunningStatus();
+        _timer.Tick += (o,e) => UpdateRunningStatus();
+        _timer.Interval = TimeSpan.FromSeconds(2);
+        _timer.Start();
+    }
+
+    private void UpdateRunningStatus()
+    {
+        foreach (var exe in Executables)
+        {
+            exe.IsLaunched = exe.CheckIfProcessIsRunning();
+        }
+    }
+
+    public ObservableCollection<ExecutableFacade> Executables { get; } = new();
+}

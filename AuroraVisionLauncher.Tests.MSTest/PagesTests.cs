@@ -45,8 +45,7 @@ public class PagesTests
 
         // ViewModels
         services.AddTransient<SettingsViewModel>();
-        services.AddTransient<MainViewModel>();
-        services.AddTransient<BlankViewModel>();
+        services.AddSingleton<LauncherViewModel>();
 
         // Configuration
         services.Configure<AppConfig>(context.Configuration.GetSection(nameof(AppConfig)));
@@ -76,19 +75,19 @@ public class PagesTests
 
     // TODO: Add tests for functionality you add to MainViewModel.
     [TestMethod]
-    public void TestMainViewModelCreation()
+    public void TestLauncherViewModelCreation()
     {
-        var vm = _host.Services.GetService(typeof(MainViewModel));
+        var vm = _host.Services.GetService(typeof(LauncherViewModel));
         Assert.IsNotNull(vm);
     }
 
     [TestMethod]
-    public void TestGetMainPageType()
+    public void TestGetLauncherPageType()
     {
         if (_host.Services.GetService(typeof(IPageService)) is IPageService pageService)
         {
-            var pageType = pageService.GetPageType(typeof(MainViewModel).FullName);
-            Assert.AreEqual(typeof(MainPage), pageType);
+            var pageType = pageService.GetPageType(typeof(LauncherViewModel).FullName);
+            Assert.AreEqual(typeof(LauncherPage), pageType);
         }
         else
         {
@@ -96,25 +95,5 @@ public class PagesTests
         }
     }
 
-    // TODO: Add tests for functionality you add to BlankViewModel.
-    [TestMethod]
-    public void TestBlankViewModelCreation()
-    {
-        var vm = _host.Services.GetService(typeof(BlankViewModel));
-        Assert.IsNotNull(vm);
-    }
-
-    [TestMethod]
-    public void TestGetBlankPageType()
-    {
-        if (_host.Services.GetService(typeof(IPageService)) is IPageService pageService)
-        {
-            var pageType = pageService.GetPageType(typeof(BlankViewModel).FullName);
-            Assert.AreEqual(typeof(BlankPage), pageType);
-        }
-        else
-        {
-            Assert.Fail($"Can't resolve {nameof(IPageService)}");
-        }
-    }
+    
 }

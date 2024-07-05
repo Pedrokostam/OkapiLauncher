@@ -24,7 +24,7 @@ public class WindowManagerService : IWindowManagerService
         _pageService = pageService;
     }
 
-    public void OpenInNewWindow(string key, object parameter = null)
+    public void OpenInNewWindow(string key, object? parameter = null)
     {
         var window = GetWindow(key);
         if (window != null)

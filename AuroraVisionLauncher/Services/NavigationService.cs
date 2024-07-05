@@ -9,10 +9,10 @@ namespace AuroraVisionLauncher.Services;
 public class NavigationService : INavigationService
 {
     private readonly IPageService _pageService;
-    private Frame _frame;
-    private object _lastParameterUsed;
+    private Frame _frame=default!;
+    private object? _lastParameterUsed;
 
-    public event EventHandler<string> Navigated;
+    public event EventHandler<string>? Navigated;
 
     public bool CanGoBack => _frame.CanGoBack;
 
@@ -33,7 +33,7 @@ public class NavigationService : INavigationService
     public void UnsubscribeNavigation()
     {
         _frame.Navigated -= OnNavigated;
-        _frame = null;
+        _frame = null!;
     }
 
     public void GoBack()
@@ -49,7 +49,7 @@ public class NavigationService : INavigationService
         }
     }
 
-    public bool NavigateTo(string pageKey, object parameter = null, bool clearNavigation = false)
+    public bool NavigateTo(string pageKey, object? parameter = null, bool clearNavigation = false)
     {
         var pageType = _pageService.GetPageType(pageKey);
 

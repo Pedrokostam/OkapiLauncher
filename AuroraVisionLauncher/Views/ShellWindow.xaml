@@ -6,11 +6,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:vms="clr-namespace:AuroraVisionLauncher.ViewModels"
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
     Style="{StaticResource CustomMetroWindow}"
     mc:Ignorable="d"
     MinWidth="500"
     MinHeight="350"
+    d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type={x:Type vms:ShellViewModel}}"
+    
     Title="{x:Static properties:Resources.AppDisplayName}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -59,15 +62,15 @@
                     </Grid.RowDefinitions>
                     <Menu Grid.Row="0" Focusable="False">
                         <MenuItem Header="{x:Static properties:Resources.ShellMenuFileHeader}" AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}">
-                            <MenuItem Header="{x:Static properties:Resources.ShellMenuItemFileSettingsOpenProject}" Command="{Binding MenuFileSettingsOpenProjectCommand}" AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}" />
+                            <MenuItem Header="{x:Static properties:Resources.ShellMenuItemFileSettingsOpenProject}" Command="{Binding MenuFileOpenProjectCommand}" AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}" />
                             <MenuItem Header="{x:Static properties:Resources.ShellMenuItemFileSettingsPageHeader}" Command="{Binding MenuFileSettingsCommand}" AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}" />
                             <Separator />
                             <MenuItem Header="{x:Static properties:Resources.ShellMenuItemFileExitHeader}" Command="{Binding MenuFileExitCommand}" AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}" />
                         </MenuItem>
                         <MenuItem Header="{x:Static properties:Resources.ShellMenuViewsHeader}" AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}">
                             <!--TODO: Review the MenuItem headers in Resources.resx file for all of your views and place '_' before the letter that you want to use for menu keyboard usage-->
-                            <MenuItem Header="{x:Static properties:Resources.ShellMenuItemViewsMainPageHeader}" Command="{Binding MenuViewsMainCommand}" AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}" />
-                            <MenuItem Header="{x:Static properties:Resources.ShellMenuItemViewsBlankPageHeader}" Command="{Binding MenuViewsBlankCommand}" AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}" />
+                            <MenuItem Header="{x:Static properties:Resources.ShellMenuItemViewsLauncherPageHeader}" Command="{Binding MenuViewsLauncherCommand}" AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}" />
+                            <MenuItem Header="{x:Static properties:Resources.ShellMenuItemViewsInstalledAppsPageHeader}" Command="{Binding MenuViewsInstalledAppsCommand}" AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}" />
                         </MenuItem>
                     </Menu>
                     <Frame

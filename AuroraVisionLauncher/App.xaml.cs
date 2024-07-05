@@ -12,7 +12,9 @@ using AuroraVisionLauncher.Models.Messages;
 using AuroraVisionLauncher.Services;
 using AuroraVisionLauncher.ViewModels;
 using AuroraVisionLauncher.Views;
+
 using CommunityToolkit.Mvvm.Messaging;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -55,6 +57,8 @@ public partial class App : Application
                 .Build();
 
         await _host.StartAsync();
+        // initialize launcher vm, so that it can start listening to FileRequestMessages
+        GetService<LauncherViewModel>();
         if (e.Args.Length == 1)
         {
             GetService<IMessenger>().Send(new FileRequestedMessage(e.Args[0]));
@@ -86,20 +90,20 @@ public partial class App : Application
         services.AddSingleton<IInstalledAppsProviderService, InstalledAppsProviderService>();
 
         // Views and ViewModels
-        services.AddTransient<IShellWindow, ShellWindow>();
-        services.AddTransient<ShellViewModel>();
+        services.AddSingleton<IShellWindow, ShellWindow>();
+        services.AddSingleton<ShellViewModel>();
 
-        services.AddTransient<MainViewModel>();
-        services.AddTransient<MainPage>();
-
-        services.AddTransient<BlankViewModel>();
-        services.AddTransient<BlankPage>();
+        services.AddSingleton<LauncherViewModel>();
+        services.AddSingleton<LauncherPage>();
 
         services.AddTransient<SettingsViewModel>();
         services.AddTransient<SettingsPage>();
 
         services.AddTransient<IShellDialogWindow, ShellDialogWindow>();
         services.AddTransient<ShellDialogViewModel>();
+
+        services.AddTransient<InstalledAppsViewModel>();
+        services.AddTransient<InstalledAppsPage>();
 
         // Configuration
         services.Configure<AppConfig>(context.Configuration.GetSection(nameof(AppConfig)));
