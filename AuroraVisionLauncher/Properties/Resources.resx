@@ -121,7 +121,7 @@
     <value>Installed _applications</value>
   </data>
   <data name="InstalledAppsPageTitle" xml:space="preserve">
-    <value>InstalledApps</value>
+    <value>Installed applications</value>
   </data>
   <data name="ShellMenuItemFileSettingsPageHeader" xml:space="preserve">
     <value>_Settings</value>
@@ -153,9 +153,6 @@
   <data name="SettingsPageRadioButtonWindowsDefaultTheme" xml:space="preserve">
     <value>Default</value>
   </data>
-  <data name="BlankPageTitle" xml:space="preserve">
-    <value>Blank</value>
-  </data>
   <data name="ShellMenuItemViewsLauncherPageHeader" xml:space="preserve">
     <value>_Launcher</value>
   </data>
@@ -182,5 +179,29 @@
   </data>
   <data name="ExecutableDevelopmentVersion" xml:space="preserve">
     <value>TRUNK</value>
+  </data>
+  <data name="ProgramDetailsLocation" xml:space="preserve">
+    <value>Path: </value>
+  </data>
+  <data name="ProgramDetailsLocationFallback" xml:space="preserve">
+    <value>N/A</value>
+  </data>
+  <data name="ProgramDetailsProgramName" xml:space="preserve">
+    <value>Program name: </value>
+  </data>
+  <data name="ProgramDetailsProgramNameFallback" xml:space="preserve">
+    <value>No program loaded</value>
+  </data>
+  <data name="ProgramDetailsProjectType" xml:space="preserve">
+    <value>Type: </value>
+  </data>
+  <data name="ProgramDetailsProjectTypeFallback" xml:space="preserve">
+    <value>N/A</value>
+  </data>
+  <data name="ProgramDetailsSavedWithVersion" xml:space="preserve">
+    <value>Saved with version: </value>
+  </data>
+  <data name="ProgramDetailsSavedWithVersionFallback" xml:space="preserve">
+    <value>N/A</value>
   </data>
 </root>

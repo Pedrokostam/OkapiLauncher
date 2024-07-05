@@ -50,16 +50,16 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <StackPanel >
-                    <TextBlock TextAlignment="Right" Text="Program name: "/>
-                    <TextBlock TextAlignment="Right" Text="Program type: " />
-                    <TextBlock TextAlignment="Right" Text="Program Version: "/>
-                    <TextBlock TextAlignment="Right" Text="Program path: "/>
+                    <TextBlock TextAlignment="Right" Text="{x:Static properties:Resources.ProgramDetailsProgramName}"/>
+                    <TextBlock TextAlignment="Right" Text="{x:Static properties:Resources.ProgramDetailsProjectType}" />
+                    <TextBlock TextAlignment="Right" Text="{x:Static properties:Resources.ProgramDetailsSavedWithVersion}"/>
+                    <TextBlock TextAlignment="Right" Text="{x:Static properties:Resources.ProgramDetailsLocation}"/>
                 </StackPanel>
                 <StackPanel  Grid.Column="1" TextBlock.FontWeight="Bold">
-                    <TextBlock Text="{Binding VisionProgram.Name }"/>
-                    <TextBlock Text="{Binding VisionProgram.Type }"/>
-                    <TextBlock Text="{Binding VisionProgram.Version }"/>
-                    <TextBlock Text="{Binding VisionProgram.Path }"/>
+                    <TextBlock Text="{Binding VisionProgram.Name, FallbackValue={x:Static properties:Resources.ProgramDetailsProgramNameFallback}}"/>
+                    <TextBlock Text="{Binding VisionProgram.Type, FallbackValue={x:Static properties:Resources.ProgramDetailsProjectTypeFallback}}"/>
+                    <TextBlock Text="{Binding VisionProgram.Version, FallbackValue={x:Static properties:Resources.ProgramDetailsSavedWithVersionFallback}}"/>
+                    <TextBlock Text="{Binding VisionProgram.Path, FallbackValue={x:Static properties:Resources.ProgramDetailsLocationFallback}}"/>
                 </StackPanel>
             </Grid>
             <Grid Grid.Row="1">

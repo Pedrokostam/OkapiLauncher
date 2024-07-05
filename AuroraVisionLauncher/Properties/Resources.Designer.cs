@@ -70,15 +70,6 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Blank.
-        /// </summary>
-        public static string BlankPageTitle {
-            get {
-                return ResourceManager.GetString("BlankPageTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to TRUNK.
         /// </summary>
         public static string ExecutableDevelopmentVersion {
@@ -88,7 +79,7 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to InstalledApps.
+        ///   Looks up a localized string similar to Installed applications.
         /// </summary>
         public static string InstalledAppsPageTitle {
             get {
@@ -102,6 +93,78 @@ namespace AuroraVisionLauncher.Properties {
         public static string MainPageTitle {
             get {
                 return ResourceManager.GetString("MainPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Path: .
+        /// </summary>
+        public static string ProgramDetailsLocation {
+            get {
+                return ResourceManager.GetString("ProgramDetailsLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to N/A.
+        /// </summary>
+        public static string ProgramDetailsLocationFallback {
+            get {
+                return ResourceManager.GetString("ProgramDetailsLocationFallback", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Program name: .
+        /// </summary>
+        public static string ProgramDetailsProgramName {
+            get {
+                return ResourceManager.GetString("ProgramDetailsProgramName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No program loaded.
+        /// </summary>
+        public static string ProgramDetailsProgramNameFallback {
+            get {
+                return ResourceManager.GetString("ProgramDetailsProgramNameFallback", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type: .
+        /// </summary>
+        public static string ProgramDetailsProjectType {
+            get {
+                return ResourceManager.GetString("ProgramDetailsProjectType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to N/A.
+        /// </summary>
+        public static string ProgramDetailsProjectTypeFallback {
+            get {
+                return ResourceManager.GetString("ProgramDetailsProjectTypeFallback", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saved with version: .
+        /// </summary>
+        public static string ProgramDetailsSavedWithVersion {
+            get {
+                return ResourceManager.GetString("ProgramDetailsSavedWithVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to N/A.
+        /// </summary>
+        public static string ProgramDetailsSavedWithVersionFallback {
+            get {
+                return ResourceManager.GetString("ProgramDetailsSavedWithVersionFallback", resourceCulture);
             }
         }
         
