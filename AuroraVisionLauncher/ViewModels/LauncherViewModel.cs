@@ -7,11 +7,11 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using AuroraVisionLauncher.Core.Models.Apps;
 using System.Collections.ObjectModel;
-using AuroraVisionLauncher.Core.Models;
 using System.Windows.Input;
 using System.Diagnostics;
 using Windows.Storage;
 using AuroraVisionLauncher.Models;
+using AuroraVisionLauncher.Core.Models.Programs;
 
 namespace AuroraVisionLauncher.ViewModels;
 
@@ -76,7 +76,7 @@ public partial class LauncherViewModel : ObservableRecipient, IRecipient<FileReq
         }
         try
         {
-            var info = AppReader.GetInformation(filepath);
+            var info = ProgramReader.GetInformation(filepath);
             VisionProgram = new VisionProgram(
                 Path.GetFileNameWithoutExtension(filepath),
                 info.Version,
@@ -85,7 +85,7 @@ public partial class LauncherViewModel : ObservableRecipient, IRecipient<FileReq
                 );
 
             var matchingExecutables = _appProvider.Executables
-                .Where(x => x.SupportsAvFile(info))
+                .Where(x => x.SupportsProgram(info))
                 .Select(x => new ExecutableFacade(x))
                 .OrderByDescending(x => x.Compatibility);
             Apps.Clear();

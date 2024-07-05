@@ -6,8 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace AuroraVisionLauncher.Core.Models.Apps;
-public static class AppReader
+namespace AuroraVisionLauncher.Core.Models.Programs;
+public static class ProgramReader
 {
     static readonly Encoding _encoder = new UTF8Encoding(false);
     static readonly Dictionary<ProgramType, byte[]> _headers = new(){
@@ -64,8 +64,8 @@ public static class AppReader
     {
         using var reader = XmlReader.Create(filepath);
         reader.Read();
-        string versionStart = reader.GetAttribute("Version");
-        string versionEnd = reader.GetAttribute("Revision");
+        string? versionStart = reader.GetAttribute("Version");
+        string? versionEnd = reader.GetAttribute("Revision");
         if (string.IsNullOrWhiteSpace(versionStart) || string.IsNullOrWhiteSpace(versionEnd))
         {
             return new Version();
@@ -73,7 +73,7 @@ public static class AppReader
         return Version.Parse(versionStart + '.' + versionEnd);
     }
 
-    public static AvFileInformation GetInformation(string filepath)
+    public static ProgramInformation GetInformation(string filepath)
     {
         var programType = CheckFile(filepath);
         Version version = programType switch
@@ -82,6 +82,6 @@ public static class AppReader
             ProgramType.FabImageRuntime or ProgramType.AuroraVisionRuntime => new Version(),
             _ => GetVersionFromXml(filepath)
         };
-        return new AvFileInformation(programType, version);
+        return new ProgramInformation(programType, version);
     }
 }

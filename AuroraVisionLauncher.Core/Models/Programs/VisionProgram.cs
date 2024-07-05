@@ -4,9 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AuroraVisionLauncher.Core.Models.Apps;
 
-namespace AuroraVisionLauncher.Core.Models
+namespace AuroraVisionLauncher.Core.Models.Programs
 {
     public record VisionProgram(string Name, Version Version, string Path, ProgramType Type)
     {
@@ -14,6 +13,6 @@ namespace AuroraVisionLauncher.Core.Models
         {
 
         }
-        public bool Exists=>File.Exists(Path);
+        public bool Exists => File.Exists(Path);
     }
 }

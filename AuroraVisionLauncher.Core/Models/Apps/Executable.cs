@@ -5,25 +5,50 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Timers;
-using AuroraVisionLauncher.Core.Models.Apps;
+using AuroraVisionLauncher.Core.Models.Programs;
 
 namespace AuroraVisionLauncher.Core.Models.Apps;
-
-public abstract record Executable : IExecutable
+internal record Configuration
 {
+    public Configuration(ExecutableType executableType, IEnumerable<ProgramType> supportedPrograms)
+    {
+        ExecutableType = executableType;
+        _supportedPrograms = new List<ProgramType>(supportedPrograms);
+    }
+
+    public ExecutableType ExecutableType { get; }
+    private readonly List<ProgramType> _supportedPrograms;
+    public IReadOnlyCollection<ProgramType> SupportedPrograms => _supportedPrograms.AsReadOnly();
+}
+public record Executable : IExecutable
+{
+    private static readonly Dictionary<string, Configuration> ExecutableConfigurations = new(StringComparer.OrdinalIgnoreCase)
+    {
+        {"aurora vision studio",    new Configuration(ExecutableType.Professional,[ProgramType.AdaptiveVisionProject,ProgramType.AuroraVisionProject])},
+        {"adaptive vision studio",  new Configuration(ExecutableType.Professional,[ProgramType.AdaptiveVisionProject])},
+        {"fabimage studio",         new Configuration(ExecutableType.Professional,[ProgramType.FabImageProject])},
+        {"aurora vision executor",  new Configuration(ExecutableType.Runtime,[ProgramType.AdaptiveVisionProject,ProgramType.AuroraVisionProject,ProgramType.AuroraVisionRuntime])},
+        {"adaptive vision executor",new Configuration(ExecutableType.Runtime,[ProgramType.AdaptiveVisionProject])},
+        {"fabimage runtime",        new Configuration(ExecutableType.Runtime,[ProgramType.FabImageRuntime,ProgramType.FabImageProject])},
+    };
+
     public string ExePath { get; }
     public Version Version { get; }
     public string Name { get; }
+    public ExecutableType ExecutableType { get; }
     public bool IsDevelopmentBuild => Version.Build >= 1000;
     readonly private FileVersionInfo _originalInfo;
-    protected abstract ReadOnlyCollection<ProgramType> SupportedAppTypes { get; }
-    protected Executable(FileVersionInfo fvinfo)
+    private readonly List<ProgramType> _supportedPrograms;
+    protected IReadOnlyCollection<ProgramType> SupportedAppTypes => _supportedPrograms.AsReadOnly();
+    internal Executable(FileVersionInfo fvinfo, Configuration configuration)
     {
         ExePath = fvinfo.FileName;
         Version = ParseVersion(fvinfo);
         Name = fvinfo.ProductName ?? "N/A";
         _originalInfo = fvinfo;
 
+        _supportedPrograms = new List<ProgramType>(configuration.SupportedPrograms);
+        ExecutableType = configuration.ExecutableType;
     }
     /// <summary>
     /// Checks if any process associated with the executable is running.
@@ -35,7 +60,7 @@ public abstract record Executable : IExecutable
         {
             var p = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(_originalInfo.InternalName));
 
-            return p.Any(x => string.Equals(x.MainModule.FileName, ExePath, StringComparison.OrdinalIgnoreCase));
+            return p.Any(x => string.Equals(x.MainModule?.FileName, ExePath, StringComparison.OrdinalIgnoreCase));
         }
         catch (InvalidOperationException)
         {
@@ -45,7 +70,7 @@ public abstract record Executable : IExecutable
 
     protected static Version ParseVersion(FileVersionInfo fvinfo)
     {
-        string productVersion = fvinfo.ProductVersion;
+        string? productVersion = fvinfo.ProductVersion;
         if (string.IsNullOrWhiteSpace(productVersion))
         {
             throw new ArgumentException("Empty product version field.");
@@ -57,13 +82,8 @@ public abstract record Executable : IExecutable
         var ver = Version.Parse(productVersion);
         return ver;
     }
-    protected Executable()
-    {
-        ExePath = "";
-        Version = new Version();
-        Name = " N/A";
-    }
-    static FileVersionInfo FindInfo(string folder)
+    
+    static FileVersionInfo? FindInfo(string folder)
 
     {
         if (string.IsNullOrWhiteSpace(folder))
@@ -71,12 +91,13 @@ public abstract record Executable : IExecutable
             return null;
         }
         var dir = new DirectoryInfo(folder);
+        // environment variables for studio proffesional points to AVL libraries, which are in the SDK subfolder
         if (dir.Name.Contains("sdk", StringComparison.OrdinalIgnoreCase))
         {
             dir = dir.Parent!;
         }
         var exes = dir.GetFiles("*.exe");
-        FileInfo theExe = null;
+        FileInfo? theExe = null;
         if (folder.Contains("professional", StringComparison.OrdinalIgnoreCase))
         {
             theExe = exes.FirstOrDefault(x => x.Name.Contains("studio", StringComparison.OrdinalIgnoreCase));
@@ -93,19 +114,15 @@ public abstract record Executable : IExecutable
     }
     public static Executable Create(FileVersionInfo fvinfo)
     {
-        return fvinfo.ProductName!.ToLowerInvariant() switch
+        if (ExecutableConfigurations.TryGetValue(fvinfo.ProductName ?? "", out Configuration? configuration))
         {
-            "aurora vision studio" => new AuroraStudioExecutable(fvinfo),
-            "adaptive vision studio" => new AdaptiveStudioExecutable(fvinfo),
-            "fabimage studio" => new FabStudioExecutable(fvinfo),
-            "aurora vision executor" => new AuroraStudioExecutable(fvinfo),
-            "adaptive vision executor" => new AdaptiveRuntimeExecutable(fvinfo),
-            "fabimage runtime" => new FabRuntimeExecutable(fvinfo),
-            _ => throw new InvalidOperationException($"Unsupported product type: {fvinfo.ProductName}")
-        };
+            return new Executable(fvinfo, configuration);
+
+        }
+        throw new InvalidOperationException($"Unsupported product type: {fvinfo.ProductName}");
     }
 
-    public static bool TryCreate(string folder, [NotNullWhen(true)] out Executable app)
+    public static bool TryCreate(string folder, [NotNullWhen(true)] out Executable? app)
     {
         if (FindInfo(folder) is not FileVersionInfo fileVersionInfo)
         {
@@ -116,7 +133,7 @@ public abstract record Executable : IExecutable
         return true;
     }
 
-    public bool SupportsAvFile(AvFileInformation information)
+    public bool SupportsProgram(ProgramInformation information)
     {
         return SupportedAppTypes.Contains(information.ProgramType);
     }
@@ -127,7 +144,7 @@ public abstract record Executable : IExecutable
         {
             double weight = 0;
             bool isProgramRuntime = info.Type == ProgramType.AuroraVisionRuntime || info.Type == ProgramType.FabImageRuntime;
-            if (isProgramRuntime && executable is not RuntimeExecutable || !isProgramRuntime && executable is RuntimeExecutable)
+            if (isProgramRuntime && executable.ExecutableType!=ExecutableType.Runtime || !isProgramRuntime && executable.ExecutableType == ExecutableType.Runtime)
             {
                 weight = -1e21;
             }

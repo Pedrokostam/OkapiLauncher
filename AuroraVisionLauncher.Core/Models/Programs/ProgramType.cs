@@ -1,4 +1,4 @@
-﻿namespace AuroraVisionLauncher.Core.Models.Apps;
+﻿namespace AuroraVisionLauncher.Core.Models.Programs;
 
 [Flags]
 public enum ProgramType

@@ -1,4 +1,5 @@
-﻿
+﻿using AuroraVisionLauncher.Core.Models.Programs;
+
 namespace AuroraVisionLauncher.Core.Models.Apps;
 
 public interface IExecutable
@@ -7,7 +8,8 @@ public interface IExecutable
     bool IsDevelopmentBuild { get; }
     string Name { get; }
     Version Version { get; }
+    ExecutableType ExecutableType { get; }
 
     bool CheckIfProcessIsRunning();
-    bool SupportsAvFile(AvFileInformation information);
+    bool SupportsProgram(ProgramInformation information);
 }
