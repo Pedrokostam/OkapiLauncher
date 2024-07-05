@@ -29,23 +29,23 @@ public partial class LauncherViewModel : ObservableRecipient, IRecipient<FileReq
 
 
 
-    public ObservableCollection<ExecutableFacade> Apps { get; } = new();
+    public ObservableCollection<AvAppFacade> Apps { get; } = new();
 
 
     private bool CanLaunch()
     {
-        return SelectedExecutable is not null && (VisionProgram?.Exists ?? false);
+        return SelectedApp is not null && (VisionProgram?.Exists ?? false);
     }
     [RelayCommand(CanExecute = nameof(CanLaunch))]
     private void Launch()
     {
-        if (SelectedExecutable is null || !(VisionProgram?.Exists ?? false))
+        if (SelectedApp is null || !(VisionProgram?.Exists ?? false))
         {
             return;
         }
         ProcessStartInfo startInfo = new ProcessStartInfo
         {
-            FileName = SelectedExecutable.ExePath,
+            FileName = SelectedApp.ExePath,
             UseShellExecute = true,  // Use the shell to start the process
             CreateNoWindow = true    // Do not create a window
         };
@@ -66,7 +66,7 @@ public partial class LauncherViewModel : ObservableRecipient, IRecipient<FileReq
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(LaunchCommand))]
-    private ExecutableFacade? _selectedExecutable = null;
+    private AvAppFacade? _selectedApp = null;
     public void Receive(FileRequestedMessage message) => OpenProject(message.Value);
     private void OpenProject(string filepath)
     {
@@ -84,27 +84,27 @@ public partial class LauncherViewModel : ObservableRecipient, IRecipient<FileReq
                 info.ProgramType
                 );
 
-            var matchingExecutables = _appProvider.Executables
+            var matchingApps = _appProvider.AvApps
                 .Where(x => x.SupportsProgram(info))
-                .Select(x => new ExecutableFacade(x))
+                .Select(x => new AvAppFacade(x))
                 .OrderByDescending(x => x.Compatibility);
             Apps.Clear();
-            foreach (var executable in matchingExecutables)
+            foreach (var app in matchingApps)
             {
-                Apps.Add(executable);
+                Apps.Add(app);
             }
-            var closestVersion = Executable.GetClosestApp(Apps, VisionProgram);
+            var closestVersion = AvApp.GetClosestApp(Apps, VisionProgram);
             if (closestVersion >= 0)
             {
-                SelectedExecutable = Apps[closestVersion];
+                SelectedApp = Apps[closestVersion];
             }
             else
             {
-                SelectedExecutable = null;
+                SelectedApp = null;
             }
             _navigationService.NavigateTo(GetType().FullName!);
         }
-        catch (InvalidDataException e)
+        catch (InvalidDataException)
         {
             MessageBox.Show("File is neither a projects file nor a runtime executable.");
         }

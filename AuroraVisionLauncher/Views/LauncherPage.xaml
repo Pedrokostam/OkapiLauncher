@@ -5,7 +5,6 @@
     xmlns:conv ="clr-namespace:AuroraVisionLauncher.Converters"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:controls="clr-namespace:AuroraVisionLauncher.Controls"
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:mod="clr-namespace:AuroraVisionLauncher.Models"
@@ -65,8 +64,8 @@
                 </StackPanel>
             </Grid>
             <Grid Grid.Row="1">
-                <ListView ItemsSource="{Binding Source={StaticResource CustomViewSource}}"  SelectedItem="{Binding SelectedExecutable,Mode=TwoWay}" 
-                          ItemTemplate="{StaticResource ExecutableFacadeDataTemplate}" 
+                <ListView ItemsSource="{Binding Source={StaticResource CustomViewSource}}"  SelectedItem="{Binding SelectedApp,Mode=TwoWay}" 
+                          ItemTemplate="{StaticResource AvAppFacadeDataTemplate}" 
                           >
                     <ListView.GroupStyle>
                         <GroupStyle>
@@ -82,7 +81,7 @@
             <Button Grid.Row="2" TextBlock.FontSize="20" Command="{Binding LaunchCommand}">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Run with "/>
-                    <TextBlock Text="{Binding SelectedExecutable, TargetNullValue=...}"/>
+                    <TextBlock Text="{Binding SelectedApp, TargetNullValue=...}"/>
                 </StackPanel>
             </Button>
         </Grid>

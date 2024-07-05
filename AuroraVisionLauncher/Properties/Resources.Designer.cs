@@ -72,9 +72,9 @@ namespace AuroraVisionLauncher.Properties {
         /// <summary>
         ///   Looks up a localized string similar to TRUNK.
         /// </summary>
-        public static string ExecutableDevelopmentVersion {
+        public static string AvAppDevelopmentVersion {
             get {
-                return ResourceManager.GetString("ExecutableDevelopmentVersion", resourceCulture);
+                return ResourceManager.GetString("AvAppDevelopmentVersion", resourceCulture);
             }
         }
         

@@ -15,9 +15,9 @@ public class InstalledAppsViewModel : ObservableObject
     public InstalledAppsViewModel(IInstalledAppsProviderService appsProviderService)
     {
         _appProvider = appsProviderService;
-        foreach (var exe in _appProvider.Executables)
+        foreach (var exe in _appProvider.AvApps)
         {
-            Executables.Add(new(exe));
+            AvApps.Add(new(exe));
         }
         _timer = new DispatcherTimer();
         UpdateRunningStatus();
@@ -28,11 +28,11 @@ public class InstalledAppsViewModel : ObservableObject
 
     private void UpdateRunningStatus()
     {
-        foreach (var exe in Executables)
+        foreach (var exe in AvApps)
         {
             exe.IsLaunched = exe.CheckIfProcessIsRunning();
         }
     }
 
-    public ObservableCollection<ExecutableFacade> Executables { get; } = new();
+    public ObservableCollection<AvAppFacade> AvApps { get; } = new();
 }

@@ -12,12 +12,12 @@ using AuroraVisionLauncher.Core.Models.Apps;
 namespace AuroraVisionLauncher.Services;
 public class InstalledAppsProviderService : IInstalledAppsProviderService
 {
-    readonly List<Executable> _executables;
-    public ReadOnlyCollection<Executable> Executables => _executables.AsReadOnly();
+    readonly List<AvApp> _avApps;
+    public ReadOnlyCollection<AvApp> AvApps => _avApps.AsReadOnly();
     public InstalledAppsProviderService()
     {
         var variables= Environment.GetEnvironmentVariables();
-        _executables = new List<Executable>();
+        _avApps = new List<AvApp>();
         foreach (DictionaryEntry entry in variables)
         {
             var key_string = entry.Key?.ToString();
@@ -28,9 +28,9 @@ public class InstalledAppsProviderService : IInstalledAppsProviderService
             }
             if (Regex.IsMatch(key_string, "^(AVS|FIS)_", RegexOptions.IgnoreCase) && value_string is not null)
             {
-                if (Executable.TryCreate(value_string, out Executable? app))
+                if (AvApp.TryCreate(value_string, out AvApp? app))
                 {
-                    _executables.Add(app);
+                    _avApps.Add(app);
                 }
             }
         }

@@ -6,7 +6,7 @@
                         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:mod="clr-namespace:AuroraVisionLauncher.Models"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <DataTemplate x:Key="ExecutableFacadeDataTemplate" DataType="{x:Type mod:ExecutableFacade}">
+    <DataTemplate x:Key="AvAppFacadeDataTemplate" DataType="{x:Type mod:AvAppFacade}">
         <Grid HorizontalAlignment="Stretch">
             <Grid.ContextMenu>
                 <ContextMenu>
@@ -68,7 +68,7 @@
                         <TextBlock Text=" - "/>
                         <TextBlock Text="{Binding Version}"/>
                         <TextBlock Text=" "/>
-                        <TextBlock Text="{x:Static properties:Resources.ExecutableDevelopmentVersion}" Visibility="{Binding IsDevelopmentBuild, Converter={StaticResource BoolVisibilityConverter}}" FontWeight="Bold" Foreground="DarkOrange"/>
+                        <TextBlock Text="{x:Static properties:Resources.AvAppDevelopmentVersion}" Visibility="{Binding IsDevelopmentBuild, Converter={StaticResource BoolVisibilityConverter}}" FontWeight="Bold" Foreground="DarkOrange"/>
                     </StackPanel >
                     <TextBlock Text="{Binding ExePath}" TextTrimming="CharacterEllipsis" FontSize="16"  Foreground="Gray"/>
                 </StackPanel>

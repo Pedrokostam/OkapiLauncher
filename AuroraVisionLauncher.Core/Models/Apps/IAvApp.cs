@@ -2,13 +2,13 @@
 
 namespace AuroraVisionLauncher.Core.Models.Apps;
 
-public interface IExecutable
+public interface IAvApp
 {
     string ExePath { get; }
     bool IsDevelopmentBuild { get; }
     string Name { get; }
     Version Version { get; }
-    ExecutableType ExecutableType { get; }
+    AvAppType AppType { get; }
 
     bool CheckIfProcessIsRunning();
     bool SupportsProgram(ProgramInformation information);

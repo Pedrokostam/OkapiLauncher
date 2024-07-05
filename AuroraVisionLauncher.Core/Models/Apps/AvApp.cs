@@ -10,37 +10,37 @@ using AuroraVisionLauncher.Core.Models.Programs;
 namespace AuroraVisionLauncher.Core.Models.Apps;
 internal record Configuration
 {
-    public Configuration(ExecutableType executableType, IEnumerable<ProgramType> supportedPrograms)
+    public Configuration(AvAppType appType, IEnumerable<ProgramType> supportedPrograms)
     {
-        ExecutableType = executableType;
+        AppType = appType;
         _supportedPrograms = new List<ProgramType>(supportedPrograms);
     }
 
-    public ExecutableType ExecutableType { get; }
+    public AvAppType AppType { get; }
     private readonly List<ProgramType> _supportedPrograms;
     public IReadOnlyCollection<ProgramType> SupportedPrograms => _supportedPrograms.AsReadOnly();
 }
-public record Executable : IExecutable
+public record AvApp : IAvApp
 {
-    private static readonly Dictionary<string, Configuration> ExecutableConfigurations = new(StringComparer.OrdinalIgnoreCase)
+    private static readonly Dictionary<string, Configuration> AvAppConfigurations = new(StringComparer.OrdinalIgnoreCase)
     {
-        {"aurora vision studio",    new Configuration(ExecutableType.Professional,[ProgramType.AdaptiveVisionProject,ProgramType.AuroraVisionProject])},
-        {"adaptive vision studio",  new Configuration(ExecutableType.Professional,[ProgramType.AdaptiveVisionProject])},
-        {"fabimage studio",         new Configuration(ExecutableType.Professional,[ProgramType.FabImageProject])},
-        {"aurora vision executor",  new Configuration(ExecutableType.Runtime,[ProgramType.AdaptiveVisionProject,ProgramType.AuroraVisionProject,ProgramType.AuroraVisionRuntime])},
-        {"adaptive vision executor",new Configuration(ExecutableType.Runtime,[ProgramType.AdaptiveVisionProject])},
-        {"fabimage runtime",        new Configuration(ExecutableType.Runtime,[ProgramType.FabImageRuntime,ProgramType.FabImageProject])},
+        {"aurora vision studio",    new Configuration(AvAppType.Professional,[ProgramType.AdaptiveVisionProject,ProgramType.AuroraVisionProject])},
+        {"adaptive vision studio",  new Configuration(AvAppType.Professional,[ProgramType.AdaptiveVisionProject])},
+        {"fabimage studio",         new Configuration(AvAppType.Professional,[ProgramType.FabImageProject])},
+        {"aurora vision executor",  new Configuration(AvAppType.Runtime,[ProgramType.AdaptiveVisionProject,ProgramType.AuroraVisionProject,ProgramType.AuroraVisionRuntime])},
+        {"adaptive vision executor",new Configuration(AvAppType.Runtime,[ProgramType.AdaptiveVisionProject])},
+        {"fabimage runtime",        new Configuration(AvAppType.Runtime,[ProgramType.FabImageRuntime,ProgramType.FabImageProject])},
     };
 
     public string ExePath { get; }
     public Version Version { get; }
     public string Name { get; }
-    public ExecutableType ExecutableType { get; }
+    public AvAppType AppType { get; }
     public bool IsDevelopmentBuild => Version.Build >= 1000;
     readonly private FileVersionInfo _originalInfo;
     private readonly List<ProgramType> _supportedPrograms;
-    protected IReadOnlyCollection<ProgramType> SupportedAppTypes => _supportedPrograms.AsReadOnly();
-    internal Executable(FileVersionInfo fvinfo, Configuration configuration)
+    protected IReadOnlyCollection<ProgramType> SupportedProgramTypes => _supportedPrograms.AsReadOnly();
+    internal AvApp(FileVersionInfo fvinfo, Configuration configuration)
     {
         ExePath = fvinfo.FileName;
         Version = ParseVersion(fvinfo);
@@ -48,7 +48,7 @@ public record Executable : IExecutable
         _originalInfo = fvinfo;
 
         _supportedPrograms = new List<ProgramType>(configuration.SupportedPrograms);
-        ExecutableType = configuration.ExecutableType;
+        AppType = configuration.AppType;
     }
     /// <summary>
     /// Checks if any process associated with the executable is running.
@@ -112,17 +112,17 @@ public record Executable : IExecutable
         }
         return FileVersionInfo.GetVersionInfo(theExe.FullName);
     }
-    public static Executable Create(FileVersionInfo fvinfo)
+    public static AvApp Create(FileVersionInfo fvinfo)
     {
-        if (ExecutableConfigurations.TryGetValue(fvinfo.ProductName ?? "", out Configuration? configuration))
+        if (AvAppConfigurations.TryGetValue(fvinfo.ProductName ?? "", out Configuration? configuration))
         {
-            return new Executable(fvinfo, configuration);
+            return new AvApp(fvinfo, configuration);
 
         }
         throw new InvalidOperationException($"Unsupported product type: {fvinfo.ProductName}");
     }
 
-    public static bool TryCreate(string folder, [NotNullWhen(true)] out Executable? app)
+    public static bool TryCreate(string folder, [NotNullWhen(true)] out AvApp? app)
     {
         if (FindInfo(folder) is not FileVersionInfo fileVersionInfo)
         {
@@ -135,21 +135,21 @@ public record Executable : IExecutable
 
     public bool SupportsProgram(ProgramInformation information)
     {
-        return SupportedAppTypes.Contains(information.ProgramType);
+        return SupportedProgramTypes.Contains(information.ProgramType);
     }
-    public static int GetClosestApp(IEnumerable<IExecutable> executables, VisionProgram info)
+    public static int GetClosestApp(IEnumerable<IAvApp> apps, VisionProgram info)
     {
         var weights = new List<double>();
-        foreach (IExecutable executable in executables)
+        foreach (IAvApp app in apps)
         {
             double weight = 0;
             bool isProgramRuntime = info.Type == ProgramType.AuroraVisionRuntime || info.Type == ProgramType.FabImageRuntime;
-            if (isProgramRuntime && executable.ExecutableType!=ExecutableType.Runtime || !isProgramRuntime && executable.ExecutableType == ExecutableType.Runtime)
+            if (isProgramRuntime && app.AppType!=AvAppType.Runtime || !isProgramRuntime && app.AppType == AvAppType.Runtime)
             {
                 weight = -1e21;
             }
             double programVersionTransformed = info.Version.Major * 1e12 + info.Version.Minor * 1e9 + info.Version.Build * 1e6 + info.Version.Revision;
-            double executableVersionTransformed = executable.Version.Major * 1e12 + executable.Version.Minor * 1e9 + executable.Version.Build * 1e6 + executable.Version.Revision;
+            double executableVersionTransformed = app.Version.Major * 1e12 + app.Version.Minor * 1e9 + app.Version.Build * 1e6 + app.Version.Revision;
             weight += executableVersionTransformed - programVersionTransformed;
             weights.Add(Math.Abs(weight));
         }

@@ -11,16 +11,16 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace AuroraVisionLauncher.Models
 {
-    public partial class ExecutableFacade : ObservableObject, IExecutable
+    public partial class AvAppFacade : ObservableObject, IAvApp
     {
-        readonly private Executable _executable;
+        readonly private AvApp _avApp;
 
-        public string Name => _executable.Name;
-        public string ExePath => _executable.ExePath;
-        public Version Version => _executable.Version;
-        public bool IsDevelopmentBuild => _executable.IsDevelopmentBuild;
+        public string Name => _avApp.Name;
+        public string ExePath => _avApp.ExePath;
+        public Version Version => _avApp.Version;
+        public bool IsDevelopmentBuild => _avApp.IsDevelopmentBuild;
 
-        public ExecutableType ExecutableType => _executable.ExecutableType;
+        public AvAppType AppType => _avApp.AppType;
 
         [ObservableProperty]
         private string _compatibility = "";
@@ -29,14 +29,14 @@ namespace AuroraVisionLauncher.Models
         [ObservableProperty]
         private bool _isLaunched = false;
 
-        public ExecutableFacade(Executable executable)
+        public AvAppFacade(AvApp avApp)
         {
-            _executable = executable;
+            _avApp = avApp;
         }
 
-        public bool CheckIfProcessIsRunning() => _executable.CheckIfProcessIsRunning();
+        public bool CheckIfProcessIsRunning() => _avApp.CheckIfProcessIsRunning();
 
-        public bool SupportsProgram(ProgramInformation information) => _executable.SupportsProgram(information);
+        public bool SupportsProgram(ProgramInformation information) => _avApp.SupportsProgram(information);
 
         [RelayCommand]
         private void OpenContainingFolder()
@@ -44,7 +44,7 @@ namespace AuroraVisionLauncher.Models
             Process.Start(new ProcessStartInfo()
             {
                 FileName = "explorer.exe",
-                Arguments = @$"/select, ""{_executable.ExePath}"""
+                Arguments = @$"/select, ""{_avApp.ExePath}"""
             });
         }
         [RelayCommand]
@@ -52,7 +52,7 @@ namespace AuroraVisionLauncher.Models
         {
             Process.Start(new ProcessStartInfo()
             {
-                FileName = _executable.ExePath
+                FileName = _avApp.ExePath
             });
         }
     }

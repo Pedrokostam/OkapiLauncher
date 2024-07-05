@@ -4,5 +4,5 @@ using AuroraVisionLauncher.Core.Models.Apps;
 namespace AuroraVisionLauncher.Contracts.Services;
 public interface IInstalledAppsProviderService
 {
-    ReadOnlyCollection<Executable> Executables { get; }
+    ReadOnlyCollection<AvApp> AvApps { get; }
 }

@@ -8,6 +8,6 @@ namespace AuroraVisionLauncher.Contracts.ViewModels
 {
     interface IRunningProcessChecker
     {
-        public void CheckExecutablesRunning();
+        public void CheckAvAppRunning();
     }
 }

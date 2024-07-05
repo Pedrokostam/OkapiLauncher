@@ -32,13 +32,13 @@ public class FileAssociationService
     /// <summary>
     /// Creates keys in the registry that define what icon to use for each extension associated with the app and extension.
     /// </summary>
-    /// <param name="mainAppExecutablePath"></param>
+    /// <param name="mainAppPath"></param>
     /// <param name="appName"></param>
-    private void SetAppShellKeys(string mainAppExecutablePath, string? appName)
+    private void SetAppShellKeys(string mainAppPath, string? appName)
     {
         foreach (var extension in _extensions)
         {
-            SetAppShellKey(extension, mainAppExecutablePath, appName);
+            SetAppShellKey(extension, mainAppPath, appName);
         }
 
     }

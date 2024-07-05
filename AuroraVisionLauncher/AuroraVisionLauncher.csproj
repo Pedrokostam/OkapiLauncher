@@ -59,6 +59,7 @@
 
 	<ItemGroup>
 	  <Folder Include="AvFileHandling\" />
+	  <Folder Include="Controls\" />
 	</ItemGroup>
 
 	<ItemGroup>

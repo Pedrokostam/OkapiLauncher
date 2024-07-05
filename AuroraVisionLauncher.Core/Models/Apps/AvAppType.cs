@@ -1,6 +1,6 @@
 ﻿namespace AuroraVisionLauncher.Core.Models.Apps;
 
-public enum ExecutableType
+public enum AvAppType
 {
     Professional,
     Runtime,
