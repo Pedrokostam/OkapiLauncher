@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
-namespace AuroraVisionLauncher.Models.Apps;
+namespace AuroraVisionLauncher.Core.Models.Apps;
 
 public record FabStudioExecutable : StudioExecutable
 {

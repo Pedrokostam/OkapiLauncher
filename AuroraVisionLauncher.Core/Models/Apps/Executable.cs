@@ -4,8 +4,10 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Timers;
+using AuroraVisionLauncher.Core.Models.Apps;
 
-namespace AuroraVisionLauncher.Models.Apps;
+namespace AuroraVisionLauncher.Core.Models.Apps;
 
 public enum Compatibility
 {
@@ -19,6 +21,7 @@ public abstract record Executable
     public Version Version { get; }
     public string Name { get; }
     public bool IsDevelopmentBuild => Version.Build >= 1000;
+    private FileVersionInfo _originalInfo;
     public Compatibility Compatibility { get; private set; } = Compatibility.Unknown;
     protected abstract ReadOnlyCollection<ProgramType> SupportedAppTypes { get; }
     protected Executable(FileVersionInfo fvinfo)
@@ -26,20 +29,37 @@ public abstract record Executable
         ExePath = fvinfo.FileName;
         Version = ParseVersion(fvinfo);
         Name = fvinfo.ProductName ?? "N/A";
+        _originalInfo = fvinfo;
+
     }
-    private static Version PlaceholderVersion => new Version(0, 0);
+    /// <summary>
+    /// Checks if any process associated with the executable is running.
+    /// </summary>
+    /// <returns><see langword="true"/> if the process is running; <see langword="false"/> if it is not running, or it could not be checked.</returns>
+    public bool CheckIfProcessIsRunning()
+    {
+        try
+        {
+            return Process.GetProcessesByName(_originalInfo.InternalName).Any();
+        }
+        catch (InvalidOperationException)
+        {
+            return false;
+        }
+    }
+
     protected static Version ParseVersion(FileVersionInfo fvinfo)
     {
-        string? productVersion = fvinfo.ProductVersion;
+        string productVersion = fvinfo.ProductVersion;
         if (string.IsNullOrWhiteSpace(productVersion))
         {
             throw new ArgumentException("Empty product version field.");
         }
         if (productVersion.Contains(' '))
         {
-            productVersion = productVersion.Split(' ', StringSplitOptions.TrimEntries)[0];
+            productVersion = productVersion.Split(' ',StringSplitOptions.TrimEntries)[0];
         }
-        Version ver = Version.Parse(productVersion);
+        var ver = Version.Parse(productVersion);
         return ver;
     }
     protected Executable()
@@ -48,7 +68,7 @@ public abstract record Executable
         Version = new Version();
         Name = " N/A";
     }
-    static FileVersionInfo? FindInfo(string folder)
+    static FileVersionInfo FindInfo(string folder)
 
     {
         if (string.IsNullOrWhiteSpace(folder))
@@ -61,7 +81,7 @@ public abstract record Executable
             dir = dir.Parent!;
         }
         var exes = dir.GetFiles("*.exe");
-        FileInfo? theExe = null;
+        FileInfo theExe = null;
         if (folder.Contains("professional", StringComparison.OrdinalIgnoreCase))
         {
             theExe = exes.FirstOrDefault(x => x.Name.Contains("studio", StringComparison.OrdinalIgnoreCase));
@@ -90,7 +110,7 @@ public abstract record Executable
         };
     }
 
-    public static bool TryCreate(string folder, [NotNullWhen(true)] out Executable? app)
+    public static bool TryCreate(string folder, [NotNullWhen(true)] out Executable app)
     {
         if (FindInfo(folder) is not FileVersionInfo fileVersionInfo)
         {
@@ -131,12 +151,12 @@ public abstract record Executable
         {
             return -1;
         }
-        List<double> weights = new List<double>(executables.Count);
+        var weights = new List<double>(executables.Count);
         foreach (Executable executable in executables)
         {
             double weight = 0;
             bool isProgramRuntime = info.Type == ProgramType.AuroraVisionRuntime || info.Type == ProgramType.FabImageRuntime;
-            if ((isProgramRuntime && executable is not RuntimeExecutable) || (!isProgramRuntime && executable is RuntimeExecutable))
+            if (isProgramRuntime && executable is not RuntimeExecutable || !isProgramRuntime && executable is RuntimeExecutable)
             {
                 weight = -1e21;
             }

@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using AuroraVisionLauncher.Models.Apps;
+using AuroraVisionLauncher.Core.Models.Apps;
 
 namespace AuroraVisionLauncher.Controls;
 /// <summary>

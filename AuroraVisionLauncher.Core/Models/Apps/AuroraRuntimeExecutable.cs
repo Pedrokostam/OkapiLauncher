@@ -2,13 +2,13 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
-namespace AuroraVisionLauncher.Models.Apps;
+namespace AuroraVisionLauncher.Core.Models.Apps;
 
 public abstract record RuntimeExecutable : Executable
 {
     protected RuntimeExecutable(FileVersionInfo fvinfo) : base(fvinfo)
     {
-        
+
     }
 }
 public record AuroraRuntimeExecutable : RuntimeExecutable

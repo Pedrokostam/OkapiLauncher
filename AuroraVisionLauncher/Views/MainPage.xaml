@@ -2,7 +2,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vms="clr-namespace:AuroraVisionLauncher.ViewModels"
-    xmlns:mod ="clr-namespace:AuroraVisionLauncher.Models.Apps"
     xmlns:conv ="clr-namespace:AuroraVisionLauncher.Converters"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -16,15 +15,7 @@
     d:DesignHeight="450" d:DesignWidth="800">
     <Page.Resources>
         <conv:FileToIconConverter x:Key="FileIconConverter"/>
-        <DataTemplate x:Key="ExecutableTemplate" DataType="{x:Type mod:Executable}">
-            <Grid>
-                <Grid.ToolTip>
-                    <TextBlock Text="Tooltip test"/>
-                </Grid.ToolTip>
-                <Rectangle Fill="Transparent"/>
-                <controls:ExecutableDisplayControl Item="{Binding}"/>
-            </Grid>
-        </DataTemplate>
+
         <CollectionViewSource x:Key="CustomViewSource" Source="{Binding Apps}" IsLiveGroupingRequested="True">
             <CollectionViewSource.GroupDescriptions>
                 <PropertyGroupDescription PropertyName="Compatibility" />
@@ -72,7 +63,7 @@
                 </StackPanel>
             </Grid>
             <Grid Grid.Row="1">
-                <ListView ItemsSource="{Binding Source={StaticResource CustomViewSource}}" ItemTemplate="{StaticResource ExecutableTemplate}"  SelectedItem="{Binding SelectedExecutable,Mode=TwoWay}">
+                <ListView ItemsSource="{Binding Source={StaticResource CustomViewSource}}"  SelectedItem="{Binding SelectedExecutable,Mode=TwoWay}">
                     <ListView.GroupStyle>
                         <GroupStyle>
                             <GroupStyle.HeaderTemplate>
@@ -82,6 +73,11 @@
                             </GroupStyle.HeaderTemplate>
                         </GroupStyle>
                     </ListView.GroupStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <controls:ExecutableDisplayControl Item="{Binding}"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
                 </ListView>
             </Grid>
             <Button Grid.Row="2" TextBlock.FontSize="20" Command="{Binding LaunchCommand}">
