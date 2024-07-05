@@ -123,7 +123,7 @@ public abstract record Executable : IExecutable
     public static int GetClosestApp(IEnumerable<IExecutable> executables, VisionProgram info)
     {
         var weights = new List<double>();
-        foreach (Executable executable in executables)
+        foreach (IExecutable executable in executables)
         {
             double weight = 0;
             bool isProgramRuntime = info.Type == ProgramType.AuroraVisionRuntime || info.Type == ProgramType.FabImageRuntime;

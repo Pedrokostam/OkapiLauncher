@@ -62,45 +62,56 @@ public partial class MainViewModel : ObservableRecipient, IRecipient<FileRequest
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(LaunchCommand))]
-    private VisionProgram? _visionProgram=null;
+    private VisionProgram? _visionProgram = null;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(LaunchCommand))]
-    private ExecutableFacade? _selectedExecutable=null;
+    private ExecutableFacade? _selectedExecutable = null;
     public void Receive(FileRequestedMessage message) => OpenProject(message.Value);
     private void OpenProject(string filepath)
     {
-        Apps.Clear();
         if (!File.Exists(filepath))
         {
             MessageBox.Show("File does not exist");
         }
-        var info=AppReader.GetInformation(filepath );
+        try
+        {
+            var info = AppReader.GetInformation(filepath);
+            VisionProgram = new VisionProgram(
+                Path.GetFileNameWithoutExtension(filepath),
+                info.Version,
+                filepath,
+                info.ProgramType
+                );
 
-        VisionProgram = new VisionProgram(
-            Path.GetFileNameWithoutExtension(filepath),
-            info.Version,
-            filepath,
-            info.ProgramType
-            );
+            var matchingExecutables = _appProvider.Executables
+                .Where(x => x.SupportsAvFile(info))
+                .Select(x => new ExecutableFacade(x))
+                .OrderByDescending(x => x.Compatibility);
+            Apps.Clear();
+            foreach (var executable in matchingExecutables)
+            {
+                Apps.Add(executable);
+            }
+            var closestVersion = Executable.GetClosestApp(Apps, VisionProgram);
+            if (closestVersion >= 0)
+            {
+                SelectedExecutable = Apps[closestVersion];
+            }
+            else
+            {
+                SelectedExecutable = null;
+            }
+        }
+        catch (InvalidDataException e)
+        {
+            MessageBox.Show("File is neither a projects file nor a runtime executable.");
+            if (VisionProgram is null && _navigationService.CanGoBack)
+            {
+                _navigationService.GoBack();
+            }
+        }
 
-        var matchingExecutables = _appProvider.Executables
-            .Where(x=>x.SupportsAvFile(info))
-            .Select(x=>new ExecutableFacade(x))
-            .OrderByDescending(x=>x.Compatibility);
-        foreach (var executable in matchingExecutables)
-        {
-            Apps.Add(executable);
-        }
-        var closestVersion = Executable.GetClosestApp(Apps,VisionProgram);
-        if (closestVersion >= 0)
-        {
-            SelectedExecutable = Apps[closestVersion];
-        }
-        else
-        {
-            SelectedExecutable = null;
-        }
     }
 
 }
