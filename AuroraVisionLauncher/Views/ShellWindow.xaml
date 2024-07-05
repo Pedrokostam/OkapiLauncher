@@ -43,18 +43,14 @@
     <controls:MetroWindow.Content>
         <controls:SplitView
             x:Name="splitView"
-            AllowDrop="True"
             Focusable="False"
             OpenPaneLength="400"
-            PanePlacement="Right"
-            PreviewDragOver="MetroWindow_PreviewDragOver">
+            PanePlacement="Right">
             <controls:SplitView.Pane>
                 <Border
-                    AllowDrop="True"
                     Background="{DynamicResource MahApps.Brushes.Control.Background}"
                     BorderBrush="{DynamicResource MahApps.Brushes.Controls.Border}"
-                    BorderThickness="1,1,0,0"
-                    PreviewDragOver="MetroWindow_PreviewDragOver">
+                    BorderThickness="1,1,0,0">
                     <Frame
                         x:Name="rightPaneFrame"
                         Focusable="False"
@@ -62,7 +58,7 @@
                 </Border>
             </controls:SplitView.Pane>
             <controls:SplitView.Content>
-                <Grid AllowDrop="True" PreviewDragOver="MetroWindow_PreviewDragOver">
+                <Grid >
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -99,10 +95,9 @@
                     <Frame
                         x:Name="shellFrame"
                         Grid.Row="1"
-                        AllowDrop="True"
                         Focusable="False"
                         NavigationUIVisibility="Hidden"
-                        PreviewDragOver="MetroWindow_PreviewDragOver" />
+                    />
                 </Grid>
             </controls:SplitView.Content>
         </controls:SplitView>

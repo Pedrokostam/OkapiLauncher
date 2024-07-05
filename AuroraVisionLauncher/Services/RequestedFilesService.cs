@@ -9,7 +9,7 @@ using AuroraVisionLauncher.Contracts.Services;
 namespace AuroraVisionLauncher.Services;
 public class RequestedFilesService : IRequestedFilesService
 {
-    private Queue<string> _files { get; }
+    readonly private Queue<string> _files;
     public RequestedFilesService()
     {
         var args = Environment.GetCommandLineArgs();

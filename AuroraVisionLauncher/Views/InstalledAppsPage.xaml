@@ -1,57 +1,70 @@
 ﻿<Page
     x:Class="AuroraVisionLauncher.Views.InstalledAppsPage"
-    Style="{DynamicResource MahApps.Styles.Page}"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:conv="[conv ]clr-namespace:AuroraVisionLauncher.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:vms="clr-namespace:AuroraVisionLauncher.ViewModels"
-             xmlns:conv ="clr-namespace:AuroraVisionLauncher.Converters"
+    xmlns:mahicon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mod="clr-namespace:AuroraVisionLauncher.Models"
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
-             xmlns:mod="clr-namespace:AuroraVisionLauncher.Models"
-             xmlns:mahicon="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type={x:Type vms:InstalledAppsViewModel}}"
-    d:DesignHeight="450" d:DesignWidth="800">
-	<Page.Resources>
-        <CollectionViewSource x:Key="CustomViewSource" Source="{Binding AvApps}" IsLiveGroupingRequested="True">
-			<CollectionViewSource.GroupDescriptions>
+    xmlns:vms="clr-namespace:AuroraVisionLauncher.ViewModels"
+    d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False,
+                                     Type={x:Type vms:InstalledAppsViewModel}}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    AllowDrop="True"
+    Style="{DynamicResource MahApps.Styles.Page}"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <CollectionViewSource
+            x:Key="CustomViewSource"
+            IsLiveGroupingRequested="True"
+            Source="{Binding AvApps}">
+            <CollectionViewSource.GroupDescriptions>
                 <PropertyGroupDescription PropertyName="Name" />
-			</CollectionViewSource.GroupDescriptions>
-			<!--<CollectionViewSource.SortDescriptions>
+            </CollectionViewSource.GroupDescriptions>
+            <!--<CollectionViewSource.SortDescriptions>
                 <componentModel:SortDescription PropertyName="YourPropertyForOrdering" />
             </CollectionViewSource.SortDescriptions>-->
-		</CollectionViewSource>
-	</Page.Resources>
-	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="48" />
-			<RowDefinition Height="*" />
-		</Grid.RowDefinitions>
-		<TextBlock
-            Style="{StaticResource PageTitleStyle}"
+        </CollectionViewSource>
+    </Page.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock
             Margin="{StaticResource MediumLeftMargin}"
+            Style="{StaticResource PageTitleStyle}"
             Text="{x:Static properties:Resources.InstalledAppsPageTitle}" />
-		<Grid
+        <Grid
             Grid.Row="1"
             Margin="{StaticResource MediumLeftRightMargin}"
             Background="{DynamicResource MahApps.Brushes.Gray10}">
-			<!--
-            The Mahapps Gray10 color represents where you should place your content.
-            Place your content here.
+            <!--
+                The Mahapps Gray10 color represents where you should place your content.
+                Place your content here.
             -->
-            <ListView ItemsSource="{Binding Source={StaticResource CustomViewSource}}" HorizontalAlignment="Stretch" Grid.IsSharedSizeScope="True" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                      ItemTemplate="{StaticResource AvAppFacadeDataTemplate}">
-				<ListView.GroupStyle>
-					<GroupStyle>
-						<GroupStyle.HeaderTemplate>
-							<DataTemplate >
-								<TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="14"/>
-							</DataTemplate>
-						</GroupStyle.HeaderTemplate>
-					</GroupStyle>
-				</ListView.GroupStyle>
-			</ListView>
-		</Grid>
-	</Grid>
+            <ListView
+                HorizontalAlignment="Stretch"
+                Grid.IsSharedSizeScope="True"
+                ItemTemplate="{StaticResource AvAppFacadeDataTemplate}"
+                ItemsSource="{Binding Source={StaticResource CustomViewSource}}"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListView.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    Text="{Binding Name}" />
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+                </ListView.GroupStyle>
+            </ListView>
+        </Grid>
+    </Grid>
 </Page>
