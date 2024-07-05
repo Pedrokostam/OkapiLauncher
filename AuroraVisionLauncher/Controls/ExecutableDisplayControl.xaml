@@ -15,7 +15,8 @@
         <conv:FileToIconConverter x:Key="FileIconConverter"/>
         <conv:BoolToVisibilityConverter x:Key="BoolVis"/>
     </UserControl.Resources>
-    <Grid x:Name="Root" >
+    <Border x:Name="Root" BorderThickness="0" BorderBrush="AliceBlue" Padding="5">
+        <Grid >
         <Grid.ContextMenu>
             <ContextMenu>
                 <MenuItem Header="Open installation folder" Command="{Binding Item.OpenContainingFolderCommand}"/>
@@ -26,7 +27,7 @@
         <Grid >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" SharedSizeGroup="IconColumn"/>
-                <ColumnDefinition Width="*" SharedSizeGroup="InfoColumn"/>
+                <ColumnDefinition Width="*" SharedSizeGroup="InfoColumn" MinWidth="200"/>
                 <ColumnDefinition Width="auto" SharedSizeGroup="StatusColumn"/>
                 <ColumnDefinition Width="auto" SharedSizeGroup="FolderColumn"/>
                 <ColumnDefinition Width="auto" SharedSizeGroup="LaunchColumn"/>
@@ -78,8 +79,9 @@
                     <TextBlock Text=" "/>
                     <TextBlock Text="{x:Static properties:Resources.ExecutableDevelopmentVersion}" Visibility="{Binding Item.IsDevelopmentBuild, Converter={StaticResource BoolVis}}" FontWeight="Bold" Foreground="DarkOrange"/>
                 </StackPanel >
-                    <TextBlock Text="{Binding Item.ExePath}" FontSize="14" Foreground="Gray"/>
+                    <TextBlock Text="{Binding Item.ExePath}" FontSize="24" Foreground="Gray"/>
             </StackPanel>
         </Grid>
-    </Grid>
+        </Grid>
+    </Border>
 </UserControl>

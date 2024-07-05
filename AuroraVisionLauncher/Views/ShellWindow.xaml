@@ -10,8 +10,8 @@
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
     Style="{StaticResource CustomMetroWindow}"
     mc:Ignorable="d"
-    MinWidth="900"
-    MinHeight="350"
+    MinWidth="1000"
+    MinHeight="600"
     d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type={x:Type vms:ShellViewModel}}"
     
     Title="{x:Static properties:Resources.AppDisplayName}">

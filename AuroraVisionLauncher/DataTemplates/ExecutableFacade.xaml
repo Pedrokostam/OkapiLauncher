@@ -1,0 +1,78 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                        xmlns:mahicon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                        xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
+                        xmlns:vms="clr-namespace:AuroraVisionLauncher.ViewModels"
+    xmlns:conv ="clr-namespace:AuroraVisionLauncher.Converters"
+                        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:mod="clr-namespace:AuroraVisionLauncher.Models"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <DataTemplate x:Key="ExecutableFacadeDataTemplate" DataType="{x:Type mod:ExecutableFacade}">
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Open installation folder" Command="{Binding OpenContainingFolderCommand}"/>
+                    <MenuItem Header="Launch the application without loading any program" Command="{Binding LaunchWithoutProgramCommand}"/>
+                </ContextMenu>
+            </Grid.ContextMenu>
+            <Rectangle Fill="Transparent"/>
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <Grid  Grid.Column="0">
+                    <Image Source="{Binding ExePath,Converter={StaticResource FileIconConverter}}"  Margin="0,0,8,0"/>
+                </Grid>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Column="2" Margin="5,0,10,0">
+                    <mahicon:PackIconMaterialDesign >
+                        <mahicon:PackIconMaterialDesign.Style>
+                            <Style TargetType="{x:Type mahicon:PackIconMaterialDesign}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsLaunched}" Value="False">
+                                        <Setter Property="Kind" Value="PowerOff"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsLaunched}" Value="True">
+                                        <Setter Property="Kind" Value="PowerOutline"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </mahicon:PackIconMaterialDesign.Style>
+                    </mahicon:PackIconMaterialDesign>
+                    <TextBlock Margin="5,0,0,0">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsLaunched}" Value="False">
+                                        <Setter Property="Text" Value="Closed"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsLaunched}" Value="TRue">
+                                        <Setter Property="Text" Value="Running"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </StackPanel>
+                <Button x:Name="button" Command="{Binding OpenContainingFolderCommand}" ToolTip="Open installation folder" Width="40" Margin="3,5,3,5" Grid.Column="3">
+                    <mahicon:PackIconMaterial Kind="FolderOpen" />
+                </Button>
+                <Button Command="{Binding LaunchWithoutProgramCommand}" ToolTip="Launch the application without loading any program" Width="40" Margin="3,5,3,5" Grid.Column="4">
+                    <mahicon:PackIconMaterial Kind="Launch" />
+                </Button>
+                <StackPanel  Grid.Column="1" Margin="0,0,20,0" VerticalAlignment="Center" TextBlock.FontSize="18">
+                    <StackPanel Orientation="Horizontal" >
+                        <TextBlock Text="{Binding Name}"/>
+                        <TextBlock Text=" - "/>
+                        <TextBlock Text="{Binding Version}"/>
+                        <TextBlock Text=" "/>
+                        <TextBlock Text="{x:Static properties:Resources.ExecutableDevelopmentVersion}" Visibility="{Binding IsDevelopmentBuild, Converter={StaticResource BoolVisibilityConverter}}" FontWeight="Bold" Foreground="DarkOrange"/>
+                    </StackPanel >
+                    <TextBlock Text="{Binding ExePath}" TextTrimming="CharacterEllipsis" FontSize="16"  Foreground="Gray"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </DataTemplate>
+</ResourceDictionary>

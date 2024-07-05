@@ -8,14 +8,16 @@
     xmlns:controls="clr-namespace:AuroraVisionLauncher.Controls"
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:mod="clr-namespace:AuroraVisionLauncher.Models"
     x:Class="AuroraVisionLauncher.Views.LauncherPage"
+    xmlns:mahicon="http://metro.mahapps.com/winfx/xaml/iconpacks"
     Style="{DynamicResource MahApps.Styles.Page}"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type={x:Type vms:LauncherViewModel}}"
     d:DesignHeight="450" d:DesignWidth="800">
     <Page.Resources>
         <conv:FileToIconConverter x:Key="FileIconConverter"/>
-
+        <conv:BoolToVisibilityConverter x:Key="BoolVis"/>
         <CollectionViewSource x:Key="CustomViewSource" Source="{Binding Apps}" IsLiveGroupingRequested="True">
             <CollectionViewSource.GroupDescriptions>
                 <PropertyGroupDescription PropertyName="Compatibility" />
@@ -63,7 +65,9 @@
                 </StackPanel>
             </Grid>
             <Grid Grid.Row="1">
-                <ListView ItemsSource="{Binding Source={StaticResource CustomViewSource}}"  SelectedItem="{Binding SelectedExecutable,Mode=TwoWay}" Grid.IsSharedSizeScope="True">
+                <ListView ItemsSource="{Binding Source={StaticResource CustomViewSource}}"  SelectedItem="{Binding SelectedExecutable,Mode=TwoWay}" 
+                          ItemTemplate="{StaticResource ExecutableFacadeDataTemplate}" 
+                          >
                     <ListView.GroupStyle>
                         <GroupStyle>
                             <GroupStyle.HeaderTemplate>
@@ -73,11 +77,6 @@
                             </GroupStyle.HeaderTemplate>
                         </GroupStyle>
                     </ListView.GroupStyle>
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <controls:ExecutableDisplayControl Item="{Binding}"/>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
                 </ListView>
             </Grid>
             <Button Grid.Row="2" TextBlock.FontSize="20" Command="{Binding LaunchCommand}">
