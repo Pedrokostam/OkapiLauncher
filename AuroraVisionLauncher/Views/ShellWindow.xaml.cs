@@ -1,8 +1,10 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 using AuroraVisionLauncher.Contracts.Views;
+using AuroraVisionLauncher.Models.Messages;
 using AuroraVisionLauncher.ViewModels;
-
+using CommunityToolkit.Mvvm.Messaging;
 using MahApps.Metro.Controls;
 
 namespace AuroraVisionLauncher.Views;
@@ -29,4 +31,40 @@ public partial class ShellWindow : MetroWindow, IShellWindow
 
     public SplitView GetSplitView()
         => splitView;
+
+    private void MetroWindow_PreviewDrop(object sender, System.Windows.DragEventArgs e)
+    {
+        if (e.Data.GetDataPresent(DataFormats.FileDrop))
+        {
+            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (files.Length == 1)
+            {
+                ((App)App.Current).GetService<IMessenger>().Send(new FileRequestedMessage(files[0]));
+            }
+        }
+    }
+
+    private void MetroWindow_PreviewDragOver(object sender, DragEventArgs e)
+    {
+        if (e.Data.GetDataPresent(DataFormats.FileDrop))
+        {
+            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (files != null && files.Length == 1)
+            {
+                e.Effects = DragDropEffects.Copy;
+                e.Handled = true;
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None;
+                e.Handled = true;
+            }
+        }
+        else
+        {
+            e.Effects = DragDropEffects.None;
+            e.Handled = true;
+        }
+    }
+
 }

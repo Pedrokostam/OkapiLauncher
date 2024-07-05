@@ -2,19 +2,22 @@
     x:Class="AuroraVisionLauncher.Views.ShellWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:vms="clr-namespace:AuroraVisionLauncher.ViewModels"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
-    Style="{StaticResource CustomMetroWindow}"
-    mc:Ignorable="d"
+    xmlns:vms="clr-namespace:AuroraVisionLauncher.ViewModels"
+    Title="{x:Static properties:Resources.AppDisplayName}"
     MinWidth="1000"
     MinHeight="600"
-    d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type={x:Type vms:ShellViewModel}}"
-    
-    Title="{x:Static properties:Resources.AppDisplayName}">
+    d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False,
+                                     Type={x:Type vms:ShellViewModel}}"
+    AllowDrop="True"
+    Drop="MetroWindow_PreviewDrop"
+    PreviewDragOver="MetroWindow_PreviewDragOver"
+    Style="{StaticResource CustomMetroWindow}"
+    mc:Ignorable="d">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding LoadedCommand}" />
@@ -27,27 +30,31 @@
         <controls:WindowCommands>
             <Button
                 AutomationProperties.Name="{x:Static properties:Resources.ShellGoBackButton}"
-                ToolTip="{x:Static properties:Resources.ShellGoBackButton}"
-                Command="{Binding GoBackCommand}">
+                Command="{Binding GoBackCommand}"
+                ToolTip="{x:Static properties:Resources.ShellGoBackButton}">
                 <TextBlock
-                    Text="&#xE72B;"
-                    FontSize="14"
+                    AutomationProperties.Name="{x:Static properties:Resources.ShellGoBackButton}"
                     FontFamily="Segoe MDL2 Assets"
-                    AutomationProperties.Name="{x:Static properties:Resources.ShellGoBackButton}" />
+                    FontSize="14"
+                    Text="&#xE72B;" />
             </Button>
         </controls:WindowCommands>
     </controls:MetroWindow.LeftWindowCommands>
     <controls:MetroWindow.Content>
         <controls:SplitView
             x:Name="splitView"
-            PanePlacement="Right"
+            AllowDrop="True"
+            Focusable="False"
             OpenPaneLength="400"
-            Focusable="False">
+            PanePlacement="Right"
+            PreviewDragOver="MetroWindow_PreviewDragOver">
             <controls:SplitView.Pane>
                 <Border
-                    BorderThickness="1,1,0,0"
+                    AllowDrop="True"
                     Background="{DynamicResource MahApps.Brushes.Control.Background}"
-                    BorderBrush="{DynamicResource MahApps.Brushes.Controls.Border}">
+                    BorderBrush="{DynamicResource MahApps.Brushes.Controls.Border}"
+                    BorderThickness="1,1,0,0"
+                    PreviewDragOver="MetroWindow_PreviewDragOver">
                     <Frame
                         x:Name="rightPaneFrame"
                         Focusable="False"
@@ -55,29 +62,47 @@
                 </Border>
             </controls:SplitView.Pane>
             <controls:SplitView.Content>
-                <Grid>
+                <Grid AllowDrop="True" PreviewDragOver="MetroWindow_PreviewDragOver">
+
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Menu Grid.Row="0" Focusable="False">
-                        <MenuItem Header="{x:Static properties:Resources.ShellMenuFileHeader}" AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}">
-                            <MenuItem Header="{x:Static properties:Resources.ShellMenuItemFileSettingsOpenProject}" Command="{Binding MenuFileOpenProjectCommand}" AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}" />
-                            <MenuItem Header="{x:Static properties:Resources.ShellMenuItemFileSettingsPageHeader}" Command="{Binding MenuFileSettingsCommand}" AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}" />
+                        <MenuItem AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}" Header="{x:Static properties:Resources.ShellMenuFileHeader}">
+                            <MenuItem
+                                AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
+                                Command="{Binding MenuFileOpenProjectCommand}"
+                                Header="{x:Static properties:Resources.ShellMenuItemFileSettingsOpenProject}" />
+                            <MenuItem
+                                AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
+                                Command="{Binding MenuFileSettingsCommand}"
+                                Header="{x:Static properties:Resources.ShellMenuItemFileSettingsPageHeader}" />
                             <Separator />
-                            <MenuItem Header="{x:Static properties:Resources.ShellMenuItemFileExitHeader}" Command="{Binding MenuFileExitCommand}" AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}" />
+                            <MenuItem
+                                AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
+                                Command="{Binding MenuFileExitCommand}"
+                                Header="{x:Static properties:Resources.ShellMenuItemFileExitHeader}" />
                         </MenuItem>
-                        <MenuItem Header="{x:Static properties:Resources.ShellMenuViewsHeader}" AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}">
-                            <!--TODO: Review the MenuItem headers in Resources.resx file for all of your views and place '_' before the letter that you want to use for menu keyboard usage-->
-                            <MenuItem Header="{x:Static properties:Resources.ShellMenuItemViewsLauncherPageHeader}" Command="{Binding MenuViewsLauncherCommand}" AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}" />
-                            <MenuItem Header="{x:Static properties:Resources.ShellMenuItemViewsInstalledAppsPageHeader}" Command="{Binding MenuViewsInstalledAppsCommand}" AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}" />
+                        <MenuItem AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}" Header="{x:Static properties:Resources.ShellMenuViewsHeader}">
+                            <!--  TODO: Review the MenuItem headers in Resources.resx file for all of your views and place '_' before the letter that you want to use for menu keyboard usage  -->
+                            <MenuItem
+                                AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
+                                Command="{Binding MenuViewsLauncherCommand}"
+                                Header="{x:Static properties:Resources.ShellMenuItemViewsLauncherPageHeader}" />
+                            <MenuItem
+                                AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
+                                Command="{Binding MenuViewsInstalledAppsCommand}"
+                                Header="{x:Static properties:Resources.ShellMenuItemViewsInstalledAppsPageHeader}" />
                         </MenuItem>
                     </Menu>
                     <Frame
-                        Grid.Row="1"
                         x:Name="shellFrame"
+                        Grid.Row="1"
+                        AllowDrop="True"
                         Focusable="False"
-                        NavigationUIVisibility="Hidden" />
+                        NavigationUIVisibility="Hidden"
+                        PreviewDragOver="MetroWindow_PreviewDragOver" />
                 </Grid>
             </controls:SplitView.Content>
         </controls:SplitView>

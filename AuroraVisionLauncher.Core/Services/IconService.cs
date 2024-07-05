@@ -8,6 +8,7 @@ using AuroraVisionLauncher.Core.Contracts.Services;
 namespace AuroraVisionLauncher.Core.Services;
 public class IconService : IIconService
 {
+
     public string? ExtractIconToFile(string? iconSourcePrimary, string destinationPath, Icon fallbackIcon)
     {
         Icon? icon = null;
