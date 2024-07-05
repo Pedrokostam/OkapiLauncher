@@ -6,7 +6,7 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        var service = new FileAssociationService();
+        var service = new FileAssociationService(new IconService());
         service.GetCurrentAssociations();
     }
 }

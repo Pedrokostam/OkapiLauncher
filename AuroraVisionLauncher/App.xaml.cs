@@ -16,6 +16,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Windows.ApplicationModel.Resources.Core;
 
 namespace AuroraVisionLauncher;
 
@@ -53,7 +54,9 @@ public partial class App : Application
                 })
                 .ConfigureServices(ConfigureServices)
                 .Build();
-
+        Uri iconUri = new Uri("pack://application:,,,/Resources/Icons/AppIcon.ico");
+        var i = new System.Windows.Media.Imaging.BitmapImage(iconUri);
+        var rr = Application.GetResourceStream(new Uri("Resources/Icons/AppIcon.ico", UriKind.Relative));
         await _host.StartAsync();
         if (e.Args.Length == 1)
         {
@@ -112,6 +115,7 @@ public partial class App : Application
         _host?.Dispose();
         _host = null;
     }
+
 
     private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {

@@ -8,7 +8,21 @@
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<ApplicationIcon>Resources\Icons\AppIcon.ico</ApplicationIcon>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\Icons\AdaptiveVisionExecutor.ico" />
+	  <None Remove="Resources\Icons\AdaptiveVisionStudio.ico" />
+	  <None Remove="Resources\Icons\AuroraVisionExecutor.ico" />
+	  <None Remove="Resources\Icons\AuroraVisionStudio.ico" />
+	  <None Remove="Resources\Icons\FabImageRuntime.ico" />
+	  <None Remove="Resources\Icons\FabImageStudio.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Resources\Icons\AppIcon.ico" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
@@ -44,5 +58,14 @@
 
 	<ItemGroup>
 	  <Folder Include="AvFileHandling\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Resources\Icons\AdaptiveVisionExecutor.ico" />
+	  <Resource Include="Resources\Icons\AdaptiveVisionStudio.ico" />
+	  <Resource Include="Resources\Icons\AuroraVisionExecutor.ico" />
+	  <Resource Include="Resources\Icons\AuroraVisionStudio.ico" />
+	  <Resource Include="Resources\Icons\FabImageRuntime.ico" />
+	  <Resource Include="Resources\Icons\FabImageStudio.ico" />
 	</ItemGroup>
 </Project>

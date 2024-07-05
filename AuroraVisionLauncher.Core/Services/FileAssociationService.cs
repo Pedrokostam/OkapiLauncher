@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using AuroraVisionLauncher.Core.Contracts.Services;
 using Microsoft.Win32;
 
 namespace AuroraVisionLauncher.Core.Services;
 public class FileAssociationService
 {
     public const string RegistryAppName = "AuroraVisionLauncher";
-    private readonly string[] _extensions=[".avproj",".fiproj",".avexe",".fiexe"];
+    private static readonly string[] _extensions=[".avproj",".fiproj",".avexe",".fiexe"];
+    private readonly IIconService _iconService;
 
     public Dictionary<string, string> GetCurrentAssociations()
     {
@@ -21,6 +23,11 @@ public class FileAssociationService
             }
         }
         return userAssociations;
+    }
+
+    public FileAssociationService(IIconService iconService)
+    {
+        _iconService = iconService;
     }
     /// <summary>
     /// Creates keys in the registry that define what icon to use for each extension associated with the app and extension.
