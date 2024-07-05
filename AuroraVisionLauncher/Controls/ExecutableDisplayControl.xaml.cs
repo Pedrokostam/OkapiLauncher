@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using AuroraVisionLauncher.Core.Models.Apps;
+using AuroraVisionLauncher.Models;
 
 namespace AuroraVisionLauncher.Controls;
 /// <summary>
@@ -26,15 +26,15 @@ public partial class ExecutableDisplayControl : UserControl
         Root.DataContext = this;
     }
 
-    public Executable Item
+    public ExecutableFacade Item
     {
-        get { return (Executable)GetValue(ItemProperty); }
+        get { return (ExecutableFacade)GetValue(ItemProperty); }
         set { SetValue(ItemProperty, value); }
     }
 
     // Using a DependencyProperty as the backing store for Item.  This enables animation, styling, binding, etc...
     public static readonly DependencyProperty ItemProperty =
-    DependencyProperty.Register("Item", typeof(Executable), typeof(ExecutableDisplayControl), new PropertyMetadata(null));
+    DependencyProperty.Register("Item", typeof(ExecutableFacade), typeof(ExecutableDisplayControl), new PropertyMetadata(null));
 
 
 

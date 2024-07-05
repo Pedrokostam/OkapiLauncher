@@ -9,20 +9,13 @@ using AuroraVisionLauncher.Core.Models.Apps;
 
 namespace AuroraVisionLauncher.Core.Models.Apps;
 
-public enum Compatibility
-{
-    Unknown,
-    Outdated,
-    Supported,
-}
-public abstract record Executable
+public abstract record Executable : IExecutable
 {
     public string ExePath { get; }
     public Version Version { get; }
     public string Name { get; }
     public bool IsDevelopmentBuild => Version.Build >= 1000;
-    private FileVersionInfo _originalInfo;
-    public Compatibility Compatibility { get; private set; } = Compatibility.Unknown;
+    readonly private FileVersionInfo _originalInfo;
     protected abstract ReadOnlyCollection<ProgramType> SupportedAppTypes { get; }
     protected Executable(FileVersionInfo fvinfo)
     {
@@ -40,7 +33,9 @@ public abstract record Executable
     {
         try
         {
-            return Process.GetProcessesByName(_originalInfo.InternalName).Any();
+            var p = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(_originalInfo.InternalName));
+
+            return p.Any(x => string.Equals(x.MainModule.FileName, ExePath, StringComparison.OrdinalIgnoreCase));
         }
         catch (InvalidOperationException)
         {
@@ -57,7 +52,7 @@ public abstract record Executable
         }
         if (productVersion.Contains(' '))
         {
-            productVersion = productVersion.Split(' ',StringSplitOptions.TrimEntries)[0];
+            productVersion = productVersion.Split(' ', StringSplitOptions.TrimEntries)[0];
         }
         var ver = Version.Parse(productVersion);
         return ver;
@@ -121,37 +116,13 @@ public abstract record Executable
         return true;
     }
 
-    public Executable WithCompatibility(AvFileInformation avinfo)
-    {
-        Compatibility comp;
-        if (avinfo.ProgramType == ProgramType.FabImageRuntime || avinfo.ProgramType == ProgramType.AuroraVisionRuntime)
-        {
-            comp = Compatibility.Unknown;
-        }
-        else
-        {
-            if (avinfo.Version > Version)
-            {
-                comp = Compatibility.Outdated;
-            }
-            else
-            {
-                comp = Compatibility.Supported;
-            }
-        }
-        return this with { Compatibility = comp };
-    }
     public bool SupportsAvFile(AvFileInformation information)
     {
         return SupportedAppTypes.Contains(information.ProgramType);
     }
-    public static int GetClosestApp(IList<Executable> executables, VisionProgram info)
+    public static int GetClosestApp(IEnumerable<IExecutable> executables, VisionProgram info)
     {
-        if (executables.Count == 0)
-        {
-            return -1;
-        }
-        var weights = new List<double>(executables.Count);
+        var weights = new List<double>();
         foreach (Executable executable in executables)
         {
             double weight = 0;
@@ -164,6 +135,10 @@ public abstract record Executable
             double executableVersionTransformed = executable.Version.Major * 1e12 + executable.Version.Minor * 1e9 + executable.Version.Build * 1e6 + executable.Version.Revision;
             weight += executableVersionTransformed - programVersionTransformed;
             weights.Add(Math.Abs(weight));
+        }
+        if (weights.Count == 0)
+        {
+            return -1;
         }
         var min = weights.Min();
         return weights.IndexOf(min);

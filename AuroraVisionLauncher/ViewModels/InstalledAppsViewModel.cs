@@ -2,6 +2,7 @@
 using System.Windows.Threading;
 using AuroraVisionLauncher.Contracts.Services;
 using AuroraVisionLauncher.Core.Models.Apps;
+using AuroraVisionLauncher.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -16,21 +17,22 @@ public class InstalledAppsViewModel : ObservableObject
         _appProvider = appsProviderService;
         foreach (var exe in _appProvider.Executables)
         {
-            Executables.Add(exe);
+            Executables.Add(new(exe));
         }
-        _timer= new DispatcherTimer();
-        _timer.Tick += Timer_Tick;
+        _timer = new DispatcherTimer();
+        UpdateRunningStatus();
+        _timer.Tick += (o,e) => UpdateRunningStatus();
         _timer.Interval = TimeSpan.FromSeconds(2);
         _timer.Start();
     }
 
-    private void Timer_Tick(object? sender, EventArgs e)
+    private void UpdateRunningStatus()
     {
         foreach (var exe in Executables)
         {
-            exe.CheckIfProcessIsRunning();
+            exe.IsLaunched = exe.CheckIfProcessIsRunning();
         }
     }
 
-    public ObservableCollection<Executable> Executables { get; } = new();
+    public ObservableCollection<ExecutableFacade> Executables { get; } = new();
 }

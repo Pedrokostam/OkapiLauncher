@@ -11,6 +11,7 @@ using AuroraVisionLauncher.Core.Models;
 using System.Windows.Input;
 using System.Diagnostics;
 using Windows.Storage;
+using AuroraVisionLauncher.Models;
 
 namespace AuroraVisionLauncher.ViewModels;
 
@@ -28,7 +29,7 @@ public partial class MainViewModel : ObservableRecipient, IRecipient<FileRequest
 
 
 
-    public ObservableCollection<Executable> Apps { get; } = new();
+    public ObservableCollection<ExecutableFacade> Apps { get; } = new();
 
 
     private bool CanLaunch()
@@ -65,7 +66,7 @@ public partial class MainViewModel : ObservableRecipient, IRecipient<FileRequest
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(LaunchCommand))]
-    private Executable? _selectedExecutable=null;
+    private ExecutableFacade? _selectedExecutable=null;
     public void Receive(FileRequestedMessage message) => OpenProject(message.Value);
     private void OpenProject(string filepath)
     {
@@ -85,7 +86,7 @@ public partial class MainViewModel : ObservableRecipient, IRecipient<FileRequest
 
         var matchingExecutables = _appProvider.Executables
             .Where(x=>x.SupportsAvFile(info))
-            .Select(x=>x.WithCompatibility(info))
+            .Select(x=>new ExecutableFacade(x))
             .OrderByDescending(x=>x.Compatibility);
         foreach (var executable in matchingExecutables)
         {

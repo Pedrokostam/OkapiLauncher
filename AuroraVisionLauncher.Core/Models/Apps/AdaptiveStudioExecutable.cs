@@ -6,10 +6,7 @@ namespace AuroraVisionLauncher.Core.Models.Apps;
 
 public record AdaptiveStudioExecutable : StudioExecutable
 {
-    private static readonly List<ProgramType> _programTypes = new List<ProgramType>
-    {
-       ProgramType.AdaptiveVisionProject
-    };
+    private static readonly List<ProgramType> _programTypes = [ProgramType.AdaptiveVisionProject];
     public AdaptiveStudioExecutable(FileVersionInfo fvinfo) : base(fvinfo)
     {
     }
