@@ -9,6 +9,7 @@ public interface IAvApp
     string Name { get; }
     Version Version { get; }
     AvAppType AppType { get; }
+    Version? SecondaryVersion { get; }
 
     bool CheckIfProcessIsRunning();
     bool SupportsProgram(ProgramInformation information);

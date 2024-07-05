@@ -22,6 +22,8 @@ namespace AuroraVisionLauncher.Models
 
         public AvAppType AppType => _avApp.AppType;
 
+        public Version? SecondaryVersion => _avApp.SecondaryVersion;
+
         [ObservableProperty]
         private string _compatibility = "";
 

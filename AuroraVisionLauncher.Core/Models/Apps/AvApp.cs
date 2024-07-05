@@ -20,32 +20,48 @@ internal record Configuration
     private readonly List<ProgramType> _supportedPrograms;
     public IReadOnlyCollection<ProgramType> SupportedPrograms => _supportedPrograms.AsReadOnly();
 }
+internal record MultiVersion(FileVersionInfo Primary, FileVersionInfo? Secondary)
+{
+    public static MultiVersion? Create(FileInfo? primary, FileInfo? secondary = null)
+    {
+        if (primary is null)
+        {
+            return null;
+        }
+        var ver1 = FileVersionInfo.GetVersionInfo(primary.FullName);
+        var ver2 = secondary is null ? null : FileVersionInfo.GetVersionInfo(secondary.FullName);
+        return new MultiVersion(ver1, ver2);
+    }
+}
 public record AvApp : IAvApp
 {
     private static readonly Dictionary<string, Configuration> AvAppConfigurations = new(StringComparer.OrdinalIgnoreCase)
     {
-        {"aurora vision studio",    new Configuration(AvAppType.Professional,[ProgramType.AdaptiveVisionProject,ProgramType.AuroraVisionProject])},
-        {"adaptive vision studio",  new Configuration(AvAppType.Professional,[ProgramType.AdaptiveVisionProject])},
-        {"fabimage studio",         new Configuration(AvAppType.Professional,[ProgramType.FabImageProject])},
-        {"aurora vision executor",  new Configuration(AvAppType.Runtime,[ProgramType.AdaptiveVisionProject,ProgramType.AuroraVisionProject,ProgramType.AuroraVisionRuntime])},
-        {"adaptive vision executor",new Configuration(AvAppType.Runtime,[ProgramType.AdaptiveVisionProject])},
-        {"fabimage runtime",        new Configuration(AvAppType.Runtime,[ProgramType.FabImageRuntime,ProgramType.FabImageProject])},
+        {"Aurora Vision Studio",    new Configuration(AvAppType.Professional,[ProgramType.AdaptiveVisionProject,ProgramType.AuroraVisionProject])},
+        {"Adaptive Vision Studio",  new Configuration(AvAppType.Professional,[ProgramType.AdaptiveVisionProject])},
+        {"FabImage Studio",         new Configuration(AvAppType.Professional,[ProgramType.FabImageProject])},
+        {"Aurora Vision Executor",  new Configuration(AvAppType.Runtime,[ProgramType.AdaptiveVisionProject,ProgramType.AuroraVisionProject,ProgramType.AuroraVisionRuntime])},
+        {"Adaptive Vision Executor",new Configuration(AvAppType.Runtime,[ProgramType.AdaptiveVisionProject])},
+        {"FabImage Runtime",        new Configuration(AvAppType.Runtime,[ProgramType.FabImageRuntime,ProgramType.FabImageProject])},
+        {"Deep Learning Editor",    new Configuration(AvAppType.DeepLearning,[])},
     };
 
     public string ExePath { get; }
     public Version Version { get; }
+    public Version? SecondaryVersion { get; }
     public string Name { get; }
     public AvAppType AppType { get; }
     public bool IsDevelopmentBuild => Version.Build >= 1000;
     readonly private FileVersionInfo _originalInfo;
     private readonly List<ProgramType> _supportedPrograms;
     protected IReadOnlyCollection<ProgramType> SupportedProgramTypes => _supportedPrograms.AsReadOnly();
-    internal AvApp(FileVersionInfo fvinfo, Configuration configuration)
+    internal AvApp(MultiVersion mvinfo, Configuration configuration)
     {
-        ExePath = fvinfo.FileName;
-        Version = ParseVersion(fvinfo);
-        Name = fvinfo.ProductName ?? "N/A";
-        _originalInfo = fvinfo;
+        ExePath = mvinfo.Primary.FileName;
+        Version = ParseVersion(mvinfo.Primary);
+        SecondaryVersion = mvinfo.Secondary is not null ? ParseVersion(mvinfo.Secondary) : null;
+        Name = mvinfo.Primary.ProductName ?? "N/A";
+        _originalInfo = mvinfo.Primary;
 
         _supportedPrograms = new List<ProgramType>(configuration.SupportedPrograms);
         AppType = configuration.AppType;
@@ -82,8 +98,8 @@ public record AvApp : IAvApp
         var ver = Version.Parse(productVersion);
         return ver;
     }
-    
-    static FileVersionInfo? FindInfo(string folder)
+
+    static MultiVersion? FindInfo(string folder)
 
     {
         if (string.IsNullOrWhiteSpace(folder))
@@ -91,40 +107,53 @@ public record AvApp : IAvApp
             return null;
         }
         var dir = new DirectoryInfo(folder);
-        // environment variables for studio proffesional points to AVL libraries, which are in the SDK subfolder
+
         if (dir.Name.Contains("sdk", StringComparison.OrdinalIgnoreCase))
         {
+            // environment variables for studio proffesional points to AVL libraries, which are in the SDK subfolder
             dir = dir.Parent!;
         }
+        else if (dir.Parent.Name.Contains("Deep Learning", StringComparison.OrdinalIgnoreCase))
+        {
+            // deep learning also points to library, so 1 step back and the go for deeplearning editor
+            dir = new DirectoryInfo(Path.Join(dir.Parent!.FullName, "Tools", "DeepLearningEditor"));
+        }
+
         var exes = dir.GetFiles("*.exe");
-        FileInfo? theExe = null;
-        if (folder.Contains("professional", StringComparison.OrdinalIgnoreCase))
+
+        if (folder.Contains("Professional", StringComparison.OrdinalIgnoreCase))
         {
-            theExe = exes.FirstOrDefault(x => x.Name.Contains("studio", StringComparison.OrdinalIgnoreCase));
+            var primary = exes.FirstOrDefault(x => x.Name.Contains("Studio", StringComparison.OrdinalIgnoreCase));
+            return MultiVersion.Create(primary);
         }
-        else if (folder.Contains("runtime", StringComparison.OrdinalIgnoreCase))
+        if (folder.Contains("Runtime", StringComparison.OrdinalIgnoreCase))
         {
-            theExe = exes.FirstOrDefault(x => x.Name.Contains("executor", StringComparison.OrdinalIgnoreCase));
+            var primary = exes.FirstOrDefault(x => x.Name.Contains("Executor", StringComparison.OrdinalIgnoreCase));
+            return MultiVersion.Create(primary);
         }
-        if (theExe is null)
+        if (folder.Contains("Deep Learning", StringComparison.OrdinalIgnoreCase))
         {
-            return null;
+            // deep learning editor
+            var primary = exes.FirstOrDefault(x => x.Name.Contains("Editor", StringComparison.OrdinalIgnoreCase));
+            // uninstaller - it has the version of DL listed on the site (what hack?)
+            var secondary = dir.Parent!.Parent!.GetFiles("*.exe").FirstOrDefault(x => x.Name.Contains("unins", StringComparison.OrdinalIgnoreCase));
+            return MultiVersion.Create(primary, secondary);
         }
-        return FileVersionInfo.GetVersionInfo(theExe.FullName);
+        return null;
     }
-    public static AvApp Create(FileVersionInfo fvinfo)
+    private static AvApp Create(MultiVersion mvinfo)
     {
-        if (AvAppConfigurations.TryGetValue(fvinfo.ProductName ?? "", out Configuration? configuration))
+        if (AvAppConfigurations.TryGetValue(mvinfo.Primary.ProductName ?? "", out Configuration? configuration))
         {
-            return new AvApp(fvinfo, configuration);
+            return new AvApp(mvinfo, configuration);
 
         }
-        throw new InvalidOperationException($"Unsupported product type: {fvinfo.ProductName}");
+        throw new InvalidOperationException($"Unsupported product type: {mvinfo.Primary.ProductName}");
     }
 
     public static bool TryCreate(string folder, [NotNullWhen(true)] out AvApp? app)
     {
-        if (FindInfo(folder) is not FileVersionInfo fileVersionInfo)
+        if (FindInfo(folder) is not MultiVersion fileVersionInfo)
         {
             app = null;
             return false;
@@ -144,7 +173,7 @@ public record AvApp : IAvApp
         {
             double weight = 0;
             bool isProgramRuntime = info.Type == ProgramType.AuroraVisionRuntime || info.Type == ProgramType.FabImageRuntime;
-            if (isProgramRuntime && app.AppType!=AvAppType.Runtime || !isProgramRuntime && app.AppType == AvAppType.Runtime)
+            if (isProgramRuntime && app.AppType != AvAppType.Runtime || !isProgramRuntime && app.AppType == AvAppType.Runtime)
             {
                 weight = -1e21;
             }

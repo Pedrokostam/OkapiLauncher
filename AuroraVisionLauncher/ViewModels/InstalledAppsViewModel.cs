@@ -11,7 +11,7 @@ namespace AuroraVisionLauncher.ViewModels;
 public class InstalledAppsViewModel : ObservableObject
 {
     private readonly IInstalledAppsProviderService _appProvider;
-    private DispatcherTimer _timer;
+    private readonly DispatcherTimer _timer;
     public InstalledAppsViewModel(IInstalledAppsProviderService appsProviderService)
     {
         _appProvider = appsProviderService;

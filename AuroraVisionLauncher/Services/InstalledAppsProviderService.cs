@@ -26,7 +26,7 @@ public class InstalledAppsProviderService : IInstalledAppsProviderService
             {
                 continue;
             }
-            if (Regex.IsMatch(key_string, "^(AVS|FIS)_", RegexOptions.IgnoreCase) && value_string is not null)
+            if (Regex.IsMatch(key_string, "^(AVS|FIS|AVLDL|FILDL)_", RegexOptions.IgnoreCase) && value_string is not null)
             {
                 if (AvApp.TryCreate(value_string, out AvApp? app))
                 {
