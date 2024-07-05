@@ -17,7 +17,6 @@ public class PageService : IPageService
     {
         _serviceProvider = serviceProvider;
         Configure<MainViewModel, MainPage>();
-        Configure<BlankViewModel, BlankPage>();
         Configure<SettingsViewModel, SettingsPage>();
         Configure<InstalledAppsViewModel, InstalledAppsPage>();
     }

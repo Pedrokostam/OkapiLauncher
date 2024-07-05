@@ -94,10 +94,6 @@ public partial class App : Application
         services.AddSingleton<MainViewModel>();
         services.AddSingleton<MainPage>();
 
-
-        services.AddTransient<BlankViewModel>();
-        services.AddTransient<BlankPage>();
-
         services.AddTransient<SettingsViewModel>();
         services.AddTransient<SettingsPage>();
 

@@ -80,11 +80,6 @@ public class ShellViewModel : ObservableObject
     private void OnMenuViewsMain()
         => _navigationService.NavigateTo(typeof(MainViewModel).FullName, null, true);
 
-    public ICommand MenuViewsBlankCommand => _menuViewsBlankCommand ?? (_menuViewsBlankCommand = new RelayCommand(OnMenuViewsBlank));
-
-    private void OnMenuViewsBlank()
-        => _navigationService.NavigateTo(typeof(BlankViewModel).FullName, null, true);
-
     private void OnMenuFileSettings()
         => _rightPaneService.OpenInRightPane(typeof(SettingsViewModel).FullName);
 
