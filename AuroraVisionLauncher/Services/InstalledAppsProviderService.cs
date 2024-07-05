@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.Models.Apps;
+using AuroraVisionLauncher.Core.Models.Apps;
 
 namespace AuroraVisionLauncher.Services;
 public class InstalledAppsProviderService : IInstalledAppsProviderService

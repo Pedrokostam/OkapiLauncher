@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using AuroraVisionLauncher.Models.Apps;
+using AuroraVisionLauncher.Core.Models.Apps;
 
 namespace AuroraVisionLauncher.Contracts.Services;
 public interface IInstalledAppsProviderService

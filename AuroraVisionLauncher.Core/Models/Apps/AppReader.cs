@@ -6,37 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace AuroraVisionLauncher.Models.Apps;
-
-[Flags]
-public enum ProgramType
-{
-    None,
-    /// <summary>
-    /// Aurora Vision Project - .avproj
-    /// </summary>
-    AuroraVisionProject,
-    /// <summary>
-    /// Adaptive Vision Project - .avproj
-    /// </summary>
-    AdaptiveVisionProject,
-    /// <summary>
-    /// Aurora Vision Runtime - .avexe
-    /// </summary>
-    AuroraVisionRuntime,
-    /// <summary>
-    /// FabImage Project - .fiproj
-    /// </summary>
-    FabImageProject,
-    /// <summary>
-    /// FabImage Runtime - .fiexe
-    /// </summary>
-    FabImageRuntime
-}
-public readonly record struct AvFileInformation(ProgramType ProgramType, Version Version)
-{
-
-}
+namespace AuroraVisionLauncher.Core.Models.Apps;
 public static class AppReader
 {
     static readonly Encoding _encoder = new UTF8Encoding(false);
@@ -58,7 +28,7 @@ public static class AppReader
         }
         if (finfo.Length < 250)
         {
-            throw new FileFormatException("The specified file is too small");
+            throw new InvalidDataException("The specified file is too small");
         }
         using var stream = finfo.OpenRead();
         Span<byte> preambleBuffer = stackalloc byte[3];
@@ -86,7 +56,7 @@ public static class AppReader
     {
 #if DEBUG
         string spanstr = _encoder.GetString(span[..header.Length]);
-        string headerstr = _encoder.GetString(header);  
+        string headerstr = _encoder.GetString(header);
 #endif
         return span[..header.Length].SequenceEqual(header);
     }
@@ -94,8 +64,8 @@ public static class AppReader
     {
         using var reader = XmlReader.Create(filepath);
         reader.Read();
-        string? versionStart = reader.GetAttribute("Version");
-        string? versionEnd = reader.GetAttribute("Revision");
+        string versionStart = reader.GetAttribute("Version");
+        string versionEnd = reader.GetAttribute("Revision");
         if (string.IsNullOrWhiteSpace(versionStart) || string.IsNullOrWhiteSpace(versionEnd))
         {
             return new Version();
@@ -108,7 +78,7 @@ public static class AppReader
         var programType = CheckFile(filepath);
         Version version = programType switch
         {
-            ProgramType.None => throw new FileFormatException("Format does not match any headers."),
+            ProgramType.None => throw new InvalidDataException("Format does not match any headers."),
             ProgramType.FabImageRuntime or ProgramType.AuroraVisionRuntime => new Version(),
             _ => GetVersionFromXml(filepath)
         };
