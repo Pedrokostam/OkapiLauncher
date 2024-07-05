@@ -63,7 +63,7 @@
                 </StackPanel>
             </Grid>
             <Grid Grid.Row="1">
-                <ListView ItemsSource="{Binding Source={StaticResource CustomViewSource}}"  SelectedItem="{Binding SelectedExecutable,Mode=TwoWay}">
+                <ListView ItemsSource="{Binding Source={StaticResource CustomViewSource}}"  SelectedItem="{Binding SelectedExecutable,Mode=TwoWay}" Grid.IsSharedSizeScope="True">
                     <ListView.GroupStyle>
                         <GroupStyle>
                             <GroupStyle.HeaderTemplate>

@@ -180,4 +180,7 @@
   <data name="ShellMenuItemFileSettingsOpenProject" xml:space="preserve">
     <value>_Open project...</value>
   </data>
+  <data name="ExecutableDevelopmentVersion" xml:space="preserve">
+    <value>TRUNK</value>
+  </data>
 </root>

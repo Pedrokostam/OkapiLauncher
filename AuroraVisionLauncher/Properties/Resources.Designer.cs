@@ -79,6 +79,15 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to TRUNK.
+        /// </summary>
+        public static string ExecutableDevelopmentVersion {
+            get {
+                return ResourceManager.GetString("ExecutableDevelopmentVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to InstalledApps.
         /// </summary>
         public static string InstalledAppsPageTitle {
