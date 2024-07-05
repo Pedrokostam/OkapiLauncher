@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -12,11 +13,12 @@ using AuroraVisionLauncher.Core.Models.Apps;
 namespace AuroraVisionLauncher.Services;
 public class InstalledAppsProviderService : IInstalledAppsProviderService
 {
+    private const string AdditionalFoldersKey = "AdditionalExecutableFolderPaths";
     readonly List<AvApp> _avApps;
     public ReadOnlyCollection<AvApp> AvApps => _avApps.AsReadOnly();
     public InstalledAppsProviderService()
     {
-        var variables= Environment.GetEnvironmentVariables();
+        var variables = Environment.GetEnvironmentVariables();
         _avApps = new List<AvApp>();
         foreach (DictionaryEntry entry in variables)
         {
@@ -31,6 +33,20 @@ public class InstalledAppsProviderService : IInstalledAppsProviderService
                 if (AvApp.TryCreate(value_string, out AvApp? app))
                 {
                     _avApps.Add(app);
+                }
+            }
+        }
+        if (App.Current.Properties.Contains(AdditionalFoldersKey))
+        {
+            var paths = App.Current.Properties[AdditionalFoldersKey] as IEnumerable<string>;
+            if (paths is not null)
+            {
+                foreach (var folder in paths)
+                {
+                    if (AvApp.TryCreate(folder, out AvApp? app))
+                    {
+                        _avApps.Add(app);
+                    }
                 }
             }
         }
