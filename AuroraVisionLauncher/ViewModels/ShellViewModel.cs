@@ -80,7 +80,7 @@ public partial class ShellViewModel : ObservableObject
         var result = dialog.ShowDialog();
         if (result == true)
         {
-            _navigationService.NavigateTo(typeof(LauncherViewModel).FullName!);
+            //_navigationService.NavigateTo(typeof(LauncherViewModel).FullName!);
             OpenProject(dialog.FileName);
         }
     }

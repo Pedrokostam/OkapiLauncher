@@ -57,6 +57,8 @@ public partial class App : Application
                 .Build();
 
         await _host.StartAsync();
+        // initialize launcher vm, so that it can start listening to FileRequestMessages
+        GetService<LauncherViewModel>();
         if (e.Args.Length == 1)
         {
             GetService<IMessenger>().Send(new FileRequestedMessage(e.Args[0]));

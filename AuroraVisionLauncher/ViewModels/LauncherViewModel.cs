@@ -102,14 +102,11 @@ public partial class LauncherViewModel : ObservableRecipient, IRecipient<FileReq
             {
                 SelectedExecutable = null;
             }
+            _navigationService.NavigateTo(GetType().FullName!);
         }
         catch (InvalidDataException e)
         {
             MessageBox.Show("File is neither a projects file nor a runtime executable.");
-            if (VisionProgram is null && _navigationService.CanGoBack)
-            {
-                _navigationService.GoBack();
-            }
         }
 
     }
