@@ -27,7 +27,7 @@ public partial class LauncherViewModel : ObservableRecipient, IRecipient<FileReq
         _appProvider = appProvider;
         _navigationService = navigationService;
         OnActivated();
-        _timer = new DispatcherTimer(); 
+        _timer = new DispatcherTimer();
         UpdateRunningStatus();
         _timer.Tick += (o, e) => UpdateRunningStatus();
         _timer.Interval = TimeSpan.FromSeconds(2);
@@ -98,6 +98,16 @@ public partial class LauncherViewModel : ObservableRecipient, IRecipient<FileReq
         LaunchOptions = LaunchOptions.Get(value);
         LaunchOptions.ProgramPath = VisionProgram?.Path;
         LaunchOptions.ApplicationPath = SelectedApp?.ExePath;
+    }
+
+    private bool CanCopyArgumentString() => !string.IsNullOrWhiteSpace(LaunchOptions?.ArgumentString);
+    [RelayCommand(CanExecute =nameof(CanCopyArgumentString))]
+    private void CopyArgumentString()
+    {
+        if (LaunchOptions?.ArgumentString is not null)
+        {
+            Clipboard.SetText(LaunchOptions.ArgumentString);
+        }
     }
 
     public void Receive(FileRequestedMessage message) => OpenProject(message.Value);

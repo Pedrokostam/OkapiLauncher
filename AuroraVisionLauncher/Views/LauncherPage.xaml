@@ -2,6 +2,7 @@
     x:Class="AuroraVisionLauncher.Views.LauncherPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:AuroraVisionLauncher.Controls"
     xmlns:conv="clr-namespace:AuroraVisionLauncher.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
@@ -20,6 +21,7 @@
     <Page.Resources>
         <conv:FileToIconConverter x:Key="FileIconConverter" />
         <conv:BoolToVisibilityConverter x:Key="BoolVis" />
+        <conv:CommandlineToFormattedTextConverter x:Key="CommandlineFormatter" />
         <Style
             x:Key="HighlightStyle"
             BasedOn="{StaticResource {x:Type Button}}"
@@ -112,14 +114,12 @@
                     <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
                 <GroupBox Grid.ColumnSpan="2" Header="{x:Static properties:Resources.LaunchOptionsCommandLineString}">
-                    <TextBox
-                        Height="auto"
-                        BorderThickness="0"
-                        FontFamily="Consolas"
-                        FontSize="18"
-                        IsReadOnly="True"
-                        Text="{Binding LaunchOptions.ArgumentString, Mode=OneWay}"
-                        TextWrapping="Wrap" />
+                    <DockPanel>
+                        <Button Command="{Binding CopyArgumentStringCommand}" DockPanel.Dock="Right">
+                            <mahicon:PackIconLucide Kind="ClipboardCopy" />
+                        </Button>
+                        <controls:BindableRichTextBox Document="{Binding LaunchOptions.ArgumentString, Converter={StaticResource CommandlineFormatter}}" HorizontalAlignment="Stretch"/>
+                    </DockPanel>
                 </GroupBox>
                 <StackPanel
                     Grid.Row="1"
