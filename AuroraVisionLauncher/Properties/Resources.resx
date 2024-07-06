@@ -249,4 +249,7 @@
   <data name="ValidationArgumentNoWhitespace" xml:space="preserve">
     <value>Argument cannot contain whitespace.</value>
   </data>
+  <data name="CommandLineCopy" xml:space="preserve">
+    <value>Copy the command-line string</value>
+  </data>
 </root>

@@ -22,7 +22,7 @@ public class CommandlineToFormattedTextConverter : IValueConverter
         }
 
         var para = new Paragraph();
-        para.FontFamily = new System.Windows.Media.FontFamily("Consolas");
+        para.TextAlignment = TextAlignment.Left;
 
         // Example logic to split and format parts of the text
         var parts = Tokenizer.Matches(input).Select(x => x.Value).ToList();
@@ -33,7 +33,7 @@ public class CommandlineToFormattedTextConverter : IValueConverter
         }
 
         var exeRun = new Run(parts[0]);
-        exeRun.Foreground = Brushes.Green;
+        exeRun.Foreground = Brushes.PaleGreen;
 
         para.Inlines.Add(exeRun);
 
@@ -49,12 +49,21 @@ public class CommandlineToFormattedTextConverter : IValueConverter
             else
             {
                 run.FontWeight = FontWeights.Bold;
-                run.Foreground = Brushes.Orange;
+                run.Foreground = Brushes.MediumPurple;
             }
             para.Inlines.Add(run);
         }
-
-        return new FlowDocument(para);
+        var doc = new FlowDocument(para)
+        {
+            PagePadding = new Thickness(0),
+            TextAlignment = TextAlignment.Left,
+            LineHeight = double.NaN,
+            IsOptimalParagraphEnabled = false,
+            IsColumnWidthFlexible = false,
+            IsHyphenationEnabled = false,
+            
+        };
+        return doc;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

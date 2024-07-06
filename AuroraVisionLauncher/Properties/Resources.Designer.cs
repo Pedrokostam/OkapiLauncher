@@ -88,6 +88,15 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy the command-line string.
+        /// </summary>
+        public static string CommandLineCopy {
+            get {
+                return ResourceManager.GetString("CommandLineCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Installed applications.
         /// </summary>
         public static string InstalledAppsPageTitle {
@@ -151,7 +160,8 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This application does not have supported launch options..
+        ///   Looks up a localized string similar to This application does not have supported launch options.
+        ///🙃.
         /// </summary>
         public static string LaunchOptionsNoOptions {
             get {
@@ -160,7 +170,8 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This application does not have customizable launch options..
+        ///   Looks up a localized string similar to This application does not have customizable launch options.
+        ///🙃.
         /// </summary>
         public static string LaunchOptionsStudioOptions {
             get {

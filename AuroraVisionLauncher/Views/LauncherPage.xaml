@@ -115,10 +115,22 @@
                 </Grid.ColumnDefinitions>
                 <GroupBox Grid.ColumnSpan="2" Header="{x:Static properties:Resources.LaunchOptionsCommandLineString}">
                     <DockPanel>
-                        <Button Command="{Binding CopyArgumentStringCommand}" DockPanel.Dock="Right">
+                        <Button
+                            Command="{Binding CopyArgumentStringCommand}"
+                            DockPanel.Dock="Right"
+                            ToolTip="{x:Static properties:Resources.CommandLineCopy}">
                             <mahicon:PackIconLucide Kind="ClipboardCopy" />
                         </Button>
-                        <controls:BindableRichTextBox Document="{Binding LaunchOptions.ArgumentString, Converter={StaticResource CommandlineFormatter}}" HorizontalAlignment="Stretch"/>
+                        <controls:BindableRichTextBox
+                            x:Name="RichCommandLine"
+                            Margin="0"
+                            HorizontalAlignment="Stretch"
+                            VerticalContentAlignment="Bottom"
+                            Background="Black"
+                            BorderThickness="0"
+                            Document="{Binding LaunchOptions.ArgumentString, Converter={StaticResource CommandlineFormatter}}"
+                            FontFamily="Consolas"
+                            FontSize="16" />
                     </DockPanel>
                 </GroupBox>
                 <StackPanel

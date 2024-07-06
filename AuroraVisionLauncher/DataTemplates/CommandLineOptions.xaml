@@ -7,30 +7,19 @@
     xmlns:mod="clr-namespace:AuroraVisionLauncher.Models"
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties">
     <helpers:CommandLineOptionsTemplateSelector x:Key="commandLineOptionsTemplateSelector" />
-
+    <Style x:Key="NoOptionsDisclaimer" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="30" />
+        <Setter Property="FontStyle" Value="Italic" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="FontSize" Value="30" />
+        <Setter Property="FontFamily" Value="Lucida Calligraphy, Times New Roman" />
+    </Style>
     <DataTemplate x:Key="NoCommandLineOptionsTemplate" DataType="{x:Type mod:NoLaunchOptions}">
-        <Grid>
-            <TextBlock
-                VerticalAlignment="Center"
-                Text="{x:Static properties:Resources.LaunchOptionsNoOptions}"
-                TextAlignment="Center"
-                TextWrapping="WrapWithOverflow" />
-        </Grid>
+        <TextBlock Style="{StaticResource NoOptionsDisclaimer}" Text="{x:Static properties:Resources.LaunchOptionsNoOptions}" />
     </DataTemplate>
     <DataTemplate x:Key="StudioCommandLineOptionsTemplate" DataType="{x:Type mod:StudioLaunchOptions}">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-            </Grid.RowDefinitions>
-            <TextBlock Text="{x:Static properties:Resources.LaunchOptionsStudioOptions}" />
-            <GroupBox Grid.Row="1" Header="{x:Static properties:Resources.LaunchOptionsCommandLineString}">
-                <TextBox
-                    Height="auto"
-                    IsReadOnly="True"
-                    Text="{Binding ArgumentString, Mode=OneWay}" />
-            </GroupBox>
-        </Grid>
+        <TextBlock Style="{StaticResource NoOptionsDisclaimer}" Text="{x:Static properties:Resources.LaunchOptionsStudioOptions}" />
     </DataTemplate>
     <DataTemplate x:Key="ExecutorCommandLineOptionsTemplate" DataType="{x:Type mod:ExecutorLaunchOptions}">
         <Grid>
@@ -70,12 +59,7 @@
                 Content="{x:Static properties:Resources.LaunchOptiosExecutorAutoCloseTitle}"
                 IsChecked="{Binding AutoClose, Mode=TwoWay}"
                 IsEnabled="{Binding ElementName=ConsoleCheckBox, Path=IsChecked}" />
-            <GroupBox Grid.Row="4" Header="{x:Static properties:Resources.LaunchOptionsCommandLineString}">
-                <TextBox
-                    Height="auto"
-                    IsReadOnly="True"
-                    Text="{Binding ArgumentString, Mode=OneWay}" />
-            </GroupBox>
+
         </Grid>
     </DataTemplate>
 </ResourceDictionary>
