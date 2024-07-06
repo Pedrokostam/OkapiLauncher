@@ -64,7 +64,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition />
-                <RowDefinition Height="100" />
+                <RowDefinition Height="300" />
             </Grid.RowDefinitions>
             <Grid Margin="10,10,0,20" TextBlock.FontSize="18">
                 <Grid.ColumnDefinitions>
@@ -103,33 +103,44 @@
                 </ListView.GroupStyle>
             </ListView>
             <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
-                <Grid Grid.Column="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
+                <GroupBox Grid.ColumnSpan="2" Header="{x:Static properties:Resources.LaunchOptionsCommandLineString}">
+                    <TextBox
+                        Height="auto"
+                        BorderThickness="0"
+                        FontFamily="Consolas"
+                        FontSize="18"
+                        IsReadOnly="True"
+                        Text="{Binding LaunchOptions.ArgumentString, Mode=OneWay}"
+                        TextWrapping="Wrap" />
+                </GroupBox>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Orientation="Horizontal">
                     <Button
                         x:Name="StandardLaunchButton"
                         Command="{Binding LaunchCommand}"
-                        Style="{StaticResource HighlightStyle}"
                         TextBlock.FontSize="20">
-                        <TextBlock Text="{Binding SelectedApp.NameWithVersion, TargetNullValue=..., StringFormat={x:Static properties:Resources.LauncherLaunchWith}}" />
+                        <TextBlock Text="{Binding SelectedApp.NameWithVersion, TargetNullValue=..., StringFormat={x:Static properties:Resources.LauncherLaunchWith}}" TextWrapping="Wrap" />
                     </Button>
+
                     <Button
                         x:Name="CloseLaunchButton"
                         Grid.Column="1"
                         Command="{Binding LaunchAndCloseCommand}"
                         TextBlock.FontSize="20">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding SelectedApp.NameWithVersion, TargetNullValue=..., StringFormat={x:Static properties:Resources.LauncherLaunchWithAndClose}}" />
-                        </StackPanel>
+                        <TextBlock Text="{Binding SelectedApp.NameWithVersion, TargetNullValue=..., StringFormat={x:Static properties:Resources.LauncherLaunchWith}}" TextWrapping="Wrap" />
                     </Button>
-                </Grid>
-                <GroupBox Header="{x:Static properties:Resources.LauncherCommandLineArgumentsSectionHeader}">
+                </StackPanel>
+                <GroupBox Grid.Row="1" Header="{x:Static properties:Resources.LauncherCommandLineArgumentsSectionHeader}">
                     <ContentControl Content="{Binding LaunchOptions}" ContentTemplateSelector="{StaticResource commandLineOptionsTemplateSelector}" />
                 </GroupBox>
             </Grid>

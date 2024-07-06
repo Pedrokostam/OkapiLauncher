@@ -106,7 +106,7 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Run with {0}.
+        ///   Looks up a localized string similar to Run with {0} .
         /// </summary>
         public static string LauncherLaunchWith {
             get {

@@ -211,7 +211,7 @@
     <value>Command-line parameters</value>
   </data>
   <data name="LauncherLaunchWith" xml:space="preserve">
-    <value>Run with {0}</value>
+    <value>Run with {0} </value>
   </data>
   <data name="LauncherLaunchWithAndClose" xml:space="preserve">
     <value>Run with {0} and close this launcher</value>
