@@ -12,6 +12,7 @@ using System.Diagnostics;
 using Windows.Storage;
 using AuroraVisionLauncher.Models;
 using AuroraVisionLauncher.Core.Models.Programs;
+using System.Windows.Threading;
 
 namespace AuroraVisionLauncher.ViewModels;
 
@@ -19,16 +20,30 @@ public partial class LauncherViewModel : ObservableRecipient, IRecipient<FileReq
 {
     private readonly IInstalledAppsProviderService _appProvider;
     private readonly INavigationService _navigationService;
+    private readonly DispatcherTimer _timer;
 
     public LauncherViewModel(IMessenger messenger, IInstalledAppsProviderService appProvider, INavigationService navigationService) : base(messenger)
     {
         _appProvider = appProvider;
         _navigationService = navigationService;
         OnActivated();
+        _timer = new DispatcherTimer(); 
+        UpdateRunningStatus();
+        _timer.Tick += (o, e) => UpdateRunningStatus();
+        _timer.Interval = TimeSpan.FromSeconds(2);
+        _timer.Start();
     }
 
+    private void UpdateRunningStatus()
+    {
+        foreach (var exe in Apps)
+        {
+            exe.IsLaunched = exe.CheckIfProcessIsRunning();
+        }
+    }
 
-
+    [ObservableProperty]
+    private LaunchOptions? _launchOptions;
     public ObservableCollection<AvAppFacade> Apps { get; } = new();
 
 
@@ -49,7 +64,11 @@ public partial class LauncherViewModel : ObservableRecipient, IRecipient<FileReq
             UseShellExecute = true,  // Use the shell to start the process
             CreateNoWindow = true    // Do not create a window
         };
-        startInfo.ArgumentList.Add(VisionProgram!.Path);
+        var args = LaunchOptions.GetCommandLineArgs();
+        foreach (var arg in args)
+        {
+            startInfo.ArgumentList.Add(arg);
+        }
         try
         {
             Process.Start(startInfo);
@@ -67,6 +86,14 @@ public partial class LauncherViewModel : ObservableRecipient, IRecipient<FileReq
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(LaunchCommand))]
     private AvAppFacade? _selectedApp = null;
+
+    partial void OnSelectedAppChanged(AvAppFacade? value)
+    {
+        LaunchOptions = LaunchOptions.Get(value);
+        LaunchOptions.ProgramPath = VisionProgram?.Path;
+        LaunchOptions.ApplicationPath = SelectedApp?.ExePath;
+    }
+
     public void Receive(FileRequestedMessage message) => OpenProject(message.Value);
     private void OpenProject(string filepath)
     {

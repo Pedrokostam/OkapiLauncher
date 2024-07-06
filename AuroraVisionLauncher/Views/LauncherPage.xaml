@@ -36,6 +36,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="48" />
+            <RowDefinition Height="3*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <TextBlock
@@ -93,10 +94,12 @@
                 Command="{Binding LaunchCommand}"
                 TextBlock.FontSize="20">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Run with " />
-                    <TextBlock Text="{Binding SelectedApp, TargetNullValue=...}" />
+                    <TextBlock Text="{Binding SelectedApp.NameWithVersion, TargetNullValue=..., StringFormat={x:Static properties:Resources.LauncherLaunchWith}}" />
                 </StackPanel>
             </Button>
         </Grid>
+        <GroupBox Grid.Row="2" Header="{x:Static properties:Resources.LauncherCommandLineArgumentsSectionHeader}" >
+            <ContentControl Content="{Binding LaunchOptions}" ContentTemplateSelector="{StaticResource commandLineOptionsTemplateSelector}"/>
+        </GroupBox>
     </Grid>
 </Page>

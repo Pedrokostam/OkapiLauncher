@@ -79,11 +79,110 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Empty rpoduct version field..
+        /// </summary>
+        public static string AvAppEmptyVersionField {
+            get {
+                return ResourceManager.GetString("AvAppEmptyVersionField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Installed applications.
         /// </summary>
         public static string InstalledAppsPageTitle {
             get {
                 return ResourceManager.GetString("InstalledAppsPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Command-line parameters.
+        /// </summary>
+        public static string LauncherCommandLineArgumentsSectionHeader {
+            get {
+                return ResourceManager.GetString("LauncherCommandLineArgumentsSectionHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Run with {0}.
+        /// </summary>
+        public static string LauncherLaunchWith {
+            get {
+                return ResourceManager.GetString("LauncherLaunchWith", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Run with {0} and close this launcher.
+        /// </summary>
+        public static string LauncherLaunchWithAndClose {
+            get {
+                return ResourceManager.GetString("LauncherLaunchWithAndClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Command-line arguments:.
+        /// </summary>
+        public static string LaunchOptionsCommandLineString {
+            get {
+                return ResourceManager.GetString("LaunchOptionsCommandLineString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log level: .
+        /// </summary>
+        public static string LaunchOptionsExecutorLogLevelTitle {
+            get {
+                return ResourceManager.GetString("LaunchOptionsExecutorLogLevelTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log pipe:.
+        /// </summary>
+        public static string LaunchOptionsExecutorLogPipeTitle {
+            get {
+                return ResourceManager.GetString("LaunchOptionsExecutorLogPipeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application does not have supported launch options..
+        /// </summary>
+        public static string LaunchOptionsNoOptions {
+            get {
+                return ResourceManager.GetString("LaunchOptionsNoOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application does not have customizable launch options..
+        /// </summary>
+        public static string LaunchOptionsStudioOptions {
+            get {
+                return ResourceManager.GetString("LaunchOptionsStudioOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close console after finished execution.
+        /// </summary>
+        public static string LaunchOptiosExecutorAutoCloseTitle {
+            get {
+                return ResourceManager.GetString("LaunchOptiosExecutorAutoCloseTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Console mode.
+        /// </summary>
+        public static string LaunchOptiosExecutorConsoleModeTitle {
+            get {
+                return ResourceManager.GetString("LaunchOptiosExecutorConsoleModeTitle", resourceCulture);
             }
         }
         
@@ -318,6 +417,42 @@ namespace AuroraVisionLauncher.Properties {
         public static string ShellMenuViewsHeader {
             get {
                 return ResourceManager.GetString("ShellMenuViewsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Argument must be a string..
+        /// </summary>
+        public static string ValidationArgumentHasToBeString {
+            get {
+                return ResourceManager.GetString("ValidationArgumentHasToBeString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Argument cannot contains double quotes..
+        /// </summary>
+        public static string ValidationArgumentNoDoubleQuotes {
+            get {
+                return ResourceManager.GetString("ValidationArgumentNoDoubleQuotes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Argument cannot contains single quotes..
+        /// </summary>
+        public static string ValidationArgumentNoSingleQuotes {
+            get {
+                return ResourceManager.GetString("ValidationArgumentNoSingleQuotes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Argument cannot contain whitespace..
+        /// </summary>
+        public static string ValidationArgumentNoWhitespace {
+            get {
+                return ResourceManager.GetString("ValidationArgumentNoWhitespace", resourceCulture);
             }
         }
     }

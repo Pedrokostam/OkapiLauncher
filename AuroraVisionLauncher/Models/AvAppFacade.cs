@@ -9,53 +9,54 @@ using AuroraVisionLauncher.Core.Models.Programs;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace AuroraVisionLauncher.Models
+namespace AuroraVisionLauncher.Models;
+public partial class AvAppFacade : ObservableObject, IAvApp
 {
-    public partial class AvAppFacade : ObservableObject, IAvApp
+    readonly private AvApp _avApp;
+
+    public string Name => _avApp.Name;
+    public string ExePath => _avApp.ExePath;
+    public Version Version => _avApp.Version;
+    public string NameWithVersion => $"{Name} {Version}";
+    public bool IsDevelopmentBuild => _avApp.IsDevelopmentBuild;
+
+    public AvAppType AppType => _avApp.AppType;
+
+    public Version? SecondaryVersion => _avApp.SecondaryVersion;
+
+    public CommandLineInterface Interface => _avApp.Interface;
+
+    [ObservableProperty]
+    private string _compatibility = "";
+
+
+    [ObservableProperty]
+    private bool _isLaunched = false;
+
+    public AvAppFacade(AvApp avApp)
     {
-        readonly private AvApp _avApp;
+        _avApp = avApp;
+    }
 
-        public string Name => _avApp.Name;
-        public string ExePath => _avApp.ExePath;
-        public Version Version => _avApp.Version;
-        public bool IsDevelopmentBuild => _avApp.IsDevelopmentBuild;
+    public bool CheckIfProcessIsRunning() => _avApp.CheckIfProcessIsRunning();
 
-        public AvAppType AppType => _avApp.AppType;
+    public bool SupportsProgram(ProgramInformation information) => _avApp.SupportsProgram(information);
 
-        public Version? SecondaryVersion => _avApp.SecondaryVersion;
-
-        [ObservableProperty]
-        private string _compatibility = "";
-
-
-        [ObservableProperty]
-        private bool _isLaunched = false;
-
-        public AvAppFacade(AvApp avApp)
+    [RelayCommand]
+    private void OpenContainingFolder()
+    {
+        Process.Start(new ProcessStartInfo()
         {
-            _avApp = avApp;
-        }
-
-        public bool CheckIfProcessIsRunning() => _avApp.CheckIfProcessIsRunning();
-
-        public bool SupportsProgram(ProgramInformation information) => _avApp.SupportsProgram(information);
-
-        [RelayCommand]
-        private void OpenContainingFolder()
+            FileName = "explorer.exe",
+            Arguments = @$"/select, ""{_avApp.ExePath}"""
+        });
+    }
+    [RelayCommand]
+    private void LaunchWithoutProgram()
+    {
+        Process.Start(new ProcessStartInfo()
         {
-            Process.Start(new ProcessStartInfo()
-            {
-                FileName = "explorer.exe",
-                Arguments = @$"/select, ""{_avApp.ExePath}"""
-            });
-        }
-        [RelayCommand]
-        private void LaunchWithoutProgram()
-        {
-            Process.Start(new ProcessStartInfo()
-            {
-                FileName = _avApp.ExePath
-            });
-        }
+            FileName = _avApp.ExePath
+        });
     }
 }

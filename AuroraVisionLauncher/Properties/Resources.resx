@@ -204,4 +204,49 @@
   <data name="ProgramDetailsSavedWithVersionFallback" xml:space="preserve">
     <value>N/A</value>
   </data>
+  <data name="AvAppEmptyVersionField" xml:space="preserve">
+    <value>Empty rpoduct version field.</value>
+  </data>
+  <data name="LauncherCommandLineArgumentsSectionHeader" xml:space="preserve">
+    <value>Command-line parameters</value>
+  </data>
+  <data name="LauncherLaunchWith" xml:space="preserve">
+    <value>Run with {0}</value>
+  </data>
+  <data name="LauncherLaunchWithAndClose" xml:space="preserve">
+    <value>Run with {0} and close this launcher</value>
+  </data>
+  <data name="LaunchOptionsCommandLineString" xml:space="preserve">
+    <value>Command-line arguments:</value>
+  </data>
+  <data name="LaunchOptionsExecutorLogLevelTitle" xml:space="preserve">
+    <value>Log level: </value>
+  </data>
+  <data name="LaunchOptionsExecutorLogPipeTitle" xml:space="preserve">
+    <value>Log pipe:</value>
+  </data>
+  <data name="LaunchOptionsNoOptions" xml:space="preserve">
+    <value>This application does not have supported launch options.</value>
+  </data>
+  <data name="LaunchOptionsStudioOptions" xml:space="preserve">
+    <value>This application does not have customizable launch options.</value>
+  </data>
+  <data name="LaunchOptiosExecutorAutoCloseTitle" xml:space="preserve">
+    <value>Close console after finished execution</value>
+  </data>
+  <data name="LaunchOptiosExecutorConsoleModeTitle" xml:space="preserve">
+    <value>Console mode</value>
+  </data>
+  <data name="ValidationArgumentHasToBeString" xml:space="preserve">
+    <value>Argument must be a string.</value>
+  </data>
+  <data name="ValidationArgumentNoDoubleQuotes" xml:space="preserve">
+    <value>Argument cannot contains double quotes.</value>
+  </data>
+  <data name="ValidationArgumentNoSingleQuotes" xml:space="preserve">
+    <value>Argument cannot contains single quotes.</value>
+  </data>
+  <data name="ValidationArgumentNoWhitespace" xml:space="preserve">
+    <value>Argument cannot contain whitespace.</value>
+  </data>
 </root>

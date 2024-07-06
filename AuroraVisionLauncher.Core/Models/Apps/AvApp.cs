@@ -8,42 +8,17 @@ using System.Timers;
 using AuroraVisionLauncher.Core.Models.Programs;
 
 namespace AuroraVisionLauncher.Core.Models.Apps;
-internal record Configuration
-{
-    public Configuration(AvAppType appType, IEnumerable<ProgramType> supportedPrograms)
-    {
-        AppType = appType;
-        _supportedPrograms = new List<ProgramType>(supportedPrograms);
-    }
-
-    public AvAppType AppType { get; }
-    private readonly List<ProgramType> _supportedPrograms;
-    public IReadOnlyCollection<ProgramType> SupportedPrograms => _supportedPrograms.AsReadOnly();
-}
-internal record MultiVersion(FileVersionInfo Primary, FileVersionInfo? Secondary)
-{
-    public static MultiVersion? Create(FileInfo? primary, FileInfo? secondary = null)
-    {
-        if (primary is null)
-        {
-            return null;
-        }
-        var ver1 = FileVersionInfo.GetVersionInfo(primary.FullName);
-        var ver2 = secondary is null ? null : FileVersionInfo.GetVersionInfo(secondary.FullName);
-        return new MultiVersion(ver1, ver2);
-    }
-}
 public record AvApp : IAvApp
 {
     private static readonly Dictionary<string, Configuration> AvAppConfigurations = new(StringComparer.OrdinalIgnoreCase)
     {
-        {"Aurora Vision Studio",    new Configuration(AvAppType.Professional,[ProgramType.AdaptiveVisionProject,ProgramType.AuroraVisionProject])},
-        {"Adaptive Vision Studio",  new Configuration(AvAppType.Professional,[ProgramType.AdaptiveVisionProject])},
-        {"FabImage Studio",         new Configuration(AvAppType.Professional,[ProgramType.FabImageProject])},
-        {"Aurora Vision Executor",  new Configuration(AvAppType.Runtime,[ProgramType.AdaptiveVisionProject,ProgramType.AuroraVisionProject,ProgramType.AuroraVisionRuntime])},
-        {"Adaptive Vision Executor",new Configuration(AvAppType.Runtime,[ProgramType.AdaptiveVisionProject])},
-        {"FabImage Runtime",        new Configuration(AvAppType.Runtime,[ProgramType.FabImageRuntime,ProgramType.FabImageProject])},
-        {"Deep Learning Editor",    new Configuration(AvAppType.DeepLearning,[])},
+        {"Aurora Vision Studio",    new Configuration(AvAppType.Professional,CommandLineInterface.Studio, [ProgramType.AdaptiveVisionProject,ProgramType.AuroraVisionProject])},
+        {"Adaptive Vision Studio",  new Configuration(AvAppType.Professional,CommandLineInterface.Studio, [ProgramType.AdaptiveVisionProject])},
+        {"FabImage Studio",         new Configuration(AvAppType.Professional,CommandLineInterface.Studio, [ProgramType.FabImageProject])},
+        {"Aurora Vision Executor",  new Configuration(AvAppType.Runtime,CommandLineInterface.Executor, [ProgramType.AdaptiveVisionProject,ProgramType.AuroraVisionProject,ProgramType.AuroraVisionRuntime])},
+        {"Adaptive Vision Executor",new Configuration(AvAppType.Runtime,CommandLineInterface.Executor, [ProgramType.AdaptiveVisionProject])},
+        {"FabImage Runtime",        new Configuration(AvAppType.Runtime,CommandLineInterface.Executor, [ProgramType.FabImageRuntime,ProgramType.FabImageProject])},
+        {"Deep Learning Editor",    new Configuration(AvAppType.DeepLearning,CommandLineInterface.None, [])},
     };
 
     public string ExePath { get; }
@@ -54,6 +29,7 @@ public record AvApp : IAvApp
     public bool IsDevelopmentBuild => Version.Build >= 1000;
     readonly private FileVersionInfo _originalInfo;
     private readonly List<ProgramType> _supportedPrograms;
+    public CommandLineInterface Interface { get; }
     protected IReadOnlyCollection<ProgramType> SupportedProgramTypes => _supportedPrograms.AsReadOnly();
     internal AvApp(MultiVersion mvinfo, Configuration configuration)
     {
@@ -65,6 +41,7 @@ public record AvApp : IAvApp
 
         _supportedPrograms = new List<ProgramType>(configuration.SupportedPrograms);
         AppType = configuration.AppType;
+        Interface = configuration.Interface;
     }
     /// <summary>
     /// Checks if any process associated with the executable is running.
@@ -113,7 +90,7 @@ public record AvApp : IAvApp
             // environment variables for studio proffesional points to AVL libraries, which are in the SDK subfolder
             dir = dir.Parent!;
         }
-        else if (dir.Parent.Name.Contains("Deep Learning", StringComparison.OrdinalIgnoreCase))
+        else if (dir.Parent!.Name.Contains("Deep Learning", StringComparison.OrdinalIgnoreCase))
         {
             // deep learning also points to library, so 1 step back and the go for deeplearning editor
             dir = new DirectoryInfo(Path.Join(dir.Parent!.FullName, "Tools", "DeepLearningEditor"));
