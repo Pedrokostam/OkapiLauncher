@@ -78,6 +78,12 @@ public partial class LauncherViewModel : ObservableRecipient, IRecipient<FileReq
         }
 
     }
+    [RelayCommand(CanExecute = nameof(CanLaunch))]
+    private void LaunchAndClose()
+    {
+        Launch();
+        Application.Current.Shutdown();
+    }
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(LaunchCommand))]

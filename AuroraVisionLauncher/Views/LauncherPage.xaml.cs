@@ -1,5 +1,5 @@
 ﻿using System.Windows.Controls;
-
+using System.Windows.Input;
 using AuroraVisionLauncher.ViewModels;
 
 namespace AuroraVisionLauncher.Views;
@@ -11,4 +11,6 @@ public partial class LauncherPage : Page
         InitializeComponent();
         DataContext = viewModel;
     }
+
+   
 }

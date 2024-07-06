@@ -20,6 +20,21 @@
     <Page.Resources>
         <conv:FileToIconConverter x:Key="FileIconConverter" />
         <conv:BoolToVisibilityConverter x:Key="BoolVis" />
+        <Style
+            x:Key="HighlightStyle"
+            BasedOn="{StaticResource {x:Type Button}}"
+            TargetType="Button">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsMouseOver, ElementName=CloseLaunchButton}" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Gray8}" />
+                    <!--<Setter Property="Foreground" Value="{Binding (mah:ControlsHelper.MouseOverBorderBrush), Mode=OneWay, RelativeSource={RelativeSource Mode=TemplatedParent}}" />-->
+                </DataTrigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Gray8}" />
+                    <!--<Setter Property="Foreground" Value="{Binding (mah:ControlsHelper.MouseOverBorderBrush), Mode=OneWay, RelativeSource={RelativeSource Mode=TemplatedParent}}" />-->
+                </Trigger>
+            </Style.Triggers>
+        </Style>
         <CollectionViewSource
             x:Key="CustomViewSource"
             IsLiveGroupingRequested="True"
@@ -36,7 +51,6 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="48" />
-            <RowDefinition Height="3*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <TextBlock
@@ -50,7 +64,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition />
-                <RowDefinition Height="50" />
+                <RowDefinition Height="100" />
             </Grid.RowDefinitions>
             <Grid Margin="10,10,0,20" TextBlock.FontSize="18">
                 <Grid.ColumnDefinitions>
@@ -70,36 +84,55 @@
                     <TextBlock Text="{Binding VisionProgram.Path, FallbackValue={x:Static properties:Resources.ProgramDetailsLocationFallback}}" />
                 </StackPanel>
             </Grid>
-            <Grid Grid.Row="1">
-                <ListView
-                    ItemTemplate="{StaticResource AvAppFacadeDataTemplate}"
-                    ItemsSource="{Binding Source={StaticResource CustomViewSource}}"
-                    SelectedItem="{Binding SelectedApp, Mode=TwoWay}">
-                    <ListView.GroupStyle>
-                        <GroupStyle>
-                            <GroupStyle.HeaderTemplate>
-                                <DataTemplate>
-                                    <TextBlock
-                                        FontSize="14"
-                                        FontWeight="Bold"
-                                        Text="{Binding Name}" />
-                                </DataTemplate>
-                            </GroupStyle.HeaderTemplate>
-                        </GroupStyle>
-                    </ListView.GroupStyle>
-                </ListView>
+            <ListView
+                Grid.Row="1"
+                ItemTemplate="{StaticResource AvAppFacadeDataTemplate}"
+                ItemsSource="{Binding Source={StaticResource CustomViewSource}}"
+                SelectedItem="{Binding SelectedApp, Mode=TwoWay}">
+                <ListView.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    Text="{Binding Name}" />
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+                </ListView.GroupStyle>
+            </ListView>
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Button
+                        x:Name="StandardLaunchButton"
+                        Command="{Binding LaunchCommand}"
+                        Style="{StaticResource HighlightStyle}"
+                        TextBlock.FontSize="20">
+                        <TextBlock Text="{Binding SelectedApp.NameWithVersion, TargetNullValue=..., StringFormat={x:Static properties:Resources.LauncherLaunchWith}}" />
+                    </Button>
+                    <Button
+                        x:Name="CloseLaunchButton"
+                        Grid.Column="1"
+                        Command="{Binding LaunchAndCloseCommand}"
+                        TextBlock.FontSize="20">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding SelectedApp.NameWithVersion, TargetNullValue=..., StringFormat={x:Static properties:Resources.LauncherLaunchWithAndClose}}" />
+                        </StackPanel>
+                    </Button>
+                </Grid>
+                <GroupBox Header="{x:Static properties:Resources.LauncherCommandLineArgumentsSectionHeader}">
+                    <ContentControl Content="{Binding LaunchOptions}" ContentTemplateSelector="{StaticResource commandLineOptionsTemplateSelector}" />
+                </GroupBox>
             </Grid>
-            <Button
-                Grid.Row="2"
-                Command="{Binding LaunchCommand}"
-                TextBlock.FontSize="20">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding SelectedApp.NameWithVersion, TargetNullValue=..., StringFormat={x:Static properties:Resources.LauncherLaunchWith}}" />
-                </StackPanel>
-            </Button>
         </Grid>
-        <GroupBox Grid.Row="2" Header="{x:Static properties:Resources.LauncherCommandLineArgumentsSectionHeader}" >
-            <ContentControl Content="{Binding LaunchOptions}" ContentTemplateSelector="{StaticResource commandLineOptionsTemplateSelector}"/>
-        </GroupBox>
     </Grid>
 </Page>
