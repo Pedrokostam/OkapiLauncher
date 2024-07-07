@@ -20,10 +20,12 @@ public partial class LauncherViewModel : ObservableRecipient, IRecipient<FileReq
 {
     private readonly IInstalledAppsProviderService _appProvider;
     private readonly INavigationService _navigationService;
+    private readonly IRecentlyOpenedFilesService _lastOpenedFilesService;
     private readonly DispatcherTimer _timer;
 
-    public LauncherViewModel(IMessenger messenger, IInstalledAppsProviderService appProvider, INavigationService navigationService) : base(messenger)
+    public LauncherViewModel(IMessenger messenger, IInstalledAppsProviderService appProvider, INavigationService navigationService,IRecentlyOpenedFilesService lastOpenedFilesService) : base(messenger)
     {
+        _lastOpenedFilesService = lastOpenedFilesService;
         _appProvider = appProvider;
         _navigationService = navigationService;
         OnActivated();
@@ -64,7 +66,7 @@ public partial class LauncherViewModel : ObservableRecipient, IRecipient<FileReq
             UseShellExecute = true,  // Use the shell to start the process
             CreateNoWindow = true    // Do not create a window
         };
-        var args = LaunchOptions.GetCommandLineArgs();
+        var args = LaunchOptions!.GetCommandLineArgs();
         foreach (var arg in args)
         {
             startInfo.ArgumentList.Add(arg);
@@ -95,9 +97,7 @@ public partial class LauncherViewModel : ObservableRecipient, IRecipient<FileReq
 
     partial void OnSelectedAppChanged(AvAppFacade? value)
     {
-        LaunchOptions = LaunchOptions.Get(value);
-        LaunchOptions.ProgramPath = VisionProgram?.Path;
-        LaunchOptions.ApplicationPath = SelectedApp?.ExePath;
+        LaunchOptions = LaunchOptions.Get(value, VisionProgram?.Path);
     }
 
     private bool CanCopyArgumentString() => !string.IsNullOrWhiteSpace(LaunchOptions?.ArgumentString);
@@ -145,7 +145,9 @@ public partial class LauncherViewModel : ObservableRecipient, IRecipient<FileReq
             {
                 SelectedApp = null;
             }
+            _lastOpenedFilesService.AddLastFile(filepath);
             _navigationService.NavigateTo(GetType().FullName!);
+            UpdateRunningStatus();
         }
         catch (InvalidDataException)
         {

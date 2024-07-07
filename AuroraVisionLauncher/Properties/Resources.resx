@@ -187,7 +187,7 @@
     <value>N/A</value>
   </data>
   <data name="ProgramDetailsProgramName" xml:space="preserve">
-    <value>Program name: </value>
+    <value>Name: </value>
   </data>
   <data name="ProgramDetailsProgramNameFallback" xml:space="preserve">
     <value>No program loaded</value>
@@ -199,7 +199,7 @@
     <value>N/A</value>
   </data>
   <data name="ProgramDetailsSavedWithVersion" xml:space="preserve">
-    <value>Saved with version: </value>
+    <value>Version: </value>
   </data>
   <data name="ProgramDetailsSavedWithVersionFallback" xml:space="preserve">
     <value>N/A</value>
@@ -251,5 +251,8 @@
   </data>
   <data name="CommandLineCopy" xml:space="preserve">
     <value>Copy the command-line string</value>
+  </data>
+  <data name="ShellMenuRecentFiles" xml:space="preserve">
+    <value>Recently opened files</value>
   </data>
 </root>

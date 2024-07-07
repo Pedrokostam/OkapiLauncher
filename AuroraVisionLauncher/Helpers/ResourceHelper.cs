@@ -13,11 +13,11 @@ public static class ResourceHelper
     /// <summary>
     /// Retrieves the stream of the given resource.
     /// </summary>
-    /// <param name="pathToResource">Path to the resource starting from the root of the project.</param>
+    /// <param name="pathToResource">Path to the resource starting from the root of the project. E.g. <code>Resources/Icons/AppIcon.ico</code></param>
     /// <returns></returns>
     public static Stream GetResourceStream(string pathToResource)
     {
-        var stream = Application.GetResourceStream(new Uri(pathToResource, UriKind.Absolute))?.Stream;
+        var stream = Application.GetResourceStream(new Uri(pathToResource, UriKind.Relative))?.Stream;
         return stream is null ? throw new FileNotFoundException(pathToResource) : stream;
     }
     /// <summary>

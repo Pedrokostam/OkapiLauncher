@@ -58,7 +58,6 @@ public partial class App : Application
                 .Build();
         Uri iconUri = new Uri("pack://application:,,,/Resources/Icons/AppIcon.ico");
         var i = new System.Windows.Media.Imaging.BitmapImage(iconUri);
-        var rr = Application.GetResourceStream(new Uri("Resources/Icons/AppIcon.ico", UriKind.Relative));
         await _host.StartAsync();
         // initialize launcher vm, so that it can start listening to FileRequestMessages
         GetService<LauncherViewModel>();
@@ -91,6 +90,7 @@ public partial class App : Application
         services.AddSingleton<IRequestedFilesService, RequestedFilesService>();
         services.AddSingleton<IMessenger, WeakReferenceMessenger>();
         services.AddSingleton<IInstalledAppsProviderService, InstalledAppsProviderService>();
+        services.AddSingleton<IRecentlyOpenedFilesService, RecentlyOpenedFilesService>();
 
         // Views and ViewModels
         services.AddSingleton<IShellWindow, ShellWindow>();

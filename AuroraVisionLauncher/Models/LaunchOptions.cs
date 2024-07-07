@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using AuroraVisionLauncher.Core.Models.Apps;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Windows.System.RemoteDesktop;
 
 namespace AuroraVisionLauncher.Models;
 
@@ -48,8 +49,12 @@ public abstract partial class LaunchOptions : ObservableObject
     /// </summary>
     /// <param name="avapp"></param>
     /// <returns></returns>
-    public static LaunchOptions Get(IAvApp? avapp)
+    /// <param name="programPath"></param>
+    public static LaunchOptions Get(IAvApp? avapp, string? programPath)
     {
-        return Get(avapp?.Interface);
+        var inst= Get(avapp?.Interface);
+        inst.ApplicationPath=avapp?.ExePath ?? string.Empty;
+        inst.ProgramPath = programPath;
+        return inst;
     }
 }

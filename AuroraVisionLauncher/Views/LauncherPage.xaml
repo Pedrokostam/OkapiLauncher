@@ -66,26 +66,33 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition />
-                <RowDefinition Height="300" />
+                <RowDefinition Height="250" />
             </Grid.RowDefinitions>
-            <Grid Margin="10,10,0,20" TextBlock.FontSize="18">
+            <ContentPresenter Content="{Binding VisionProgram}" />
+            <!--<Grid Margin="10,10,0,20" TextBlock.FontSize="18">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
-                    <ColumnDefinition />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
-                <StackPanel>
-                    <TextBlock Text="{x:Static properties:Resources.ProgramDetailsProgramName}" TextAlignment="Right" />
-                    <TextBlock Text="{x:Static properties:Resources.ProgramDetailsProjectType}" TextAlignment="Right" />
-                    <TextBlock Text="{x:Static properties:Resources.ProgramDetailsSavedWithVersion}" TextAlignment="Right" />
-                    <TextBlock Text="{x:Static properties:Resources.ProgramDetailsLocation}" TextAlignment="Right" />
-                </StackPanel>
-                <StackPanel Grid.Column="1" TextBlock.FontWeight="Bold">
-                    <TextBlock Text="{Binding VisionProgram.Name, FallbackValue={x:Static properties:Resources.ProgramDetailsProgramNameFallback}}" />
-                    <TextBlock Text="{Binding VisionProgram.Type, FallbackValue={x:Static properties:Resources.ProgramDetailsProjectTypeFallback}}" />
-                    <TextBlock Text="{Binding VisionProgram.Version, FallbackValue={x:Static properties:Resources.ProgramDetailsSavedWithVersionFallback}}" />
-                    <TextBlock Text="{Binding VisionProgram.Path, FallbackValue={x:Static properties:Resources.ProgramDetailsLocationFallback}}" />
-                </StackPanel>
-            </Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Column="0" Grid.Row="0" Text="{x:Static properties:Resources.ProgramDetailsProgramName}" TextAlignment="Right" />
+                <TextBlock Grid.Column="0" Grid.Row="1" Text="{x:Static properties:Resources.ProgramDetailsProjectType}" TextAlignment="Right" />
+                <TextBlock Grid.Column="0" Grid.Row="2" Text="{x:Static properties:Resources.ProgramDetailsSavedWithVersion}" TextAlignment="Right" />
+                <TextBlock Grid.Column="0" Grid.Row="3" Text="{x:Static properties:Resources.ProgramDetailsLocation}" TextAlignment="Right" />
+                <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding VisionProgram.Name, FallbackValue={x:Static properties:Resources.ProgramDetailsProgramNameFallback}}" />
+                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding VisionProgram.Type, FallbackValue={x:Static properties:Resources.ProgramDetailsProjectTypeFallback}}" />
+                <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding VisionProgram.Version, FallbackValue={x:Static properties:Resources.ProgramDetailsSavedWithVersionFallback}}" />
+                <TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding VisionProgram.Path, FallbackValue={x:Static properties:Resources.ProgramDetailsLocationFallback}}" />
+            </Grid>-->
             <ListView
                 Grid.Row="1"
                 ItemTemplate="{StaticResource AvAppFacadeDataTemplate}"
@@ -111,7 +118,7 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <GroupBox Grid.ColumnSpan="2" Header="{x:Static properties:Resources.LaunchOptionsCommandLineString}">
                     <DockPanel>
@@ -133,25 +140,32 @@
                             FontSize="16" />
                     </DockPanel>
                 </GroupBox>
-                <StackPanel
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    Orientation="Horizontal">
+                <Grid Grid.Row="1" Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
                     <Button
                         x:Name="StandardLaunchButton"
                         Command="{Binding LaunchCommand}"
                         TextBlock.FontSize="20">
-                        <TextBlock Text="{Binding SelectedApp.NameWithVersion, TargetNullValue=..., StringFormat={x:Static properties:Resources.LauncherLaunchWith}}" TextWrapping="Wrap" />
+                        <TextBlock
+                            Text="{Binding SelectedApp.NameWithVersion, TargetNullValue=..., StringFormat={x:Static properties:Resources.LauncherLaunchWith}}"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
                     </Button>
 
                     <Button
                         x:Name="CloseLaunchButton"
-                        Grid.Column="1"
+                        Grid.Row="1"
                         Command="{Binding LaunchAndCloseCommand}"
                         TextBlock.FontSize="20">
-                        <TextBlock Text="{Binding SelectedApp.NameWithVersion, TargetNullValue=..., StringFormat={x:Static properties:Resources.LauncherLaunchWith}}" TextWrapping="Wrap" />
+                        <TextBlock
+                            Text="{Binding SelectedApp.NameWithVersion, TargetNullValue=..., StringFormat={x:Static properties:Resources.LauncherLaunchWithAndClose}}"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
                     </Button>
-                </StackPanel>
+                </Grid>
                 <GroupBox Grid.Row="1" Header="{x:Static properties:Resources.LauncherCommandLineArgumentsSectionHeader}">
                     <ContentControl Content="{Binding LaunchOptions}" ContentTemplateSelector="{StaticResource commandLineOptionsTemplateSelector}" />
                 </GroupBox>

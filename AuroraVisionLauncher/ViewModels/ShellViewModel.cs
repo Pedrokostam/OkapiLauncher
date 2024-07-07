@@ -1,7 +1,9 @@
-﻿using System.Windows;
+﻿using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 
 using AuroraVisionLauncher.Contracts.Services;
+using AuroraVisionLauncher.Models;
 using AuroraVisionLauncher.Models.Messages;
 using AuroraVisionLauncher.Properties;
 
@@ -15,20 +17,27 @@ namespace AuroraVisionLauncher.ViewModels;
 // using the NavigationService, RightPaneService and WindowManagerService.
 // Read more about MenuBar project type here:
 // https://github.com/microsoft/TemplateStudio/blob/main/docs/WPF/projectTypes/menubar.md
-public partial class ShellViewModel : ObservableObject
+public partial class ShellViewModel : ObservableObject, IRecipient<RecentFilesChangedMessage>
 {
     private readonly INavigationService _navigationService;
     private readonly IRightPaneService _rightPaneService;
     private readonly IMessenger _messenger;
+    private readonly IRecentlyOpenedFilesService _lastOpenedFilesService;
 
-    public ShellViewModel(INavigationService navigationService, IRightPaneService rightPaneService, IMessenger messenger)
+    public ShellViewModel(INavigationService navigationService,
+                          IRightPaneService rightPaneService,
+                          IMessenger messenger,
+                          IRecentlyOpenedFilesService lastOpenedFilesService)
     {
         _navigationService = navigationService;
         _rightPaneService = rightPaneService;
         _messenger = messenger;
+        _lastOpenedFilesService = lastOpenedFilesService;
+        RecentlyOpenedFiles= new ObservableCollection<RecentlyOpenedFileFacade>(_lastOpenedFilesService.GetLastOpenedFiles());
+        messenger.Register<RecentFilesChangedMessage>(this);
     }
-
-    [RelayCommand()]
+    public ObservableCollection<RecentlyOpenedFileFacade> RecentlyOpenedFiles { get; }
+    [RelayCommand]
     private void OnLoaded()
     {
         _navigationService.Navigated += OnNavigated;
@@ -84,9 +93,37 @@ public partial class ShellViewModel : ObservableObject
             OpenProject(dialog.FileName);
         }
     }
-
+    [RelayCommand()]
+    private void MenuOpenRecentFile(RecentlyOpenedFileFacade file)
+    {
+        OpenProject(file.FilePath);
+    }
+    [RelayCommand()]
+    private void MenuOpenRecentFileByIndex(object index)
+    {
+        int intIndex = index switch
+        {
+            string strindex => int.Parse(strindex),
+            int i => i,
+            _ => -1
+        };
+        if (RecentlyOpenedFiles.Count < intIndex)
+        {
+            return;
+        }
+        OpenProject(RecentlyOpenedFiles[intIndex].FilePath);
+    }
     private void OpenProject(string path)
     {
         _messenger.Send(new FileRequestedMessage(path));
+    }
+
+    void IRecipient<RecentFilesChangedMessage>.Receive(RecentFilesChangedMessage message)
+    {
+        RecentlyOpenedFiles.Clear();
+        foreach (var item in message.RecentlyOpenedFiles)
+        {
+            RecentlyOpenedFiles.Add(item);
+        }
     }
 }

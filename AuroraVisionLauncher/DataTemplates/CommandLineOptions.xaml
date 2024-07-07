@@ -7,12 +7,17 @@
     xmlns:mod="clr-namespace:AuroraVisionLauncher.Models"
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties">
     <helpers:CommandLineOptionsTemplateSelector x:Key="commandLineOptionsTemplateSelector" />
-    <Style x:Key="NoOptionsDisclaimer" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="30" />
+    <Style
+        x:Key="NoOptionsDisclaimer"
+        BasedOn="{StaticResource {x:Type TextBlock}}"
+        TargetType="TextBlock">
+        <Setter Property="Padding" Value="20" />
+        <Setter Property="FontSize" Value="10" />
         <Setter Property="FontStyle" Value="Italic" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="TextAlignment" Value="Center" />
         <Setter Property="FontSize" Value="30" />
+        <Setter Property="TextWrapping" Value="WrapWithOverflow" />
         <Setter Property="FontFamily" Value="Lucida Calligraphy, Times New Roman" />
     </Style>
     <DataTemplate x:Key="NoCommandLineOptionsTemplate" DataType="{x:Type mod:NoLaunchOptions}">
@@ -28,15 +33,32 @@
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
-            <StackPanel>
-                <TextBlock Text="{x:Static properties:Resources.LaunchOptionsExecutorLogLevelTitle}" />
-                <ComboBox ItemsSource="{conv:EnumBindingSource {x:Type coremod:LogLevel}}" SelectedItem="{Binding LogLevel, Mode=TwoWay}" />
-            </StackPanel>
-            <StackPanel Grid.Row="1" Orientation="Horizontal">
-                <TextBlock VerticalAlignment="Center" Text="{x:Static properties:Resources.LaunchOptionsExecutorLogPipeTitle}" />
-                <TextBox Width="120">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Text="{x:Static properties:Resources.LaunchOptionsExecutorLogLevelTitle}"
+                    TextAlignment="Right" />
+                <ComboBox
+                    Grid.Column="1"
+                    ItemsSource="{conv:EnumBindingSource {x:Type coremod:LogLevel}}"
+                    SelectedItem="{Binding LogLevel, Mode=TwoWay}" />
+                <TextBlock
+                    Grid.Row="1"
+                    VerticalAlignment="Center"
+                    Text="{x:Static properties:Resources.LaunchOptionsExecutorLogPipeTitle}" />
+                <TextBox
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    TextAlignment="Right">
                     <TextBox.Text>
                         <Binding
                             Mode="TwoWay"
@@ -48,18 +70,21 @@
                         </Binding>
                     </TextBox.Text>
                 </TextBox>
-            </StackPanel>
+            </Grid>
             <CheckBox
                 x:Name="ConsoleCheckBox"
-                Grid.Row="2"
+                Grid.Row="1"
                 Content="{x:Static properties:Resources.LaunchOptiosExecutorConsoleModeTitle}"
                 IsChecked="{Binding Console, Mode=TwoWay}" />
             <CheckBox
-                Grid.Row="3"
+                Grid.Row="2"
                 Content="{x:Static properties:Resources.LaunchOptiosExecutorAutoCloseTitle}"
                 IsChecked="{Binding AutoClose, Mode=TwoWay}"
                 IsEnabled="{Binding ElementName=ConsoleCheckBox, Path=IsChecked}" />
-
+            <Button
+                Grid.Row="3"
+                HorizontalAlignment="Right"
+                Content="Reset to defaults" />
         </Grid>
     </DataTemplate>
 </ResourceDictionary>

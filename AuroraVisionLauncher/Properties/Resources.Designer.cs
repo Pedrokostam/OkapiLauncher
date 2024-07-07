@@ -160,8 +160,7 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This application does not have supported launch options.
-        ///🙃.
+        ///   Looks up a localized string similar to This application does not have supported launch options..
         /// </summary>
         public static string LaunchOptionsNoOptions {
             get {
@@ -170,8 +169,7 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This application does not have customizable launch options.
-        ///🙃.
+        ///   Looks up a localized string similar to This application does not have customizable launch options..
         /// </summary>
         public static string LaunchOptionsStudioOptions {
             get {
@@ -225,7 +223,7 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Program name: .
+        ///   Looks up a localized string similar to Name: .
         /// </summary>
         public static string ProgramDetailsProgramName {
             get {
@@ -261,7 +259,7 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Saved with version: .
+        ///   Looks up a localized string similar to Version: .
         /// </summary>
         public static string ProgramDetailsSavedWithVersion {
             get {
@@ -419,6 +417,15 @@ namespace AuroraVisionLauncher.Properties {
         public static string ShellMenuItemViewsLauncherPageHeader {
             get {
                 return ResourceManager.GetString("ShellMenuItemViewsLauncherPageHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recently opened files.
+        /// </summary>
+        public static string ShellMenuRecentFiles {
+            get {
+                return ResourceManager.GetString("ShellMenuRecentFiles", resourceCulture);
             }
         }
         

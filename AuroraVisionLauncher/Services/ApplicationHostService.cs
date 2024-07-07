@@ -15,7 +15,7 @@ public class ApplicationHostService : IHostedService
     private readonly IThemeSelectorService _themeSelectorService;
     private readonly IRightPaneService _rightPaneService;
     private readonly IEnumerable<IActivationHandler> _activationHandlers;
-    private IShellWindow _shellWindow;
+    private IShellWindow _shellWindow=default!;
     private bool _isInitialized;
 
     public ApplicationHostService(IServiceProvider serviceProvider, IEnumerable<IActivationHandler> activationHandlers, INavigationService navigationService, IRightPaneService rightPaneService, IThemeSelectorService themeSelectorService, IPersistAndRestoreService persistAndRestoreService)
@@ -74,15 +74,14 @@ public class ApplicationHostService : IHostedService
         }
 
         await Task.CompletedTask;
-
-        if (App.Current.Windows.OfType<IShellWindow>().Count() == 0)
+        if (!App.Current.Windows.OfType<IShellWindow>().Any())
         {
             // Default activation that navigates to the apps default page
-            _shellWindow = _serviceProvider.GetService(typeof(IShellWindow)) as IShellWindow;
+            _shellWindow = (IShellWindow)_serviceProvider.GetService(typeof(IShellWindow))!;
             _navigationService.Initialize(_shellWindow.GetNavigationFrame());
             _rightPaneService.Initialize(_shellWindow.GetRightPaneFrame(), _shellWindow.GetSplitView());
             _shellWindow.ShowWindow();
-            _navigationService.NavigateTo(typeof(InstalledAppsViewModel).FullName);
+            _navigationService.NavigateTo(typeof(InstalledAppsViewModel).FullName!);
             await Task.CompletedTask;
         }
     }
