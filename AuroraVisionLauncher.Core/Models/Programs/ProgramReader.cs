@@ -68,7 +68,7 @@ public static class ProgramReader
         string? versionEnd = reader.GetAttribute("Revision");
         if (string.IsNullOrWhiteSpace(versionStart) || string.IsNullOrWhiteSpace(versionEnd))
         {
-            return new Version();
+            return VisionProgram.MissingVersion;
         }
         return Version.Parse(versionStart + '.' + versionEnd);
     }
@@ -79,7 +79,7 @@ public static class ProgramReader
         Version version = programType switch
         {
             ProgramType.None => throw new InvalidDataException("Format does not match any headers."),
-            ProgramType.FabImageRuntime or ProgramType.AuroraVisionRuntime => new Version(),
+            ProgramType.FabImageRuntime or ProgramType.AuroraVisionRuntime => VisionProgram.MissingVersion,
             _ => GetVersionFromXml(filepath)
         };
         return new ProgramInformation(programType, version);

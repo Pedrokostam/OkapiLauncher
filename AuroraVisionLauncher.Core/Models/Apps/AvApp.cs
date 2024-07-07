@@ -139,32 +139,67 @@ public record AvApp : IAvApp
         return true;
     }
 
-    public bool SupportsProgram(ProgramInformation information)
+    public bool CanOpen(ProgramType type)
     {
-        return SupportedProgramTypes.Contains(information.ProgramType);
+        return SupportedProgramTypes.Contains(type);
+    }
+    private static double VersionToDouble(Version version, Version baseVersion)
+    {
+        var balance = 1.0d;
+        // revision doesnt really matter, started with so it will never move it below 0
+        // in fact the score should never be exactly zero
+        balance += (version.Revision - baseVersion.Revision) / 100_000;
+        // different builds denotes changes in the API, so runtime cannot be lauched for example
+        balance += (version.Build - baseVersion.Build) * 10;
+        // minor indicate some larger changes, but noting too ground breaking
+        balance += (version.Minor - baseVersion.Minor) * 10_000;
+        // hoo boy
+        balance += (version.Major - baseVersion.Major) * 1_000_000;
+        /*
+        the goal is to find a version that gets the value closes to 0
+        negative values mean the app is outdated, but may still be able to load the program
+        positive values mena the app is from the future
+        if we have 5.4.5.10000 and 5.3.1.01247 installed and the program is 5.2.7.23347 then we want to select the app that has the least changes,
+        so is the closest to zero.
+
+        In case we have outdated versions only, we still want to select the one closest to 0
+        */
+
+        return balance;
     }
     public static int GetClosestApp(IEnumerable<IAvApp> apps, IVisionProgram info)
     {
         var weights = new List<double>();
+        bool hasPositive = false;
+        bool hasNegative = false;
         foreach (IAvApp app in apps)
         {
-            double weight = 0;
-            bool isProgramRuntime = info.Type == ProgramType.AuroraVisionRuntime || info.Type == ProgramType.FabImageRuntime;
-            if (isProgramRuntime && app.AppType != AvAppType.Runtime || !isProgramRuntime && app.AppType == AvAppType.Runtime)
+            var score = VersionToDouble(app.Version, info.Version);
+            if (!app.CanOpen(info.Type))
             {
-                weight = -1e21;
+                score = double.MinValue;
             }
-            double programVersionTransformed = info.Version.Major * 1e12 + info.Version.Minor * 1e9 + info.Version.Build * 1e6 + info.Version.Revision;
-            double executableVersionTransformed = app.Version.Major * 1e12 + app.Version.Minor * 1e9 + app.Version.Build * 1e6 + app.Version.Revision;
-            weight += executableVersionTransformed - programVersionTransformed;
-            weights.Add(Math.Abs(weight));
+            hasPositive |= score > 0;
+            hasNegative |= score < 0;
+            weights.Add(score);
         }
-        if (weights.Count == 0)
+        if (weights.Count == 0 || !(hasPositive || hasNegative))
         {
             return -1;
         }
-        var min = weights.Min();
-        return weights.IndexOf(min);
+        if (hasPositive)
+        {
+            // negative values are set to the highest possible value, so they will not be considered
+            var min = weights.Min(x => x < 0 ? double.MaxValue : x);
+            return weights.IndexOf(min);
+        }
+        // only negatives 
+        var max = weights.Max();
+        if (max == double.MinValue)
+        {
+            return -1;
+        }
+        return weights.IndexOf(max);
     }
     protected string ShortForm() => $"{Name} {Version}";
     public override string ToString() => ShortForm();

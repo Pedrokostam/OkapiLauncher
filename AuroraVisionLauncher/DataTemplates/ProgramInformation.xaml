@@ -71,7 +71,7 @@
                 Grid.Row="2"
                 Grid.Column="1"
                 Style="{StaticResource ValueStyle}"
-                Text="{Binding Version, FallbackValue={x:Static properties:Resources.ProgramDetailsSavedWithVersionFallback}}" />
+                Text="{Binding NonMissingVersion, FallbackValue={x:Static properties:Resources.ProgramDetailsSavedWithVersionFallback},TargetNullValue={x:Static properties:Resources.ProgramDetailsSavedWithVersionMissing}}" />
             <!--  LOCATION  -->
             <TextBlock
                 Grid.Row="3"

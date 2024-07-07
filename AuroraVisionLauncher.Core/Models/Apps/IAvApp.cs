@@ -13,5 +13,5 @@ public interface IAvApp
     CommandLineInterface Interface { get; }
 
     bool CheckIfProcessIsRunning();
-    bool SupportsProgram(ProgramInformation information);
+    bool CanOpen(ProgramType type);
 }

@@ -376,6 +376,15 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not determine version.
+        /// </summary>
+        public static string ProgramDetailsSavedWithVersionMissing {
+            get {
+                return ResourceManager.GetString("ProgramDetailsSavedWithVersionMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nothing to talk about..
         /// </summary>
         public static string SettingsPageAboutText {

@@ -15,6 +15,7 @@ public partial class VisionProgramFacade : ObservableObject, IVisionProgram
     private readonly VisionProgram _visionProgram;
     public string Name => _visionProgram.Name;
     public Version Version => _visionProgram.Version;
+    public Version? NonMissingVersion => Version == VisionProgram.MissingVersion ? null : Version;
     public string Path => _visionProgram.Path;
     public ProgramType Type => _visionProgram.Type;
 

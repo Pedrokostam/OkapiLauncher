@@ -166,7 +166,7 @@
                             TextWrapping="Wrap" />
                     </Button>
                 </Grid>
-                <GroupBox Grid.Row="1" Header="{x:Static properties:Resources.LauncherCommandLineArgumentsSectionHeader}" >
+                <GroupBox Grid.Row="1" Header="{x:Static properties:Resources.LauncherCommandLineArgumentsSectionHeader}">
                     <ContentControl Content="{Binding LaunchOptions}" ContentTemplateSelector="{StaticResource commandLineOptionsTemplateSelector}" />
                 </GroupBox>
             </Grid>

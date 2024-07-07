@@ -288,4 +288,7 @@
   <data name="LaunchOptionsExecutorLogPipeTooltip" xml:space="preserve">
     <value>Creates a named pipe which will be populated with log entries during application lifetime</value>
   </data>
+  <data name="ProgramDetailsSavedWithVersionMissing" xml:space="preserve">
+    <value>Could not determine version</value>
+  </data>
 </root>
