@@ -30,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AuroraVisionLauncher.Core\AuroraVisionLauncher.Core.csproj" />
     <ProjectReference Include="..\AuroraVisionLauncher\AuroraVisionLauncher.csproj" />
   </ItemGroup>
 

@@ -5,16 +5,20 @@ using AuroraVisionLauncher.Core.Contracts.Services;
 using Microsoft.Win32;
 
 namespace AuroraVisionLauncher.Core.Services;
-public class FileAssociationService
+public interface IFileAssociationService
+{
+    Dictionary<string, string> GetCurrentAssociations();
+    void SetAssociationsToApp(string mainAppExecutablePath, string? appName, IList<string>? extensionsToAssociate = null);
+}
+public class FileAssociationService : IFileAssociationService
 {
     public const string RegistryAppName = "AuroraVisionLauncher";
-    private static readonly string[] _extensions=[".avproj",".fiproj",".avexe",".fiexe"];
-    private readonly IIconService _iconService;
+    private static readonly string[] _extensions = [".avproj", ".fiproj", ".avexe", ".fiexe"];
 
     public Dictionary<string, string> GetCurrentAssociations()
     {
-        var classes= Registry.CurrentUser.OpenSubKey("Software")!.OpenSubKey("Classes")!;
-        Dictionary<string,string> userAssociations=[];
+        var classes = Registry.CurrentUser.OpenSubKey("Software")!.OpenSubKey("Classes")!;
+        Dictionary<string, string> userAssociations = [];
         foreach (var extension in _extensions)
         {
             if (classes.OpenSubKey(extension)?.GetValue(null) is string association)
@@ -25,9 +29,8 @@ public class FileAssociationService
         return userAssociations;
     }
 
-    public FileAssociationService(IIconService iconService)
+    public FileAssociationService()
     {
-        _iconService = iconService;
     }
     /// <summary>
     /// Creates keys in the registry that define what icon to use for each extension associated with the app and extension.
@@ -46,21 +49,21 @@ public class FileAssociationService
     {
         var appFolder = Path.GetDirectoryName(mainAppExecutablePath);
         appName ??= Path.GetFileNameWithoutExtension(mainAppExecutablePath);
-        var registryKeyName = appName+extensionKey.ToUpperInvariant();
+        var registryKeyName = appName + extensionKey.ToUpperInvariant();
 
-        var classes= GetRegistryClasses();
+        var classes = GetRegistryClasses();
         classes.DeleteSubKeyTree(registryKeyName);
 
         var appKey = classes.CreateSubKey(registryKeyName);
         appKey.SetValue(null, "Launcher association for " + extensionKey);
 
-        var iconKey=appKey.CreateSubKey("DefaultIcon");
+        var iconKey = appKey.CreateSubKey("DefaultIcon");
         // {app folder}/icons/{extensionKey without dot}.ico
-        var iconPath = Path.Combine(appFolder,"icons",extensionKey.TrimStart('.')+".ico");
+        var iconPath = Path.Combine(appFolder!, "icons", extensionKey.TrimStart('.') + ".ico");
         // No need to enclose in quotes; 0 means use the first icon available
         iconKey.SetValue(null, $"{iconPath},0");
 
-        var commandOpenShellKey=appKey.CreateSubKey("shell").CreateSubKey("open").CreateSubKey("command");
+        var commandOpenShellKey = appKey.CreateSubKey("shell").CreateSubKey("open").CreateSubKey("command");
         commandOpenShellKey.SetValue(null, $"\"{mainAppExecutablePath}\" \"%1\"");
 
 
@@ -82,7 +85,7 @@ public class FileAssociationService
 
         foreach (string extension in extensionsToAssociate)
         {
-            var registryKeyName = appName+extension.ToUpperInvariant();
+            var registryKeyName = appName + extension.ToUpperInvariant();
             var extKey = classes.CreateSubKey(extension);
             extKey.SetValue(null, registryKeyName);
         }

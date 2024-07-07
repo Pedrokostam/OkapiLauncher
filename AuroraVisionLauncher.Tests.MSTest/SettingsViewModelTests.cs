@@ -1,4 +1,6 @@
 ﻿using AuroraVisionLauncher.Contracts.Services;
+using AuroraVisionLauncher.Core.Contracts.Services;
+using AuroraVisionLauncher.Core.Services;
 using AuroraVisionLauncher.Models;
 using AuroraVisionLauncher.ViewModels;
 
@@ -24,8 +26,18 @@ public class SettingsViewModelTests
         var mockAppConfig = new Mock<IOptions<AppConfig>>();
         var mockSystemService = new Mock<ISystemService>();
         var mockApplicationInfoService = new Mock<IApplicationInfoService>();
+        var mockIconService = new Mock<IIconService>();
+        var mockInstalledAppsProviderService = new Mock<IInstalledAppsProviderService>();
+        var mockFileAssociationService = new Mock<IFileAssociationService>();
 
-        var settingsVm = new SettingsViewModel(mockAppConfig.Object, mockThemeSelectorService.Object, mockSystemService.Object, mockApplicationInfoService.Object);
+        var settingsVm = new SettingsViewModel(
+            mockAppConfig.Object,
+            mockThemeSelectorService.Object,
+            mockSystemService.Object, 
+            mockApplicationInfoService.Object,
+            mockInstalledAppsProviderService.Object,
+            mockIconService.Object,
+            mockFileAssociationService.Object);
         settingsVm.OnNavigatedTo(null);
 
         Assert.AreEqual(AppTheme.Light, settingsVm.Theme);
@@ -38,10 +50,20 @@ public class SettingsViewModelTests
         var mockAppConfig = new Mock<IOptions<AppConfig>>();
         var mockSystemService = new Mock<ISystemService>();
         var mockApplicationInfoService = new Mock<IApplicationInfoService>();
+        var mockIconService = new Mock<IIconService>();
+        var mockInstalledAppsProviderService = new Mock<IInstalledAppsProviderService>();
+        var mockFileAssociationService = new Mock<IFileAssociationService>();
         var testVersion = new Version(1, 2, 3, 4);
         mockApplicationInfoService.Setup(mock => mock.GetVersion()).Returns(testVersion);
 
-        var settingsVm = new SettingsViewModel(mockAppConfig.Object, mockThemeSelectorService.Object, mockSystemService.Object, mockApplicationInfoService.Object);
+        var settingsVm = new SettingsViewModel(
+           mockAppConfig.Object,
+           mockThemeSelectorService.Object,
+           mockSystemService.Object,
+           mockApplicationInfoService.Object,
+           mockInstalledAppsProviderService.Object,
+           mockIconService.Object,
+           mockFileAssociationService.Object);
         settingsVm.OnNavigatedTo(null);
 
         Assert.AreEqual($"AuroraVisionLauncher - {testVersion}", settingsVm.VersionDescription);
@@ -54,8 +76,18 @@ public class SettingsViewModelTests
         var mockAppConfig = new Mock<IOptions<AppConfig>>();
         var mockSystemService = new Mock<ISystemService>();
         var mockApplicationInfoService = new Mock<IApplicationInfoService>();
+        var mockIconService = new Mock<IIconService>();
+        var mockInstalledAppsProviderService = new Mock<IInstalledAppsProviderService>();
+        var mockFileAssociationService = new Mock<IFileAssociationService>();
 
-        var settingsVm = new SettingsViewModel(mockAppConfig.Object, mockThemeSelectorService.Object, mockSystemService.Object, mockApplicationInfoService.Object);
+        var settingsVm = new SettingsViewModel(
+           mockAppConfig.Object,
+           mockThemeSelectorService.Object,
+           mockSystemService.Object,
+           mockApplicationInfoService.Object,
+           mockInstalledAppsProviderService.Object,
+           mockIconService.Object,
+           mockFileAssociationService.Object);
         settingsVm.SetThemeCommand.Execute(AppTheme.Light.ToString());
 
         mockThemeSelectorService.Verify(mock => mock.SetTheme(AppTheme.Light));

@@ -20,7 +20,7 @@ public class IconService : IIconService
         var destDir = Path.GetDirectoryName(destinationPath);
         if (!Directory.Exists(destDir))
         {
-            Directory.CreateDirectory(destDir);
+            Directory.CreateDirectory(destDir!);
         }
         destinationPath = Path.ChangeExtension(destinationPath, ".ico");
         icon.ToBitmap().Save(destinationPath, ImageFormat.Icon);

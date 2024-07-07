@@ -91,6 +91,7 @@ public partial class App : Application
         services.AddSingleton<IMessenger, WeakReferenceMessenger>();
         services.AddSingleton<IInstalledAppsProviderService, InstalledAppsProviderService>();
         services.AddSingleton<IRecentlyOpenedFilesService, RecentlyOpenedFilesService>();
+        services.AddSingleton<IFileAssociationService, FileAssociationService>();
 
         // Views and ViewModels
         services.AddSingleton<IShellWindow, ShellWindow>();
