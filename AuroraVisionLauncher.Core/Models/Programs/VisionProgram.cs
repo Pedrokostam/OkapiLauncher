@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AuroraVisionLauncher.Core.Models.Programs
 {
-    public record VisionProgram(string Name, Version Version, string Path, ProgramType Type)
+    public record VisionProgram(string Name, Version Version, string Path, ProgramType Type) : IVisionProgram
     {
         public VisionProgram() : this("No program selected", new Version(), "No program selected", ProgramType.None)
         {

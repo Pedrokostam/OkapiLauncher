@@ -89,7 +89,7 @@ public partial class LauncherViewModel : ObservableRecipient, IRecipient<FileReq
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(LaunchCommand))]
-    private VisionProgram? _visionProgram = null;
+    private VisionProgramFacade? _visionProgram = null;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(LaunchCommand))]
@@ -120,7 +120,7 @@ public partial class LauncherViewModel : ObservableRecipient, IRecipient<FileReq
         try
         {
             var info = ProgramReader.GetInformation(filepath);
-            VisionProgram = new VisionProgram(
+            VisionProgram = new VisionProgramFacade(
                 Path.GetFileNameWithoutExtension(filepath),
                 info.Version,
                 filepath,

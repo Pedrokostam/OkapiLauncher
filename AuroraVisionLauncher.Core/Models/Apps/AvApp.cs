@@ -143,7 +143,7 @@ public record AvApp : IAvApp
     {
         return SupportedProgramTypes.Contains(information.ProgramType);
     }
-    public static int GetClosestApp(IEnumerable<IAvApp> apps, VisionProgram info)
+    public static int GetClosestApp(IEnumerable<IAvApp> apps, IVisionProgram info)
     {
         var weights = new List<double>();
         foreach (IAvApp app in apps)

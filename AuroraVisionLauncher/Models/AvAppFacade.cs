@@ -4,8 +4,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using AuroraVisionLauncher.Core.Models.Apps;
 using AuroraVisionLauncher.Core.Models.Programs;
+using AuroraVisionLauncher.Helpers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -43,14 +45,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp
     public bool SupportsProgram(ProgramInformation information) => _avApp.SupportsProgram(information);
 
     [RelayCommand]
-    private void OpenContainingFolder()
-    {
-        Process.Start(new ProcessStartInfo()
-        {
-            FileName = "explorer.exe",
-            Arguments = @$"/select, ""{_avApp.ExePath}"""
-        });
-    }
+    private void OpenContainingFolder() => ExplorerHelper.OpenExplorer(ExePath);
     [RelayCommand]
     private void LaunchWithoutProgram()
     {
@@ -58,5 +53,10 @@ public partial class AvAppFacade : ObservableObject, IAvApp
         {
             FileName = _avApp.ExePath
         });
+    }
+    [RelayCommand]
+    private void CopyExecutablePath()
+    {
+        Clipboard.SetText(ExePath);
     }
 }

@@ -11,4 +11,9 @@ public partial class StudioLaunchOptions : LaunchOptions
     {
         return new string[] { ProgramPath! };
     }
+
+    public override void Reset()
+    {
+        
+    }
 }

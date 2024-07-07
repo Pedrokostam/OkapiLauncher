@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using AuroraVisionLauncher.Core.Models.Apps;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Windows.System.RemoteDesktop;
 
 namespace AuroraVisionLauncher.Models;
@@ -57,4 +58,6 @@ public abstract partial class LaunchOptions : ObservableObject
         inst.ProgramPath = programPath;
         return inst;
     }
+    [RelayCommand]
+    public abstract void Reset();
 }

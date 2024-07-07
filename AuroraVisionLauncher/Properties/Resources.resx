@@ -130,7 +130,7 @@
     <value>Settings</value>
   </data>
   <data name="SettingsPageAboutText" xml:space="preserve">
-    <value>Settings page placeholder text.  Your app description goes here.</value>
+    <value>Nothing to talk about.</value>
   </data>
   <data name="SettingsPageAboutTitle" xml:space="preserve">
     <value>About this application</value>
@@ -231,10 +231,10 @@
   <data name="LaunchOptionsStudioOptions" xml:space="preserve">
     <value>This application does not have customizable launch options.</value>
   </data>
-  <data name="LaunchOptiosExecutorAutoCloseTitle" xml:space="preserve">
+  <data name="LaunchOptionsExecutorAutoCloseTitle" xml:space="preserve">
     <value>Close console after finished execution</value>
   </data>
-  <data name="LaunchOptiosExecutorConsoleModeTitle" xml:space="preserve">
+  <data name="LaunchOptionsExecutorConsoleModeTitle" xml:space="preserve">
     <value>Console mode</value>
   </data>
   <data name="ValidationArgumentHasToBeString" xml:space="preserve">
@@ -254,5 +254,26 @@
   </data>
   <data name="ShellMenuRecentFiles" xml:space="preserve">
     <value>Recently opened files</value>
+  </data>
+  <data name="LaunchOptionsResetButton" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="LaunchOptionsResetButtonTooltip" xml:space="preserve">
+    <value>Reset all arguments to default values</value>
+  </data>
+  <data name="ProgramDetailsCopyPath" xml:space="preserve">
+    <value>Copy program path to clipboard</value>
+  </data>
+  <data name="ProgramDetailsOpenFolder" xml:space="preserve">
+    <value>Open program folder</value>
+  </data>
+  <data name="AvAppCopyPath" xml:space="preserve">
+    <value>Copy executable path to clipboard</value>
+  </data>
+  <data name="AvAppLaunchWithNoProgram" xml:space="preserve">
+    <value>Launch the application without loading any program</value>
+  </data>
+  <data name="AvAppOpenInstallationFolder" xml:space="preserve">
+    <value>Open installation folder</value>
   </data>
 </root>

@@ -70,6 +70,15 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy executable path to clipboard.
+        /// </summary>
+        public static string AvAppCopyPath {
+            get {
+                return ResourceManager.GetString("AvAppCopyPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to TRUNK.
         /// </summary>
         public static string AvAppDevelopmentVersion {
@@ -84,6 +93,24 @@ namespace AuroraVisionLauncher.Properties {
         public static string AvAppEmptyVersionField {
             get {
                 return ResourceManager.GetString("AvAppEmptyVersionField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Launch the application without loading any program.
+        /// </summary>
+        public static string AvAppLaunchWithNoProgram {
+            get {
+                return ResourceManager.GetString("AvAppLaunchWithNoProgram", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open installation folder.
+        /// </summary>
+        public static string AvAppOpenInstallationFolder {
+            get {
+                return ResourceManager.GetString("AvAppOpenInstallationFolder", resourceCulture);
             }
         }
         
@@ -142,6 +169,24 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close console after finished execution.
+        /// </summary>
+        public static string LaunchOptionsExecutorAutoCloseTitle {
+            get {
+                return ResourceManager.GetString("LaunchOptionsExecutorAutoCloseTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Console mode.
+        /// </summary>
+        public static string LaunchOptionsExecutorConsoleModeTitle {
+            get {
+                return ResourceManager.GetString("LaunchOptionsExecutorConsoleModeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log level: .
         /// </summary>
         public static string LaunchOptionsExecutorLogLevelTitle {
@@ -169,6 +214,24 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset.
+        /// </summary>
+        public static string LaunchOptionsResetButton {
+            get {
+                return ResourceManager.GetString("LaunchOptionsResetButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset all arguments to default values.
+        /// </summary>
+        public static string LaunchOptionsResetButtonTooltip {
+            get {
+                return ResourceManager.GetString("LaunchOptionsResetButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This application does not have customizable launch options..
         /// </summary>
         public static string LaunchOptionsStudioOptions {
@@ -178,29 +241,20 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Close console after finished execution.
-        /// </summary>
-        public static string LaunchOptiosExecutorAutoCloseTitle {
-            get {
-                return ResourceManager.GetString("LaunchOptiosExecutorAutoCloseTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Console mode.
-        /// </summary>
-        public static string LaunchOptiosExecutorConsoleModeTitle {
-            get {
-                return ResourceManager.GetString("LaunchOptiosExecutorConsoleModeTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Opening project.
         /// </summary>
         public static string MainPageTitle {
             get {
                 return ResourceManager.GetString("MainPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy program path to clipboard.
+        /// </summary>
+        public static string ProgramDetailsCopyPath {
+            get {
+                return ResourceManager.GetString("ProgramDetailsCopyPath", resourceCulture);
             }
         }
         
@@ -219,6 +273,15 @@ namespace AuroraVisionLauncher.Properties {
         public static string ProgramDetailsLocationFallback {
             get {
                 return ResourceManager.GetString("ProgramDetailsLocationFallback", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open program folder.
+        /// </summary>
+        public static string ProgramDetailsOpenFolder {
+            get {
+                return ResourceManager.GetString("ProgramDetailsOpenFolder", resourceCulture);
             }
         }
         
@@ -277,7 +340,7 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Settings page placeholder text.  Your app description goes here..
+        ///   Looks up a localized string similar to Nothing to talk about..
         /// </summary>
         public static string SettingsPageAboutText {
             get {

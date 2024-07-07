@@ -27,7 +27,12 @@
         <TextBlock Style="{StaticResource NoOptionsDisclaimer}" Text="{x:Static properties:Resources.LaunchOptionsStudioOptions}" />
     </DataTemplate>
     <DataTemplate x:Key="ExecutorCommandLineOptionsTemplate" DataType="{x:Type mod:ExecutorLaunchOptions}">
-        <Grid>
+        <Grid TextBlock.FontSize="16">
+            <Grid.Resources>
+                <Style BasedOn="{StaticResource {x:Type CheckBox}}" TargetType="CheckBox">
+                    <Setter Property="FontSize" Value="16" />
+                </Style>
+            </Grid.Resources>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
@@ -55,10 +60,7 @@
                     Grid.Row="1"
                     VerticalAlignment="Center"
                     Text="{x:Static properties:Resources.LaunchOptionsExecutorLogPipeTitle}" />
-                <TextBox
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    TextAlignment="Right">
+                <TextBox Grid.Row="1" Grid.Column="1">
                     <TextBox.Text>
                         <Binding
                             Mode="TwoWay"
@@ -74,17 +76,24 @@
             <CheckBox
                 x:Name="ConsoleCheckBox"
                 Grid.Row="1"
-                Content="{x:Static properties:Resources.LaunchOptiosExecutorConsoleModeTitle}"
+                Content="{x:Static properties:Resources.LaunchOptionsExecutorConsoleModeTitle}"
                 IsChecked="{Binding Console, Mode=TwoWay}" />
             <CheckBox
                 Grid.Row="2"
-                Content="{x:Static properties:Resources.LaunchOptiosExecutorAutoCloseTitle}"
+                Content="{x:Static properties:Resources.LaunchOptionsExecutorAutoCloseTitle}"
                 IsChecked="{Binding AutoClose, Mode=TwoWay}"
                 IsEnabled="{Binding ElementName=ConsoleCheckBox, Path=IsChecked}" />
             <Button
                 Grid.Row="3"
+                Margin="15"
                 HorizontalAlignment="Right"
-                Content="Reset to defaults" />
+                Command="{Binding ResetCommand}"
+                FontFamily="Segoe UI"
+                FontSize="14"
+                FontWeight="Normal"
+                ToolTip="{x:Static properties:Resources.LaunchOptionsResetButtonTooltip}">
+                <TextBlock Padding="5" Text="{x:Static properties:Resources.LaunchOptionsResetButton}" />
+            </Button>
         </Grid>
     </DataTemplate>
 </ResourceDictionary>

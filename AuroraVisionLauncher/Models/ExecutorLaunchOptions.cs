@@ -46,4 +46,12 @@ public partial class ExecutorLaunchOptions : LaunchOptions
         }
         return args;
     }
+
+    public override void Reset()
+    {
+        AutoClose=false;
+        Console=false;
+        LogLevel = LogLevel.Pass;
+        LogPipe = null;
+    }
 }

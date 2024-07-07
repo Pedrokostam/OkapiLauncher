@@ -6,4 +6,8 @@ public class NoLaunchOptions : LaunchOptions
     {
         return Enumerable.Empty<string>();
     }
+
+    public override void Reset()
+    {
+    }
 }
