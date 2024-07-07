@@ -178,11 +178,29 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Automatically closes the application when program is finished (only in console mode).
+        /// </summary>
+        public static string LaunchOptionsExecutorAutoCloseTooltip {
+            get {
+                return ResourceManager.GetString("LaunchOptionsExecutorAutoCloseTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Console mode.
         /// </summary>
         public static string LaunchOptionsExecutorConsoleModeTitle {
             get {
                 return ResourceManager.GetString("LaunchOptionsExecutorConsoleModeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Runs the application in console mode, without HMI.
+        /// </summary>
+        public static string LaunchOptionsExecutorConsoleModeTooltip {
+            get {
+                return ResourceManager.GetString("LaunchOptionsExecutorConsoleModeTooltip", resourceCulture);
             }
         }
         
@@ -196,11 +214,29 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sets the minimum log level that will be printed in the console.
+        /// </summary>
+        public static string LaunchOptionsExecutorLogLevelTooltip {
+            get {
+                return ResourceManager.GetString("LaunchOptionsExecutorLogLevelTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log pipe:.
         /// </summary>
         public static string LaunchOptionsExecutorLogPipeTitle {
             get {
                 return ResourceManager.GetString("LaunchOptionsExecutorLogPipeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creates a named pipe which will be populated with log entries during application lifetime.
+        /// </summary>
+        public static string LaunchOptionsExecutorLogPipeTooltip {
+            get {
+                return ResourceManager.GetString("LaunchOptionsExecutorLogPipeTooltip", resourceCulture);
             }
         }
         

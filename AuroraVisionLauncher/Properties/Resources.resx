@@ -276,4 +276,16 @@
   <data name="AvAppOpenInstallationFolder" xml:space="preserve">
     <value>Open installation folder</value>
   </data>
+  <data name="LaunchOptionsExecutorAutoCloseTooltip" xml:space="preserve">
+    <value>Automatically closes the application when program is finished (only in console mode)</value>
+  </data>
+  <data name="LaunchOptionsExecutorConsoleModeTooltip" xml:space="preserve">
+    <value>Runs the application in console mode, without HMI</value>
+  </data>
+  <data name="LaunchOptionsExecutorLogLevelTooltip" xml:space="preserve">
+    <value>Sets the minimum log level that will be printed in the console</value>
+  </data>
+  <data name="LaunchOptionsExecutorLogPipeTooltip" xml:space="preserve">
+    <value>Creates a named pipe which will be populated with log entries during application lifetime</value>
+  </data>
 </root>

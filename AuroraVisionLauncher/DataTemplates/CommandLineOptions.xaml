@@ -51,16 +51,22 @@
                 <TextBlock
                     VerticalAlignment="Center"
                     Text="{x:Static properties:Resources.LaunchOptionsExecutorLogLevelTitle}"
-                    TextAlignment="Right" />
+                    TextAlignment="Right"
+                    ToolTip="{x:Static properties:Resources.LaunchOptionsExecutorLogLevelTooltip}" />
                 <ComboBox
                     Grid.Column="1"
                     ItemsSource="{conv:EnumBindingSource {x:Type coremod:LogLevel}}"
-                    SelectedItem="{Binding LogLevel, Mode=TwoWay}" />
+                    SelectedItem="{Binding LogLevel, Mode=TwoWay}"
+                    ToolTip="{x:Static properties:Resources.LaunchOptionsExecutorLogLevelTooltip}" />
                 <TextBlock
                     Grid.Row="1"
                     VerticalAlignment="Center"
-                    Text="{x:Static properties:Resources.LaunchOptionsExecutorLogPipeTitle}" />
-                <TextBox Grid.Row="1" Grid.Column="1">
+                    Text="{x:Static properties:Resources.LaunchOptionsExecutorLogPipeTitle}"
+                    ToolTip="{x:Static properties:Resources.LaunchOptionsExecutorLogPipeTooltip}" />
+                <TextBox
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    ToolTip="{x:Static properties:Resources.LaunchOptionsExecutorLogPipeTooltip}">
                     <TextBox.Text>
                         <Binding
                             Mode="TwoWay"
@@ -77,12 +83,14 @@
                 x:Name="ConsoleCheckBox"
                 Grid.Row="1"
                 Content="{x:Static properties:Resources.LaunchOptionsExecutorConsoleModeTitle}"
-                IsChecked="{Binding Console, Mode=TwoWay}" />
+                IsChecked="{Binding Console, Mode=TwoWay}"
+                ToolTip="{x:Static properties:Resources.LaunchOptionsExecutorConsoleModeTooltip}" />
             <CheckBox
                 Grid.Row="2"
                 Content="{x:Static properties:Resources.LaunchOptionsExecutorAutoCloseTitle}"
                 IsChecked="{Binding AutoClose, Mode=TwoWay}"
-                IsEnabled="{Binding ElementName=ConsoleCheckBox, Path=IsChecked}" />
+                IsEnabled="{Binding ElementName=ConsoleCheckBox, Path=IsChecked}"
+                ToolTip="{x:Static properties:Resources.LaunchOptionsExecutorAutoCloseTooltip}" />
             <Button
                 Grid.Row="3"
                 Margin="15"
