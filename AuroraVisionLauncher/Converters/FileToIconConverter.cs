@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AuroraVisionLauncher.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
@@ -28,7 +29,7 @@ namespace AuroraVisionLauncher.Converters
                 {
                     return null;
                 }
-                return Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                return icon.ToBitmapSource();
             }
             catch (ArgumentException)
             {
