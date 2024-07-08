@@ -457,6 +457,24 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set this app as default for all related files.
+        /// </summary>
+        public static string SettingsPageSetFileAssociationsButton {
+            get {
+                return ResourceManager.GetString("SettingsPageSetFileAssociationsButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sets this app as the dafult app to open all vision project and runtime files.
+        /// </summary>
+        public static string SettingsPageSetFileAssociationsButtonTooltip {
+            get {
+                return ResourceManager.GetString("SettingsPageSetFileAssociationsButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string SettingsPageTitle {

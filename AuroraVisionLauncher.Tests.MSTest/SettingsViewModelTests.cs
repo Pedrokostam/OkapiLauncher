@@ -2,6 +2,7 @@
 using AuroraVisionLauncher.Core.Contracts.Services;
 using AuroraVisionLauncher.Core.Services;
 using AuroraVisionLauncher.Models;
+using AuroraVisionLauncher.Services;
 using AuroraVisionLauncher.ViewModels;
 
 using Microsoft.Extensions.Options;
@@ -26,7 +27,6 @@ public class SettingsViewModelTests
         var mockAppConfig = new Mock<IOptions<AppConfig>>();
         var mockSystemService = new Mock<ISystemService>();
         var mockApplicationInfoService = new Mock<IApplicationInfoService>();
-        var mockIconService = new Mock<IIconService>();
         var mockInstalledAppsProviderService = new Mock<IInstalledAppsProviderService>();
         var mockFileAssociationService = new Mock<IFileAssociationService>();
 
@@ -36,7 +36,6 @@ public class SettingsViewModelTests
             mockSystemService.Object, 
             mockApplicationInfoService.Object,
             mockInstalledAppsProviderService.Object,
-            mockIconService.Object,
             mockFileAssociationService.Object);
         settingsVm.OnNavigatedTo(null);
 
@@ -50,7 +49,6 @@ public class SettingsViewModelTests
         var mockAppConfig = new Mock<IOptions<AppConfig>>();
         var mockSystemService = new Mock<ISystemService>();
         var mockApplicationInfoService = new Mock<IApplicationInfoService>();
-        var mockIconService = new Mock<IIconService>();
         var mockInstalledAppsProviderService = new Mock<IInstalledAppsProviderService>();
         var mockFileAssociationService = new Mock<IFileAssociationService>();
         var testVersion = new Version(1, 2, 3, 4);
@@ -62,7 +60,6 @@ public class SettingsViewModelTests
            mockSystemService.Object,
            mockApplicationInfoService.Object,
            mockInstalledAppsProviderService.Object,
-           mockIconService.Object,
            mockFileAssociationService.Object);
         settingsVm.OnNavigatedTo(null);
 
@@ -76,7 +73,6 @@ public class SettingsViewModelTests
         var mockAppConfig = new Mock<IOptions<AppConfig>>();
         var mockSystemService = new Mock<ISystemService>();
         var mockApplicationInfoService = new Mock<IApplicationInfoService>();
-        var mockIconService = new Mock<IIconService>();
         var mockInstalledAppsProviderService = new Mock<IInstalledAppsProviderService>();
         var mockFileAssociationService = new Mock<IFileAssociationService>();
 
@@ -86,7 +82,6 @@ public class SettingsViewModelTests
            mockSystemService.Object,
            mockApplicationInfoService.Object,
            mockInstalledAppsProviderService.Object,
-           mockIconService.Object,
            mockFileAssociationService.Object);
         settingsVm.SetThemeCommand.Execute(AppTheme.Light.ToString());
 

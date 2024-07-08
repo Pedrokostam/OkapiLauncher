@@ -4,6 +4,7 @@
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
 		<RootNamespace>AuroraVisionLauncher</RootNamespace>
+		<LangVersion>latest</LangVersion>
 		<UseWPF>true</UseWPF>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<Nullable>enable</Nullable>
@@ -55,11 +56,6 @@
 		<None Update="appsettings.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="AvFileHandling\" />
-	  <Folder Include="Themes\" />
 	</ItemGroup>
 
 	<ItemGroup>

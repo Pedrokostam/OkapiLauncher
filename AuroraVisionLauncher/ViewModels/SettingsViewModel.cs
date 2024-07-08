@@ -4,10 +4,8 @@ using System.Windows.Input;
 
 using AuroraVisionLauncher.Contracts.Services;
 using AuroraVisionLauncher.Contracts.ViewModels;
-using AuroraVisionLauncher.Core.Contracts.Services;
-using AuroraVisionLauncher.Core.Services;
 using AuroraVisionLauncher.Models;
-
+using AuroraVisionLauncher.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -23,7 +21,6 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     private readonly ISystemService _systemService;
     private readonly IApplicationInfoService _applicationInfoService;
     private readonly IInstalledAppsProviderService _installedAppsProviderService;
-    private readonly IIconService _iconService;
     private readonly IFileAssociationService _fileAssociationService;
     private AppTheme _theme;
     private string _versionDescription = string.Empty;
@@ -45,7 +42,6 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
                              ISystemService systemService,
                              IApplicationInfoService applicationInfoService,
                              IInstalledAppsProviderService installedAppsProviderService,
-                             IIconService iconService,
                              IFileAssociationService fileAssociationService
                              )
     {
@@ -54,7 +50,6 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
         _systemService = systemService;
         _applicationInfoService = applicationInfoService;
         _installedAppsProviderService = installedAppsProviderService;
-        _iconService = iconService;
         _fileAssociationService = fileAssociationService;
     }
 
@@ -81,9 +76,7 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     [RelayCommand]
     private void AssociateAppWithExtensions()
     {
-        var _localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-        var iconsPath = Path.Combine(_localAppData, _appConfig.ConfigurationsFolder,"Icons");
-        _fileAssociationService.SetAssociationsToApp()
+        _fileAssociationService.SetAssociationsToApp();
     }
 
 }

@@ -291,4 +291,10 @@
   <data name="ProgramDetailsSavedWithVersionMissing" xml:space="preserve">
     <value>Could not determine version</value>
   </data>
+  <data name="SettingsPageSetFileAssociationsButton" xml:space="preserve">
+    <value>Set this app as default for all related files</value>
+  </data>
+  <data name="SettingsPageSetFileAssociationsButtonTooltip" xml:space="preserve">
+    <value>Sets this app as the dafult app to open all vision project and runtime files</value>
+  </data>
 </root>

@@ -69,6 +69,10 @@
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </RadioButton>
+                        <Button
+                            Command="{Binding AssociateAppWithExtensionsCommand}"
+                            Content="{x:Static properties:Resources.SettingsPageSetFileAssociationsButton}"
+                            ToolTip="{x:Static properties:Resources.SettingsPageSetFileAssociationsButtonTooltip}" />
                     </StackPanel>
                 </StackPanel>
 

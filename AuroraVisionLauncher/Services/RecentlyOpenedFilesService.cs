@@ -23,8 +23,9 @@ public class RecentlyOpenedFilesService : IRecentlyOpenedFilesService
     public RecentlyOpenedFilesService(IMessenger messenger)
     {
         //App.Current.Properties[Key] = new List<RecentlyOpenedFile>();
-        if (!App.Current.Properties.Contains("LastOpenedFiles"))
+        if (!App.Current.Properties.Contains(Key))
         {
+            App.Current.Properties[Key]=new List<RecentlyOpenedFile>();
         }
         else
         {
