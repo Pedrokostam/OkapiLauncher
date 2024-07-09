@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -34,7 +35,7 @@ public record AvApp : IAvApp
     internal AvApp(MultiVersion mvinfo, Configuration configuration)
     {
         ExePath = mvinfo.Primary.FileName;
-        Version = ParseVersion(mvinfo.Primary);
+        Version = ParseVersion(mvinfo.Primary) ?? throw new VersionNotFoundException("The ProductVersion field is empty");
         SecondaryVersion = mvinfo.Secondary is not null ? ParseVersion(mvinfo.Secondary) : null;
         Name = mvinfo.Primary.ProductName ?? "N/A";
         _originalInfo = mvinfo.Primary;
@@ -61,12 +62,12 @@ public record AvApp : IAvApp
         }
     }
 
-    protected static Version ParseVersion(FileVersionInfo fvinfo)
+    protected static Version? ParseVersion(FileVersionInfo fvinfo)
     {
         string? productVersion = fvinfo.ProductVersion;
         if (string.IsNullOrWhiteSpace(productVersion))
         {
-            throw new ArgumentException("Empty product version field.");
+            return null;
         }
         if (productVersion.Contains(' '))
         {
