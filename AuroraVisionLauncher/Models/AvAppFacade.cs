@@ -43,6 +43,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp
     public bool CheckIfProcessIsRunning() => _avApp.CheckIfProcessIsRunning();
 
     public bool CanOpen(ProgramType type) => _avApp.CanOpen(type);
+    public bool IsNativeApp(ProgramType type) => _avApp.IsNativeApp(type);
 
     [RelayCommand]
     private void OpenContainingFolder() => ExplorerHelper.OpenExplorer(ExePath);

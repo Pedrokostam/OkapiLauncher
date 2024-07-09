@@ -130,7 +130,7 @@ public partial class LauncherViewModel : ObservableRecipient, IRecipient<FileReq
             var matchingApps = _appProvider.AvApps
                 .Where(x => x.CanOpen(info.ProgramType))
                 .Select(x => new AvAppFacade(x))
-                .OrderByDescending(x => x.Compatibility);
+                .OrderByDescending(x => x.Version);
             Apps.Clear();
             foreach (var app in matchingApps)
             {

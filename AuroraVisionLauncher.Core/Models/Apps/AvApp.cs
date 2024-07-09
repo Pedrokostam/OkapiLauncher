@@ -180,6 +180,13 @@ public record AvApp : IAvApp
             {
                 score = double.MinValue;
             }
+            if (!app.IsNativeApp(info.Type))
+            {
+                // lower non-native app score by 100 million
+                // it is lower than any negative score can get, so they will always be chosen
+                // only as the last resort.
+                score -= 100_000_000;
+            }
             hasPositive |= score > 0;
             hasNegative |= score < 0;
             weights.Add(score);
@@ -204,4 +211,14 @@ public record AvApp : IAvApp
     }
     protected string ShortForm() => $"{Name} {Version}";
     public override string ToString() => ShortForm();
+
+    public bool IsNativeApp(ProgramType type)
+    {
+        return AppType switch
+        {
+            AvAppType.Professional => type == ProgramType.AuroraVisionProject || type == ProgramType.AdaptiveVisionProject || type == ProgramType.FabImageProject,
+            AvAppType.Runtime => type == ProgramType.AuroraVisionRuntime || type == ProgramType.FabImageRuntime,
+            _ => false,
+        };
+    }
 }

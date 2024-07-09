@@ -14,4 +14,5 @@ public interface IAvApp
 
     bool CheckIfProcessIsRunning();
     bool CanOpen(ProgramType type);
+    bool IsNativeApp(ProgramType type);
 }
