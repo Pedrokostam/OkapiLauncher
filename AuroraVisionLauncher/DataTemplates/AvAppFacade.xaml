@@ -93,11 +93,11 @@
                     VerticalAlignment="Center"
                     TextBlock.FontSize="18">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Name}" />
-                        <TextBlock Text=" - " />
-                        <TextBlock Text="{Binding Version}" />
-                        <TextBlock Text=" " />
-                        <TextBlock Text="{Binding SecondaryVersion, StringFormat={}({0})}" Visibility="{Binding SecondaryVersion, Converter={StaticResource NullVisibilityConverter}}" />
+                        <TextBlock >
+                            <Run Text="{Binding Name, Mode=OneWay, StringFormat='{}{0} - '}"/>
+                            <Run Text="{Binding Version, Mode=OneWay, StringFormat='{}{0} '}"/>
+                            <Run Text="{Binding SecondaryVersion, Mode=OneWay, TargetNullValue='', StringFormat='{}({0}) '}" />
+                        </TextBlock>
                         <TextBlock
                             FontWeight="Bold"
                             Foreground="DarkOrange"
