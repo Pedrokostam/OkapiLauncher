@@ -131,10 +131,12 @@ public partial class LauncherViewModel : ObservableRecipient, IRecipient<FileReq
                 .Where(x => x.CanOpen(info.ProgramType))
                 .Select(x => new AvAppFacade(x))
                 .OrderByDescending(x => x.Version);
+            SelectedApp = null;
             Apps.Clear();
             foreach (var app in matchingApps)
             {
                 Apps.Add(app);
+                app.UpdateCompatibility(VisionProgram);
             }
             var closestVersion = AvApp.GetClosestApp(Apps, VisionProgram);
             if (closestVersion >= 0)

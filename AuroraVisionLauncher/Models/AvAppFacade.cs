@@ -5,11 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using ABI.Windows.Foundation;
 using AuroraVisionLauncher.Core.Models.Apps;
 using AuroraVisionLauncher.Core.Models.Programs;
 using AuroraVisionLauncher.Helpers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Windows.ApplicationModel.VoiceCommands;
 
 namespace AuroraVisionLauncher.Models;
 public partial class AvAppFacade : ObservableObject, IAvApp
@@ -29,8 +31,12 @@ public partial class AvAppFacade : ObservableObject, IAvApp
     public CommandLineInterface Interface => _avApp.Interface;
 
     [ObservableProperty]
-    private string _compatibility = "";
+    private Compatibility? _compatibility = null;
 
+    public void UpdateCompatibility(IVisionProgram program)
+    {
+        Compatibility = Compatibility.Get(this, program);
+    }
 
     [ObservableProperty]
     private bool _isLaunched = false;

@@ -42,7 +42,8 @@
             IsLiveGroupingRequested="True"
             Source="{Binding Apps}">
             <CollectionViewSource.GroupDescriptions>
-                <PropertyGroupDescription PropertyName="Compatibility" />
+                <PropertyGroupDescription PropertyName="Compatibility.Category" />
+
             </CollectionViewSource.GroupDescriptions>
             <!--<CollectionViewSource.SortDescriptions>
                 <componentModel:SortDescription PropertyName="YourPropertyForOrdering" />
