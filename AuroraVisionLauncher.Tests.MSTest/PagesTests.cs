@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.Reflection;
-
+using System.Windows;
 using AuroraVisionLauncher.Contracts.Services;
 using AuroraVisionLauncher.Core.Contracts.Services;
 using AuroraVisionLauncher.Core.Services;
@@ -8,7 +8,7 @@ using AuroraVisionLauncher.Models;
 using AuroraVisionLauncher.Services;
 using AuroraVisionLauncher.ViewModels;
 using AuroraVisionLauncher.Views;
-
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -20,6 +20,12 @@ namespace AuroraVisionLauncher.Tests.MSTest;
 public class PagesTests
 {
     private readonly IHost _host;
+    [ClassInitialize]
+    public static void Init(TestContext testContext)
+    {
+        if (System.Windows.Application.Current == null)
+        { new System.Windows.Application { ShutdownMode = ShutdownMode.OnExplicitShutdown }; }
+    }
 
     public PagesTests()
     {
@@ -42,6 +48,10 @@ public class PagesTests
         services.AddSingleton<IApplicationInfoService, ApplicationInfoService>();
         services.AddSingleton<IPageService, PageService>();
         services.AddSingleton<INavigationService, NavigationService>();
+        services.AddSingleton<IMessenger, WeakReferenceMessenger>();
+        services.AddSingleton<IInstalledAppsProviderService, InstalledAppsProviderService>();
+        services.AddSingleton<IRecentlyOpenedFilesService, RecentlyOpenedFilesService>();
+        services.AddSingleton<IFileAssociationService, FileAssociationService>();
 
         // ViewModels
         services.AddTransient<SettingsViewModel>();

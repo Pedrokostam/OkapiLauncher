@@ -63,7 +63,7 @@ public class SettingsViewModelTests
            mockFileAssociationService.Object);
         settingsVm.OnNavigatedTo(null);
 
-        Assert.AreEqual($"AuroraVisionLauncher - {testVersion}", settingsVm.VersionDescription);
+        Assert.AreEqual($"Aurora Vision Launcher - {testVersion}", settingsVm.VersionDescription);
     }
 
     [TestMethod]
