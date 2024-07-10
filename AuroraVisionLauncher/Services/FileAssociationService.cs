@@ -142,7 +142,7 @@ public class FileAssociationService : IFileAssociationService
         var iconFolder = Path.Combine(appdata, _appConfig.IconsFolder);
         return Path.Combine(iconFolder, assoc.IconName);
     }
-    private bool IsAdministrator()
+    private static bool IsAdministrator()
     {
         using WindowsIdentity identity = WindowsIdentity.GetCurrent();
         WindowsPrincipal principal = new WindowsPrincipal(identity);
@@ -180,13 +180,6 @@ public class FileAssociationService : IFileAssociationService
         }
         try
         {
-            string user = Environment.UserDomainName + "\\" + Environment.UserName;
-            var sec = new RegistrySecurity();
-            sec.AddAccessRule(new RegistryAccessRule(user,
-                                                     RegistryRights.ReadKey | RegistryRights.SetValue | RegistryRights.CreateSubKey | RegistryRights.Delete,
-                                                     InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit,
-                                                     PropagationFlags.InheritOnly,
-                                                     AccessControlType.Allow));
             mainAppExecutablePath ??= Environment.ProcessPath!;
 
             RestoreIconFiles();
