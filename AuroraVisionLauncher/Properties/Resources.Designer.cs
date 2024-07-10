@@ -412,6 +412,24 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open app folder.
+        /// </summary>
+        public static string SettingsPageOpenInstallationFolderButton {
+            get {
+                return ResourceManager.GetString("SettingsPageOpenInstallationFolderButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opens the folder in which this app is installed.
+        /// </summary>
+        public static string SettingsPageOpenInstallationFolderButtonTooltip {
+            get {
+                return ResourceManager.GetString("SettingsPageOpenInstallationFolderButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Personalization.
         /// </summary>
         public static string SettingsPagePersonalizationTitle {

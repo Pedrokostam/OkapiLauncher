@@ -297,4 +297,10 @@
   <data name="SettingsPageSetFileAssociationsButtonTooltip" xml:space="preserve">
     <value>Sets this app as the dafult app to open all vision project and runtime files</value>
   </data>
+  <data name="SettingsPageOpenInstallationFolderButton" xml:space="preserve">
+    <value>Open app folder</value>
+  </data>
+  <data name="SettingsPageOpenInstallationFolderButtonTooltip" xml:space="preserve">
+    <value>Opens the folder in which this app is installed</value>
+  </data>
 </root>

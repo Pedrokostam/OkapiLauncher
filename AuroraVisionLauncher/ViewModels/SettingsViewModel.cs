@@ -1,9 +1,11 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Input;
 
 using AuroraVisionLauncher.Contracts.Services;
 using AuroraVisionLauncher.Contracts.ViewModels;
+using AuroraVisionLauncher.Helpers;
 using AuroraVisionLauncher.Models;
 using AuroraVisionLauncher.Services;
 using AuroraVisionLauncher.Views;
@@ -79,5 +81,14 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     {
         _fileAssociationService.SetAssociationsToApp();
     }
-
+    [RelayCommand]
+    private void OpenInstallationFolder()
+    {
+        var exePath = Process.GetCurrentProcess().MainModule!.FileName;
+        if (exePath is null)
+        {
+            return;
+        }
+        ExplorerHelper.OpenExplorer(exePath);
+    }
 }
