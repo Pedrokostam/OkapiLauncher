@@ -167,7 +167,7 @@ public class FileAssociationService : IFileAssociationService
             {
                 Process.Start(new ProcessStartInfo()
                 {
-                    FileName = Process.GetCurrentProcess().MainModule!.FileName,
+                    FileName = Environment.ProcessPath,
                     UseShellExecute = true,
                     Verb = "runas"
                 });
@@ -187,14 +187,13 @@ public class FileAssociationService : IFileAssociationService
                                                      InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit,
                                                      PropagationFlags.InheritOnly,
                                                      AccessControlType.Allow));
-            mainAppExecutablePath ??= Process.GetCurrentProcess().MainModule!.FileName!;
+            mainAppExecutablePath ??= Environment.ProcessPath!;
 
             RestoreIconFiles();
 
             RemoveExplorerAssociations();
 
             SetAppShellKeys(mainAppExecutablePath);
-
 
             SetAssociations();
         }

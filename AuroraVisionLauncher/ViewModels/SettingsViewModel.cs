@@ -84,7 +84,7 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     [RelayCommand]
     private void OpenInstallationFolder()
     {
-        var exePath = Process.GetCurrentProcess().MainModule!.FileName;
+        var exePath = Environment.ProcessPath;
         if (exePath is null)
         {
             return;
