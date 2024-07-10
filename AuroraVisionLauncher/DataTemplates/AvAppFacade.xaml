@@ -33,6 +33,37 @@
                     Margin="5,0,10,0"
                     VerticalAlignment="Center"
                     Orientation="Horizontal">
+                    <StackPanel.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Processes" ItemsSource="{Binding ActiveProcesses}">
+                                <MenuItem.ItemContainerStyle>
+                                    <Style BasedOn="{StaticResource MahApps.Styles.MenuItem}" TargetType="MenuItem">
+                                        <Setter Property="Header" Value="{Binding MainWindowTitle}" />
+                                        <Setter Property="Command" Value="{Binding KillCommand}" />
+                                        <!--<Setter Property="ToolTip">
+                                            <Setter.Value>
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding FilePath}" />
+                                                    <TextBlock Text="{Binding OpenedOn, StringFormat={}Opened on {0:yyyy-MM-dd HH:mm:ss}, Converter={StaticResource UtcToLocalConverter}}" />
+                                                </StackPanel>
+                                            </Setter.Value>
+                                        </Setter>
+                                <Setter Property="Command" Value="{Binding DataContext.MenuOpenRecentFileCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                                        <Setter Property="CommandParameter" Value="{Binding}" />
+                                        <Setter Property="InputGestureText" Value="{Binding Index, Converter={StaticResource IndexConverter}, StringFormat={}Alt + {0}}" />
+                                <Setter Property="Icon">
+            <Setter.Value>
+                <Image Source="{Binding Icon}" />
+            </Setter.Value>
+        </Setter>-->
+
+
+                                    </Style>
+                                </MenuItem.ItemContainerStyle>
+                            </MenuItem>
+                            <MenuItem Header="Kill All" />
+                        </ContextMenu>
+                    </StackPanel.ContextMenu>
                     <mahicon:PackIconMaterialDesign>
                         <mahicon:PackIconMaterialDesign.Style>
                             <Style TargetType="{x:Type mahicon:PackIconMaterialDesign}">
@@ -93,16 +124,16 @@
                     VerticalAlignment="Center"
                     TextBlock.FontSize="18">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock >
-                            <Run Text="{Binding Name, Mode=OneWay, StringFormat='{}{0} - '}"/>
-                            <Run Text="{Binding Version, Mode=OneWay, StringFormat='{}{0} '}"/>
+                        <TextBlock>
+                            <Run Text="{Binding Name, Mode=OneWay, StringFormat='{}{0} - '}" />
+                            <Run Text="{Binding Version, Mode=OneWay, StringFormat='{}{0} '}" />
                             <Run Text="{Binding SecondaryVersion, Mode=OneWay, TargetNullValue='', StringFormat='{}({0}) '}" />
                         </TextBlock>
                         <TextBlock
                             FontWeight="Bold"
                             Foreground="DarkOrange"
                             Text="{x:Static properties:Resources.AvAppDevelopmentVersion}"
-                            Visibility="{Binding IsDevelopmentBuild, Converter={StaticResource BoolVisibilityConverter}}" />
+                            Visibility="{Binding IsDevelopmentVersion, Converter={StaticResource BoolVisibilityConverter}}" />
                     </StackPanel>
                     <TextBlock
                         FontSize="16"

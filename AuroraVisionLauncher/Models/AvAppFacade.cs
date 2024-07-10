@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using ABI.Windows.Foundation;
+using AuroraVisionLauncher.Core.Models;
 using AuroraVisionLauncher.Core.Models.Apps;
 using AuroraVisionLauncher.Core.Models.Programs;
 using AuroraVisionLauncher.Helpers;
@@ -20,15 +23,19 @@ public partial class AvAppFacade : ObservableObject, IAvApp
 
     public string Name => _avApp.Name;
     public string ExePath => _avApp.ExePath;
-    public Version Version => _avApp.Version;
+    public AvVersionFacade Version { get; }
     public string NameWithVersion => $"{Name} {Version}";
-    public bool IsDevelopmentBuild => _avApp.IsDevelopmentBuild;
+    public bool IsDevelopmentVersion => Version.IsDevelopmentVersion;
 
     public AvAppType AppType => _avApp.AppType;
 
-    public Version? SecondaryVersion => _avApp.SecondaryVersion;
+    public AvVersionFacade? SecondaryVersion { get; }
 
     public CommandLineInterface Interface => _avApp.Interface;
+    IAvVersion IAvApp.Version => Version;
+    IAvVersion? IAvApp.SecondaryVersion => SecondaryVersion;
+
+    public string InternalName => _avApp.InternalName;
 
     [ObservableProperty]
     private Compatibility? _compatibility = null;
@@ -44,9 +51,63 @@ public partial class AvAppFacade : ObservableObject, IAvApp
     public AvAppFacade(AvApp avApp)
     {
         _avApp = avApp;
+        Version = new AvVersionFacade(avApp.Version);
+        SecondaryVersion = avApp.SecondaryVersion is not null ? new AvVersionFacade(avApp.SecondaryVersion) : null;
     }
+    public ObservableCollection<SimpleProcess> ActiveProcesses { get; } = new();
 
-    public bool CheckIfProcessIsRunning() => _avApp.CheckIfProcessIsRunning();
+    /// <summary>
+    /// Checks if any process associated with the executable is running.
+    /// </summary>
+    /// <returns><see langword="true"/> if the process is running; <see langword="false"/> if it is not running, or it could not be checked.</returns>
+    public bool CheckIfProcessIsRunning()
+    {
+        try
+        {
+            var processes = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(InternalName));
+            List<int> keptIds = [];
+            List<int> indicesToRemove = [];
+            foreach (var process in processes)
+            {
+                if(!string.Equals(process.MainModule?.FileName, ExePath, StringComparison.OrdinalIgnoreCase))
+                {
+                    process.Dispose();
+                    continue;
+                }
+                var existing = ActiveProcesses.FirstOrDefault(x => x.Id == process.Id);
+                keptIds.Add(process.Id);
+                if (existing is null)
+                {
+                    ActiveProcesses.Add(new(process));
+                }
+                else
+                {
+                    existing.MainWindowTitle = process.MainWindowTitle;
+                    process.Dispose();
+                }
+            }
+
+            foreach (var (sp, i) in ActiveProcesses.Select((x, i) => (x, i)))
+            {
+                if (!keptIds.Contains(sp.Id))
+                {
+                    indicesToRemove.Add(i);
+                }
+            }
+
+            indicesToRemove.Reverse();
+            foreach (var index in indicesToRemove)
+            {
+                ActiveProcesses.RemoveAt(index);
+            }
+
+            return ActiveProcesses.Any();
+        }
+        catch (InvalidOperationException)
+        {
+            return false;
+        }
+    }
 
     public bool CanOpen(ProgramType type) => _avApp.CanOpen(type);
     public bool IsNativeApp(ProgramType type) => _avApp.IsNativeApp(type);

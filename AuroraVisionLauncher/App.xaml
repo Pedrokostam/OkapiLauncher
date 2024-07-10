@@ -22,9 +22,6 @@
                 <ResourceDictionary Source="/Styles/_Thickness.xaml" />
                 <ResourceDictionary Source="/Styles/MetroWindow.xaml" />
                 <ResourceDictionary Source="/Styles/TextBlock.xaml" />
-                <ResourceDictionary Source="/DataTemplates/AvAppFacade.xaml" />
-                <ResourceDictionary Source="/DataTemplates/CommandLineOptions.xaml" />
-                <ResourceDictionary Source="/DataTemplates/ProgramInformation.xaml" />
                 <!--
                     MahApps.Metro resource dictionaries.
                     Learn more about using MahApps.Metro at https://mahapps.com/
@@ -36,6 +33,12 @@
                 <!--  Accent and AppTheme setting  -->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />
+                
+                
+                
+                <ResourceDictionary Source="/DataTemplates/AvAppFacade.xaml" />
+                <ResourceDictionary Source="/DataTemplates/CommandLineOptions.xaml" />
+                <ResourceDictionary Source="/DataTemplates/ProgramInformation.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

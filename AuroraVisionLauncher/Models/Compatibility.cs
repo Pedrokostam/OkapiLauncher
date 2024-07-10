@@ -28,7 +28,7 @@ public class Compatibility
         {
             return Incompatible;
         }
-        if (program.Version == VisionProgram.MissingVersion)
+        if (program.Version.IsUnknown)
         {
             return Unknown;
         }
@@ -40,7 +40,7 @@ public class Compatibility
             }
             return Incompatible;
         }
-        if (app.Version >= program.Version)
+        if (app.Version.CompareTo(program.Version) >= 0)
         {
             return Compatible;
         }

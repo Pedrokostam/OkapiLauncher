@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AuroraVisionLauncher.Core.Models;
 using AuroraVisionLauncher.Core.Models.Programs;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -25,7 +26,7 @@ public class VisionProgramTests
             {
                 continue;
             }
-            var prog = new VisionProgram("", new Version(), "", item);
+            var prog = new VisionProgram("", AvVersion.MissingVersion, "", item);
             var s = prog.IsStudio();
             var r = prog.IsRuntime();
             Assert.IsTrue(s || r);

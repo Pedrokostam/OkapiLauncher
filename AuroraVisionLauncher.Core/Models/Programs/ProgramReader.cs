@@ -60,7 +60,7 @@ public static class ProgramReader
 #endif
         return span[..header.Length].SequenceEqual(header);
     }
-    private static Version GetVersionFromXml(string filepath)
+    private static AvVersion GetVersionFromXml(string filepath)
     {
         using var reader = XmlReader.Create(filepath);
         reader.Read();
@@ -68,18 +68,18 @@ public static class ProgramReader
         string? versionEnd = reader.GetAttribute("Revision");
         if (string.IsNullOrWhiteSpace(versionStart) || string.IsNullOrWhiteSpace(versionEnd))
         {
-            return VisionProgram.MissingVersion;
+            return AvVersion.MissingVersion;
         }
-        return Version.Parse(versionStart + '.' + versionEnd);
+        return AvVersion.Parse(versionStart + '.' + versionEnd) ?? AvVersion.MissingVersion;
     }
 
     public static ProgramInformation GetInformation(string filepath)
     {
         var programType = CheckFile(filepath);
-        Version version = programType switch
+        IAvVersion version = programType switch
         {
             ProgramType.None => throw new InvalidDataException("Format does not match any headers."),
-            ProgramType.FabImageRuntime or ProgramType.AuroraVisionRuntime => VisionProgram.MissingVersion,
+            ProgramType.FabImageRuntime or ProgramType.AuroraVisionRuntime => AvVersion.MissingVersion,
             _ => GetVersionFromXml(filepath)
         };
         return new ProgramInformation(programType, version);

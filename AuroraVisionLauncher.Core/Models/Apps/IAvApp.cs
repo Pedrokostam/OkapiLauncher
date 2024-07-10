@@ -5,14 +5,13 @@ namespace AuroraVisionLauncher.Core.Models.Apps;
 public interface IAvApp
 {
     string ExePath { get; }
-    bool IsDevelopmentBuild { get; }
+    bool IsDevelopmentVersion { get; }
     string Name { get; }
-    Version Version { get; }
+    IAvVersion Version { get; }
     AvAppType AppType { get; }
-    Version? SecondaryVersion { get; }
+    IAvVersion? SecondaryVersion { get; }
     CommandLineInterface Interface { get; }
-
-    bool CheckIfProcessIsRunning();
+    string InternalName { get; }
     bool CanOpen(ProgramType type);
     bool IsNativeApp(ProgramType type);
 }

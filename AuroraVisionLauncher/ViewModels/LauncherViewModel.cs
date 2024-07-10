@@ -32,7 +32,7 @@ public sealed partial class LauncherViewModel : ObservableRecipient, IRecipient<
         _timer = new DispatcherTimer();
         UpdateRunningStatus();
         _timer.Tick += (o, e) => UpdateRunningStatus();
-        _timer.Interval = TimeSpan.FromSeconds(2);
+        _timer.Interval = TimeSpan.FromSeconds(3);
         _timer.Start();
     }
 

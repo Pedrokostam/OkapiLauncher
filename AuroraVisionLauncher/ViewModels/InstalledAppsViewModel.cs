@@ -22,7 +22,7 @@ public class InstalledAppsViewModel : ObservableObject
         _timer = new DispatcherTimer();
         UpdateRunningStatus();
         _timer.Tick += (o,e) => UpdateRunningStatus();
-        _timer.Interval = TimeSpan.FromSeconds(5);
+        _timer.Interval = TimeSpan.FromSeconds(3);
         _timer.Start();
     }
 

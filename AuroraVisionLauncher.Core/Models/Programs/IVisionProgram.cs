@@ -7,5 +7,5 @@ public interface IVisionProgram
     string Name { get;}
     string Path { get; }
     ProgramType Type { get; }
-    Version Version { get; }
+    IAvVersion Version { get; }
 }

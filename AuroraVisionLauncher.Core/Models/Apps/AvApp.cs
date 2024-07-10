@@ -23,59 +23,32 @@ public record AvApp : IAvApp
     };
 
     public string ExePath { get; }
-    public Version Version { get; }
-    public Version? SecondaryVersion { get; }
+    public AvVersion Version { get; }
+    public AvVersion? SecondaryVersion { get; }
     public string Name { get; }
     public AvAppType AppType { get; }
-    public bool IsDevelopmentBuild => Version.Build >= 1000;
-    readonly private FileVersionInfo _originalInfo;
+    public string InternalName { get; }
+    public bool IsDevelopmentVersion => Version.Build >= 1000;
     private readonly List<ProgramType> _supportedPrograms;
     public CommandLineInterface Interface { get; }
     protected IReadOnlyCollection<ProgramType> SupportedProgramTypes => _supportedPrograms.AsReadOnly();
+
+    IAvVersion IAvApp.Version => Version;
+
+    IAvVersion? IAvApp.SecondaryVersion => SecondaryVersion;
+
     internal AvApp(MultiVersion mvinfo, Configuration configuration)
     {
         ExePath = mvinfo.Primary.FileName;
-        Version = ParseVersion(mvinfo.Primary) ?? throw new VersionNotFoundException("The ProductVersion field is empty");
-        SecondaryVersion = mvinfo.Secondary is not null ? ParseVersion(mvinfo.Secondary) : null;
+        Version = AvVersion.Parse(mvinfo.Primary) ?? throw new VersionNotFoundException("The ProductVersion field is empty");
+        SecondaryVersion = AvVersion.Parse(mvinfo.Secondary);
         Name = mvinfo.Primary.ProductName ?? "N/A";
-        _originalInfo = mvinfo.Primary;
-
+        InternalName = mvinfo.Primary.InternalName!;
         _supportedPrograms = new List<ProgramType>(configuration.SupportedPrograms);
         AppType = configuration.AppType;
         Interface = configuration.Interface;
     }
-    /// <summary>
-    /// Checks if any process associated with the executable is running.
-    /// </summary>
-    /// <returns><see langword="true"/> if the process is running; <see langword="false"/> if it is not running, or it could not be checked.</returns>
-    public bool CheckIfProcessIsRunning()
-    {
-        try
-        {
-            var p = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(_originalInfo.InternalName));
 
-            return p.Any(x => string.Equals(x.MainModule?.FileName, ExePath, StringComparison.OrdinalIgnoreCase));
-        }
-        catch (InvalidOperationException)
-        {
-            return false;
-        }
-    }
-
-    protected static Version? ParseVersion(FileVersionInfo fvinfo)
-    {
-        string? productVersion = fvinfo.ProductVersion;
-        if (string.IsNullOrWhiteSpace(productVersion))
-        {
-            return null;
-        }
-        if (productVersion.Contains(' '))
-        {
-            productVersion = productVersion.Split(' ', StringSplitOptions.TrimEntries)[0];
-        }
-        var ver = Version.Parse(productVersion);
-        return ver;
-    }
 
     static MultiVersion? FindInfo(string folder)
 
@@ -144,7 +117,7 @@ public record AvApp : IAvApp
     {
         return SupportedProgramTypes.Contains(type);
     }
-    private static double VersionToDouble(Version version, Version baseVersion)
+    private static double VersionToDouble(IAvVersion version, IAvVersion baseVersion)
     {
         var balance = 1.0d;
         // revision doesnt really matter, started with so it will never move it below 0
@@ -211,10 +184,10 @@ public record AvApp : IAvApp
     }
     protected string ShortForm() => $"{Name} {Version}";
     public override string ToString() => ShortForm();
-
-    public bool IsNativeApp(ProgramType type)
+    public bool IsNativeApp(ProgramType type) => IsNativeApp(this, type);
+    public static bool IsNativeApp(IAvApp app, ProgramType type)
     {
-        return AppType switch
+        return app.AppType switch
         {
             AvAppType.Professional => type == ProgramType.AuroraVisionProject || type == ProgramType.AdaptiveVisionProject || type == ProgramType.FabImageProject,
             AvAppType.Runtime => type == ProgramType.AuroraVisionRuntime || type == ProgramType.FabImageRuntime,
