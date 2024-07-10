@@ -36,12 +36,12 @@ public class WindowManagerService : IWindowManagerService
             window = new MetroWindow()
             {
                 Title = "AuroraVisionLauncher",
-                Style = Application.Current.FindResource("CustomMetroWindow") as Style
+                Style = Application.Current.FindResource("CustomMetroWindow") as Style,
             };
             var frame = new Frame()
             {
                 Focusable = false,
-                NavigationUIVisibility = NavigationUIVisibility.Hidden
+                NavigationUIVisibility = NavigationUIVisibility.Hidden,
             };
 
             window.Content = frame;
@@ -53,9 +53,9 @@ public class WindowManagerService : IWindowManagerService
         }
     }
 
-    public bool? OpenInDialog(string key, object parameter = null)
+    public bool? OpenInDialog(string key, object? parameter = null)
     {
-        var shellWindow = _serviceProvider.GetService(typeof(IShellDialogWindow)) as Window;
+        var shellWindow = (Window)_serviceProvider.GetService(typeof(IShellDialogWindow))!;
         var frame = ((IShellDialogWindow)shellWindow).GetDialogFrame();
         frame.Navigated += OnNavigated;
         shellWindow.Closed += OnWindowClosed;
@@ -64,12 +64,12 @@ public class WindowManagerService : IWindowManagerService
         return shellWindow.ShowDialog();
     }
 
-    public Window GetWindow(string key)
+    public Window? GetWindow(string key)
     {
         foreach (Window window in Application.Current.Windows)
         {
             var dataContext = window.GetDataContext();
-            if (dataContext?.GetType().FullName == key)
+            if (string.Equals(dataContext?.GetType().FullName, key, StringComparison.Ordinal))
             {
                 return window;
             }
@@ -90,7 +90,7 @@ public class WindowManagerService : IWindowManagerService
         }
     }
 
-    private void OnWindowClosed(object sender, EventArgs e)
+    private void OnWindowClosed(object? sender, EventArgs e)
     {
         if (sender is Window window)
         {

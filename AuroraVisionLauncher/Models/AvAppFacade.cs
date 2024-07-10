@@ -58,7 +58,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp
     {
         Process.Start(new ProcessStartInfo()
         {
-            FileName = _avApp.ExePath
+            FileName = _avApp.ExePath,
         });
     }
     [RelayCommand]

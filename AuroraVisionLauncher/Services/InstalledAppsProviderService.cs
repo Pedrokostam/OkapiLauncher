@@ -19,7 +19,7 @@ public class InstalledAppsProviderService : IInstalledAppsProviderService
     public InstalledAppsProviderService()
     {
         var variables = Environment.GetEnvironmentVariables();
-        _avApps = new List<AvApp>();
+        _avApps = [];
         foreach (DictionaryEntry entry in variables)
         {
             var key_string = entry.Key?.ToString();
@@ -28,7 +28,10 @@ public class InstalledAppsProviderService : IInstalledAppsProviderService
             {
                 continue;
             }
-            if (Regex.IsMatch(key_string, "^(AVS|FIS|AVLDL|FILDL)_", RegexOptions.IgnoreCase) && value_string is not null)
+            if (Regex.IsMatch(key_string,
+                "^(AVS|FIS|AVLDL|FILDL)_",
+                RegexOptions.IgnoreCase|RegexOptions.ExplicitCapture,
+                TimeSpan.FromMilliseconds(100)))
             {
                 if (AvApp.TryCreate(value_string, out AvApp? app))
                 {

@@ -38,10 +38,7 @@ public class Compatibility
             {
                 return Compatible;
             }
-            else
-            {
-                return Incompatible;
-            }
+            return Incompatible;
         }
         if (app.Version >= program.Version)
         {

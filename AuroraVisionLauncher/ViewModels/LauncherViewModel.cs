@@ -16,14 +16,14 @@ using System.Windows.Threading;
 
 namespace AuroraVisionLauncher.ViewModels;
 
-public partial class LauncherViewModel : ObservableRecipient, IRecipient<FileRequestedMessage>
+public sealed partial class LauncherViewModel : ObservableRecipient, IRecipient<FileRequestedMessage>
 {
     private readonly IInstalledAppsProviderService _appProvider;
     private readonly INavigationService _navigationService;
     private readonly IRecentlyOpenedFilesService _lastOpenedFilesService;
     private readonly DispatcherTimer _timer;
 
-    public LauncherViewModel(IMessenger messenger, IInstalledAppsProviderService appProvider, INavigationService navigationService,IRecentlyOpenedFilesService lastOpenedFilesService) : base(messenger)
+    public LauncherViewModel(IMessenger messenger, IInstalledAppsProviderService appProvider, INavigationService navigationService, IRecentlyOpenedFilesService lastOpenedFilesService) : base(messenger)
     {
         _lastOpenedFilesService = lastOpenedFilesService;
         _appProvider = appProvider;
@@ -46,7 +46,7 @@ public partial class LauncherViewModel : ObservableRecipient, IRecipient<FileReq
 
     [ObservableProperty]
     private LaunchOptions? _launchOptions;
-    public ObservableCollection<AvAppFacade> Apps { get; } = new();
+    public ObservableCollection<AvAppFacade> Apps { get; } = [];
 
 
     private bool CanLaunch()
@@ -64,7 +64,7 @@ public partial class LauncherViewModel : ObservableRecipient, IRecipient<FileReq
         {
             FileName = SelectedApp.ExePath,
             UseShellExecute = true,  // Use the shell to start the process
-            CreateNoWindow = true    // Do not create a window
+            CreateNoWindow = true, // Do not create a window
         };
         var args = LaunchOptions!.GetCommandLineArgs();
         foreach (var arg in args)
@@ -101,7 +101,7 @@ public partial class LauncherViewModel : ObservableRecipient, IRecipient<FileReq
     }
 
     private bool CanCopyArgumentString() => !string.IsNullOrWhiteSpace(LaunchOptions?.ArgumentString);
-    [RelayCommand(CanExecute =nameof(CanCopyArgumentString))]
+    [RelayCommand(CanExecute = nameof(CanCopyArgumentString))]
     private void CopyArgumentString()
     {
         if (LaunchOptions?.ArgumentString is not null)

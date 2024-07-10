@@ -23,28 +23,12 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     private readonly IThemeSelectorService _themeSelectorService;
     private readonly ISystemService _systemService;
     private readonly IApplicationInfoService _applicationInfoService;
-    private readonly IInstalledAppsProviderService _installedAppsProviderService;
     private readonly IFileAssociationService _fileAssociationService;
-    private AppTheme _theme;
-    private string _versionDescription = string.Empty;
-
-    public AppTheme Theme
-    {
-        get { return _theme; }
-        set { SetProperty(ref _theme, value); }
-    }
-
-    public string VersionDescription
-    {
-        get { return _versionDescription; }
-        set { SetProperty(ref _versionDescription, value); }
-    }
 
     public SettingsViewModel(IOptions<AppConfig> appConfig,
                              IThemeSelectorService themeSelectorService,
                              ISystemService systemService,
                              IApplicationInfoService applicationInfoService,
-                             IInstalledAppsProviderService installedAppsProviderService,
                              IFileAssociationService fileAssociationService
                              )
     {
@@ -52,9 +36,13 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
         _themeSelectorService = themeSelectorService;
         _systemService = systemService;
         _applicationInfoService = applicationInfoService;
-        _installedAppsProviderService = installedAppsProviderService;
         _fileAssociationService = fileAssociationService;
     }
+
+    [ObservableProperty]
+    private AppTheme _theme;
+    [ObservableProperty]
+    private string _versionDescription = string.Empty;
 
     [RelayCommand]
     public void OnNavigatedTo(object parameter)
@@ -82,7 +70,7 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
         _fileAssociationService.SetAssociationsToApp();
     }
     [RelayCommand]
-    private void OpenInstallationFolder()
+    private static void OpenInstallationFolder()
     {
         var exePath = Environment.ProcessPath;
         if (exePath is null)

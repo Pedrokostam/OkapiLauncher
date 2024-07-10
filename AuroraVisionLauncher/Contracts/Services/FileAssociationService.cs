@@ -16,22 +16,15 @@ using Microsoft.Extensions.Options;
 using Microsoft.Win32;
 
 namespace AuroraVisionLauncher.Services;
-public interface IFileAssociationService
-{
-    void SetAssociationsToApp(string? mainAppExecutablePath = null);
-}
 public class FileAssociationService : IFileAssociationService
 {
 
-    private RegistryKey CreateOrOpenRegistryPathWritable(params string[] steps)
+    private static RegistryKey CreateOrOpenRegistryPathWritable(params string[] steps)
     {
-        return CreateOrOpenRegistrPathImpl(steps, true);
+        return CreateOrOpenRegistrPathImpl(steps, writable: true);
     }
 
-    private RegistryKey CreateOrOpenRegistryPathReadOnly(params string[] steps)
-    {
-        return CreateOrOpenRegistrPathImpl(steps, false);
-    }
+
     /// <summary>
     /// Creates a subkey, or returns the existing one.
     /// </summary>
@@ -61,7 +54,6 @@ public class FileAssociationService : IFileAssociationService
         ];
 
     public const string RegistryAppName = "AuroraVisionLauncher";
-    private static readonly string[] _extensions = [".avproj", ".fiproj", ".avexe", ".fiexe"];
     private readonly AppConfig _appConfig;
 
     //public Dictionary<string, string> GetCurrentAssociations()
@@ -95,19 +87,19 @@ public class FileAssociationService : IFileAssociationService
             var registryKeyName = GetExtensionRegistryName(association);
             // delete existing keys
             string extensionSubkey = CreateRegistryPathString("Software", "Classes", registryKeyName);
-            Registry.CurrentUser.DeleteSubKeyTree(extensionSubkey, false);
+            Registry.CurrentUser.DeleteSubKeyTree(extensionSubkey, throwOnMissingSubKey: false);
             //Registry.CurrentUser.Close();
             using var appKey = CreateOrOpenRegistryPathWritable("Software", "Classes", registryKeyName);
 
-            using var iconKey = appKey.CreateSubKey("DefaultIcon", true);
+            using var iconKey = appKey.CreateSubKey("DefaultIcon", writable: true);
 
             var iconPath = GetIconName(association);
             // No need to enclose in quotes; 0 means use the first icon available
-            iconKey.SetValue(null, $"{iconPath},0");
+            iconKey.SetValue(name: null, $"{iconPath},0");
 
             using var commandOpenShellKey = appKey.CreateSubKey(CreateRegistryPathString("shell", "open", "command"));
 
-            commandOpenShellKey.SetValue(null, $"\"{mainAppPath}\" \"%1\"");
+            commandOpenShellKey.SetValue(name: null, $"\"{mainAppPath}\" \"%1\"");
         }
 
     }
@@ -158,7 +150,7 @@ public class FileAssociationService : IFileAssociationService
                                       Do you want to restart the application with those rights?
                                       """,
                                       "Administrative privileges required",
-                                      MessageBoxButton.YesNo,MessageBoxImage.Exclamation);
+                                      MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
             if (res == MessageBoxResult.No)
             {
                 return;
@@ -169,7 +161,7 @@ public class FileAssociationService : IFileAssociationService
                 {
                     FileName = Environment.ProcessPath,
                     UseShellExecute = true,
-                    Verb = "runas"
+                    Verb = "runas", 
                 });
                 Environment.Exit(0);
             }
@@ -203,11 +195,8 @@ public class FileAssociationService : IFileAssociationService
         using var fileExts = CreateOrOpenRegistryPathWritable("Software", "Microsoft", "Windows", "CurrentVersion", "Explorer", "FileExts");
         foreach (var assoc in associations)
         {
-            using var assocKey = fileExts.OpenSubKey(assoc.Extension, true);
-            if (assocKey is not null)
-            {
-                assocKey.DeleteSubKey("UserChoice", false);
-            }
+            using var assocKey = fileExts.OpenSubKey(assoc.Extension, writable: true);
+            assocKey?.DeleteSubKey("UserChoice", throwOnMissingSubKey: false);
         }
     }
 
@@ -217,7 +206,7 @@ public class FileAssociationService : IFileAssociationService
         {
             var registryKeyName = GetExtensionRegistryName(association);
             using var extKey = CreateOrOpenRegistryPathWritable("Software", "Classes", association.Extension);
-            extKey.SetValue(null, registryKeyName);
+            extKey.SetValue(name: null, registryKeyName);
         }
     }
 }

@@ -116,7 +116,7 @@ public partial class App : Application
 
     private async void OnExit(object sender, ExitEventArgs e)
     {
-        await _host?.StopAsync();
+        await _host!.StopAsync();
         _host?.Dispose();
         _host = null;
     }

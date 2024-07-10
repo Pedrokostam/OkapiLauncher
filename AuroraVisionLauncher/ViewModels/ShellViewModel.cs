@@ -69,7 +69,7 @@ public partial class ShellViewModel : ObservableObject, IRecipient<RecentFilesCh
 
     [RelayCommand()]
     private void OnMenuViewsLauncher()
-        => _navigationService.NavigateTo(typeof(LauncherViewModel).FullName!, null, true);
+        => _navigationService.NavigateTo(typeof(LauncherViewModel).FullName!, parameter: null, clearNavigation: true);
 
     [RelayCommand()]
     private void OnMenuFileSettings()
@@ -77,7 +77,7 @@ public partial class ShellViewModel : ObservableObject, IRecipient<RecentFilesCh
 
     [RelayCommand()]
     private void OnMenuViewsInstalledApps()
-        => _navigationService.NavigateTo(typeof(InstalledAppsViewModel).FullName!, null, true);
+        => _navigationService.NavigateTo(typeof(InstalledAppsViewModel).FullName!, parameter: null, clearNavigation: true);
     [RelayCommand()]
     private void OnMenuFileOpenProject()
     {

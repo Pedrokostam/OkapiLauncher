@@ -31,19 +31,19 @@ public class ApplicationHostService : IHostedService
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         // Initialize services that you need before app activation
-        await InitializeAsync();
+        await InitializeAsync().ConfigureAwait(false);
 
-        await HandleActivationAsync();
+        await HandleActivationAsync().ConfigureAwait(false);
 
         // Tasks after activation
-        await StartupAsync();
+        await StartupAsync().ConfigureAwait(false);
         _isInitialized = true;
     }
 
     public async Task StopAsync(CancellationToken cancellationToken)
     {
         _persistAndRestoreService.PersistData();
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(false);
     }
 
     private async Task InitializeAsync()
@@ -52,7 +52,7 @@ public class ApplicationHostService : IHostedService
         {
             _persistAndRestoreService.RestoreData();
             _themeSelectorService.InitializeTheme();
-            await Task.CompletedTask;
+            await Task.CompletedTask.ConfigureAwait(false);
         }
     }
 
@@ -60,7 +60,7 @@ public class ApplicationHostService : IHostedService
     {
         if (!_isInitialized)
         {
-            await Task.CompletedTask;
+            await Task.CompletedTask.ConfigureAwait(false);
         }
     }
 
@@ -70,10 +70,10 @@ public class ApplicationHostService : IHostedService
 
         if (activationHandler != null)
         {
-            await activationHandler.HandleAsync();
+            await activationHandler.HandleAsync().ConfigureAwait(false);
         }
 
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(false);
         if (!App.Current.Windows.OfType<IShellWindow>().Any())
         {
             // Default activation that navigates to the apps default page
@@ -82,7 +82,7 @@ public class ApplicationHostService : IHostedService
             _rightPaneService.Initialize(_shellWindow.GetRightPaneFrame(), _shellWindow.GetSplitView());
             _shellWindow.ShowWindow();
             _navigationService.NavigateTo(typeof(InstalledAppsViewModel).FullName!);
-            await Task.CompletedTask;
+            await Task.CompletedTask.ConfigureAwait(false);
         }
     }
 }

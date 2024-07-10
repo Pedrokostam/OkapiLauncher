@@ -4,7 +4,7 @@ public class NoLaunchOptions : LaunchOptions
 {
     public override  IEnumerable<string> GetCommandLineArgs()
     {
-        return Enumerable.Empty<string>();
+        return [];
     }
 
     public override void Reset()

@@ -15,20 +15,20 @@ public class SimpleArgumentRule : ValidationRule
     {
         if (value is not string s)
         {
-            return new ValidationResult(false, Properties.Resources.ValidationArgumentHasToBeString);
+            return new ValidationResult(isValid: false, Properties.Resources.ValidationArgumentHasToBeString);
         }
         s = s.Trim();
         if (s.Contains(' '))
         {
-            return new ValidationResult(false, Properties.Resources.ValidationArgumentNoWhitespace);
+            return new ValidationResult(isValid: false, Properties.Resources.ValidationArgumentNoWhitespace);
         }
         if (s.Contains('"'))
         {
-            return new ValidationResult(false, Properties.Resources.ValidationArgumentNoDoubleQuotes);
+            return new ValidationResult(isValid: false, Properties.Resources.ValidationArgumentNoDoubleQuotes);
         }
         if (s.Contains('\''))
         {
-            return new ValidationResult(false, Properties.Resources.ValidationArgumentNoSingleQuotes);
+            return new ValidationResult(isValid: false, Properties.Resources.ValidationArgumentNoSingleQuotes);
         }
         return ValidationResult.ValidResult;
     }

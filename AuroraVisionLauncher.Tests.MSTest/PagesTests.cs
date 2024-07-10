@@ -21,6 +21,8 @@ public class PagesTests
 {
     private readonly IHost _host;
     [ClassInitialize]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1806:Do not ignore method results", Justification = "<Pending>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
     public static void Init(TestContext testContext)
     {
         if (System.Windows.Application.Current == null)

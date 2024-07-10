@@ -27,7 +27,7 @@ public abstract partial class LaunchOptions : ObservableObject
             CommandLineInterface.None => _noOptions,
             CommandLineInterface.Studio => _studioOptions,
             CommandLineInterface.Executor => _executorOptions,
-            _ => throw new NotImplementedException()
+            _ => throw new NotSupportedException()
         };
     }
     [ObservableProperty]
@@ -40,7 +40,9 @@ public abstract partial class LaunchOptions : ObservableObject
     {
         get
         {
-            var args = GetCommandLineArgs().Prepend(ApplicationPath!).Select(x => (x ?? "").Contains(' ') ? $"\"{x}\"" : x);
+            var args = GetCommandLineArgs()
+                .Prepend(ApplicationPath!)
+                .Select(x => (x ?? "").Contains(' ',StringComparison.Ordinal) ? $"\"{x}\"" : x);
             return string.Join(' ', args);
         }
     }
