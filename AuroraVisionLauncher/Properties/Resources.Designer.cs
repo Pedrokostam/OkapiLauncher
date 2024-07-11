@@ -97,6 +97,15 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Kill all active processes.
+        /// </summary>
+        public static string AvAppKillAllProcesses {
+            get {
+                return ResourceManager.GetString("AvAppKillAllProcesses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Launch the application without loading any program.
         /// </summary>
         public static string AvAppLaunchWithNoProgram {
@@ -111,6 +120,15 @@ namespace AuroraVisionLauncher.Properties {
         public static string AvAppOpenInstallationFolder {
             get {
                 return ResourceManager.GetString("AvAppOpenInstallationFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Active processes: {0}.
+        /// </summary>
+        public static string AvAppProcessesActive {
+            get {
+                return ResourceManager.GetString("AvAppProcessesActive", resourceCulture);
             }
         }
         

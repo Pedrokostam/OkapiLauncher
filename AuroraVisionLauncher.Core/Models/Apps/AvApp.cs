@@ -27,7 +27,7 @@ public record AvApp : IAvApp
     public AvVersion? SecondaryVersion { get; }
     public string Name { get; }
     public AvAppType AppType { get; }
-    public string InternalName { get; }
+    public string ProcessName { get; }
     public bool IsDevelopmentVersion => Version.Build >= 1000;
     private readonly List<ProgramType> _supportedPrograms;
     public CommandLineInterface Interface { get; }
@@ -43,7 +43,7 @@ public record AvApp : IAvApp
         Version = AvVersion.Parse(mvinfo.Primary) ?? throw new VersionNotFoundException("The ProductVersion field is empty");
         SecondaryVersion = AvVersion.Parse(mvinfo.Secondary);
         Name = mvinfo.Primary.ProductName ?? "N/A";
-        InternalName = mvinfo.Primary.InternalName!;
+        ProcessName = Path.GetFileNameWithoutExtension(mvinfo.Primary.InternalName!);
         _supportedPrograms = new List<ProgramType>(configuration.SupportedPrograms);
         AppType = configuration.AppType;
         Interface = configuration.Interface;

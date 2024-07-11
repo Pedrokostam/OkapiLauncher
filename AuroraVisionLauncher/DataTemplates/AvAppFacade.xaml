@@ -13,6 +13,10 @@
                 <ContextMenu>
                     <MenuItem Command="{Binding OpenContainingFolderCommand}" Header="{x:Static properties:Resources.AvAppOpenInstallationFolder}" />
                     <MenuItem Command="{Binding LaunchWithoutProgramCommand}" Header="{x:Static properties:Resources.AvAppLaunchWithNoProgram}" />
+                    <MenuItem
+                        Command="{Binding KillAllProcessesCommand}"
+                        Header="{x:Static properties:Resources.AvAppKillAllProcesses}"
+                        IsEnabled="{Binding IsLaunched}" />
                 </ContextMenu>
             </Grid.ContextMenu>
             <Rectangle Fill="Transparent" />
@@ -83,10 +87,10 @@
                             <Style TargetType="{x:Type TextBlock}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsLaunched}" Value="False">
-                                        <Setter Property="Text" Value="Closed" />
+                                        <Setter Property="Text" Value="Not running" />
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding IsLaunched}" Value="TRue">
-                                        <Setter Property="Text" Value="Running" />
+                                        <Setter Property="Text" Value="{Binding ActiveProcessesNumber, StringFormat={x:Static properties:Resources.AvAppProcessesActive}}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>

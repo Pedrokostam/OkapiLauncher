@@ -303,4 +303,10 @@
   <data name="SettingsPageOpenInstallationFolderButtonTooltip" xml:space="preserve">
     <value>Opens the folder in which this app is installed</value>
   </data>
+  <data name="AvAppKillAllProcesses" xml:space="preserve">
+    <value>Kill all active processes</value>
+  </data>
+  <data name="AvAppProcessesActive" xml:space="preserve">
+    <value>Active processes: {0}</value>
+  </data>
 </root>

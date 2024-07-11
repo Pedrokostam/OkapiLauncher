@@ -60,7 +60,7 @@ public partial class App : Application
         var i = new System.Windows.Media.Imaging.BitmapImage(iconUri);
         await _host.StartAsync();
         // initialize launcher vm, so that it can start listening to FileRequestMessages
-        GetService<LauncherViewModel>();
+        GetService<FileOpenerBroker>();
         if (e.Args.Length == 1)
         {
             GetService<IMessenger>().Send(new FileRequestedMessage(e.Args[0]));
@@ -92,13 +92,15 @@ public partial class App : Application
         services.AddSingleton<IInstalledAppsProviderService, InstalledAppsProviderService>();
         services.AddSingleton<IRecentlyOpenedFilesService, RecentlyOpenedFilesService>();
         services.AddSingleton<IFileAssociationService, FileAssociationService>();
+        services.AddSingleton<FileOpenerBroker>();
 
+        services.AddTransient<IProcessManagerService, ProcessManagerService>();
         // Views and ViewModels
         services.AddSingleton<IShellWindow, ShellWindow>();
         services.AddSingleton<ShellViewModel>();
 
-        services.AddSingleton<LauncherViewModel>();
-        services.AddSingleton<LauncherPage>();
+        services.AddTransient<LauncherViewModel>();
+        services.AddTransient<LauncherPage>();
 
         services.AddTransient<SettingsViewModel>();
         services.AddTransient<SettingsPage>();

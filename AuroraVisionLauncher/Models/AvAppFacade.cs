@@ -35,7 +35,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp
     IAvVersion IAvApp.Version => Version;
     IAvVersion? IAvApp.SecondaryVersion => SecondaryVersion;
 
-    public string InternalName => _avApp.InternalName;
+    public string ProcessName => _avApp.ProcessName;
 
     [ObservableProperty]
     private Compatibility? _compatibility = null;
@@ -46,7 +46,10 @@ public partial class AvAppFacade : ObservableObject, IAvApp
     }
 
     [ObservableProperty]
-    private bool _isLaunched = false;
+    [NotifyPropertyChangedFor(nameof(IsLaunched))]
+    private int _activeProcessesNumber;
+
+    public bool IsLaunched => ActiveProcessesNumber > 0;
 
     public AvAppFacade(AvApp avApp)
     {
@@ -64,7 +67,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp
     {
         try
         {
-            var processes = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(InternalName));
+            var processes = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(ProcessName));
             List<int> keptIds = [];
             List<int> indicesToRemove = [];
             foreach (var process in processes)
@@ -126,5 +129,10 @@ public partial class AvAppFacade : ObservableObject, IAvApp
     private void CopyExecutablePath()
     {
         Clipboard.SetText(ExePath);
+    }
+    [RelayCommand]
+    private void KillAllProcesses()
+    {
+        return;
     }
 }

@@ -13,36 +13,32 @@ using Windows.Storage;
 using AuroraVisionLauncher.Models;
 using AuroraVisionLauncher.Core.Models.Programs;
 using System.Windows.Threading;
+using AuroraVisionLauncher.Services;
+using AuroraVisionLauncher.Contracts.ViewModels;
 
 namespace AuroraVisionLauncher.ViewModels;
 
-public sealed partial class LauncherViewModel : ObservableRecipient, IRecipient<FileRequestedMessage>
+public sealed partial class LauncherViewModel : ObservableObject, INavigationAware
 {
     private readonly IInstalledAppsProviderService _appProvider;
     private readonly INavigationService _navigationService;
     private readonly IRecentlyOpenedFilesService _lastOpenedFilesService;
+    private readonly IProcessManagerService _processManagerService;
     private readonly DispatcherTimer _timer;
 
-    public LauncherViewModel(IMessenger messenger, IInstalledAppsProviderService appProvider, INavigationService navigationService, IRecentlyOpenedFilesService lastOpenedFilesService) : base(messenger)
+    public LauncherViewModel(IMessenger messenger,
+                             IInstalledAppsProviderService appProvider,
+                             INavigationService navigationService,
+                             IRecentlyOpenedFilesService lastOpenedFilesService,
+                             IProcessManagerService processManagerService)
     {
         _lastOpenedFilesService = lastOpenedFilesService;
+        _processManagerService = processManagerService;
         _appProvider = appProvider;
         _navigationService = navigationService;
-        OnActivated();
-        _timer = new DispatcherTimer();
-        UpdateRunningStatus();
-        _timer.Tick += (o, e) => UpdateRunningStatus();
-        _timer.Interval = TimeSpan.FromSeconds(3);
-        _timer.Start();
+        _timer = _processManagerService.CreateTimer(Apps);
     }
 
-    private void UpdateRunningStatus()
-    {
-        foreach (var exe in Apps)
-        {
-            exe.IsLaunched = exe.CheckIfProcessIsRunning();
-        }
-    }
 
     [ObservableProperty]
     private LaunchOptions? _launchOptions;
@@ -110,7 +106,6 @@ public sealed partial class LauncherViewModel : ObservableRecipient, IRecipient<
         }
     }
 
-    public void Receive(FileRequestedMessage message) => OpenProject(message.Value);
     private void OpenProject(string filepath)
     {
         if (!File.Exists(filepath))
@@ -149,7 +144,7 @@ public sealed partial class LauncherViewModel : ObservableRecipient, IRecipient<
             }
             _lastOpenedFilesService.AddLastFile(filepath);
             _navigationService.NavigateTo(GetType().FullName!);
-            UpdateRunningStatus();
+            _processManagerService.UpdateProcessActive(Apps);
         }
         catch (InvalidDataException)
         {
@@ -158,4 +153,16 @@ public sealed partial class LauncherViewModel : ObservableRecipient, IRecipient<
 
     }
 
+    public void OnNavigatedTo(object parameter)
+    {
+        if (parameter is string s)
+        {
+            OpenProject(s);
+        }
+    }
+
+    public void OnNavigatedFrom()
+    {
+        _timer.Stop();
+    }
 }

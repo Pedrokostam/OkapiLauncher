@@ -11,7 +11,7 @@ public interface IAvApp
     AvAppType AppType { get; }
     IAvVersion? SecondaryVersion { get; }
     CommandLineInterface Interface { get; }
-    string InternalName { get; }
+    string ProcessName { get; }
     bool CanOpen(ProgramType type);
     bool IsNativeApp(ProgramType type);
 }
