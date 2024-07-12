@@ -17,23 +17,21 @@ namespace AuroraVisionLauncher.ViewModels;
 // using the NavigationService, RightPaneService and WindowManagerService.
 // Read more about MenuBar project type here:
 // https://github.com/microsoft/TemplateStudio/blob/main/docs/WPF/projectTypes/menubar.md
-public partial class ShellViewModel : ObservableObject, IRecipient<RecentFilesChangedMessage>
+public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFilesChangedMessage>
 {
     private readonly INavigationService _navigationService;
     private readonly IRightPaneService _rightPaneService;
-    private readonly IMessenger _messenger;
     private readonly IRecentlyOpenedFilesService _lastOpenedFilesService;
 
     public ShellViewModel(INavigationService navigationService,
                           IRightPaneService rightPaneService,
                           IMessenger messenger,
-                          IRecentlyOpenedFilesService lastOpenedFilesService)
+                          IRecentlyOpenedFilesService lastOpenedFilesService) : base(messenger)
     {
         _navigationService = navigationService;
         _rightPaneService = rightPaneService;
-        _messenger = messenger;
         _lastOpenedFilesService = lastOpenedFilesService;
-        RecentlyOpenedFiles= new ObservableCollection<RecentlyOpenedFileFacade>(_lastOpenedFilesService.GetLastOpenedFiles());
+        RecentlyOpenedFiles = new ObservableCollection<RecentlyOpenedFileFacade>(_lastOpenedFilesService.GetLastOpenedFiles());
         messenger.Register<RecentFilesChangedMessage>(this);
     }
     public ObservableCollection<RecentlyOpenedFileFacade> RecentlyOpenedFiles { get; }
@@ -69,7 +67,8 @@ public partial class ShellViewModel : ObservableObject, IRecipient<RecentFilesCh
 
     [RelayCommand()]
     private void OnMenuViewsLauncher()
-        => _navigationService.NavigateTo(typeof(LauncherViewModel).FullName!, parameter: null, clearNavigation: true);
+        => _navigationService.NavigateTo(typeof(LauncherViewModel).FullName!, parameter: null);
+    //=> _navigationService.NavigateTo(typeof(LauncherViewModel).FullName!, parameter: null, clearNavigation: true);
 
     [RelayCommand()]
     private void OnMenuFileSettings()
@@ -77,7 +76,8 @@ public partial class ShellViewModel : ObservableObject, IRecipient<RecentFilesCh
 
     [RelayCommand()]
     private void OnMenuViewsInstalledApps()
-        => _navigationService.NavigateTo(typeof(InstalledAppsViewModel).FullName!, parameter: null, clearNavigation: true);
+        => _navigationService.NavigateTo(typeof(InstalledAppsViewModel).FullName!, parameter: null);
+        //=> _navigationService.NavigateTo(typeof(InstalledAppsViewModel).FullName!, parameter: null, clearNavigation: true);
     [RelayCommand()]
     private void OnMenuFileOpenProject()
     {
@@ -115,7 +115,7 @@ public partial class ShellViewModel : ObservableObject, IRecipient<RecentFilesCh
     }
     private void OpenProject(string path)
     {
-        _messenger.Send(new FileRequestedMessage(path));
+        Messenger.Send(new FileRequestedMessage(path));
     }
 
     void IRecipient<RecentFilesChangedMessage>.Receive(RecentFilesChangedMessage message)
@@ -125,5 +125,11 @@ public partial class ShellViewModel : ObservableObject, IRecipient<RecentFilesCh
         {
             RecentlyOpenedFiles.Add(item);
         }
+    }
+
+    [RelayCommand]
+    private void Collect()
+    {
+        GC.Collect();
     }
 }

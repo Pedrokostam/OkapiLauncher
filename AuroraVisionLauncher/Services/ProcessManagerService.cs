@@ -16,10 +16,10 @@ namespace AuroraVisionLauncher.Services
         public DispatcherTimer CreateTimer(IList<AvAppFacade> apps)
         {
             var timer = new DispatcherTimer();
-            timer.Tick += (o, e) => UpdateProcessActive(apps);
-            timer.Interval = TimeSpan.FromSeconds(3);
-            UpdateProcessActive(apps);
-            timer.Start();
+            //timer.Tick += (o, e) => UpdateProcessActive(apps);
+            //timer.Interval = TimeSpan.FromSeconds(3);
+            //UpdateProcessActive(apps);
+            //timer.Start();
             return timer;
 
         }

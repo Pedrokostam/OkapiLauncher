@@ -56,10 +56,14 @@
             <RowDefinition Height="48" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock
+        <!--<TextBlock
             Margin="{StaticResource MediumLeftMargin}"
             Style="{StaticResource PageTitleStyle}"
-            Text="{x:Static properties:Resources.MainPageTitle}" />
+            Text="{x:Static properties:Resources.MainPageTitle}" />-->
+        <TextBlock
+    Margin="{StaticResource MediumLeftMargin}"
+    Style="{StaticResource PageTitleStyle}"
+    Text="{Binding ID}" />
         <Grid
             Grid.Row="1"
             Margin="{StaticResource MediumLeftRightMargin}"

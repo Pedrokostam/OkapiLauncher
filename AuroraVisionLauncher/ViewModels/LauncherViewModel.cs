@@ -20,14 +20,16 @@ namespace AuroraVisionLauncher.ViewModels;
 
 public sealed partial class LauncherViewModel : ObservableObject, INavigationAware
 {
+    private static int counter = 0;
+    public int ID { get; } = counter++;
+
     private readonly IInstalledAppsProviderService _appProvider;
     private readonly INavigationService _navigationService;
     private readonly IRecentlyOpenedFilesService _lastOpenedFilesService;
     private readonly IProcessManagerService _processManagerService;
     private readonly DispatcherTimer _timer;
 
-    public LauncherViewModel(IMessenger messenger,
-                             IInstalledAppsProviderService appProvider,
+    public LauncherViewModel(IInstalledAppsProviderService appProvider,
                              INavigationService navigationService,
                              IRecentlyOpenedFilesService lastOpenedFilesService,
                              IProcessManagerService processManagerService)
@@ -43,7 +45,6 @@ public sealed partial class LauncherViewModel : ObservableObject, INavigationAwa
     [ObservableProperty]
     private LaunchOptions? _launchOptions;
     public ObservableCollection<AvAppFacade> Apps { get; } = [];
-
 
     private bool CanLaunch()
     {
@@ -152,6 +153,7 @@ public sealed partial class LauncherViewModel : ObservableObject, INavigationAwa
         }
 
     }
+ 
 
     public void OnNavigatedTo(object parameter)
     {

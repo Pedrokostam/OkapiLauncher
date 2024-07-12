@@ -88,7 +88,7 @@ public partial class App : Application
         services.AddSingleton<IPageService, PageService>();
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IRequestedFilesService, RequestedFilesService>();
-        services.AddSingleton<IMessenger, WeakReferenceMessenger>();
+        services.AddSingleton<IMessenger, StrongReferenceMessenger>();
         services.AddSingleton<IInstalledAppsProviderService, InstalledAppsProviderService>();
         services.AddSingleton<IRecentlyOpenedFilesService, RecentlyOpenedFilesService>();
         services.AddSingleton<IFileAssociationService, FileAssociationService>();

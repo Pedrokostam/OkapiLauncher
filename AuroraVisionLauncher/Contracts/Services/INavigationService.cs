@@ -10,7 +10,7 @@ public interface INavigationService
 
     void Initialize(Frame shellFrame);
 
-    bool NavigateTo(string pageKey, object? parameter = null, bool clearNavigation = false);
+    bool NavigateTo(string pageKey, object? parameter = null);
 
     void GoBack();
 

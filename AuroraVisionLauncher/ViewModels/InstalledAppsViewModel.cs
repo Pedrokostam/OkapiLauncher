@@ -25,7 +25,7 @@ public class InstalledAppsViewModel : ObservableObject, INavigationAware
         }
         _timer = _processManagerService.CreateTimer(AvApps);
     }
-
+   
     public void OnNavigatedTo(object parameter)
     {
     }
