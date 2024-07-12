@@ -89,7 +89,7 @@ public partial class App : Application
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IRequestedFilesService, RequestedFilesService>();
         services.AddSingleton<IMessenger, StrongReferenceMessenger>();
-        services.AddSingleton<IInstalledAppsProviderService, InstalledAppsProviderService>();
+        services.AddSingleton<IAvAppFacadeFactory, AvAppFacadeFactory>();
         services.AddSingleton<IRecentlyOpenedFilesService, RecentlyOpenedFilesService>();
         services.AddSingleton<IFileAssociationService, FileAssociationService>();
         services.AddSingleton<FileOpenerBroker>();
@@ -101,6 +101,9 @@ public partial class App : Application
 
         services.AddTransient<LauncherViewModel>();
         services.AddTransient<LauncherPage>();
+
+        services.AddTransient<ProcessOverviewPage>();
+        services.AddTransient<ProcessOverviewViewModel>();
 
         services.AddTransient<SettingsViewModel>();
         services.AddTransient<SettingsPage>();

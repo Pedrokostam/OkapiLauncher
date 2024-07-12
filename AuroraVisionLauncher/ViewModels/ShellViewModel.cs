@@ -21,15 +21,18 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
 {
     private readonly INavigationService _navigationService;
     private readonly IRightPaneService _rightPaneService;
+    private readonly Lazy<IWindowManagerService> _windowManagerService;
     private readonly IRecentlyOpenedFilesService _lastOpenedFilesService;
 
     public ShellViewModel(INavigationService navigationService,
                           IRightPaneService rightPaneService,
                           IMessenger messenger,
+                          IWindowManagerService windowManagerService,
                           IRecentlyOpenedFilesService lastOpenedFilesService) : base(messenger)
     {
         _navigationService = navigationService;
         _rightPaneService = rightPaneService;
+        _windowManagerService = new Lazy<IWindowManagerService>(windowManagerService);
         _lastOpenedFilesService = lastOpenedFilesService;
         RecentlyOpenedFiles = new ObservableCollection<RecentlyOpenedFileFacade>(_lastOpenedFilesService.GetLastOpenedFiles());
         messenger.Register<RecentFilesChangedMessage>(this);
@@ -131,5 +134,10 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
     private void Collect()
     {
         GC.Collect();
+    }
+    [RelayCommand]
+    private void KillAllChildren()
+    {
+        _windowManagerService.Value.CloseChildWindows();
     }
 }

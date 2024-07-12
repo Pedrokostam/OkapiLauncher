@@ -309,4 +309,16 @@
   <data name="AvAppProcessesActive" xml:space="preserve">
     <value>Active processes: {0}</value>
   </data>
+  <data name="DatetimeOpenedOn" xml:space="preserve">
+    <value>Opened on {0:yyyy-MM-dd HH:mm:ss}</value>
+  </data>
+  <data name="ProcessOverviewBringToFocus" xml:space="preserve">
+    <value>Bring window to focus</value>
+  </data>
+  <data name="ProcessOverviewKill" xml:space="preserve">
+    <value>Kill process</value>
+  </data>
+  <data name="ShellKillChildrenButton" xml:space="preserve">
+    <value>Kill all child windows</value>
+  </data>
 </root>

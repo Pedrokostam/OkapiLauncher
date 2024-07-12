@@ -51,13 +51,13 @@ public class PagesTests
         services.AddSingleton<IPageService, PageService>();
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IMessenger, WeakReferenceMessenger>();
-        services.AddSingleton<IInstalledAppsProviderService, InstalledAppsProviderService>();
+        services.AddSingleton<IAvAppFacadeFactory, AvAppFacadeFactory>();
         services.AddSingleton<IRecentlyOpenedFilesService, RecentlyOpenedFilesService>();
         services.AddSingleton<IFileAssociationService, FileAssociationService>();
 
         // ViewModels
         services.AddTransient<SettingsViewModel>();
-        services.AddSingleton<LauncherViewModel>();
+        services.AddTransient<LauncherViewModel>();
 
         // Configuration
         services.Configure<AppConfig>(context.Configuration.GetSection(nameof(AppConfig)));

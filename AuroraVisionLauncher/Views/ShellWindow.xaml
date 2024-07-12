@@ -81,16 +81,9 @@
     </i:Interaction.Triggers>
     <controls:MetroWindow.LeftWindowCommands>
         <controls:WindowCommands>
-            <!--<Button
-                AutomationProperties.Name="{x:Static properties:Resources.ShellGoBackButton}"
-                Command="{Binding GoBackCommand}"
-                ToolTip="{x:Static properties:Resources.ShellGoBackButton}">
-                <TextBlock
-                    AutomationProperties.Name="{x:Static properties:Resources.ShellGoBackButton}"
-                    FontFamily="Segoe MDL2 Assets"
-                    FontSize="14"
-                    Text="&#xE72B;" />
-            </Button>-->
+            <Button Command="{Binding KillAllChildrenCommand}" ToolTip="{x:Static properties:Resources.ShellKillChildrenButton}">
+                <mahicon:PackIconMaterial Kind="SkullCrossbonesOutline" />
+            </Button>
         </controls:WindowCommands>
     </controls:MetroWindow.LeftWindowCommands>
     <controls:MetroWindow.Content>
@@ -113,15 +106,20 @@
             <controls:SplitView.Content>
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="11*"/>
-                        <ColumnDefinition Width="114*"/>
+                        <ColumnDefinition Width="11*" />
+                        <ColumnDefinition Width="114*" />
                     </Grid.ColumnDefinitions>
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <Menu Grid.Row="0" Focusable="False" Grid.ColumnSpan="2" Margin="0,0,0,754" Grid.RowSpan="2">
+                    <Menu
+                        Grid.Row="0"
+                        Grid.RowSpan="2"
+                        Grid.ColumnSpan="2"
+                        Margin="0,0,0,754"
+                        Focusable="False">
                         <MenuItem
                             x:Name="FileMenu"
                             AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
@@ -147,7 +145,7 @@
                                             <Setter.Value>
                                                 <StackPanel>
                                                     <TextBlock Text="{Binding FilePath}" />
-                                                    <TextBlock Text="{Binding OpenedOn, StringFormat={}Opened on {0:yyyy-MM-dd HH:mm:ss}, Converter={StaticResource UtcToLocalConverter}}" />
+                                                    <TextBlock Text="{Binding OpenedOn, StringFormat={x:Static properties:Resources.DatetimeOpenedOn}, Converter={StaticResource UtcToLocalConverter}}" />
                                                 </StackPanel>
                                             </Setter.Value>
                                         </Setter>
@@ -222,8 +220,9 @@
                     <Frame
                         x:Name="shellFrame"
                         Grid.Row="1"
+                        Grid.ColumnSpan="2"
                         Focusable="False"
-                        NavigationUIVisibility="Hidden" Grid.ColumnSpan="2" />
+                        NavigationUIVisibility="Hidden" />
                 </Grid>
             </controls:SplitView.Content>
         </controls:SplitView>

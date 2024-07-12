@@ -13,16 +13,6 @@ namespace AuroraVisionLauncher.Services
     public class ProcessManagerService : IProcessManagerService
     {
         private Dictionary<string, List<AvAppFacade>> _dictionary = new(StringComparer.OrdinalIgnoreCase);
-        public DispatcherTimer CreateTimer(IList<AvAppFacade> apps)
-        {
-            var timer = new DispatcherTimer();
-            //timer.Tick += (o, e) => UpdateProcessActive(apps);
-            //timer.Interval = TimeSpan.FromSeconds(3);
-            //UpdateProcessActive(apps);
-            //timer.Start();
-            return timer;
-
-        }
         public void UpdateProcessActive(IList<AvAppFacade> apps)
         {
             _dictionary.Clear();

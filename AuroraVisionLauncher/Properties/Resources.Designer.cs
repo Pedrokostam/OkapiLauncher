@@ -142,6 +142,15 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Opened on {0:yyyy-MM-dd HH:mm:ss}.
+        /// </summary>
+        public static string DatetimeOpenedOn {
+            get {
+                return ResourceManager.GetString("DatetimeOpenedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Installed applications.
         /// </summary>
         public static string InstalledAppsPageTitle {
@@ -300,6 +309,24 @@ namespace AuroraVisionLauncher.Properties {
         public static string MainPageTitle {
             get {
                 return ResourceManager.GetString("MainPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bring window to focus.
+        /// </summary>
+        public static string ProcessOverviewBringToFocus {
+            get {
+                return ResourceManager.GetString("ProcessOverviewBringToFocus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kill process.
+        /// </summary>
+        public static string ProcessOverviewKill {
+            get {
+                return ResourceManager.GetString("ProcessOverviewKill", resourceCulture);
             }
         }
         
@@ -525,6 +552,15 @@ namespace AuroraVisionLauncher.Properties {
         public static string ShellGoBackButton {
             get {
                 return ResourceManager.GetString("ShellGoBackButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kill all child windows.
+        /// </summary>
+        public static string ShellKillChildrenButton {
+            get {
+                return ResourceManager.GetString("ShellKillChildrenButton", resourceCulture);
             }
         }
         

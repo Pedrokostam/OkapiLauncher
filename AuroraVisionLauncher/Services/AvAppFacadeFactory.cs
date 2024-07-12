@@ -9,14 +9,17 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AuroraVisionLauncher.Contracts.Services;
 using AuroraVisionLauncher.Core.Models.Apps;
+using AuroraVisionLauncher.Models;
 
 namespace AuroraVisionLauncher.Services;
-public class InstalledAppsProviderService : IInstalledAppsProviderService
+public class AvAppFacadeFactory : IAvAppFacadeFactory
 {
     private const string AdditionalFoldersKey = "AdditionalExecutableFolderPaths";
     readonly List<AvApp> _avApps;
+    private readonly IWindowManagerService _windowManagerService;
+
     public ReadOnlyCollection<AvApp> AvApps => _avApps.AsReadOnly();
-    public InstalledAppsProviderService()
+    public AvAppFacadeFactory(IWindowManagerService windowManagerService)
     {
         var variables = Environment.GetEnvironmentVariables();
         _avApps = [];
@@ -30,7 +33,7 @@ public class InstalledAppsProviderService : IInstalledAppsProviderService
             }
             if (Regex.IsMatch(key_string,
                 "^(AVS|FIS|AVLDL|FILDL)_",
-                RegexOptions.IgnoreCase|RegexOptions.ExplicitCapture,
+                RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture,
                 TimeSpan.FromMilliseconds(100)))
             {
                 if (AvApp.TryCreate(value_string, out AvApp? app))
@@ -52,6 +55,28 @@ public class InstalledAppsProviderService : IInstalledAppsProviderService
                     }
                 }
             }
+        }
+        _windowManagerService = windowManagerService;
+    }
+
+    public AvAppFacade Create(AvApp app)
+    {
+        return new(app, _windowManagerService);
+    }
+
+    public void Populate(IList<AvAppFacade> appFacades, bool clear = true, Action<AvAppFacade>? perItemAction = null) => Populate(_avApps, appFacades, clear, perItemAction);
+
+    public void Populate(IEnumerable<AvApp> apps, IList<AvAppFacade> appFacades, bool clear = true, Action<AvAppFacade>? perItemAction = null)
+    {
+        if (clear)
+        {
+            appFacades.Clear();
+        }
+        foreach (var app in apps)
+        {
+            var facade = Create(app);
+            appFacades.Add(facade);
+            perItemAction?.Invoke(facade);
         }
     }
 }

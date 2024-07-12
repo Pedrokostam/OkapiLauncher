@@ -7,6 +7,7 @@ public interface IAvApp
     string ExePath { get; }
     bool IsDevelopmentVersion { get; }
     string Name { get; }
+
     IAvVersion Version { get; }
     AvAppType AppType { get; }
     IAvVersion? SecondaryVersion { get; }

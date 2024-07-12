@@ -5,18 +5,14 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace AuroraVisionLauncher.ViewModels;
 
-public class ShellDialogViewModel : ObservableObject
+public partial class ShellDialogViewModel : ObservableObject
 {
-    private ICommand _closeCommand;
-
-    public ICommand CloseCommand => _closeCommand ?? (_closeCommand = new RelayCommand(OnClose));
-
     public Action<bool?> SetResult { get; set; }
 
     public ShellDialogViewModel()
     {
     }
-
+    [RelayCommand]
     private void OnClose()
     {
         bool result = true;

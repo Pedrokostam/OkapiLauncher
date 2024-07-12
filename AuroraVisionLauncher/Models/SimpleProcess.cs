@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,11 +20,16 @@ namespace AuroraVisionLauncher.Models
         private string _mainWindowTitle;
         [ObservableProperty]
         private string _processName;
+        [ObservableProperty]
+        private DateTime _startTime;
+        private IntPtr _windowHandle;
         public SimpleProcess(Process proc)
         {
             ProcessName = proc.ProcessName;
             Id = proc.Id;
             MainWindowTitle = proc.MainWindowTitle;
+            StartTime = proc.StartTime;
+            _windowHandle = proc.MainWindowHandle;
         }
 
         public bool Equals(SimpleProcess? other)
@@ -48,21 +54,32 @@ namespace AuroraVisionLauncher.Models
             return Equals(obj as SimpleProcess);
         }
         [RelayCommand]
-        private void Kill(bool ask = true)
+        private void KillAsk()
         {
-            if (ask)
+            var res = MessageBox.Show($"Are you sure you want to kill this process:\n{ProcessName} - {MainWindowTitle}?",
+                                      "Confirm processing ending",
+                                      MessageBoxButton.YesNo,
+                                      MessageBoxImage.Warning);
+            if (res == MessageBoxResult.No)
             {
-                var res = MessageBox.Show($"Are you sure you want to kill this process:\n{ProcessName} - {MainWindowTitle}?",
-                                          "Confirm processing ending",
-                                          MessageBoxButton.YesNo,
-                                          MessageBoxImage.Warning);
-                if (res == MessageBoxResult.No)
-                {
-                    return;
-                }
+                return;
             }
+            Kill();
+        }
+
+        [RelayCommand]
+        private void Kill()
+        {
             using Process p = Process.GetProcessById(Id);
             p.Kill();
+        }
+
+        [DllImport("user32.dll")]
+        static extern bool SetForegroundWindow(IntPtr hWnd);
+        [RelayCommand]
+        private void BringToFocus()
+        {
+            SetForegroundWindow(_windowHandle);
         }
 
         public int CompareTo(SimpleProcess? other)
@@ -73,6 +90,7 @@ namespace AuroraVisionLauncher.Models
             }
             return MainWindowTitle.CompareTo(other.MainWindowTitle);
         }
+
 
         public static bool operator ==(SimpleProcess left, SimpleProcess right)
         {

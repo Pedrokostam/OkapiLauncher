@@ -15,6 +15,8 @@ using AuroraVisionLauncher.Core.Models.Programs;
 using System.Windows.Threading;
 using AuroraVisionLauncher.Services;
 using AuroraVisionLauncher.Contracts.ViewModels;
+using AuroraVisionLauncher.Helpers;
+using Microsoft.VisualBasic;
 
 namespace AuroraVisionLauncher.ViewModels;
 
@@ -23,22 +25,30 @@ public sealed partial class LauncherViewModel : ObservableObject, INavigationAwa
     private static int counter = 0;
     public int ID { get; } = counter++;
 
-    private readonly IInstalledAppsProviderService _appProvider;
+    private readonly IAvAppFacadeFactory _appFactory;
     private readonly INavigationService _navigationService;
     private readonly IRecentlyOpenedFilesService _lastOpenedFilesService;
     private readonly IProcessManagerService _processManagerService;
     private readonly DispatcherTimer _timer;
 
-    public LauncherViewModel(IInstalledAppsProviderService appProvider,
+    public LauncherViewModel(IAvAppFacadeFactory appProvider,
                              INavigationService navigationService,
                              IRecentlyOpenedFilesService lastOpenedFilesService,
                              IProcessManagerService processManagerService)
     {
         _lastOpenedFilesService = lastOpenedFilesService;
         _processManagerService = processManagerService;
-        _appProvider = appProvider;
+        _appFactory = appProvider;
         _navigationService = navigationService;
-        _timer = _processManagerService.CreateTimer(Apps);
+        _timer = TimerHelper.GetTimer();
+        _timer.Tick += Update;
+        _processManagerService.UpdateProcessActive(Apps);
+        _timer.Start();
+    }
+
+    private void Update(object? sender, EventArgs e)
+    {
+        _processManagerService.UpdateProcessActive(Apps);
     }
 
 
@@ -123,17 +133,13 @@ public sealed partial class LauncherViewModel : ObservableObject, INavigationAwa
                 info.ProgramType
                 );
 
-            var matchingApps = _appProvider.AvApps
+            var matchingApps = _appFactory.AvApps
                 .Where(x => x.CanOpen(info.ProgramType))
-                .Select(x => new AvAppFacade(x))
                 .OrderByDescending(x => x.Version);
             SelectedApp = null;
-            Apps.Clear();
-            foreach (var app in matchingApps)
-            {
-                Apps.Add(app);
-                app.UpdateCompatibility(VisionProgram);
-            }
+            _appFactory.Populate(matchingApps,
+                Apps,
+                perItemAction: app => app.UpdateCompatibility(VisionProgram));
             var closestVersion = AvApp.GetClosestApp(Apps, VisionProgram);
             if (closestVersion >= 0)
             {
@@ -153,7 +159,7 @@ public sealed partial class LauncherViewModel : ObservableObject, INavigationAwa
         }
 
     }
- 
+
 
     public void OnNavigatedTo(object parameter)
     {

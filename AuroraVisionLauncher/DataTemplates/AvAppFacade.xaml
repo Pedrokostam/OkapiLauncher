@@ -13,10 +13,7 @@
                 <ContextMenu>
                     <MenuItem Command="{Binding OpenContainingFolderCommand}" Header="{x:Static properties:Resources.AvAppOpenInstallationFolder}" />
                     <MenuItem Command="{Binding LaunchWithoutProgramCommand}" Header="{x:Static properties:Resources.AvAppLaunchWithNoProgram}" />
-                    <MenuItem
-                        Command="{Binding KillAllProcessesCommand}"
-                        Header="{x:Static properties:Resources.AvAppKillAllProcesses}"
-                        IsEnabled="{Binding IsLaunched}" />
+                    <MenuItem Command="{Binding ShowProcessOverviewCommand}" Header="Open process overview window" />
                 </ContextMenu>
             </Grid.ContextMenu>
             <Rectangle Fill="Transparent" />
@@ -37,37 +34,6 @@
                     Margin="5,0,10,0"
                     VerticalAlignment="Center"
                     Orientation="Horizontal">
-                    <StackPanel.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="Processes" ItemsSource="{Binding ActiveProcesses}">
-                                <MenuItem.ItemContainerStyle>
-                                    <Style BasedOn="{StaticResource MahApps.Styles.MenuItem}" TargetType="MenuItem">
-                                        <Setter Property="Header" Value="{Binding MainWindowTitle}" />
-                                        <Setter Property="Command" Value="{Binding KillCommand}" />
-                                        <!--<Setter Property="ToolTip">
-                                            <Setter.Value>
-                                                <StackPanel>
-                                                    <TextBlock Text="{Binding FilePath}" />
-                                                    <TextBlock Text="{Binding OpenedOn, StringFormat={}Opened on {0:yyyy-MM-dd HH:mm:ss}, Converter={StaticResource UtcToLocalConverter}}" />
-                                                </StackPanel>
-                                            </Setter.Value>
-                                        </Setter>
-                                <Setter Property="Command" Value="{Binding DataContext.MenuOpenRecentFileCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
-                                        <Setter Property="CommandParameter" Value="{Binding}" />
-                                        <Setter Property="InputGestureText" Value="{Binding Index, Converter={StaticResource IndexConverter}, StringFormat={}Alt + {0}}" />
-                                <Setter Property="Icon">
-            <Setter.Value>
-                <Image Source="{Binding Icon}" />
-            </Setter.Value>
-        </Setter>-->
-
-
-                                    </Style>
-                                </MenuItem.ItemContainerStyle>
-                            </MenuItem>
-                            <MenuItem Header="Kill All" />
-                        </ContextMenu>
-                    </StackPanel.ContextMenu>
                     <mahicon:PackIconMaterialDesign>
                         <mahicon:PackIconMaterialDesign.Style>
                             <Style TargetType="{x:Type mahicon:PackIconMaterialDesign}">
@@ -143,7 +109,8 @@
                         FontSize="16"
                         Foreground="Gray"
                         Text="{Binding ExePath}"
-                        TextTrimming="CharacterEllipsis" />
+                        TextTrimming="CharacterEllipsis"
+                        ToolTip="{Binding ExePath}" />
                 </StackPanel>
             </Grid>
         </Grid>

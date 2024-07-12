@@ -8,10 +8,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using ABI.Windows.Foundation;
+using AuroraVisionLauncher.Contracts.Services;
 using AuroraVisionLauncher.Core.Models;
 using AuroraVisionLauncher.Core.Models.Apps;
 using AuroraVisionLauncher.Core.Models.Programs;
 using AuroraVisionLauncher.Helpers;
+using AuroraVisionLauncher.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Windows.ApplicationModel.VoiceCommands;
@@ -20,6 +22,7 @@ namespace AuroraVisionLauncher.Models;
 public partial class AvAppFacade : ObservableObject, IAvApp
 {
     readonly private AvApp _avApp;
+    private readonly Lazy<IWindowManagerService> _windowManagerService;
 
     public string Name => _avApp.Name;
     public string ExePath => _avApp.ExePath;
@@ -51,9 +54,10 @@ public partial class AvAppFacade : ObservableObject, IAvApp
 
     public bool IsLaunched => ActiveProcessesNumber > 0;
 
-    public AvAppFacade(AvApp avApp)
+    public AvAppFacade(AvApp avApp, IWindowManagerService windowManagerService)
     {
         _avApp = avApp;
+        _windowManagerService = new (windowManagerService);
         Version = new AvVersionFacade(avApp.Version);
         SecondaryVersion = avApp.SecondaryVersion is not null ? new AvVersionFacade(avApp.SecondaryVersion) : null;
     }
@@ -134,5 +138,11 @@ public partial class AvAppFacade : ObservableObject, IAvApp
     private void KillAllProcesses()
     {
         return;
+    }
+
+    [RelayCommand]
+    private void ShowProcessOverview()
+    {
+        _windowManagerService.Value.OpenInNewWindow(typeof(ProcessOverviewViewModel).FullName!, this);
     }
 }
