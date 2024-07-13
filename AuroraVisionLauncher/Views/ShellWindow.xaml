@@ -105,21 +105,11 @@
             </controls:SplitView.Pane>
             <controls:SplitView.Content>
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="11*" />
-                        <ColumnDefinition Width="114*" />
-                    </Grid.ColumnDefinitions>
-
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="100" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <Menu
-                        Grid.Row="0"
-                        Grid.RowSpan="2"
-                        Grid.ColumnSpan="2"
-                        Margin="0,0,0,754"
-                        Focusable="False">
+                    <Menu Grid.Row="0" Focusable="False">
                         <MenuItem
                             x:Name="FileMenu"
                             AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
@@ -152,11 +142,6 @@
                                         <Setter Property="Command" Value="{Binding DataContext.MenuOpenRecentFileCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                         <Setter Property="CommandParameter" Value="{Binding}" />
                                         <Setter Property="InputGestureText" Value="{Binding Index, Converter={StaticResource IndexConverter}, StringFormat={}Alt + {0}}" />
-                                        <!--<Setter Property="Icon">
-                                            <Setter.Value>
-                                                <Image Source="{Binding Icon}" />
-                                            </Setter.Value>
-                                        </Setter>-->
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding Index, Converter={StaticResource IndexConverter}}" Value="{x:Null}">
                                                 <Setter Property="InputGestureText" Value="" />
@@ -164,20 +149,6 @@
                                         </Style.Triggers>
                                     </Style>
                                 </MenuItem.ItemContainerStyle>
-                                <!--<MenuItem.ItemTemplate>
-                                    <DataTemplate>
-                                        <MenuItem
-                                            Command="{Binding DataContext.MenuOpenRecentFileCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                            CommandParameter="{Binding}"
-                                            Header="{Binding FilePath}"
-                                            InputGestureText="{Binding Index, StringFormat={}Alt + {0}}"
-                                            ToolTip="{Binding OpenedOn, StringFormat=yyyy-MM-dd HH:mm:ss, Converter={StaticResource UtcToLocalConverter}}">
-                                            <MenuItem.Icon>
-                                                <mahicon:PackIconVaadinIcons  Kind="Tools" />
-                                            </MenuItem.Icon>
-                                        </MenuItem>
-                                    </DataTemplate>
-                                </MenuItem.ItemTemplate>-->
                             </MenuItem>
                             <MenuItem
                                 AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
@@ -220,7 +191,6 @@
                     <Frame
                         x:Name="shellFrame"
                         Grid.Row="1"
-                        Grid.ColumnSpan="2"
                         Focusable="False"
                         NavigationUIVisibility="Hidden" />
                 </Grid>
