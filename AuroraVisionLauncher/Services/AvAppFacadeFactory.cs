@@ -48,4 +48,5 @@ public class AvAppFacadeFactory : IAvAppFacadeFactory
     }
 
     public IEnumerable<AvAppFacade> CreateAllFacades()=>AvApps.Select(Create);
+
 }

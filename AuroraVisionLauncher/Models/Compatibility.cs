@@ -8,6 +8,14 @@ using AuroraVisionLauncher.Core.Models.Apps;
 using AuroraVisionLauncher.Core.Models.Projects;
 
 namespace AuroraVisionLauncher.Models;
+public enum Compatibility
+{
+    Unknown,
+    Compatible,
+    Outdated,
+    Incompatible
+}
+/*
 public class Compatibility
 {
     private static readonly Compatibility Incompatible = new("Incompatible", "These applications cannot open the program.");
@@ -48,3 +56,4 @@ public class Compatibility
         return Outdated;
     }
 }
+*/

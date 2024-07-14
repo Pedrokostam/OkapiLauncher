@@ -10,6 +10,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mod="clr-namespace:AuroraVisionLauncher.Models"
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
+    xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
     xmlns:vms="clr-namespace:AuroraVisionLauncher.ViewModels"
     d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False,
                                      Type={x:Type vms:LauncherViewModel}}"
@@ -42,11 +43,13 @@
             IsLiveGroupingRequested="True"
             Source="{Binding Apps}">
             <CollectionViewSource.GroupDescriptions>
-                <PropertyGroupDescription PropertyName="Compatibility.Category" />
+                <PropertyGroupDescription PropertyName="Compatibility" />
             </CollectionViewSource.GroupDescriptions>
-            <!--<CollectionViewSource.SortDescriptions>
-                <componentModel:SortDescription PropertyName="YourPropertyForOrdering" />
-            </CollectionViewSource.SortDescriptions>-->
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Compatibility" />
+                <scm:SortDescription Direction="Descending" PropertyName="Version" />
+                <scm:SortDescription PropertyName="Name" />
+            </CollectionViewSource.SortDescriptions>
         </CollectionViewSource>
 
     </Page.Resources>
@@ -105,7 +108,27 @@
                                 <TextBlock
                                     FontSize="14"
                                     FontWeight="Bold"
-                                    Text="{Binding Name}" />
+                                    Text="{Binding Name}"
+                                    ToolTip="{Binding Name, Converter={StaticResource CompatibilityDescription}}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Name}" Value="{x:Static mod:Compatibility.Compatible}">
+                                                    <Setter Property="Foreground" Value="{DynamicResource Brushes.Compatibility.Compatible}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Name}" Value="{x:Static mod:Compatibility.Incompatible}">
+                                                    <Setter Property="Foreground" Value="{DynamicResource Brushes.Compatibility.Incompatible}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Name}" Value="{x:Static mod:Compatibility.Outdated}">
+                                                    <Setter Property="Foreground" Value="{DynamicResource Brushes.Compatibility.Outdated}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Name}" Value="{x:Static mod:Compatibility.Unknown}">
+                                                    <Setter Property="Foreground" Value="{DynamicResource Brushes.Compatibility.Unknown}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
                             </DataTemplate>
                         </GroupStyle.HeaderTemplate>
                     </GroupStyle>
@@ -133,7 +156,7 @@
                             Margin="0"
                             HorizontalAlignment="Stretch"
                             VerticalContentAlignment="Bottom"
-                            Background="Black"
+                            Background="{DynamicResource Brushes.Commandline.Background}"
                             BorderThickness="0"
                             Document="{Binding LaunchOptions.ArgumentString, Converter={StaticResource CommandlineFormatter}}"
                             FontFamily="Consolas"

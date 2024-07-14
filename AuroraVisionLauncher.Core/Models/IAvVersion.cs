@@ -2,7 +2,7 @@
 
 namespace AuroraVisionLauncher.Core.Models;
 
-public interface IAvVersion : IComparable<IAvVersion>, IEquatable<IAvVersion>
+public interface IAvVersion : IComparable<IAvVersion>
 {
     int Major { get; }
     int Minor { get; }
@@ -10,6 +10,8 @@ public interface IAvVersion : IComparable<IAvVersion>, IEquatable<IAvVersion>
     int Revision { get; }
     bool IsDevelopmentVersion { get; }
     bool IsUnknown { get; }
+    Version InterfaceVersion { get; }
+
     Version ToVersion();
     bool IsRuntimeCompatibleWith(IAvVersion otherVersion);
     bool IsSupportedBy(IAvVersion loaderVersion);

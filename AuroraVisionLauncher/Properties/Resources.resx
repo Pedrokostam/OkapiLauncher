@@ -333,6 +333,19 @@
   <data name="AppProductTypeRuntimeLabel" xml:space="preserve">
     <value>Studio Runtime</value>
   </data>
+  <data name="CompatibilityCompatibleDescription" xml:space="preserve">
+    <value>Can load the specified program. Studio project may be upgraded in the process, if their version is lower.</value>
+  </data>
+  <data name="CompatibilityIncompatibleDescription" xml:space="preserve">
+    <value>Cannot load the program</value>
+  </data>
+  <data name="CompatibilityOutdatedDescription" xml:space="preserve">
+    <value>May load studio projects of earlier versions. User may be required to fix issues with changed ports.</value>
+    <comment>. </comment>
+  </data>
+  <data name="CompatibilityUnknownDescription" xml:space="preserve">
+    <value>Version of project is unknown - cannot determine compatibility</value>
+  </data>
   <data name="InstalledAppsGroupBy" xml:space="preserve">
     <value>Group by:  </value>
   </data>

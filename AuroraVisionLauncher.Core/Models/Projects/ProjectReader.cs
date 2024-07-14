@@ -21,6 +21,7 @@ public static class ProjectReader
             MagicBytes = magicByte.ToArray();
             Type = type;
             Brand = brand;
+            IsXml = isXml;
         }
         public bool MatchesHeader(ReadOnlySpan<byte> headerBytes)
         {

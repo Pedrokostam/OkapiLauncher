@@ -178,6 +178,42 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can load the specified program. Studio project may be upgraded in the process, if their version is lower..
+        /// </summary>
+        public static string CompatibilityCompatibleDescription {
+            get {
+                return ResourceManager.GetString("CompatibilityCompatibleDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot load the program.
+        /// </summary>
+        public static string CompatibilityIncompatibleDescription {
+            get {
+                return ResourceManager.GetString("CompatibilityIncompatibleDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to May load studio projects of earlier versions. User may be required to fix issues with changed ports..
+        /// </summary>
+        public static string CompatibilityOutdatedDescription {
+            get {
+                return ResourceManager.GetString("CompatibilityOutdatedDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version of project is unknown - cannot determine compatibility.
+        /// </summary>
+        public static string CompatibilityUnknownDescription {
+            get {
+                return ResourceManager.GetString("CompatibilityUnknownDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Opened on {0:yyyy-MM-dd HH:mm:ss}.
         /// </summary>
         public static string DatetimeOpenedOn {

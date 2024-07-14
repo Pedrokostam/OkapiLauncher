@@ -30,6 +30,9 @@ public class AvVersion : IAvVersion
     public bool IsDevelopmentVersion => CheckIfDevelopmentVersion(this);
 
     public bool IsUnknown => IsMissingVersion(this);
+
+    public Version InterfaceVersion => new Version(Major, Minor, Build);
+
     public static bool TryParse(string? versionString, [NotNullWhen(true)] out AvVersion? version)
     {
         if (string.IsNullOrWhiteSpace(versionString))
@@ -171,5 +174,6 @@ public class AvVersion : IAvVersion
         var ver = FileVersionInfo.GetVersionInfo(filePath);
         return AvVersion.Parse(ver.ProductVersion);
     }
-    #endregion  
+
+    #endregion
 }

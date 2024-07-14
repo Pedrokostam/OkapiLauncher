@@ -13,7 +13,7 @@ using Windows.Security.Cryptography.Core;
 
 namespace AuroraVisionLauncher.Models
 {
-    public sealed partial class AvVersionFacade : ObservableObject, IAvVersion
+    public sealed partial class AvVersionFacade : ObservableObject, IAvVersion, IComparable<AvVersionFacade>, IComparable
     {
         public readonly static AvVersionFacade MissingVersion = new AvVersionFacade(AvVersion.MissingVersionBase);
 
@@ -44,6 +44,11 @@ namespace AuroraVisionLauncher.Models
 
 
         public Version ToVersion() => AvVersion.ToVersion(this);
-    public Version InterfaceVersion => new Version(Major, Minor, Build);
+
+        public int CompareTo(AvVersionFacade? other) => AvVersion.CompareTo(this, other);
+
+        public int CompareTo(object? obj) => AvVersion.CompareTo(this, obj as IAvVersion);
+
+        public Version InterfaceVersion => new Version(Major, Minor, Build);
     }
 }

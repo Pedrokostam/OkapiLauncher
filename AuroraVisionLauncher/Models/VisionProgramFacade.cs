@@ -44,4 +44,6 @@ public partial class VisionProjectFacade : ObservableObject, IVisionProject
     }
     [RelayCommand]
     private void OpenProgramFolder() => ExplorerHelper.OpenExplorerAndSelect(Path);
+
+    public override string ToString() => $"{Name}, {Type}, {Version}";
 }

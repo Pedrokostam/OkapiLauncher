@@ -17,6 +17,7 @@ using AuroraVisionLauncher.Services;
 using AuroraVisionLauncher.Contracts.ViewModels;
 using AuroraVisionLauncher.Helpers;
 using Microsoft.VisualBasic;
+using AuroraVisionLauncher.Core.Models;
 
 namespace AuroraVisionLauncher.ViewModels;
 
@@ -131,7 +132,7 @@ public sealed partial class LauncherViewModel : ObservableObject, INavigationAwa
             SelectedApp = null;
             _appFactory.Populate(matchingApps,
                 Apps,
-                perItemAction: app => app.UpdateCompatibility(VisionProject));
+                perItemAction: UpdateCompatibility);
             var closestVersion = AvApp.GetClosestApp(Apps, VisionProject);
             if (closestVersion >= 0)
             {
@@ -151,7 +152,38 @@ public sealed partial class LauncherViewModel : ObservableObject, INavigationAwa
         }
 
     }
-
+    private  void UpdateCompatibility(AvAppFacade avApp)
+    {
+        avApp.Compatibility = JudgeCompatibility(avApp, VisionProject!);
+    }
+    private static Compatibility JudgeCompatibility(IAvApp app, IVisionProject program)
+    {
+        if (!app.CanOpen(program))
+        {
+            return Compatibility.Incompatible;
+        }
+        if (program.Version.IsUnknown)
+        {
+            return Compatibility.Unknown;
+        }
+        if (program.Type == ProductType.Runtime)
+        {
+            if (app.Version.Major == program.Version.Major && app.Version.Minor == program.Version.Minor && app.Version.Build == program.Version.Build)
+            {
+                return Compatibility.Compatible;
+            }
+            return Compatibility.Incompatible;
+        }
+        if (app.Type == ProductType.Runtime)
+        {
+            return app.Version.InterfaceVersion == program.Version.InterfaceVersion ? Compatibility.Compatible : Compatibility.Incompatible;
+        }
+        if (app.Version.CompareTo(program.Version) >= 0)
+        {
+            return Compatibility.Compatible;
+        }
+        return Compatibility.Outdated;
+    }
 
     public void OnNavigatedTo(object parameter)
     {

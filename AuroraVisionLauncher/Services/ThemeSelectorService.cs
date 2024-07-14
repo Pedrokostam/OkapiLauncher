@@ -13,6 +13,8 @@ public class ThemeSelectorService : IThemeSelectorService
 {
     private const string HcDarkTheme = "pack://application:,,,/Styles/Themes/HC.Dark.Blue.xaml";
     private const string HcLightTheme = "pack://application:,,,/Styles/Themes/HC.Light.Blue.xaml";
+    private const string DarkTheme = "pack://application:,,,/Styles/Themes/Dark.xaml";
+    private const string LightTheme = "pack://application:,,,/Styles/Themes/Light.xaml";
 
     public ThemeSelectorService()
     {
@@ -25,6 +27,8 @@ public class ThemeSelectorService : IThemeSelectorService
         // Please complete these themes following the docs on https://mahapps.com/docs/themes/thememanager#creating-custom-themes
         ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(HcDarkTheme), MahAppsLibraryThemeProvider.DefaultInstance));
         ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(HcLightTheme), MahAppsLibraryThemeProvider.DefaultInstance));
+        ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(DarkTheme), MahAppsLibraryThemeProvider.DefaultInstance));
+        ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(LightTheme), MahAppsLibraryThemeProvider.DefaultInstance));
 
         var theme = GetCurrentTheme();
         SetTheme(theme);

@@ -71,4 +71,5 @@ public class ProductType : IComparable<ProductType>
         }
         return Type.CompareTo(other.Type);
     }
+    public override string ToString() => Name;
 }

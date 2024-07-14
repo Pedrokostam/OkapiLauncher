@@ -45,10 +45,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     [ObservableProperty]
     private Compatibility? _compatibility = null;
 
-    public void UpdateCompatibility(IVisionProject program)
-    {
-        Compatibility = Compatibility.Get(this, program);
-    }
+
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsLaunched))]
@@ -189,23 +186,5 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
         return !(left == right);
     }
 
-    public static bool operator <(AvAppFacade left, AvAppFacade right)
-    {
-        return ReferenceEquals(left, null) ? !ReferenceEquals(right, null) : left.CompareTo(right) < 0;
-    }
-
-    public static bool operator <=(AvAppFacade left, AvAppFacade right)
-    {
-        return ReferenceEquals(left, null) || left.CompareTo(right) <= 0;
-    }
-
-    public static bool operator >(AvAppFacade left, AvAppFacade right)
-    {
-        return !ReferenceEquals(left, null) && left.CompareTo(right) > 0;
-    }
-
-    public static bool operator >=(AvAppFacade left, AvAppFacade right)
-    {
-        return ReferenceEquals(left, null) ? ReferenceEquals(right, null) : left.CompareTo(right) >= 0;
-    }
+    public override string ToString() => _avApp.ToString();
 }
