@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Diagnostics;
 using Windows.Storage;
 using AuroraVisionLauncher.Models;
-using AuroraVisionLauncher.Core.Models.Programs;
+using AuroraVisionLauncher.Core.Models.Projects;
 using System.Windows.Threading;
 using AuroraVisionLauncher.Services;
 using AuroraVisionLauncher.Contracts.ViewModels;
@@ -22,9 +22,6 @@ namespace AuroraVisionLauncher.ViewModels;
 
 public sealed partial class LauncherViewModel : ObservableObject, INavigationAware
 {
-    private static int counter = 0;
-    public int ID { get; } = counter++;
-
     private readonly IAvAppFacadeFactory _appFactory;
     private readonly INavigationService _navigationService;
     private readonly IRecentlyOpenedFilesService _lastOpenedFilesService;
@@ -58,18 +55,18 @@ public sealed partial class LauncherViewModel : ObservableObject, INavigationAwa
 
     private bool CanLaunch()
     {
-        return SelectedApp is not null && (VisionProgram?.Exists ?? false);
+        return SelectedApp is not null && (VisionProject?.Exists ?? false);
     }
     [RelayCommand(CanExecute = nameof(CanLaunch))]
     private void Launch()
     {
-        if (SelectedApp is null || !(VisionProgram?.Exists ?? false))
+        if (SelectedApp is null || !(VisionProject?.Exists ?? false))
         {
             return;
         }
         ProcessStartInfo startInfo = new ProcessStartInfo
         {
-            FileName = SelectedApp.ExePath,
+            FileName = SelectedApp.Path,
             UseShellExecute = true,  // Use the shell to start the process
             CreateNoWindow = true, // Do not create a window
         };
@@ -96,7 +93,7 @@ public sealed partial class LauncherViewModel : ObservableObject, INavigationAwa
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(LaunchCommand))]
-    private VisionProgramFacade? _visionProgram = null;
+    private VisionProjectFacade? _visionProject = null;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(LaunchCommand))]
@@ -104,7 +101,7 @@ public sealed partial class LauncherViewModel : ObservableObject, INavigationAwa
 
     partial void OnSelectedAppChanged(AvAppFacade? value)
     {
-        LaunchOptions = LaunchOptions.Get(value, VisionProgram?.Path);
+        LaunchOptions = LaunchOptions.Get(value, VisionProject?.Path);
     }
 
     private bool CanCopyArgumentString() => !string.IsNullOrWhiteSpace(LaunchOptions?.ArgumentString);
@@ -125,22 +122,17 @@ public sealed partial class LauncherViewModel : ObservableObject, INavigationAwa
         }
         try
         {
-            var info = ProgramReader.GetInformation(filepath);
-            VisionProgram = new VisionProgramFacade(
-                Path.GetFileNameWithoutExtension(filepath),
-                info.Version,
-                filepath,
-                info.ProgramType
-                );
+            var project = ProjectReader.OpenProject(filepath);
+            VisionProject = new VisionProjectFacade(project);
 
             var matchingApps = _appFactory.AvApps
-                .Where(x => x.CanOpen(info.ProgramType))
+                .Where(x => x.CanOpen(VisionProject))
                 .OrderByDescending(x => x.Version);
             SelectedApp = null;
             _appFactory.Populate(matchingApps,
                 Apps,
-                perItemAction: app => app.UpdateCompatibility(VisionProgram));
-            var closestVersion = AvApp.GetClosestApp(Apps, VisionProgram);
+                perItemAction: app => app.UpdateCompatibility(VisionProject));
+            var closestVersion = AvApp.GetClosestApp(Apps, VisionProject);
             if (closestVersion >= 0)
             {
                 SelectedApp = Apps[closestVersion];

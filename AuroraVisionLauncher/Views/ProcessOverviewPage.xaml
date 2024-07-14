@@ -60,9 +60,9 @@
                 <TextBlock
                     FontSize="16"
                     Foreground="Gray"
-                    Text="{Binding ExePath}"
+                    Text="{Binding Path}"
                     TextTrimming="CharacterEllipsis"
-                    ToolTip="{Binding ExePath}" />
+                    ToolTip="{Binding Path}" />
             </StackPanel>
             <Button
                 Grid.Column="2"

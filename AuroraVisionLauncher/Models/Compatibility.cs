@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AuroraVisionLauncher.Core.Models;
 using AuroraVisionLauncher.Core.Models.Apps;
-using AuroraVisionLauncher.Core.Models.Programs;
+using AuroraVisionLauncher.Core.Models.Projects;
 
 namespace AuroraVisionLauncher.Models;
 public class Compatibility
@@ -22,9 +23,9 @@ public class Compatibility
     public string Category { get; }
     public string Description { get; }
 
-    public static Compatibility Get(IAvApp app, IVisionProgram program)
+    public static Compatibility Get(IAvApp app, IVisionProject program)
     {
-        if (!app.CanOpen(program.Type))
+        if (!app.CanOpen(program))
         {
             return Incompatible;
         }
@@ -32,7 +33,7 @@ public class Compatibility
         {
             return Unknown;
         }
-        if (program.IsRuntime())
+        if (program.Type == ProductType.Runtime)
         {
             if (app.Version.Major == program.Version.Major && app.Version.Minor == program.Version.Minor && app.Version.Build == program.Version.Build)
             {

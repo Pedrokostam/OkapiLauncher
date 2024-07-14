@@ -268,7 +268,7 @@
     <value>Open program folder</value>
   </data>
   <data name="AvAppCopyPath" xml:space="preserve">
-    <value>Copy executable path to clipboard</value>
+    <value>Copy file path to clipboard</value>
   </data>
   <data name="AvAppLaunchWithNoProgram" xml:space="preserve">
     <value>Launch the application without loading any program</value>
@@ -320,5 +320,11 @@
   </data>
   <data name="ShellKillChildrenButton" xml:space="preserve">
     <value>Kill all child windows</value>
+  </data>
+  <data name="ProjectProductTypeProfessionalLabel" xml:space="preserve">
+    <value>Studio professional project</value>
+  </data>
+  <data name="ProjectProductTypeRuntimeLabel" xml:space="preserve">
+    <value>Runtime application</value>
   </data>
 </root>

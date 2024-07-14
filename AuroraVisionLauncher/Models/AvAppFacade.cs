@@ -11,7 +11,7 @@ using ABI.Windows.Foundation;
 using AuroraVisionLauncher.Contracts.Services;
 using AuroraVisionLauncher.Core.Models;
 using AuroraVisionLauncher.Core.Models.Apps;
-using AuroraVisionLauncher.Core.Models.Programs;
+using AuroraVisionLauncher.Core.Models.Projects;
 using AuroraVisionLauncher.Helpers;
 using AuroraVisionLauncher.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -19,23 +19,25 @@ using CommunityToolkit.Mvvm.Input;
 using Windows.ApplicationModel.VoiceCommands;
 
 namespace AuroraVisionLauncher.Models;
-public partial class AvAppFacade : ObservableObject, IAvApp
+public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFacade>, IEquatable<AvAppFacade>
 {
     readonly private AvApp _avApp;
     private readonly Lazy<IWindowManagerService> _windowManagerService;
 
     public string Name => _avApp.Name;
-    public string ExePath => _avApp.ExePath;
+    public string Path => _avApp.Path;
+    public string RootPath => _avApp.RootPath;
     public AvVersionFacade Version { get; }
     public string NameWithVersion => $"{Name} {Version}";
     public bool IsDevelopmentVersion => Version.IsDevelopmentVersion;
+    public bool IsExecutable=>_avApp.IsExecutable;
 
-    public AvAppType AppType => _avApp.AppType;
+
 
     public AvVersionFacade? SecondaryVersion { get; }
 
     public CommandLineInterface Interface => _avApp.Interface;
-    IAvVersion IAvApp.Version => Version;
+    IAvVersion IProduct.Version => Version;
     IAvVersion? IAvApp.SecondaryVersion => SecondaryVersion;
 
     public string ProcessName => _avApp.ProcessName;
@@ -43,7 +45,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp
     [ObservableProperty]
     private Compatibility? _compatibility = null;
 
-    public void UpdateCompatibility(IVisionProgram program)
+    public void UpdateCompatibility(IVisionProject program)
     {
         Compatibility = Compatibility.Get(this, program);
     }
@@ -57,11 +59,15 @@ public partial class AvAppFacade : ObservableObject, IAvApp
     public AvAppFacade(AvApp avApp, IWindowManagerService windowManagerService)
     {
         _avApp = avApp;
-        _windowManagerService = new (windowManagerService);
+        _windowManagerService = new(windowManagerService);
         Version = new AvVersionFacade(avApp.Version);
         SecondaryVersion = avApp.SecondaryVersion is not null ? new AvVersionFacade(avApp.SecondaryVersion) : null;
     }
     public ObservableCollection<SimpleProcess> ActiveProcesses { get; } = new();
+
+    public ProductBrand Brand => _avApp.Brand;
+
+    public ProductType Type => _avApp.Type;
 
     /// <summary>
     /// Checks if any process associated with the executable is running.
@@ -71,12 +77,12 @@ public partial class AvAppFacade : ObservableObject, IAvApp
     {
         try
         {
-            var processes = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(ProcessName));
+            var processes = Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(ProcessName));
             List<int> keptIds = [];
             List<int> indicesToRemove = [];
             foreach (var process in processes)
             {
-                if(!string.Equals(process.MainModule?.FileName, ExePath, StringComparison.OrdinalIgnoreCase))
+                if (!string.Equals(process.MainModule?.FileName, Path, StringComparison.OrdinalIgnoreCase))
                 {
                     process.Dispose();
                     continue;
@@ -116,23 +122,24 @@ public partial class AvAppFacade : ObservableObject, IAvApp
         }
     }
 
-    public bool CanOpen(ProgramType type) => _avApp.CanOpen(type);
-    public bool IsNativeApp(ProgramType type) => _avApp.IsNativeApp(type);
+    public bool CanOpen(IVisionProject type) => _avApp.CanOpen(type);
+    public bool IsNativeApp(IVisionProject type) => _avApp.IsNativeApp(type);
 
     [RelayCommand]
-    private void OpenContainingFolder() => ExplorerHelper.OpenExplorer(ExePath);
-    [RelayCommand]
+    private void OpenContainingFolder() => ExplorerHelper.OpenExplorer(RootPath);
+    private bool CanLaunchExecutable() => IsExecutable;
+    [RelayCommand(CanExecute =nameof(CanLaunchExecutable))]
     private void LaunchWithoutProgram()
     {
         Process.Start(new ProcessStartInfo()
         {
-            FileName = _avApp.ExePath,
+            FileName = _avApp.Path,
         });
     }
     [RelayCommand]
     private void CopyExecutablePath()
     {
-        Clipboard.SetText(ExePath);
+        Clipboard.SetText(Path);
     }
     [RelayCommand]
     private void KillAllProcesses()
@@ -144,5 +151,61 @@ public partial class AvAppFacade : ObservableObject, IAvApp
     private void ShowProcessOverview()
     {
         _windowManagerService.Value.OpenInNewWindow(typeof(ProcessOverviewViewModel).FullName!, this);
+    }
+
+    public int CompareTo(AvAppFacade? other) => CompareTo(other as IAvApp);
+    public bool Equals(AvAppFacade? other) => _avApp == other?._avApp;
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
+        if (ReferenceEquals(obj, null))
+        {
+            return false;
+        }
+
+        return Equals(obj as AvAppFacade);
+    }
+
+    public override int GetHashCode()=>_avApp.GetHashCode();
+
+    public int CompareTo(IAvApp? other) => _avApp.CompareTo(other);
+
+    public static bool operator ==(AvAppFacade left, AvAppFacade right)
+    {
+        if (ReferenceEquals(left, null))
+        {
+            return ReferenceEquals(right, null);
+        }
+
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(AvAppFacade left, AvAppFacade right)
+    {
+        return !(left == right);
+    }
+
+    public static bool operator <(AvAppFacade left, AvAppFacade right)
+    {
+        return ReferenceEquals(left, null) ? !ReferenceEquals(right, null) : left.CompareTo(right) < 0;
+    }
+
+    public static bool operator <=(AvAppFacade left, AvAppFacade right)
+    {
+        return ReferenceEquals(left, null) || left.CompareTo(right) <= 0;
+    }
+
+    public static bool operator >(AvAppFacade left, AvAppFacade right)
+    {
+        return !ReferenceEquals(left, null) && left.CompareTo(right) > 0;
+    }
+
+    public static bool operator >=(AvAppFacade left, AvAppFacade right)
+    {
+        return ReferenceEquals(left, null) ? ReferenceEquals(right, null) : left.CompareTo(right) >= 0;
     }
 }

@@ -79,7 +79,7 @@ public class AvVersion : IAvVersion
     public static bool CheckIfDevelopmentVersion(IAvVersion version) => version.Build >= 1000;
     public static int GetHashCode(IAvVersion version)
     {
-       return HashCode.Combine(version.Major, version.Minor, version.Build, version.Revision);
+        return HashCode.Combine(version.Major, version.Minor, version.Build, version.Revision);
     }
     public static string ToString(IAvVersion version)
     {
@@ -131,7 +131,7 @@ public class AvVersion : IAvVersion
             && version.Revision == 0;
     }
 
-    public static Version ToVersion(IAvVersion version)=>new(version.Major,version.Minor,version.Build,version.Revision);
+    public static Version ToVersion(IAvVersion version) => new(version.Major, version.Minor, version.Build, version.Revision);
 
     public static int CompareTo(IAvVersion? a, IAvVersion? b)
     {
@@ -163,6 +163,13 @@ public class AvVersion : IAvVersion
             return buildComp;
         }
         return a.Revision.CompareTo(b.Revision);
+    }
+
+    public static AvVersion? FromFile(FileInfo fileInfo) => FromFile(fileInfo.FullName);
+    public static AvVersion? FromFile(string filePath)
+    {
+        var ver = FileVersionInfo.GetVersionInfo(filePath);
+        return AvVersion.Parse(ver.ProductVersion);
     }
     #endregion  
 }

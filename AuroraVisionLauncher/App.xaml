@@ -17,6 +17,7 @@
                     <conv:UtcDatetimeToLocalConverter x:Key="UtcToLocalConverter" />
                     <conv:IndexToKeyShortcutIndex x:Key="IndexConverter" />
                     <conv:PathToFilenameConverter x:Key="PathToFilenameConverter" />
+                    <conv:ProjectTypeToStringConverter x:Key="ProjectTypeToString" />
                 </ResourceDictionary>
                 <ResourceDictionary Source="/Styles/_FontSizes.xaml" />
                 <ResourceDictionary Source="/Styles/_Thickness.xaml" />
@@ -33,9 +34,9 @@
                 <!--  Accent and AppTheme setting  -->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />
-                
-                
-                
+
+
+
                 <ResourceDictionary Source="/DataTemplates/AvAppFacade.xaml" />
                 <ResourceDictionary Source="/DataTemplates/CommandLineOptions.xaml" />
                 <ResourceDictionary Source="/DataTemplates/ProgramInformation.xaml" />

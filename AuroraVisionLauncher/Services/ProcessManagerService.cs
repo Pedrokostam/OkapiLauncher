@@ -41,7 +41,7 @@ namespace AuroraVisionLauncher.Services
                     {
                         foreach (var innerApp in appList)
                         {
-                            if (string.Equals(innerApp.ExePath, process.MainModule?.FileName, StringComparison.OrdinalIgnoreCase))
+                            if (string.Equals(innerApp.Path, process.MainModule?.FileName, StringComparison.OrdinalIgnoreCase))
                             {
                                 innerApp.ActiveProcessesNumber++;
                             }
@@ -66,7 +66,7 @@ namespace AuroraVisionLauncher.Services
             {
                 try
                 {
-                    if (string.Equals(process.MainModule?.FileName, app.ExePath, StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(process.MainModule?.FileName, app.Path, StringComparison.OrdinalIgnoreCase))
                     {
                         simples.Add(new(process));
                     }

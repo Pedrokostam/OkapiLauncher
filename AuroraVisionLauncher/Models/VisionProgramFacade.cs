@@ -6,31 +6,34 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using AuroraVisionLauncher.Core.Models;
-using AuroraVisionLauncher.Core.Models.Programs;
+using AuroraVisionLauncher.Core.Models.Projects;
 using AuroraVisionLauncher.Helpers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 namespace AuroraVisionLauncher.Models;
-public partial class VisionProgramFacade : ObservableObject, IVisionProgram
+public partial class VisionProjectFacade : ObservableObject, IVisionProject
 {
     public string Name { get; }
     public AvVersionFacade Version { get; }
     public AvVersionFacade? VersionNonMissing => Version.IsUnknown ? null : Version;
     public string Path { get; }
-    public ProgramType Type { get;  }
+    public ProductType Type { get; }
+    public ProductBrand Brand { get; }
 
     public bool Exists => File.Exists(Path);
 
-    IAvVersion IVisionProgram.Version => Version;
+    IAvVersion IProduct.Version => Version;
 
-    public VisionProgramFacade(VisionProgram visprog):this(visprog.Name,visprog.Version,visprog.Path,visprog.Type)
+    public VisionProjectFacade(VisionProject visprog)
+        : this(visprog.Name, visprog.Version, visprog.Path, visprog.Type, visprog.Brand)
     {
     }
-    public VisionProgramFacade(string name, IAvVersion version, string path, ProgramType type)/*:this(new VisionProgram(name,new(version),path,type))*/
+    public VisionProjectFacade(string name, IAvVersion version, string path, ProductType type, ProductBrand brand)/*:this(new VisionProgram(name,new(version),path,type))*/
     {
         Name = name;
         Path = path;
+        Brand = brand;
         Type = type;
         Version = new AvVersionFacade(version);
     }
@@ -40,5 +43,5 @@ public partial class VisionProgramFacade : ObservableObject, IVisionProgram
         Clipboard.SetText(Path);
     }
     [RelayCommand]
-    private void OpenProgramFolder() => ExplorerHelper.OpenExplorer(Path);
+    private void OpenProgramFolder() => ExplorerHelper.OpenExplorerAndSelect(Path);
 }

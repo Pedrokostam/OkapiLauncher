@@ -43,7 +43,6 @@
             Source="{Binding Apps}">
             <CollectionViewSource.GroupDescriptions>
                 <PropertyGroupDescription PropertyName="Compatibility.Category" />
-
             </CollectionViewSource.GroupDescriptions>
             <!--<CollectionViewSource.SortDescriptions>
                 <componentModel:SortDescription PropertyName="YourPropertyForOrdering" />
@@ -56,14 +55,10 @@
             <RowDefinition Height="48" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <!--<TextBlock
+        <TextBlock
             Margin="{StaticResource MediumLeftMargin}"
             Style="{StaticResource PageTitleStyle}"
-            Text="{x:Static properties:Resources.MainPageTitle}" />-->
-        <TextBlock
-    Margin="{StaticResource MediumLeftMargin}"
-    Style="{StaticResource PageTitleStyle}"
-    Text="{Binding ID}" />
+            Text="{x:Static properties:Resources.MainPageTitle}" />
         <Grid
             Grid.Row="1"
             Margin="{StaticResource MediumLeftRightMargin}"
@@ -73,7 +68,7 @@
                 <RowDefinition />
                 <RowDefinition Height="250" />
             </Grid.RowDefinitions>
-            <ContentPresenter Content="{Binding VisionProgram}" />
+            <ContentPresenter Content="{Binding VisionProject}" />
             <!--<Grid Margin="10,10,0,20" TextBlock.FontSize="18">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />

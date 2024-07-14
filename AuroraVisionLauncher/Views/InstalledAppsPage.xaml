@@ -19,6 +19,7 @@
     <Page.Resources>
         <CollectionViewSource
             x:Key="CustomViewSource"
+            x:Name="GRUPA"
             IsLiveGroupingRequested="True"
             Source="{Binding AvApps}">
             <CollectionViewSource.GroupDescriptions>
@@ -34,10 +35,17 @@
             <RowDefinition Height="48" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock
-            Margin="{StaticResource MediumLeftMargin}"
-            Style="{StaticResource PageTitleStyle}"
-            Text="{x:Static properties:Resources.InstalledAppsPageTitle}" />
+        <StackPanel Orientation="Horizontal">
+            <TextBlock
+                Margin="{StaticResource MediumLeftMargin}"
+                Style="{StaticResource PageTitleStyle}"
+                Text="{x:Static properties:Resources.InstalledAppsPageTitle}" />
+            <ComboBox x:Name="Combi">
+                <ComboBoxItem Name="Name" />
+                <ComboBoxItem Name="Type" />
+                <ComboBoxItem Name="Company" />
+            </ComboBox>
+        </StackPanel>
         <Grid
             Grid.Row="1"
             Margin="{StaticResource MediumLeftRightMargin}"
@@ -46,11 +54,12 @@
                 The Mahapps Gray10 color represents where you should place your content.
                 Place your content here.
             -->
-            <ListView x:Name="InstalledAppsList"
+            <ListView
+                x:Name="InstalledAppsList"
                 HorizontalAlignment="Stretch"
                 Grid.IsSharedSizeScope="True"
                 ItemTemplate="{StaticResource AvAppFacadeDataTemplate}"
-                ItemsSource="{Binding Source={StaticResource CustomViewSource}}"
+                ItemsSource="{Binding Apps}"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListView.GroupStyle>
                     <GroupStyle>

@@ -10,5 +10,6 @@ public partial class InstalledAppsPage : Page
     {
         InitializeComponent();
         DataContext = viewModel;
+        
     }
 }

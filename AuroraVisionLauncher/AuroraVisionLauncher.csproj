@@ -13,20 +13,26 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="Resources\Icons\AdaptiveVisionExecutor.ico" />
-	  <None Remove="Resources\Icons\AdaptiveVisionStudio.ico" />
-	  <None Remove="Resources\Icons\AuroraVisionExecutor.ico" />
-	  <None Remove="Resources\Icons\AuroraVisionStudio.ico" />
-	  <None Remove="Resources\Icons\FabImageRuntime.ico" />
-	  <None Remove="Resources\Icons\FabImageStudio.ico" />
+		<None Remove="Resources\Icons\AdaptiveVisionExecutor.ico" />
+		<None Remove="Resources\Icons\AdaptiveVisionStudio.ico" />
+		<None Remove="Resources\Icons\AuroraVisionExecutor.ico" />
+		<None Remove="Resources\Icons\AuroraVisionStudio.ico" />
+		<None Remove="Resources\Icons\FabImageRuntime.ico" />
+		<None Remove="Resources\Icons\FabImageStudio.ico" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="..\.editorconfig" Link=".editorconfig" />
+		<None Include="..\.editorconfig" Link=".editorconfig" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Resource Include="Resources\Icons\AppIcon.ico" />
+		<Resource Include="Resources\Icons\AppIcon.ico" />
+		<Resource Include="Resources\Icons\AdaptiveVisionExecutor.ico" />
+		<Resource Include="Resources\Icons\AdaptiveVisionStudio.ico" />
+		<Resource Include="Resources\Icons\AuroraVisionExecutor.ico" />
+		<Resource Include="Resources\Icons\AuroraVisionStudio.ico" />
+		<Resource Include="Resources\Icons\FabImageRuntime.ico" />
+		<Resource Include="Resources\Icons\FabImageStudio.ico" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -34,8 +40,8 @@
 		<PackageReference Include="MahApps.Metro" Version="2.4.10" />
 		<PackageReference Include="MahApps.Metro.IconPacks" Version="5.0.0" />
 		<PackageReference Include="Meziantou.Analyzer" Version="2.0.160">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
 		<PackageReference Include="System.Drawing.Common" Version="8.0.6" />
@@ -66,12 +72,4 @@
 		</None>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Resource Include="Resources\Icons\AdaptiveVisionExecutor.ico" />
-	  <Resource Include="Resources\Icons\AdaptiveVisionStudio.ico" />
-	  <Resource Include="Resources\Icons\AuroraVisionExecutor.ico" />
-	  <Resource Include="Resources\Icons\AuroraVisionStudio.ico" />
-	  <Resource Include="Resources\Icons\FabImageRuntime.ico" />
-	  <Resource Include="Resources\Icons\FabImageStudio.ico" />
-	</ItemGroup>
 </Project>

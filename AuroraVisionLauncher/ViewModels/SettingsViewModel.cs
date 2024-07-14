@@ -77,6 +77,6 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
         {
             return;
         }
-        ExplorerHelper.OpenExplorer(exePath);
+        ExplorerHelper.OpenExplorerAndSelect(exePath);
     }
 }

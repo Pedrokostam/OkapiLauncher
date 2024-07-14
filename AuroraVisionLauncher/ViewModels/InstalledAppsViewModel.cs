@@ -8,10 +8,12 @@ using AuroraVisionLauncher.Services;
 using AuroraVisionLauncher.Helpers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.ComponentModel;
+using System.Windows.Data;
 
 namespace AuroraVisionLauncher.ViewModels;
 
-public class InstalledAppsViewModel : ObservableObject, INavigationAware
+public partial  class InstalledAppsViewModel : ObservableObject, INavigationAware
 {
     private readonly IAvAppFacadeFactory _appFactory;
     private readonly IProcessManagerService _processManagerService;
@@ -20,7 +22,10 @@ public class InstalledAppsViewModel : ObservableObject, INavigationAware
     {
         _appFactory = appFactory;
         _processManagerService = processManagerService;
-        _appFactory.Populate(AvApps);
+        _apps = CollectionViewSource.GetDefaultView(_appFactory.CreateAllFacades());
+        _apps.GroupDescriptions.Add(new PropertyGroupDescription(nameof(AvAppFacade.Name)));
+
+        //_appFactory.Populate(AvApps);
         _timer = TimerHelper.GetTimer();
         _timer.Tick += Update;
         _processManagerService.UpdateProcessActive(AvApps);
@@ -42,5 +47,8 @@ public class InstalledAppsViewModel : ObservableObject, INavigationAware
         _timer.Tick -= Update;
     }
 
+
+    [ObservableProperty]
+    private ICollectionView _apps;
     public ObservableCollection<AvAppFacade> AvApps { get; } = new();
 }

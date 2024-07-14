@@ -106,7 +106,7 @@
             <controls:SplitView.Content>
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="100" />
+                        <RowDefinition Height="auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Menu Grid.Row="0" Focusable="False">

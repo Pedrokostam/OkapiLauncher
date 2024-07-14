@@ -4,7 +4,7 @@
     xmlns:mahicon="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mod="clr-namespace:AuroraVisionLauncher.Models"
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties">
-    <DataTemplate DataType="{x:Type mod:VisionProgramFacade}">
+    <DataTemplate DataType="{x:Type mod:VisionProjectFacade}">
         <Grid Margin="20,5,20,5">
             <Grid.Resources>
                 <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="TextBlock">
@@ -60,7 +60,7 @@
                 Grid.Row="1"
                 Grid.Column="1"
                 Style="{StaticResource ValueStyle}"
-                Text="{Binding Type, FallbackValue={x:Static properties:Resources.ProgramDetailsProjectTypeFallback}}" />
+                Text="{Binding Type, FallbackValue={x:Static properties:Resources.ProgramDetailsProjectTypeFallback}, Converter={StaticResource ProjectTypeToString}}" />
             <!--  VERSION  -->
             <TextBlock
                 Grid.Row="2"

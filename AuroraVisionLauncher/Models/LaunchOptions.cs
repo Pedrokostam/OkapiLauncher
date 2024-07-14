@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using AuroraVisionLauncher.Core.Models;
 using AuroraVisionLauncher.Core.Models.Apps;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -20,15 +21,17 @@ public abstract partial class LaunchOptions : ObservableObject
     /// </summary>
     /// <param name="avapp"></param>
     /// <returns></returns>
-    public static LaunchOptions Get(CommandLineInterface? międzymordzie)
+    public static LaunchOptions Get(ProductType? productType)
     {
-        return (międzymordzie ?? CommandLineInterface.None) switch
+        if(productType == ProductType.Professional)
         {
-            CommandLineInterface.None => _noOptions,
-            CommandLineInterface.Studio => _studioOptions,
-            CommandLineInterface.Executor => _executorOptions,
-            _ => throw new NotSupportedException()
-        };
+            return _studioOptions;  
+        }
+        if (productType == ProductType.Runtime)
+        {
+            return _executorOptions;
+        }
+        return _noOptions;
     }
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ArgumentString))]
@@ -55,8 +58,8 @@ public abstract partial class LaunchOptions : ObservableObject
     /// <param name="programPath"></param>
     public static LaunchOptions Get(IAvApp? avapp, string? programPath)
     {
-        var inst= Get(avapp?.Interface);
-        inst.ApplicationPath=avapp?.ExePath ?? string.Empty;
+        var inst= Get(avapp?.Type);
+        inst.ApplicationPath=avapp?.Path ?? string.Empty;
         inst.ProgramPath = programPath;
         return inst;
     }

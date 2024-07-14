@@ -1,11 +1,5 @@
 ﻿namespace AuroraVisionLauncher.Core.Models.Apps;
 
-public enum AvAppType
-{
-    Professional,
-    Runtime,
-    DeepLearning
-}
 public enum CommandLineInterface
 {
     None,
@@ -40,20 +34,4 @@ public enum CommandLineInterface
     /// </code>
     /// </summary>
     Executor,
-}
-
-public enum LogLevel
-{
-    Trace,
-    Debug,
-    /// <summary>
-    /// Default
-    /// </summary>
-    Pass,
-    Info,
-    Warning,
-    Warn,
-    Error,
-    Fatal,
-    Off
 }

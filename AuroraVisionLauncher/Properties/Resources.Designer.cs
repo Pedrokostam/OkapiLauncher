@@ -70,7 +70,7 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copy executable path to clipboard.
+        ///   Looks up a localized string similar to Copy file path to clipboard.
         /// </summary>
         public static string AvAppCopyPath {
             get {
@@ -426,6 +426,24 @@ namespace AuroraVisionLauncher.Properties {
         public static string ProgramDetailsSavedWithVersionMissing {
             get {
                 return ResourceManager.GetString("ProgramDetailsSavedWithVersionMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Studio professional project.
+        /// </summary>
+        public static string ProjectProductTypeProfessionalLabel {
+            get {
+                return ResourceManager.GetString("ProjectProductTypeProfessionalLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Runtime application.
+        /// </summary>
+        public static string ProjectProductTypeRuntimeLabel {
+            get {
+                return ResourceManager.GetString("ProjectProductTypeRuntimeLabel", resourceCulture);
             }
         }
         

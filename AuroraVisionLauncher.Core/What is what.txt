@@ -1,0 +1,3 @@
+﻿App - Studio Prof, Runtime, DL, Library - things that can conduct vision inspection
+Project - avproj, avexe, - all that can be loaded in an App
+Product - App/Program
