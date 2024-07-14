@@ -125,4 +125,5 @@ public class ProductBrand:IComparable<ProductBrand>
         if(other == null) return 1;
         return Brand.CompareTo(other.Brand);
     }
+    public override string ToString() => Name;
 }

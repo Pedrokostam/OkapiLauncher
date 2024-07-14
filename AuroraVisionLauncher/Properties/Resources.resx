@@ -321,6 +321,21 @@
   <data name="ShellKillChildrenButton" xml:space="preserve">
     <value>Kill all child windows</value>
   </data>
+  <data name="AppProductTypeDeepLearningLabel" xml:space="preserve">
+    <value>Deep Learning</value>
+  </data>
+  <data name="AppProductTypeLibraryLabel" xml:space="preserve">
+    <value>Library</value>
+  </data>
+  <data name="AppProductTypeProfessionalLabel" xml:space="preserve">
+    <value>Studio Professional</value>
+  </data>
+  <data name="AppProductTypeRuntimeLabel" xml:space="preserve">
+    <value>Studio Runtime</value>
+  </data>
+  <data name="InstalledAppsGroupBy" xml:space="preserve">
+    <value>Group by:  </value>
+  </data>
   <data name="ProjectProductTypeProfessionalLabel" xml:space="preserve">
     <value>Studio professional project</value>
   </data>

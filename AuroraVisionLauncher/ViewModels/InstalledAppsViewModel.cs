@@ -10,20 +10,24 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.ComponentModel;
 using System.Windows.Data;
+using AuroraVisionLauncher.Converters;
+using System.Text.RegularExpressions;
 
 namespace AuroraVisionLauncher.ViewModels;
 
-public partial  class InstalledAppsViewModel : ObservableObject, INavigationAware
+public partial class InstalledAppsViewModel : ObservableObject, INavigationAware
 {
     private readonly IAvAppFacadeFactory _appFactory;
     private readonly IProcessManagerService _processManagerService;
     private readonly DispatcherTimer _timer;
+    [ObservableProperty]
+    private AppSortProperty _sortProperty = AppSortProperty.Type;
     public InstalledAppsViewModel(IAvAppFacadeFactory appFactory, IProcessManagerService processManagerService)
     {
         _appFactory = appFactory;
         _processManagerService = processManagerService;
         _apps = CollectionViewSource.GetDefaultView(_appFactory.CreateAllFacades());
-        _apps.GroupDescriptions.Add(new PropertyGroupDescription(nameof(AvAppFacade.Name)));
+        Regroup();
 
         //_appFactory.Populate(AvApps);
         _timer = TimerHelper.GetTimer();
@@ -35,6 +39,24 @@ public partial  class InstalledAppsViewModel : ObservableObject, INavigationAwar
     private void Update(object? sender, EventArgs e)
     {
         _processManagerService.UpdateProcessActive(AvApps);
+    }
+
+    partial void OnSortPropertyChanged(AppSortProperty value)
+    {
+        Regroup();
+    }
+
+    private void Regroup()
+    {
+        Apps.GroupDescriptions.Clear();
+        var gd = SortProperty switch
+        {
+            AppSortProperty.Type => new PropertyGroupDescription(nameof(AvAppFacade.Type), AppTypeToStringConverter.Instance),
+            AppSortProperty.Brand => new PropertyGroupDescription(nameof(AvAppFacade.Brand)),
+            AppSortProperty.Version => new PropertyGroupDescription(nameof(AvAppFacade.Version), InterfaceVersionConverter.Instance),
+            _ => throw new NotSupportedException()
+        };
+        Apps.GroupDescriptions.Add(gd);
     }
 
     public void OnNavigatedTo(object parameter)

@@ -14,4 +14,6 @@ public interface IAvVersion : IComparable<IAvVersion>, IEquatable<IAvVersion>
     bool IsRuntimeCompatibleWith(IAvVersion otherVersion);
     bool IsSupportedBy(IAvVersion loaderVersion);
     bool Supports(IAvVersion versionToLoad);
+
+   
 }

@@ -44,5 +44,6 @@ namespace AuroraVisionLauncher.Models
 
 
         public Version ToVersion() => AvVersion.ToVersion(this);
+    public Version InterfaceVersion => new Version(Major, Minor, Build);
     }
 }

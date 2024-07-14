@@ -70,6 +70,42 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Deep Learning.
+        /// </summary>
+        public static string AppProductTypeDeepLearningLabel {
+            get {
+                return ResourceManager.GetString("AppProductTypeDeepLearningLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Library.
+        /// </summary>
+        public static string AppProductTypeLibraryLabel {
+            get {
+                return ResourceManager.GetString("AppProductTypeLibraryLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Studio Professional.
+        /// </summary>
+        public static string AppProductTypeProfessionalLabel {
+            get {
+                return ResourceManager.GetString("AppProductTypeProfessionalLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Studio Runtime.
+        /// </summary>
+        public static string AppProductTypeRuntimeLabel {
+            get {
+                return ResourceManager.GetString("AppProductTypeRuntimeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy file path to clipboard.
         /// </summary>
         public static string AvAppCopyPath {
@@ -147,6 +183,15 @@ namespace AuroraVisionLauncher.Properties {
         public static string DatetimeOpenedOn {
             get {
                 return ResourceManager.GetString("DatetimeOpenedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group by:  .
+        /// </summary>
+        public static string InstalledAppsGroupBy {
+            get {
+                return ResourceManager.GetString("InstalledAppsGroupBy", resourceCulture);
             }
         }
         
