@@ -13,7 +13,7 @@ namespace AuroraVisionLauncher.Services
     public class ProcessManagerService : IProcessManagerService
     {
         private Dictionary<string, List<AvAppFacade>> _dictionary = new(StringComparer.OrdinalIgnoreCase);
-        public void UpdateProcessActive(IList<AvAppFacade> apps)
+        public void UpdateProcessActive(IEnumerable<AvAppFacade> apps)
         {
             _dictionary.Clear();
             foreach (var item in apps)

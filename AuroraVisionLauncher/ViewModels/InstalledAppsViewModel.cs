@@ -22,23 +22,25 @@ public partial class InstalledAppsViewModel : ObservableObject, INavigationAware
     private readonly DispatcherTimer _timer;
     [ObservableProperty]
     private AppSortProperty _sortProperty = AppSortProperty.Type;
+    private readonly List<AvAppFacade> _rawApps;
     public InstalledAppsViewModel(IAvAppFacadeFactory appFactory, IProcessManagerService processManagerService)
     {
         _appFactory = appFactory;
         _processManagerService = processManagerService;
-        _apps = CollectionViewSource.GetDefaultView(_appFactory.CreateAllFacades());
+        _rawApps = new(_appFactory.CreateAllFacades());
+        _apps = CollectionViewSource.GetDefaultView(_rawApps);
         Regroup();
 
         //_appFactory.Populate(AvApps);
         _timer = TimerHelper.GetTimer();
         _timer.Tick += Update;
-        _processManagerService.UpdateProcessActive(AvApps);
+        _processManagerService.UpdateProcessActive(_rawApps);
         _timer.Start();
     }
 
     private void Update(object? sender, EventArgs e)
     {
-        _processManagerService.UpdateProcessActive(AvApps);
+        _processManagerService.UpdateProcessActive(_rawApps);
     }
 
     partial void OnSortPropertyChanged(AppSortProperty value)
@@ -72,5 +74,4 @@ public partial class InstalledAppsViewModel : ObservableObject, INavigationAware
 
     [ObservableProperty]
     private ICollectionView _apps;
-    public ObservableCollection<AvAppFacade> AvApps { get; } = new();
 }

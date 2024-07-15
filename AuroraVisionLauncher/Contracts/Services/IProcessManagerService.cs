@@ -6,5 +6,5 @@ public interface IProcessManagerService
 {
 
     IList<SimpleProcess> GetActiveProcesses(AvAppFacade app);
-    void UpdateProcessActive(IList<AvAppFacade> apps);
+    void UpdateProcessActive(IEnumerable<AvAppFacade> apps);
 }
