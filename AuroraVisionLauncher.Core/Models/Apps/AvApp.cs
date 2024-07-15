@@ -42,7 +42,7 @@ public record AvApp : IAvApp
     }
     public bool CanOpen(IVisionProject project)
     {
-        return SupportedProgramTypes.Contains(project.Type);
+        return SupportedProgramTypes.Contains(project.Type) && Brand.SupportsBrand(project.Brand);
     }
     private static double VersionToDouble(IAvVersion version, IAvVersion baseVersion)
     {

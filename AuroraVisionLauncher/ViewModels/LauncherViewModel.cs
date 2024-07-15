@@ -152,12 +152,15 @@ public sealed partial class LauncherViewModel : ObservableObject, INavigationAwa
         }
 
     }
-    private  void UpdateCompatibility(AvAppFacade avApp)
+    private void UpdateCompatibility(AvAppFacade avApp)
     {
         avApp.Compatibility = JudgeCompatibility(avApp, VisionProject!);
     }
     private static Compatibility JudgeCompatibility(IAvApp app, IVisionProject program)
     {
+        if (!app.Brand.SupportsBrand(program.Brand) ){
+            return Compatibility.Incompatible;
+        }
         if (!app.CanOpen(program))
         {
             return Compatibility.Incompatible;
