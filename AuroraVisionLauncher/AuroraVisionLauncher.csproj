@@ -10,6 +10,7 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<ApplicationIcon>Resources\Icons\AppIcon.ico</ApplicationIcon>
+		<Version>0.8.5.0</Version>
 	</PropertyGroup>
 
 	<ItemGroup>

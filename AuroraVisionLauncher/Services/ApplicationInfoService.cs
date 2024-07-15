@@ -16,6 +16,6 @@ public class ApplicationInfoService : IApplicationInfoService
         // Set the app version in AuroraVisionLauncher > Properties > Package > PackageVersion
         string assemblyLocation = Assembly.GetExecutingAssembly().Location;
         var version = FileVersionInfo.GetVersionInfo(assemblyLocation).FileVersion;
-        return new Version(version);
+        return new Version(version!);
     }
 }
