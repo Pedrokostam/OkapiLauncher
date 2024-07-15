@@ -24,7 +24,8 @@
         <KeyBinding
             Key="D0"
             Command="{Binding MenuOpenRecentFileByIndexCommand}"
-            Modifiers="Ctrl" />
+            CommandParameter="10"
+            Modifiers="Alt" />
         <KeyBinding
             Key="D1"
             Command="{Binding MenuOpenRecentFileByIndexCommand}"
@@ -130,7 +131,7 @@
                                 ItemsSource="{Binding RecentlyOpenedFiles}">
                                 <MenuItem.ItemContainerStyle>
                                     <Style BasedOn="{StaticResource MahApps.Styles.MenuItem}" TargetType="MenuItem">
-                                        <Setter Property="Header" Value="{Binding FilePath, Converter={StaticResource PathToFilenameConverter}, ConverterParameter=80}" />
+                                        <Setter Property="Header" Value="{Binding FilePath, Converter={StaticResource PathToFilenameConverter}, ConverterParameter=50}" />
                                         <Setter Property="ToolTip">
                                             <Setter.Value>
                                                 <StackPanel>

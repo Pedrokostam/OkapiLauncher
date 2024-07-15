@@ -29,12 +29,18 @@ public class PathToFilenameConverter : IValueConverter
         {
             maxLength = int.MaxValue;
         }
-        var name = Path.GetFileName(path);
-        if (name?.Length > maxLength)
+        var name = Path.GetFileNameWithoutExtension(path);
+        var extension = Path.GetExtension(path);
+        if(extension.Length > maxLength)
         {
-            return name.Substring(0, maxLength - 1)+ "…";
+            throw new ArgumentException("Too short permitted length.",nameof(parameter));
         }
-        return name;
+        if(name.Length + extension.Length > maxLength)
+        {
+            var nameLength = maxLength - extension.Length - 3;
+            name = name[..nameLength]+ "[…]";
+        }
+        return name+extension;
     }
 
     public object? ConvertBack(object? value, Type targetType, object parameter, CultureInfo culture)
