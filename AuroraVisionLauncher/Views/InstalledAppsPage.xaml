@@ -75,9 +75,7 @@
                     <GroupStyle>
                         <GroupStyle.HeaderTemplate>
                             <DataTemplate>
-                                <TextBlock
-                                    FontSize="14"
-                                    FontWeight="Bold"
+                                <TextBlock Style="{StaticResource GroupHeaderTextblockStyle}"
                                     Text="{Binding Name}" />
                             </DataTemplate>
                         </GroupStyle.HeaderTemplate>

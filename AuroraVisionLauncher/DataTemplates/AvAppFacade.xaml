@@ -24,7 +24,7 @@
                 </ContextMenu>
             </Grid.ContextMenu>
             <Rectangle Fill="Transparent" />
-            <Grid>
+            <Grid Margin="15,0,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width="*" />
@@ -42,7 +42,7 @@
                     VerticalAlignment="Center"
                     Orientation="Horizontal"
                     Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <mahicon:PackIconMaterialDesign>
+                    <mahicon:PackIconMaterialDesign VerticalAlignment="Center">
                         <mahicon:PackIconMaterialDesign.Style>
                             <Style TargetType="{x:Type mahicon:PackIconMaterialDesign}">
                                 <Style.Triggers>
@@ -58,7 +58,7 @@
                     </mahicon:PackIconMaterialDesign>
                     <TextBlock Margin="5,0,0,0">
                         <TextBlock.Style>
-                            <Style TargetType="{x:Type TextBlock}">
+                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BaseTextBlockStyle}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsLaunched}" Value="False">
                                         <Setter Property="Text" Value="Not running" />
@@ -103,23 +103,19 @@
                     VerticalAlignment="Center"
                     TextBlock.FontSize="18">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock>
+                        <TextBlock Style="{StaticResource AppTitleStyle}">
                             <Run Text="{Binding Name, Mode=OneWay, StringFormat='{}{0} - '}" />
                             <Run Text="{Binding Version, Mode=OneWay, StringFormat='{}{0} '}" />
                             <Run Text="{Binding SecondaryVersion, Mode=OneWay, TargetNullValue='', StringFormat='{}({0}) '}" />
                         </TextBlock>
                         <TextBlock
-                            FontWeight="Bold"
+                            FontStyle="Italic"
                             Foreground="DarkOrange"
+                            Style="{StaticResource AppTitleStyle}"
                             Text="{x:Static properties:Resources.AvAppDevelopmentVersion}"
                             Visibility="{Binding IsDevelopmentVersion, Converter={StaticResource BoolVisibilityConverter}}" />
                     </StackPanel>
-                    <TextBlock
-                        FontSize="16"
-                        Foreground="Gray"
-                        Text="{Binding Path}"
-                        TextTrimming="CharacterEllipsis"
-                        ToolTip="{Binding Path}" />
+                    <TextBlock Style="{StaticResource AppFilePathStyle}" Text="{Binding Path}" />
                 </StackPanel>
             </Grid>
         </Grid>

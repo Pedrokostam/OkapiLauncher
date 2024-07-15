@@ -1103,8 +1103,14 @@
     <SolidColorBrush x:Key="Brushes.Compatibility.Incompatible" Color="OrangeRed" />
     <SolidColorBrush x:Key="Brushes.Compatibility.Outdated" Color="Goldenrod" />
     <SolidColorBrush x:Key="Brushes.Compatibility.Unknown" Color="DimGray" />
+    <SolidColorBrush x:Key="Brushes.TextBlock.NotImportant" Color="#FF656565" />
 
-    <SolidColorBrush x:Key="Brushes.Commandline.Background" Color="#FF505050" />
-    
-    
+
+    <SolidColorBrush x:Key="Brushes.Commandline.App" Color="ForestGreen" />
+    <SolidColorBrush x:Key="Brushes.Commandline.Parameter" Color="RoyalBlue" />
+    <SolidColorBrush x:Key="Brushes.Commandline.Value" Color="MediumPurple" />
+    <SolidColorBrush x:Key="Brushes.Commandline.Background" Color="LightYellow" />
+
+
+
 </ResourceDictionary>

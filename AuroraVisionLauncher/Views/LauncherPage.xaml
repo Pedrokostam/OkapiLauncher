@@ -73,30 +73,6 @@
                 <RowDefinition Height="250" />
             </Grid.RowDefinitions>
             <ContentPresenter Content="{Binding VisionProject}" />
-            <!--<Grid Margin="10,10,0,20" TextBlock.FontSize="18">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Column="0" Grid.Row="0" Text="{x:Static properties:Resources.ProgramDetailsProgramName}" TextAlignment="Right" />
-                <TextBlock Grid.Column="0" Grid.Row="1" Text="{x:Static properties:Resources.ProgramDetailsProjectType}" TextAlignment="Right" />
-                <TextBlock Grid.Column="0" Grid.Row="2" Text="{x:Static properties:Resources.ProgramDetailsSavedWithVersion}" TextAlignment="Right" />
-                <TextBlock Grid.Column="0" Grid.Row="3" Text="{x:Static properties:Resources.ProgramDetailsLocation}" TextAlignment="Right" />
-                <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding VisionProgram.Name, FallbackValue={x:Static properties:Resources.ProgramDetailsProgramNameFallback}}" />
-                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding VisionProgram.Type, FallbackValue={x:Static properties:Resources.ProgramDetailsProjectTypeFallback}}" />
-                <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding VisionProgram.Version, FallbackValue={x:Static properties:Resources.ProgramDetailsSavedWithVersionFallback}}" />
-                <TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding VisionProgram.Path, FallbackValue={x:Static properties:Resources.ProgramDetailsLocationFallback}}" />
-            </Grid>-->
             <ListView
                 Grid.Row="1"
                 ItemTemplate="{StaticResource AvAppFacadeDataTemplate}"
@@ -106,13 +82,9 @@
                     <GroupStyle>
                         <GroupStyle.HeaderTemplate>
                             <DataTemplate>
-                                <TextBlock
-                                    FontSize="14"
-                                    FontWeight="Bold"
-                                    Text="{Binding Name}"
-                                    ToolTip="{Binding Name, Converter={StaticResource CompatibilityDescription}}">
+                                <TextBlock Text="{Binding Name}" ToolTip="{Binding Name, Converter={StaticResource CompatibilityDescription}}">
                                     <TextBlock.Style>
-                                        <Style TargetType="TextBlock">
+                                        <Style BasedOn="{StaticResource GroupHeaderTextblockStyle}" TargetType="TextBlock">
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding Name}" Value="{x:Static mod:Compatibility.Compatible}">
                                                     <Setter Property="Foreground" Value="{DynamicResource Brushes.Compatibility.Compatible}" />

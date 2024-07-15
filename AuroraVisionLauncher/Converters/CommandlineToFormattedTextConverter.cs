@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Text.RegularExpressions;
 using System.Windows.Media;
+using AuroraVisionLauncher.Properties;
 
 namespace AuroraVisionLauncher.Converters;
 public class CommandlineToFormattedTextConverter : IValueConverter
@@ -33,7 +34,7 @@ public class CommandlineToFormattedTextConverter : IValueConverter
         }
 
         var exeRun = new Run(parts[0]);
-        exeRun.Foreground = Brushes.PaleGreen;
+        exeRun.Style = Application.Current.Resources["CommandlineAppStyle"] as Style;
 
         para.Inlines.Add(exeRun);
 
@@ -43,13 +44,11 @@ public class CommandlineToFormattedTextConverter : IValueConverter
             var run = new Run(part);
             if (part.StartsWith('-'))
             {
-                run.FontStyle = FontStyles.Italic;
-                run.Foreground = Brushes.Cyan;
+                run.Style = Application.Current.Resources["CommandlineParameterStyle"] as Style;
             }
             else
             {
-                run.FontWeight = FontWeights.Bold;
-                run.Foreground = Brushes.MediumPurple;
+                run.Style = Application.Current.Resources["CommandlineValueStyle"] as Style;
             }
             para.Inlines.Add(run);
         }

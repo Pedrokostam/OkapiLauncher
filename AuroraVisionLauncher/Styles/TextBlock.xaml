@@ -1,5 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+    <ToolTip x:Key="SelfToolTipText">
+        <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=ToolTip}, Path=PlacementTarget.Text}" />
+    </ToolTip>
+
     <!--  Base Styles  -->
     <Style x:Key="BaseTextBlockStyle" TargetType="{x:Type TextBlock}">
         <Setter Property="FontSize" Value="{StaticResource MediumFontSize}" />
@@ -19,6 +23,7 @@
         BasedOn="{StaticResource BaseTextBlockStyle}"
         TargetType="{x:Type TextBlock}">
         <Setter Property="FontSize" Value="{StaticResource XLargeFontSize}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Margin" Value="{StaticResource MediumLeftMargin}" />
     </Style>
@@ -70,6 +75,46 @@
         BasedOn="{StaticResource BaseIconStyle}"
         TargetType="TextBlock">
         <Setter Property="FontSize" Value="48" />
+    </Style>
+
+    <Style
+        x:Key="AppFilePathStyle"
+        BasedOn="{StaticResource BaseTextBlockStyle}"
+        TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource Brushes.TextBlock.NotImportant}" />
+        <Setter Property="TextWrapping" Value="NoWrap" />
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+        <!--<Setter Property="Tooltip" Value="{StaticResource SelfToolTipText}" />-->
+    </Style>
+
+    <Style
+        x:Key="AppTitleStyle"
+        BasedOn="{StaticResource SubtitleTextStyle}"
+        TargetType="TextBlock" />
+
+    <Style
+        x:Key="GroupHeaderTextblockStyle"
+        BasedOn="{StaticResource BaseTextBlockStyle}"
+        TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{StaticResource LargeFontSize}" />
+        <Setter Property="Foreground" Value="{DynamicResource Brushes.TextBlock.NotImportant}" />
+        <Setter Property="FontStyle" Value="Italic" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Margin" Value="0,3,0,3" />
+    </Style>
+
+    <Style x:Key="CommandlineValueStyle" TargetType="Run">
+        <Setter Property="Foreground" Value="{DynamicResource Brushes.Commandline.Value}" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+
+    <Style x:Key="CommandlineParameterStyle" TargetType="Run">
+        <Setter Property="Foreground" Value="{DynamicResource Brushes.Commandline.Parameter}" />
+        <Setter Property="FontStyle" Value="Italic" />
+    </Style>
+
+    <Style x:Key="CommandlineAppStyle" TargetType="Run">
+        <Setter Property="Foreground" Value="{DynamicResource Brushes.Commandline.App}" />
     </Style>
 
 </ResourceDictionary>

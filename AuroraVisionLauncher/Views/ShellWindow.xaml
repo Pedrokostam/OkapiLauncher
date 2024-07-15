@@ -91,7 +91,7 @@
         <controls:SplitView
             x:Name="splitView"
             Focusable="False"
-            OpenPaneLength="1000"
+            OpenPaneLength="500"
             PanePlacement="Right">
             <controls:SplitView.Pane>
                 <Border

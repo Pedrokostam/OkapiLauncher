@@ -7,8 +7,7 @@
     <DataTemplate DataType="{x:Type mod:VisionProjectFacade}">
         <Grid Margin="20,5,20,5">
             <Grid.Resources>
-                <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="TextBlock">
-                    <Setter Property="FontSize" Value="20" />
+                <Style BasedOn="{StaticResource SubtitleTextStyle}" TargetType="TextBlock">
                     <Setter Property="TextWrapping" Value="NoWrap" />
                     <Setter Property="TextTrimming" Value="CharacterEllipsis" />
                     <Setter Property="Padding" Value="0,5,0,5" />
@@ -19,8 +18,8 @@
                     BasedOn="{StaticResource {x:Type TextBlock}}"
                     TargetType="TextBlock">
                     <Setter Property="TextAlignment" Value="Right" />
-                    <Setter Property="FontStyle" Value="Normal" />
-                    <Setter Property="Opacity" Value="0.6" />
+                    <Setter Property="FontStyle" Value="Italic" />
+                    <Setter Property="Foreground" Value="{DynamicResource Brushes.TextBlock.NotImportant}" />
                 </Style>
                 <Style
                     x:Key="ValueStyle"
@@ -61,9 +60,9 @@
                 Grid.Row="1"
                 Grid.Column="1"
                 Style="{StaticResource ValueStyle}">
-                    <Run Text="{Binding Type, FallbackValue={x:Static properties:Resources.ProgramDetailsProjectTypeFallback}, Mode=OneWay,Converter={StaticResource ProjectTypeToString}, StringFormat={}{0} -}" />
-                    <Run Text="{Binding Brand, FallbackValue={x:Static properties:Resources.ProgramDetailsProjectTypeFallback}, Mode=OneWay}" />
-                <!--Text="{Binding Type, FallbackValue={x:Static properties:Resources.ProgramDetailsProjectTypeFallback}, Converter={StaticResource ProjectTypeToString}}" />-->
+                <Run Text="{Binding Type, FallbackValue={x:Static properties:Resources.ProgramDetailsProjectTypeFallback}, Mode=OneWay, Converter={StaticResource ProjectTypeToString}, StringFormat={}{0} -}" />
+                <Run Text="{Binding Brand, FallbackValue={x:Static properties:Resources.ProgramDetailsProjectTypeFallback}, Mode=OneWay}" />
+                <!--  Text="{Binding Type, FallbackValue={x:Static properties:Resources.ProgramDetailsProjectTypeFallback}, Converter={StaticResource ProjectTypeToString}}" />  -->
             </TextBlock>
 
             <!--  VERSION  -->
