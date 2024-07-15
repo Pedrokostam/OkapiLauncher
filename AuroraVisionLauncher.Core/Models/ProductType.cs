@@ -13,7 +13,7 @@ internal enum AvType
     DeepLearning,
     Library
 }
-public class ProductType : IComparable<ProductType>
+public class ProductType : IComparable<ProductType>, IComparable
 {
     public static readonly ProductType Professional = new("Professional", AvType.Professional);
     public static readonly ProductType Runtime = new("Runtime", AvType.Runtime);
@@ -72,4 +72,6 @@ public class ProductType : IComparable<ProductType>
         return Type.CompareTo(other.Type);
     }
     public override string ToString() => Name;
+
+    public int CompareTo(object? obj) => CompareTo(obj as ProductType);
 }

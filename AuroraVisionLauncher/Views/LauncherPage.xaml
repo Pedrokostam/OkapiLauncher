@@ -48,6 +48,7 @@
             <CollectionViewSource.SortDescriptions>
                 <scm:SortDescription PropertyName="Compatibility" />
                 <scm:SortDescription Direction="Descending" PropertyName="Version" />
+                <scm:SortDescription PropertyName="Type" />
                 <scm:SortDescription PropertyName="Name" />
             </CollectionViewSource.SortDescriptions>
         </CollectionViewSource>
