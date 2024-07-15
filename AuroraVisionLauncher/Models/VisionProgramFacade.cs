@@ -20,22 +20,24 @@ public partial class VisionProjectFacade : ObservableObject, IVisionProject
     public string Path { get; }
     public ProductType Type { get; }
     public ProductBrand Brand { get; }
+    public DateTime DateModified { get; }
 
     public bool Exists => File.Exists(Path);
 
     IAvVersion IProduct.Version => Version;
 
     public VisionProjectFacade(VisionProject visprog)
-        : this(visprog.Name, visprog.Version, visprog.Path, visprog.Type, visprog.Brand)
+        : this(visprog.Name, visprog.Version, visprog.Path, visprog.Type, visprog.Brand, visprog.DateModified)
     {
     }
-    public VisionProjectFacade(string name, IAvVersion version, string path, ProductType type, ProductBrand brand)/*:this(new VisionProgram(name,new(version),path,type))*/
+    public VisionProjectFacade(string name, IAvVersion version, string path, ProductType type, ProductBrand brand, DateTime dateModified)/*:this(new VisionProgram(name,new(version),path,type))*/
     {
         Name = name;
         Path = path;
         Brand = brand;
         Type = type;
         Version = new AvVersionFacade(version);
+        DateModified = dateModified;
     }
     [RelayCommand]
     private void CopyPathToClipboard()

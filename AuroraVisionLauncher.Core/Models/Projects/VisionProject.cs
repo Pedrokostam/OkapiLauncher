@@ -14,13 +14,15 @@ namespace AuroraVisionLauncher.Core.Models.Projects
         public ProductBrand Brand { get; }
         public string Path { get; }
         public ProductType Type { get; }
-        internal VisionProject(string name, AvVersion version, ProductBrand brand, string path, ProductType type)
+        public DateTime DateModified { get; }
+        internal VisionProject(string name, AvVersion version, ProductBrand brand, string path, ProductType type, DateTime dateModified)
         {
             Name = name;
             Version = version;
             Brand = brand;
             Path = path;
             Type = type;
+            DateModified = dateModified;
         }
         public bool Exists => File.Exists(Path);
 

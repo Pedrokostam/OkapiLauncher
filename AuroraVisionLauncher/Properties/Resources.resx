@@ -355,4 +355,7 @@
   <data name="ProjectProductTypeRuntimeLabel" xml:space="preserve">
     <value>Runtime application</value>
   </data>
+  <data name="ProgramDetailsDateModified" xml:space="preserve">
+    <value>Date modified: </value>
+  </data>
 </root>

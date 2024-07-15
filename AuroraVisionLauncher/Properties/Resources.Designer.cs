@@ -421,6 +421,15 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Date modified: .
+        /// </summary>
+        public static string ProgramDetailsDateModified {
+            get {
+                return ResourceManager.GetString("ProgramDetailsDateModified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Path: .
         /// </summary>
         public static string ProgramDetailsLocation {

@@ -88,6 +88,7 @@ public static class ProjectReader
 
     public static VisionProject OpenProject(string filepath)
     {
+        var dateModified = File.GetLastWriteTimeUtc(filepath);
         var header = GetHeader(filepath);
         AvVersion version;
         string name;
@@ -109,7 +110,8 @@ public static class ProjectReader
             brand: header.Brand,
             type: header.Type,
             name: name,
-            version: version
+            version: version,
+            dateModified:dateModified
             );
         return project;
     }
