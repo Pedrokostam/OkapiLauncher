@@ -130,7 +130,7 @@
                                 ItemsSource="{Binding RecentlyOpenedFiles}">
                                 <MenuItem.ItemContainerStyle>
                                     <Style BasedOn="{StaticResource MahApps.Styles.MenuItem}" TargetType="MenuItem">
-                                        <Setter Property="Header" Value="{Binding FilePath, Converter={StaticResource PathToFilenameConverter}, ConverterParameter=30}" />
+                                        <Setter Property="Header" Value="{Binding FilePath, Converter={StaticResource PathToFilenameConverter}, ConverterParameter=80}" />
                                         <Setter Property="ToolTip">
                                             <Setter.Value>
                                                 <StackPanel>
