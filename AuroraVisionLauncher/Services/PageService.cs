@@ -19,6 +19,7 @@ public class PageService : IPageService
         Configure<LauncherViewModel, LauncherPage>();
         Configure<SettingsViewModel, SettingsPage>();
         Configure<InstalledAppsViewModel, InstalledAppsPage>();
+        Configure<ProcessOverviewViewModel, ProcessOverviewPage>();
     }
 
     public Type GetPageType(string key)

@@ -11,16 +11,16 @@ using AuroraVisionLauncher.Core.Models;
 using AuroraVisionLauncher.Helpers;
 using AuroraVisionLauncher.Models;
 using AuroraVisionLauncher.Models.Messages;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 
 namespace AuroraVisionLauncher.Services;
-public class RecentlyOpenedFilesService : IRecentlyOpenedFilesService
+public class RecentlyOpenedFilesService :ObservableRecipient, IRecentlyOpenedFilesService
 {
     private readonly string Key = "LastOpenedFiles";
-    private readonly IMessenger _messenger;
     const int FileCountLimit = 30;
     private List<RecentlyOpenedFile> LastOpenedPaths => (List<RecentlyOpenedFile>)App.Current.Properties[Key]!;
-    public RecentlyOpenedFilesService(IMessenger messenger)
+    public RecentlyOpenedFilesService(IMessenger messenger):base(messenger)
     {
         //App.Current.Properties[Key] = new List<RecentlyOpenedFile>();
         if (!App.Current.Properties.Contains(Key))
@@ -46,7 +46,7 @@ public class RecentlyOpenedFilesService : IRecentlyOpenedFilesService
             App.Current.Properties[Key] = list;
         }
 
-        this._messenger = messenger;
+        IsActive = true;
     }
     public IEnumerable<RecentlyOpenedFileFacade> GetLastOpenedFiles() => GetFacades();
     public void AddLastFile(string file)
@@ -59,7 +59,7 @@ public class RecentlyOpenedFilesService : IRecentlyOpenedFilesService
             LastOpenedPaths.RemoveAt(FileCountLimit);
         }
         IEnumerable<RecentlyOpenedFileFacade> enumerable = GetFacades();
-        _messenger.Send(new RecentFilesChangedMessage(enumerable));
+        Messenger.Send(new RecentFilesChangedMessage(enumerable));
     }
 
     private IEnumerable<RecentlyOpenedFileFacade> GetFacades()

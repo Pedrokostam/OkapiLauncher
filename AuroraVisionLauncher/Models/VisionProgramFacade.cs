@@ -1,33 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using AuroraVisionLauncher.Core.Models.Programs;
+using AuroraVisionLauncher.Core.Models;
+using AuroraVisionLauncher.Core.Models.Projects;
 using AuroraVisionLauncher.Helpers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 namespace AuroraVisionLauncher.Models;
-public partial class VisionProgramFacade : ObservableObject, IVisionProgram
+public partial class VisionProjectFacade : ObservableObject, IVisionProject
 {
-    private readonly VisionProgram _visionProgram;
-    public string Name => _visionProgram.Name;
-    public Version Version => _visionProgram.Version;
-    public Version? NonMissingVersion => Version == VisionProgram.MissingVersion ? null : Version;
-    public string Path => _visionProgram.Path;
-    public ProgramType Type => _visionProgram.Type;
+    public string Name { get; }
+    public AvVersionFacade Version { get; }
+    public AvVersionFacade? VersionNonMissing => Version.IsUnknown ? null : Version;
+    public string Path { get; }
+    public ProductType Type { get; }
+    public ProductBrand Brand { get; }
+    public DateTime DateModified { get; }
 
-    public bool Exists => _visionProgram.Exists;
+    public bool Exists => File.Exists(Path);
 
-    public VisionProgramFacade(VisionProgram visprog)
+    IAvVersion IProduct.Version => Version;
+
+    public VisionProjectFacade(VisionProject visprog)
+        : this(visprog.Name, visprog.Version, visprog.Path, visprog.Type, visprog.Brand, visprog.DateModified)
     {
-        _visionProgram = visprog;
     }
-    public VisionProgramFacade(string name, Version version, string path, ProgramType type):this(new VisionProgram(name,version,path,type))
+    public VisionProjectFacade(string name, IAvVersion version, string path, ProductType type, ProductBrand brand, DateTime dateModified)/*:this(new VisionProgram(name,new(version),path,type))*/
     {
-            
+        Name = name;
+        Path = path;
+        Brand = brand;
+        Type = type;
+        Version = new AvVersionFacade(version);
+        DateModified = dateModified;
     }
     [RelayCommand]
     private void CopyPathToClipboard()
@@ -35,5 +45,7 @@ public partial class VisionProgramFacade : ObservableObject, IVisionProgram
         Clipboard.SetText(Path);
     }
     [RelayCommand]
-    private void OpenProgramFolder() => ExplorerHelper.OpenExplorer(Path);
+    private void OpenProgramFolder() => ExplorerHelper.OpenExplorerAndSelect(Path);
+
+    public override string ToString() => $"{Name}, {Type}, {Version}";
 }

@@ -70,7 +70,43 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copy executable path to clipboard.
+        ///   Looks up a localized string similar to Deep Learning.
+        /// </summary>
+        public static string AppProductTypeDeepLearningLabel {
+            get {
+                return ResourceManager.GetString("AppProductTypeDeepLearningLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Library.
+        /// </summary>
+        public static string AppProductTypeLibraryLabel {
+            get {
+                return ResourceManager.GetString("AppProductTypeLibraryLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Studio Professional.
+        /// </summary>
+        public static string AppProductTypeProfessionalLabel {
+            get {
+                return ResourceManager.GetString("AppProductTypeProfessionalLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Studio Runtime.
+        /// </summary>
+        public static string AppProductTypeRuntimeLabel {
+            get {
+                return ResourceManager.GetString("AppProductTypeRuntimeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy file path to clipboard.
         /// </summary>
         public static string AvAppCopyPath {
             get {
@@ -97,6 +133,15 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Kill all active processes.
+        /// </summary>
+        public static string AvAppKillAllProcesses {
+            get {
+                return ResourceManager.GetString("AvAppKillAllProcesses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Launch the application without loading any program.
         /// </summary>
         public static string AvAppLaunchWithNoProgram {
@@ -115,11 +160,74 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Active processes: {0}.
+        /// </summary>
+        public static string AvAppProcessesActive {
+            get {
+                return ResourceManager.GetString("AvAppProcessesActive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy the command-line string.
         /// </summary>
         public static string CommandLineCopy {
             get {
                 return ResourceManager.GetString("CommandLineCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can load the specified program. Studio project may be upgraded in the process, if their version is lower..
+        /// </summary>
+        public static string CompatibilityCompatibleDescription {
+            get {
+                return ResourceManager.GetString("CompatibilityCompatibleDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot load the program.
+        /// </summary>
+        public static string CompatibilityIncompatibleDescription {
+            get {
+                return ResourceManager.GetString("CompatibilityIncompatibleDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to May load studio projects of earlier versions. User may be required to fix issues with changed ports..
+        /// </summary>
+        public static string CompatibilityOutdatedDescription {
+            get {
+                return ResourceManager.GetString("CompatibilityOutdatedDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version of project is unknown - cannot determine compatibility.
+        /// </summary>
+        public static string CompatibilityUnknownDescription {
+            get {
+                return ResourceManager.GetString("CompatibilityUnknownDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opened on {0:yyyy-MM-dd HH:mm:ss}.
+        /// </summary>
+        public static string DatetimeOpenedOn {
+            get {
+                return ResourceManager.GetString("DatetimeOpenedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group by:  .
+        /// </summary>
+        public static string InstalledAppsGroupBy {
+            get {
+                return ResourceManager.GetString("InstalledAppsGroupBy", resourceCulture);
             }
         }
         
@@ -286,11 +394,38 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bring window to focus.
+        /// </summary>
+        public static string ProcessOverviewBringToFocus {
+            get {
+                return ResourceManager.GetString("ProcessOverviewBringToFocus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kill process.
+        /// </summary>
+        public static string ProcessOverviewKill {
+            get {
+                return ResourceManager.GetString("ProcessOverviewKill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy program path to clipboard.
         /// </summary>
         public static string ProgramDetailsCopyPath {
             get {
                 return ResourceManager.GetString("ProgramDetailsCopyPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date modified: .
+        /// </summary>
+        public static string ProgramDetailsDateModified {
+            get {
+                return ResourceManager.GetString("ProgramDetailsDateModified", resourceCulture);
             }
         }
         
@@ -381,6 +516,24 @@ namespace AuroraVisionLauncher.Properties {
         public static string ProgramDetailsSavedWithVersionMissing {
             get {
                 return ResourceManager.GetString("ProgramDetailsSavedWithVersionMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Studio professional project.
+        /// </summary>
+        public static string ProjectProductTypeProfessionalLabel {
+            get {
+                return ResourceManager.GetString("ProjectProductTypeProfessionalLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Runtime application.
+        /// </summary>
+        public static string ProjectProductTypeRuntimeLabel {
+            get {
+                return ResourceManager.GetString("ProjectProductTypeRuntimeLabel", resourceCulture);
             }
         }
         
@@ -507,6 +660,15 @@ namespace AuroraVisionLauncher.Properties {
         public static string ShellGoBackButton {
             get {
                 return ResourceManager.GetString("ShellGoBackButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kill all child windows.
+        /// </summary>
+        public static string ShellKillChildrenButton {
+            get {
+                return ResourceManager.GetString("ShellKillChildrenButton", resourceCulture);
             }
         }
         

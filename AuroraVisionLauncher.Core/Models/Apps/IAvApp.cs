@@ -1,18 +1,17 @@
-﻿using AuroraVisionLauncher.Core.Models.Programs;
+﻿using AuroraVisionLauncher.Core.Models.Projects;
 
 namespace AuroraVisionLauncher.Core.Models.Apps;
 
-public interface IAvApp
+public interface IAvApp : IProduct, IComparable<IAvApp>
 {
-    string ExePath { get; }
-    bool IsDevelopmentBuild { get; }
+    string Path { get; }
+    string RootPath { get; }
+    bool IsDevelopmentVersion { get; }
     string Name { get; }
-    Version Version { get; }
-    AvAppType AppType { get; }
-    Version? SecondaryVersion { get; }
+    IAvVersion? SecondaryVersion { get; }
     CommandLineInterface Interface { get; }
-
-    bool CheckIfProcessIsRunning();
-    bool CanOpen(ProgramType type);
-    bool IsNativeApp(ProgramType type);
+    string ProcessName { get; }
+    bool CanOpen(IVisionProject type);
+    bool IsNativeApp(IVisionProject type);
+    public bool IsExecutable { get; }
 }

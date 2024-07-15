@@ -4,7 +4,7 @@
     xmlns:mahicon="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mod="clr-namespace:AuroraVisionLauncher.Models"
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties">
-    <DataTemplate DataType="{x:Type mod:VisionProgramFacade}">
+    <DataTemplate DataType="{x:Type mod:VisionProjectFacade}">
         <Grid Margin="20,5,20,5">
             <Grid.Resources>
                 <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="TextBlock">
@@ -34,6 +34,7 @@
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" />
@@ -59,8 +60,12 @@
             <TextBlock
                 Grid.Row="1"
                 Grid.Column="1"
-                Style="{StaticResource ValueStyle}"
-                Text="{Binding Type, FallbackValue={x:Static properties:Resources.ProgramDetailsProjectTypeFallback}}" />
+                Style="{StaticResource ValueStyle}">
+                    <Run Text="{Binding Type, FallbackValue={x:Static properties:Resources.ProgramDetailsProjectTypeFallback}, Mode=OneWay,Converter={StaticResource ProjectTypeToString}, StringFormat={}{0} -}" />
+                    <Run Text="{Binding Brand, FallbackValue={x:Static properties:Resources.ProgramDetailsProjectTypeFallback}, Mode=OneWay}" />
+                <!--Text="{Binding Type, FallbackValue={x:Static properties:Resources.ProgramDetailsProjectTypeFallback}, Converter={StaticResource ProjectTypeToString}}" />-->
+            </TextBlock>
+
             <!--  VERSION  -->
             <TextBlock
                 Grid.Row="2"
@@ -71,14 +76,25 @@
                 Grid.Row="2"
                 Grid.Column="1"
                 Style="{StaticResource ValueStyle}"
-                Text="{Binding NonMissingVersion, FallbackValue={x:Static properties:Resources.ProgramDetailsSavedWithVersionFallback},TargetNullValue={x:Static properties:Resources.ProgramDetailsSavedWithVersionMissing}}" />
-            <!--  LOCATION  -->
+                Text="{Binding VersionNonMissing, FallbackValue={x:Static properties:Resources.ProgramDetailsSavedWithVersionFallback}, TargetNullValue={x:Static properties:Resources.ProgramDetailsSavedWithVersionMissing}}" />
+            <!--  DATE  -->
             <TextBlock
                 Grid.Row="3"
                 Grid.Column="0"
                 Style="{StaticResource TitleStyle}"
+                Text="{x:Static properties:Resources.ProgramDetailsDateModified}" />
+            <TextBlock
+                Grid.Row="3"
+                Grid.Column="1"
+                Style="{StaticResource ValueStyle}"
+                Text="{Binding DateModified, Converter={StaticResource UtcToLocalConverter}, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+            <!--  LOCATION  -->
+            <TextBlock
+                Grid.Row="4"
+                Grid.Column="0"
+                Style="{StaticResource TitleStyle}"
                 Text="{x:Static properties:Resources.ProgramDetailsLocation}" />
-            <Grid Grid.Row="3" Grid.Column="1">
+            <Grid Grid.Row="4" Grid.Column="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="auto" />

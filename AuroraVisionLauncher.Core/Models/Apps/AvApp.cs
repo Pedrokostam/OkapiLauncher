@@ -6,145 +6,45 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Timers;
-using AuroraVisionLauncher.Core.Models.Programs;
+using AuroraVisionLauncher.Core.Models.Projects;
 
 namespace AuroraVisionLauncher.Core.Models.Apps;
 public record AvApp : IAvApp
 {
-    private static readonly Dictionary<string, Configuration> AvAppConfigurations = new(StringComparer.OrdinalIgnoreCase)
-    {
-        {"Aurora Vision Studio",    new Configuration(AvAppType.Professional,CommandLineInterface.Studio, [ProgramType.AdaptiveVisionProject,ProgramType.AuroraVisionProject])},
-        {"Adaptive Vision Studio",  new Configuration(AvAppType.Professional,CommandLineInterface.Studio, [ProgramType.AdaptiveVisionProject])},
-        {"FabImage Studio",         new Configuration(AvAppType.Professional,CommandLineInterface.Studio, [ProgramType.FabImageProject])},
-        {"Aurora Vision Executor",  new Configuration(AvAppType.Runtime,CommandLineInterface.Executor, [ProgramType.AdaptiveVisionProject,ProgramType.AuroraVisionProject,ProgramType.AuroraVisionRuntime])},
-        {"Adaptive Vision Executor",new Configuration(AvAppType.Runtime,CommandLineInterface.Executor, [ProgramType.AdaptiveVisionProject])},
-        {"FabImage Runtime",        new Configuration(AvAppType.Runtime,CommandLineInterface.Executor, [ProgramType.FabImageRuntime,ProgramType.FabImageProject])},
-        {"Deep Learning Editor",    new Configuration(AvAppType.DeepLearning,CommandLineInterface.None, [])},
-    };
-
-    public string ExePath { get; }
-    public Version Version { get; }
-    public Version? SecondaryVersion { get; }
+    public string Path { get; }
+    public string RootPath { get; }
+    public AvVersion Version { get; }
+    public AvVersion? SecondaryVersion { get; }
     public string Name { get; }
-    public AvAppType AppType { get; }
-    public bool IsDevelopmentBuild => Version.Build >= 1000;
-    readonly private FileVersionInfo _originalInfo;
-    private readonly List<ProgramType> _supportedPrograms;
+    public string ProcessName { get; }
+    public bool IsExecutable => Type != ProductType.Library;
+    public bool IsDevelopmentVersion => Version.Build >= 1000;
     public CommandLineInterface Interface { get; }
-    protected IReadOnlyCollection<ProgramType> SupportedProgramTypes => _supportedPrograms.AsReadOnly();
-    internal AvApp(MultiVersion mvinfo, Configuration configuration)
+    protected IReadOnlyCollection<ProductType> SupportedProgramTypes => Type.SupportedAvTypes;
+
+    IAvVersion IProduct.Version => Version;
+
+    IAvVersion? IAvApp.SecondaryVersion => SecondaryVersion;
+
+    public ProductBrand Brand { get; }
+    public ProductType Type { get; }
+
+    internal AvApp(FileVersionInfo mainInfo, AvVersion? secondaryVersion, ProductType type, ProductBrand brand, string rootInstallationPath)
     {
-        ExePath = mvinfo.Primary.FileName;
-        Version = ParseVersion(mvinfo.Primary) ?? throw new VersionNotFoundException("The ProductVersion field is empty");
-        SecondaryVersion = mvinfo.Secondary is not null ? ParseVersion(mvinfo.Secondary) : null;
-        Name = mvinfo.Primary.ProductName ?? "N/A";
-        _originalInfo = mvinfo.Primary;
-
-        _supportedPrograms = new List<ProgramType>(configuration.SupportedPrograms);
-        AppType = configuration.AppType;
-        Interface = configuration.Interface;
+        Path = mainInfo.FileName;
+        Version = AvVersion.Parse(mainInfo) ?? throw new VersionNotFoundException("The ProductVersion field is empty");
+        SecondaryVersion = secondaryVersion;
+        Name = mainInfo.ProductName ?? "N/A";
+        ProcessName = System.IO.Path.GetFileNameWithoutExtension(mainInfo.InternalName!);
+        Type = type;
+        Brand = brand;
+        RootPath = rootInstallationPath;
     }
-    /// <summary>
-    /// Checks if any process associated with the executable is running.
-    /// </summary>
-    /// <returns><see langword="true"/> if the process is running; <see langword="false"/> if it is not running, or it could not be checked.</returns>
-    public bool CheckIfProcessIsRunning()
+    public bool CanOpen(IVisionProject project)
     {
-        try
-        {
-            var p = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(_originalInfo.InternalName));
-
-            return p.Any(x => string.Equals(x.MainModule?.FileName, ExePath, StringComparison.OrdinalIgnoreCase));
-        }
-        catch (InvalidOperationException)
-        {
-            return false;
-        }
+        return SupportedProgramTypes.Contains(project.Type) && Brand.SupportsBrand(project.Brand);
     }
-
-    protected static Version? ParseVersion(FileVersionInfo fvinfo)
-    {
-        string? productVersion = fvinfo.ProductVersion;
-        if (string.IsNullOrWhiteSpace(productVersion))
-        {
-            return null;
-        }
-        if (productVersion.Contains(' '))
-        {
-            productVersion = productVersion.Split(' ', StringSplitOptions.TrimEntries)[0];
-        }
-        var ver = Version.Parse(productVersion);
-        return ver;
-    }
-
-    static MultiVersion? FindInfo(string folder)
-
-    {
-        if (string.IsNullOrWhiteSpace(folder))
-        {
-            return null;
-        }
-        var dir = new DirectoryInfo(folder);
-
-        if (dir.Name.Contains("sdk", StringComparison.OrdinalIgnoreCase))
-        {
-            // environment variables for studio proffesional points to AVL libraries, which are in the SDK subfolder
-            dir = dir.Parent!;
-        }
-        else if (dir.Parent!.Name.Contains("Deep Learning", StringComparison.OrdinalIgnoreCase))
-        {
-            // deep learning also points to library, so 1 step back and the go for deeplearning editor
-            dir = new DirectoryInfo(Path.Join(dir.Parent!.FullName, "Tools", "DeepLearningEditor"));
-        }
-
-        var exes = dir.GetFiles("*.exe");
-
-        if (folder.Contains("Professional", StringComparison.OrdinalIgnoreCase))
-        {
-            var primary = exes.FirstOrDefault(x => x.Name.Contains("Studio", StringComparison.OrdinalIgnoreCase));
-            return MultiVersion.Create(primary);
-        }
-        if (folder.Contains("Runtime", StringComparison.OrdinalIgnoreCase))
-        {
-            var primary = exes.FirstOrDefault(x => x.Name.Contains("Executor", StringComparison.OrdinalIgnoreCase));
-            return MultiVersion.Create(primary);
-        }
-        if (folder.Contains("Deep Learning", StringComparison.OrdinalIgnoreCase))
-        {
-            // deep learning editor
-            var primary = exes.FirstOrDefault(x => x.Name.Contains("Editor", StringComparison.OrdinalIgnoreCase));
-            // uninstaller - it has the version of DL listed on the site (what hack?)
-            var secondary = dir.Parent!.Parent!.GetFiles("*.exe").FirstOrDefault(x => x.Name.Contains("unins", StringComparison.OrdinalIgnoreCase));
-            return MultiVersion.Create(primary, secondary);
-        }
-        return null;
-    }
-    private static AvApp Create(MultiVersion mvinfo)
-    {
-        if (AvAppConfigurations.TryGetValue(mvinfo.Primary.ProductName ?? "", out Configuration? configuration))
-        {
-            return new AvApp(mvinfo, configuration);
-
-        }
-        throw new InvalidOperationException($"Unsupported product type: {mvinfo.Primary.ProductName}");
-    }
-
-    public static bool TryCreate(string folder, [NotNullWhen(true)] out AvApp? app)
-    {
-        if (FindInfo(folder) is not MultiVersion fileVersionInfo)
-        {
-            app = null;
-            return false;
-        }
-        app = Create(fileVersionInfo);
-        return true;
-    }
-
-    public bool CanOpen(ProgramType type)
-    {
-        return SupportedProgramTypes.Contains(type);
-    }
-    private static double VersionToDouble(Version version, Version baseVersion)
+    private static double VersionToDouble(IAvVersion version, IAvVersion baseVersion)
     {
         var balance = 1.0d;
         // revision doesnt really matter, started with so it will never move it below 0
@@ -168,19 +68,19 @@ public record AvApp : IAvApp
 
         return balance;
     }
-    public static int GetClosestApp(IEnumerable<IAvApp> apps, IVisionProgram info)
+    public static int GetClosestApp(IEnumerable<IAvApp> apps, IVisionProject project)
     {
         var weights = new List<double>();
         bool hasPositive = false;
         bool hasNegative = false;
         foreach (IAvApp app in apps)
         {
-            var score = VersionToDouble(app.Version, info.Version);
-            if (!app.CanOpen(info.Type))
+            var score = VersionToDouble(app.Version, project.Version);
+            if (!app.CanOpen(project))
             {
                 score = double.MinValue;
             }
-            if (!app.IsNativeApp(info.Type))
+            if (!app.IsNativeApp(project))
             {
                 // lower non-native app score by 100 million
                 // it is lower than any negative score can get, so they will always be chosen
@@ -211,14 +111,31 @@ public record AvApp : IAvApp
     }
     protected string ShortForm() => $"{Name} {Version}";
     public override string ToString() => ShortForm();
-
-    public bool IsNativeApp(ProgramType type)
+    public bool IsNativeApp(IVisionProject type) => IsNativeApp(this, type);
+    public static bool IsNativeApp(IAvApp app, IVisionProject project)
     {
-        return AppType switch
+        return app.Type == project.Type;
+    }
+
+    public int CompareTo(IAvApp? other)
+    {
+        if (other == null)
+            return 1;
+        int type = Type.CompareTo(other.Type);
+        if (type != 0)
         {
-            AvAppType.Professional => type == ProgramType.AuroraVisionProject || type == ProgramType.AdaptiveVisionProject || type == ProgramType.FabImageProject,
-            AvAppType.Runtime => type == ProgramType.AuroraVisionRuntime || type == ProgramType.FabImageRuntime,
-            _ => false,
-        };
+            return type;
+        }
+        int brand = Brand.CompareTo(other.Brand);
+        if (brand != 0)
+        {
+            return brand;
+        }
+        int ver = Version.CompareTo(other.Version);
+        if (ver != 0)
+        {
+            return -ver;
+        }
+        return Name.CompareTo(other.Name);
     }
 }

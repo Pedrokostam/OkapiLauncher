@@ -1,12 +1,17 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Navigation;
-
+using AuroraVisionLauncher.Contracts;
 using AuroraVisionLauncher.Contracts.Services;
 using AuroraVisionLauncher.Contracts.ViewModels;
 using AuroraVisionLauncher.Contracts.Views;
-
+using AuroraVisionLauncher.Core.Models.Apps;
+using AuroraVisionLauncher.Models;
+using AuroraVisionLauncher.ViewModels;
+using AuroraVisionLauncher.Views;
 using MahApps.Metro.Controls;
+using Windows.ApplicationModel.VoiceCommands;
 
 namespace AuroraVisionLauncher.Services;
 
@@ -23,11 +28,23 @@ public class WindowManagerService : IWindowManagerService
         _serviceProvider = serviceProvider;
         _pageService = pageService;
     }
+    private string GetWindowTitle(string key, object? parameter)
+    {
+        if(string.Equals(key,typeof(ProcessOverviewViewModel).FullName, StringComparison.Ordinal))
+        {
+            if (parameter is AvAppFacade app)
+            {
+                return $"{app.NameWithVersion} - Process Overview";
+            }
+            return $"Process Overview";
+        }
+        return (string)(Application.Current.FindResource("AppDisplayName"));
+    }
 
     public void OpenInNewWindow(string key, object? parameter = null)
     {
         var window = GetWindow(key);
-        if (window != null)
+        if (window != null )
         {
             window.Activate();
         }
@@ -35,7 +52,7 @@ public class WindowManagerService : IWindowManagerService
         {
             window = new MetroWindow()
             {
-                Title = "AuroraVisionLauncher",
+                Title = GetWindowTitle(key, parameter),
                 Style = Application.Current.FindResource("CustomMetroWindow") as Style,
             };
             var frame = new Frame()
@@ -69,7 +86,7 @@ public class WindowManagerService : IWindowManagerService
         foreach (Window window in Application.Current.Windows)
         {
             var dataContext = window.GetDataContext();
-            if (string.Equals(dataContext?.GetType().FullName, key, StringComparison.Ordinal))
+            if (string.Equals(dataContext?.GetType().FullName, key, StringComparison.Ordinal) && dataContext is not ITransientWindow)
             {
                 return window;
             }
@@ -100,6 +117,17 @@ public class WindowManagerService : IWindowManagerService
             }
 
             window.Closed -= OnWindowClosed;
+        }
+    }
+
+    public void CloseChildWindows()
+    {
+        foreach (Window window in Application.Current.Windows)
+        {
+            if (window is not ShellWindow)
+            {
+                window.Close();
+            }
         }
     }
 }

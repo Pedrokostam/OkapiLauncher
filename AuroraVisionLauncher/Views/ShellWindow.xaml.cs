@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using AuroraVisionLauncher.Contracts.Views;
 using AuroraVisionLauncher.Models.Messages;
 using AuroraVisionLauncher.ViewModels;
+using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using MahApps.Metro.Controls;
 
@@ -15,7 +16,26 @@ public partial class ShellWindow : MetroWindow, IShellWindow
     {
         InitializeComponent();
         DataContext = viewModel;
+#if DEBUG
+        var mi = new MenuItem
+        {
+            Header = "Force GC.Collect",
+            Command = new RelayCommand(Collect),
+        };
+        var sep = new Separator();
+        FileMenu.Items.Insert(FileMenu.Items.Count - 2, sep);
+        FileMenu.Items.Insert(FileMenu.Items.Count - 2, mi);
+#endif
     }
+#if DEBUG
+    private void Collect()
+    {
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+    }
+#endif
+
+
 
     public Frame GetNavigationFrame()
         => shellFrame;

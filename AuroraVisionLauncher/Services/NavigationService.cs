@@ -1,8 +1,10 @@
-﻿using System.Windows.Controls;
+﻿using System.Diagnostics;
+using System.Windows.Controls;
 using System.Windows.Navigation;
 
 using AuroraVisionLauncher.Contracts.Services;
 using AuroraVisionLauncher.Contracts.ViewModels;
+using Windows.Media.Playback;
 
 namespace AuroraVisionLauncher.Services;
 
@@ -49,13 +51,13 @@ public class NavigationService : INavigationService
         }
     }
 
-    public bool NavigateTo(string pageKey, object? parameter = null, bool clearNavigation = false)
+    public bool NavigateTo(string pageKey, object? parameter = null)
     {
         var pageType = _pageService.GetPageType(pageKey);
 
         if (_frame.Content?.GetType() != pageType || (parameter != null && !parameter.Equals(_lastParameterUsed)))
         {
-            _frame.Tag = clearNavigation;
+            //_frame.Tag = clearNavigation;
             var page = _pageService.GetPage(pageKey);
             var navigated = _frame.Navigate(page, parameter);
             if (navigated)
@@ -81,19 +83,22 @@ public class NavigationService : INavigationService
     {
         if (sender is Frame frame)
         {
-            bool clearNavigation = (bool)frame.Tag;
-            if (clearNavigation)
-            {
-                frame.CleanNavigation();
-            }
+            Debug.WriteLine($"History count: {frame?.BackStack?.Cast<object>()?.Count()}");
+            Debug.WriteLine($"Uri: {frame?.CurrentSource}");
+            //bool clearNavigation = (bool)frame.Tag;
+            //if (clearNavigation)
+            //{
+            //    frame.CleanNavigation();
+            //}
+            frame?.CleanNavigation();
 
-            var dataContext = frame.GetDataContext();
+            var dataContext = frame?.GetDataContext();
             if (dataContext is INavigationAware navigationAware)
             {
                 navigationAware.OnNavigatedTo(e.ExtraData);
             }
 
-            Navigated?.Invoke(sender, dataContext.GetType().FullName);
+            Navigated?.Invoke(sender, dataContext!.GetType().FullName!);
         }
     }
 }

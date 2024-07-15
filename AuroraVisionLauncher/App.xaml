@@ -17,14 +17,13 @@
                     <conv:UtcDatetimeToLocalConverter x:Key="UtcToLocalConverter" />
                     <conv:IndexToKeyShortcutIndex x:Key="IndexConverter" />
                     <conv:PathToFilenameConverter x:Key="PathToFilenameConverter" />
+                    <conv:ProjectTypeToStringConverter x:Key="ProjectTypeToString" />
+                    <conv:CompatibilityToDescriptionConverter x:Key="CompatibilityDescription" />
                 </ResourceDictionary>
                 <ResourceDictionary Source="/Styles/_FontSizes.xaml" />
                 <ResourceDictionary Source="/Styles/_Thickness.xaml" />
                 <ResourceDictionary Source="/Styles/MetroWindow.xaml" />
                 <ResourceDictionary Source="/Styles/TextBlock.xaml" />
-                <ResourceDictionary Source="/DataTemplates/AvAppFacade.xaml" />
-                <ResourceDictionary Source="/DataTemplates/CommandLineOptions.xaml" />
-                <ResourceDictionary Source="/DataTemplates/ProgramInformation.xaml" />
                 <!--
                     MahApps.Metro resource dictionaries.
                     Learn more about using MahApps.Metro at https://mahapps.com/
@@ -33,9 +32,17 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Clean/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.Buttons.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Dark.Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Light.Blue.xaml" />-->
                 <!--  Accent and AppTheme setting  -->
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.Blue.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />
+                <ResourceDictionary Source="/Styles/Themes/Dark.xaml" />
+                <ResourceDictionary Source="/Styles/Themes/Light.xaml" />
+
+
+
+                <ResourceDictionary Source="/DataTemplates/AvAppFacade.xaml" />
+                <ResourceDictionary Source="/DataTemplates/CommandLineOptions.xaml" />
+                <ResourceDictionary Source="/DataTemplates/ProgramInformation.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

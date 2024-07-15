@@ -161,7 +161,7 @@ public class FileAssociationService : IFileAssociationService
                 {
                     FileName = Environment.ProcessPath,
                     UseShellExecute = true,
-                    Verb = "runas", 
+                    Verb = "runas",
                 });
                 Environment.Exit(0);
             }
@@ -195,8 +195,8 @@ public class FileAssociationService : IFileAssociationService
         using var fileExts = CreateOrOpenRegistryPathWritable("Software", "Microsoft", "Windows", "CurrentVersion", "Explorer", "FileExts");
         foreach (var assoc in associations)
         {
-            using var assocKey = fileExts.OpenSubKey(assoc.Extension, writable: true);
-            assocKey?.DeleteSubKey("UserChoice", throwOnMissingSubKey: false);
+            using var subkey = fileExts.OpenSubKey(assoc.Extension,writable:true);
+            subkey?.DeleteSubKeyTree("", throwOnMissingSubKey: false);
         }
     }
 

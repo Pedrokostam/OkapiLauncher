@@ -12,7 +12,15 @@
             <Grid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Command="{Binding OpenContainingFolderCommand}" Header="{x:Static properties:Resources.AvAppOpenInstallationFolder}" />
-                    <MenuItem Command="{Binding LaunchWithoutProgramCommand}" Header="{x:Static properties:Resources.AvAppLaunchWithNoProgram}" />
+                    <MenuItem Command="{Binding CopyExecutablePathCommand}" Header="{x:Static properties:Resources.AvAppCopyPath}" />
+                    <MenuItem
+                        Command="{Binding LaunchWithoutProgramCommand}"
+                        Header="{x:Static properties:Resources.AvAppLaunchWithNoProgram}"
+                        Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <MenuItem
+                        Command="{Binding ShowProcessOverviewCommand}"
+                        Header="Open process overview window"
+                        Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </ContextMenu>
             </Grid.ContextMenu>
             <Rectangle Fill="Transparent" />
@@ -26,13 +34,14 @@
                     <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0">
-                    <Image Margin="0,0,8,0" Source="{Binding ExePath, Converter={StaticResource FileIconConverter}}" />
+                    <Image Margin="0,0,8,0" Source="{Binding Path, Converter={StaticResource FileIconConverter}}" />
                 </Grid>
                 <StackPanel
                     Grid.Column="2"
                     Margin="5,0,10,0"
                     VerticalAlignment="Center"
-                    Orientation="Horizontal">
+                    Orientation="Horizontal"
+                    Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <mahicon:PackIconMaterialDesign>
                         <mahicon:PackIconMaterialDesign.Style>
                             <Style TargetType="{x:Type mahicon:PackIconMaterialDesign}">
@@ -52,10 +61,10 @@
                             <Style TargetType="{x:Type TextBlock}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsLaunched}" Value="False">
-                                        <Setter Property="Text" Value="Closed" />
+                                        <Setter Property="Text" Value="Not running" />
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding IsLaunched}" Value="TRue">
-                                        <Setter Property="Text" Value="Running" />
+                                        <Setter Property="Text" Value="{Binding ActiveProcessesNumber, StringFormat={x:Static properties:Resources.AvAppProcessesActive}}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -63,7 +72,7 @@
                     </TextBlock>
                 </StackPanel>
                 <Button
-                    Grid.Column="3"
+                    Grid.Column="4"
                     Width="40"
                     Margin="3,5,3,5"
                     Command="{Binding CopyExecutablePathCommand}"
@@ -72,7 +81,7 @@
                 </Button>
                 <Button
                     x:Name="button"
-                    Grid.Column="4"
+                    Grid.Column="5"
                     Width="40"
                     Margin="3,5,3,5"
                     Command="{Binding OpenContainingFolderCommand}"
@@ -80,11 +89,12 @@
                     <mahicon:PackIconMaterial Kind="FolderOpen" />
                 </Button>
                 <Button
-                    Grid.Column="5"
+                    Grid.Column="3"
                     Width="40"
                     Margin="3,5,3,5"
                     Command="{Binding LaunchWithoutProgramCommand}"
-                    ToolTip="{x:Static properties:Resources.AvAppLaunchWithNoProgram}">
+                    ToolTip="{x:Static properties:Resources.AvAppLaunchWithNoProgram}"
+                    Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <mahicon:PackIconMaterial Kind="Launch" />
                 </Button>
                 <StackPanel
@@ -93,22 +103,23 @@
                     VerticalAlignment="Center"
                     TextBlock.FontSize="18">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock >
-                            <Run Text="{Binding Name, Mode=OneWay, StringFormat='{}{0} - '}"/>
-                            <Run Text="{Binding Version, Mode=OneWay, StringFormat='{}{0} '}"/>
+                        <TextBlock>
+                            <Run Text="{Binding Name, Mode=OneWay, StringFormat='{}{0} - '}" />
+                            <Run Text="{Binding Version, Mode=OneWay, StringFormat='{}{0} '}" />
                             <Run Text="{Binding SecondaryVersion, Mode=OneWay, TargetNullValue='', StringFormat='{}({0}) '}" />
                         </TextBlock>
                         <TextBlock
                             FontWeight="Bold"
                             Foreground="DarkOrange"
                             Text="{x:Static properties:Resources.AvAppDevelopmentVersion}"
-                            Visibility="{Binding IsDevelopmentBuild, Converter={StaticResource BoolVisibilityConverter}}" />
+                            Visibility="{Binding IsDevelopmentVersion, Converter={StaticResource BoolVisibilityConverter}}" />
                     </StackPanel>
                     <TextBlock
                         FontSize="16"
                         Foreground="Gray"
-                        Text="{Binding ExePath}"
-                        TextTrimming="CharacterEllipsis" />
+                        Text="{Binding Path}"
+                        TextTrimming="CharacterEllipsis"
+                        ToolTip="{Binding Path}" />
                 </StackPanel>
             </Grid>
         </Grid>
