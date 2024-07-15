@@ -10,4 +10,5 @@ public enum AppSortProperty
     Type,
     Brand,
     Version,
+    Name,
 }

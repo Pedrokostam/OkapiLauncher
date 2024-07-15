@@ -38,7 +38,7 @@
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
-                <Image Margin="0,0,8,0" Source="{Binding ExePath, Converter={StaticResource FileIconConverter}}" />
+                <Image Margin="0,0,8,0" Source="{Binding Path, Converter={StaticResource FileIconConverter}}" />
             </Grid>
             <StackPanel
                 Grid.Column="1"

@@ -9,6 +9,7 @@ using AuroraVisionLauncher.Contracts.Views;
 using AuroraVisionLauncher.Core.Models.Apps;
 using AuroraVisionLauncher.Models;
 using AuroraVisionLauncher.ViewModels;
+using AuroraVisionLauncher.Views;
 using MahApps.Metro.Controls;
 using Windows.ApplicationModel.VoiceCommands;
 
@@ -123,7 +124,7 @@ public class WindowManagerService : IWindowManagerService
     {
         foreach (Window window in Application.Current.Windows)
         {
-            if (window.GetDataContext() is not ShellViewModel)
+            if (window is not ShellWindow)
             {
                 window.Close();
             }

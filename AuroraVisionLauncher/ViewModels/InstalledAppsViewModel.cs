@@ -21,7 +21,7 @@ public partial class InstalledAppsViewModel : ObservableObject, INavigationAware
     private readonly IProcessManagerService _processManagerService;
     private readonly DispatcherTimer _timer;
     [ObservableProperty]
-    private AppSortProperty _sortProperty = AppSortProperty.Type;
+    private AppSortProperty _sortProperty = AppSortProperty.Name;
     private readonly List<AvAppFacade> _rawApps;
     public InstalledAppsViewModel(IAvAppFacadeFactory appFactory, IProcessManagerService processManagerService)
     {
@@ -56,6 +56,7 @@ public partial class InstalledAppsViewModel : ObservableObject, INavigationAware
             AppSortProperty.Type => new PropertyGroupDescription(nameof(AvAppFacade.Type), AppTypeToStringConverter.Instance),
             AppSortProperty.Brand => new PropertyGroupDescription(nameof(AvAppFacade.Brand)),
             AppSortProperty.Version => new PropertyGroupDescription(nameof(AvAppFacade.Version), InterfaceVersionConverter.Instance),
+            AppSortProperty.Name => new PropertyGroupDescription(nameof(AvAppFacade.Name)),
             _ => throw new NotSupportedException()
         };
         Apps.GroupDescriptions.Add(gd);
