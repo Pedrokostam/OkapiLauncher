@@ -17,15 +17,6 @@
         x:Key="Theme.ShowcaseBrush"
         options:Freeze="True"
         Color="#FF0078D7" />
-
-
-    <SolidColorBrush x:Key="Brushes.Compatibility.Compatible" Color="SpringGreen" />
-    <SolidColorBrush x:Key="Brushes.Compatibility.Incompatible" Color="Crimson" />
-    <SolidColorBrush x:Key="Brushes.Compatibility.Outdated" Color="Orange" />
-    <SolidColorBrush x:Key="Brushes.Compatibility.Unknown" Color="Gray" />
-
-    <SolidColorBrush x:Key="Brushes.Commandline.Background" Color="{StaticResource MahApps.Colors.ThemeBackground}" />
-
     <Color x:Key="MahApps.Colors.Highlight">#FF00589F</Color>
     <Color x:Key="MahApps.Colors.AccentBase">#FF0078D7</Color>
     <Color x:Key="MahApps.Colors.Accent">#CC0078D7</Color>
@@ -1106,4 +1097,13 @@
     <markupWithAssembly:StaticResourceExtension x:Key="MahApps.Brushes.ToggleSwitch.KnobFillOnPointerOver" ResourceKey="MahApps.Brushes.SystemControlHighlightChromeWhite" />
     <markupWithAssembly:StaticResourceExtension x:Key="MahApps.Brushes.ToggleSwitch.KnobFillOnPressed" ResourceKey="MahApps.Brushes.SystemControlHighlightAltChromeWhite" />
     <markupWithAssembly:StaticResourceExtension x:Key="MahApps.Brushes.ToggleSwitch.KnobFillOnDisabled" ResourceKey="MahApps.Brushes.SystemControlPageBackgroundBaseLow" />
+
+    <SolidColorBrush x:Key="Brushes.Compatibility.Compatible" Color="SpringGreen" />
+    <SolidColorBrush x:Key="Brushes.Compatibility.Incompatible" Color="Crimson" />
+    <SolidColorBrush x:Key="Brushes.Compatibility.Outdated" Color="Orange" />
+    <SolidColorBrush x:Key="Brushes.Compatibility.Unknown" Color="Gray" />
+
+    <SolidColorBrush x:Key="Brushes.Commandline.Background" Color="#FF252525" />
+
+    
 </ResourceDictionary>
