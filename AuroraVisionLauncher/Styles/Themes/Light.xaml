@@ -1106,10 +1106,10 @@
     <SolidColorBrush x:Key="Brushes.TextBlock.NotImportant" Color="#FF656565" />
 
 
-    <SolidColorBrush x:Key="Brushes.Commandline.App" Color="ForestGreen" />
-    <SolidColorBrush x:Key="Brushes.Commandline.Parameter" Color="RoyalBlue" />
-    <SolidColorBrush x:Key="Brushes.Commandline.Value" Color="MediumPurple" />
-    <SolidColorBrush x:Key="Brushes.Commandline.Background" Color="LightYellow" />
+    <SolidColorBrush x:Key="Brushes.Commandline.App" Color="#CB4B16" />
+    <SolidColorBrush x:Key="Brushes.Commandline.Parameter" Color="#586E75" />
+    <SolidColorBrush x:Key="Brushes.Commandline.Value" Color="#6C71C4" />
+    <SolidColorBrush x:Key="Brushes.Commandline.Background" Color="#FDF6E3" />
 
 
 

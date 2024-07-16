@@ -7,6 +7,35 @@
     xmlns:mod="clr-namespace:AuroraVisionLauncher.Models"
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
     xmlns:vms="clr-namespace:AuroraVisionLauncher.ViewModels">
+    <DataTemplate x:Key="AppHeader">
+        <Grid  Margin="0,0,10,0" VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Border  Grid.Column="0" Grid.RowSpan="2" Padding="0,0,10,0" >
+                <Image VerticalAlignment="Center" HorizontalAlignment="Center" Source="{Binding Path, Converter={StaticResource FileIconConverter}}"/>
+            </Border>
+            <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
+                <TextBlock Style="{StaticResource AppTitleStyle}">
+                        <Run Text="{Binding Name, Mode=OneWay, StringFormat='{}{0} - '}" />
+                        <Run Text="{Binding Version, Mode=OneWay}" />
+                        <Run Text="{Binding SecondaryVersion, Mode=OneWay, TargetNullValue='', StringFormat='{}({0}) '}" />
+                </TextBlock>
+                <TextBlock 
+                FontStyle="Italic"
+                Foreground="DarkOrange"
+                Style="{StaticResource AppTitleStyle}"
+                Text="{x:Static properties:Resources.AvAppDevelopmentVersion}"
+                Visibility="{Binding IsDevelopmentVersion, Converter={StaticResource BoolVisibilityConverter}}" />
+            </StackPanel>
+            <TextBlock Style="{StaticResource AppFilePathStyle}" Text="{Binding Path}" Grid.Row="1" Grid.Column="1" />
+        </Grid>
+    </DataTemplate>
     <DataTemplate x:Key="AvAppFacadeDataTemplate" DataType="{x:Type mod:AvAppFacade}">
         <Grid HorizontalAlignment="Stretch">
             <Grid.ContextMenu>
@@ -26,18 +55,14 @@
             <Rectangle Fill="Transparent" />
             <Grid Margin="15,0,0,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0">
-                    <Image Margin="0,0,8,0" Source="{Binding Path, Converter={StaticResource FileIconConverter}}" />
-                </Grid>
-                <StackPanel
-                    Grid.Column="2"
+                <ContentControl Grid.Column="0" ContentTemplate="{StaticResource AppHeader}" Content="{Binding}"/>
+                <StackPanel                    Grid.Column="1"
                     Margin="5,0,10,0"
                     VerticalAlignment="Center"
                     Orientation="Horizontal"
@@ -71,25 +96,7 @@
                         </TextBlock.Style>
                     </TextBlock>
                 </StackPanel>
-                <Button
-                    Grid.Column="4"
-                    Width="40"
-                    Margin="3,5,3,5"
-                    Command="{Binding CopyExecutablePathCommand}"
-                    ToolTip="{x:Static properties:Resources.AvAppCopyPath}">
-                    <mahicon:PackIconLucide Kind="ClipboardCopy" />
-                </Button>
-                <Button
-                    x:Name="button"
-                    Grid.Column="5"
-                    Width="40"
-                    Margin="3,5,3,5"
-                    Command="{Binding OpenContainingFolderCommand}"
-                    ToolTip="{x:Static properties:Resources.AvAppOpenInstallationFolder}">
-                    <mahicon:PackIconMaterial Kind="FolderOpen" />
-                </Button>
-                <Button
-                    Grid.Column="3"
+                <Button                    Grid.Column="2"
                     Width="40"
                     Margin="3,5,3,5"
                     Command="{Binding LaunchWithoutProgramCommand}"
@@ -97,26 +104,21 @@
                     Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <mahicon:PackIconMaterial Kind="Launch" />
                 </Button>
-                <StackPanel
-                    Grid.Column="1"
-                    Margin="0,0,20,0"
-                    VerticalAlignment="Center"
-                    TextBlock.FontSize="18">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Style="{StaticResource AppTitleStyle}">
-                            <Run Text="{Binding Name, Mode=OneWay, StringFormat='{}{0} - '}" />
-                            <Run Text="{Binding Version, Mode=OneWay, StringFormat='{}{0} '}" />
-                            <Run Text="{Binding SecondaryVersion, Mode=OneWay, TargetNullValue='', StringFormat='{}({0}) '}" />
-                        </TextBlock>
-                        <TextBlock
-                            FontStyle="Italic"
-                            Foreground="DarkOrange"
-                            Style="{StaticResource AppTitleStyle}"
-                            Text="{x:Static properties:Resources.AvAppDevelopmentVersion}"
-                            Visibility="{Binding IsDevelopmentVersion, Converter={StaticResource BoolVisibilityConverter}}" />
-                    </StackPanel>
-                    <TextBlock Style="{StaticResource AppFilePathStyle}" Text="{Binding Path}" />
-                </StackPanel>
+                <Button                    Grid.Column="3"
+                    Width="40"
+                    Margin="3,5,3,5"
+                    Command="{Binding CopyExecutablePathCommand}"
+                    ToolTip="{x:Static properties:Resources.AvAppCopyPath}">
+                    <mahicon:PackIconLucide Kind="ClipboardCopy" />
+                </Button>
+                <Button                    Grid.Column="4"
+                    x:Name="button"
+                    Width="40"
+                    Margin="3,5,3,5"
+                    Command="{Binding OpenContainingFolderCommand}"
+                    ToolTip="{x:Static properties:Resources.AvAppOpenInstallationFolder}">
+                    <mahicon:PackIconMaterial Kind="FolderOpen" />
+                </Button>
             </Grid>
         </Grid>
     </DataTemplate>
