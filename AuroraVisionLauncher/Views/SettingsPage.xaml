@@ -37,7 +37,29 @@
                     Text="{x:Static properties:Resources.SettingsPagePersonalizationTitle}" />
                 <StackPanel Margin="{StaticResource SmallTopBottomMargin}">
                     <TextBlock Style="{StaticResource BodyTextStyle}" Text="{x:Static properties:Resources.SettingsPageChooseThemeText}" />
-                    <StackPanel Margin="{StaticResource XSmallTopMargin}">
+                    <Grid Margin="{StaticResource XSmallTopMargin}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <mah:ColorPicker
+                            Grid.RowSpan="2"
+                            Grid.Column="1"
+                            mah:TextBoxHelper.ClearTextButton="False"
+                            mah:TextBoxHelper.UseFloatingWatermark="True"
+                            mah:TextBoxHelper.Watermark="Select a color"
+                            IsEnabled="{Binding Theme, Mode=OneWay, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=!System}"
+                            SelectedColor="{Binding CurrentAccent}" />
+                        <Button
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Command="{Binding ResetColorCommand}"
+                            Content="Reset" />
                         <RadioButton
                             Content="{x:Static properties:Resources.SettingsPageRadioButtonLightTheme}"
                             FontSize="{StaticResource MediumFontSize}"
@@ -50,6 +72,7 @@
                             </i:Interaction.Triggers>
                         </RadioButton>
                         <RadioButton
+                            Grid.Row="1"
                             Margin="{StaticResource XSmallTopMargin}"
                             Content="{x:Static properties:Resources.SettingsPageRadioButtonDarkTheme}"
                             FontSize="{StaticResource MediumFontSize}"
@@ -62,6 +85,7 @@
                             </i:Interaction.Triggers>
                         </RadioButton>
                         <RadioButton
+                            Grid.Row="2"
                             Margin="{StaticResource XSmallTopMargin}"
                             Content="{x:Static properties:Resources.SettingsPageRadioButtonWindowsDefaultTheme}"
                             FontSize="{StaticResource MediumFontSize}"
@@ -73,15 +97,15 @@
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </RadioButton>
-                        <Button
-                            Command="{Binding AssociateAppWithExtensionsCommand}"
-                            Content="{x:Static properties:Resources.SettingsPageSetFileAssociationsButton}"
-                            ToolTip="{x:Static properties:Resources.SettingsPageSetFileAssociationsButtonTooltip}" />
-                        <Button
-                            Command="{Binding OpenInstallationFolderCommand}"
-                            Content="{x:Static properties:Resources.SettingsPageOpenInstallationFolderButton}"
-                            ToolTip="{x:Static properties:Resources.SettingsPageOpenInstallationFolderButtonTooltip}" />
-                    </StackPanel>
+                    </Grid>
+                    <Button
+                        Command="{Binding AssociateAppWithExtensionsCommand}"
+                        Content="{x:Static properties:Resources.SettingsPageSetFileAssociationsButton}"
+                        ToolTip="{x:Static properties:Resources.SettingsPageSetFileAssociationsButtonTooltip}" />
+                    <Button
+                        Command="{Binding OpenInstallationFolderCommand}"
+                        Content="{x:Static properties:Resources.SettingsPageOpenInstallationFolderButton}"
+                        ToolTip="{x:Static properties:Resources.SettingsPageOpenInstallationFolderButtonTooltip}" />
                 </StackPanel>
                 <TextBlock
                     Margin="{StaticResource SmallTopMargin}"
@@ -95,12 +119,7 @@
                     Margin="{StaticResource XSmallTopMargin}"
                     Style="{StaticResource BodyTextStyle}"
                     Text="{x:Static properties:Resources.SettingsPageAboutText}" />
-                <mah:ColorPicker
-                    mah:TextBoxHelper.ClearTextButton="False"
-                    mah:TextBoxHelper.UseFloatingWatermark="True"
-                    mah:TextBoxHelper.Watermark="Select a color"
-                    IsEnabled="{Binding Theme, Mode=OneWay, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=!System}"
-                    SelectedColor="{Binding CurrentAccent}" />
+
                 <TextBlock Margin="{StaticResource SmallTopMargin}" AutomationProperties.Name="{Binding Text, ElementName=settingsPrivacyStatement}">
                     <Hyperlink AutomationProperties.Name="{Binding Text, ElementName=settingsPrivacyStatement}" Command="{Binding PrivacyStatementCommand}">
                         <TextBlock

@@ -10,6 +10,7 @@ using AuroraVisionLauncher.Core.Models.Apps;
 using AuroraVisionLauncher.Models;
 using AuroraVisionLauncher.ViewModels;
 using AuroraVisionLauncher.Views;
+using ControlzEx.Theming;
 using MahApps.Metro.Controls;
 using Windows.ApplicationModel.VoiceCommands;
 
@@ -67,6 +68,14 @@ public class WindowManagerService : IWindowManagerService
             window.Show();
             frame.Navigated += OnNavigated;
             var navigated = frame.Navigate(page, parameter);
+            // Rather ugly, but apparently the new window does not the theme applied
+            // It only applies after it has changed
+            // Changing the theme to the current one wont dot, because the themes are exactly the same
+            // So we momentarily change to the inverse theme.
+            var currentTheme = ThemeManager.Current.DetectTheme(Application.Current)!;
+            var inverse = ThemeManager.Current.GetInverseTheme(currentTheme);
+            ThemeManager.Current.ChangeTheme(window, inverse!);
+            ThemeManager.Current.ChangeTheme(window, currentTheme);
         }
     }
 

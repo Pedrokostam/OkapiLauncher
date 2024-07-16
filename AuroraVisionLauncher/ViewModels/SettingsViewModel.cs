@@ -47,6 +47,7 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     private string _versionDescription = string.Empty;
 
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(ResetColorCommand))]
     private System.Windows.Media.Color? _currentAccent;
 
     [RelayCommand]
@@ -71,6 +72,11 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     }
 
     partial void OnCurrentAccentChanged(System.Windows.Media.Color? value) => OnSetTheme(Theme.ToString());
+
+    private bool CanResetColor() => CurrentAccent != null;
+
+    [RelayCommand(CanExecute =nameof(CanResetColor))]
+    private void ResetColor()=>CurrentAccent = null;
 
     [RelayCommand]
     private void OnPrivacyStatement()

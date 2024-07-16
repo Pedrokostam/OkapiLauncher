@@ -81,7 +81,9 @@
         x:Key="AppFilePathStyle"
         BasedOn="{StaticResource BaseTextBlockStyle}"
         TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{DynamicResource Brushes.TextBlock.NotImportant}" />
+        <!--<Setter Property="Foreground" Value="Red" />-->
+        <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.Foreground}" />
+        <Setter Property="Opacity" Value="0.6" />
         <Setter Property="TextWrapping" Value="NoWrap" />
         <Setter Property="TextTrimming" Value="CharacterEllipsis" />
         <!--<Setter Property="Tooltip" Value="{StaticResource SelfToolTipText}" />-->
@@ -90,14 +92,18 @@
     <Style
         x:Key="AppTitleStyle"
         BasedOn="{StaticResource SubtitleTextStyle}"
-        TargetType="TextBlock" />
+        TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.Foreground}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontSize" Value="{StaticResource LargeFontSize}" />
+    </Style>
 
     <Style
         x:Key="GroupHeaderTextblockStyle"
         BasedOn="{StaticResource BaseTextBlockStyle}"
         TargetType="TextBlock">
         <Setter Property="FontSize" Value="{StaticResource LargeFontSize}" />
-        <Setter Property="Foreground" Value="{DynamicResource Brushes.TextBlock.NotImportant}" />
+        <!--<Setter Property="Foreground" Value="{DynamicResource Brushes.TextBlock.NotImportant}" />-->
         <Setter Property="FontStyle" Value="Italic" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="Margin" Value="0,3,0,3" />

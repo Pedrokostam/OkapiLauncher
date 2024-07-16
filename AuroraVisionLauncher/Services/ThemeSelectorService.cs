@@ -53,7 +53,7 @@ public class ThemeSelectorService : IThemeSelectorService
                                    displayName: "CustomTheme",
                                    baseColorScheme: themeEnum.ToString(),
                                    colorScheme: "CustomAccent",
-                primaryAccentColor: customColor.Value,
+                                   primaryAccentColor: customColor.Value,
                                    showcaseBrush: new SolidColorBrush(customColor.Value),
                                    isRuntimeGenerated: true,
                                    isHighContrast: false);
