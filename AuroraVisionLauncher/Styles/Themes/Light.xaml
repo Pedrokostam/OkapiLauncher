@@ -7,7 +7,7 @@
     xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     mc:Ignorable="options">
-    <system:String x:Key="Theme.Name">Light.Blue</system:String>
+    <system:String x:Key="Theme.Name">Light</system:String>
     <system:String x:Key="Theme.Origin">MahApps.Metro</system:String>
     <system:String x:Key="Theme.DisplayName">Blue (Light)</system:String>
     <system:String x:Key="Theme.BaseColorScheme">Light</system:String>

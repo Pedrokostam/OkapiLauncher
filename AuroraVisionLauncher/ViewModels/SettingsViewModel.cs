@@ -1,8 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
+using System.Windows;
 using System.Windows.Input;
-
+using System.Windows.Media;
 using AuroraVisionLauncher.Contracts.Services;
 using AuroraVisionLauncher.Contracts.ViewModels;
 using AuroraVisionLauncher.Helpers;
@@ -11,7 +13,7 @@ using AuroraVisionLauncher.Services;
 using AuroraVisionLauncher.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-
+using ControlzEx.Theming;
 using Microsoft.Extensions.Options;
 
 namespace AuroraVisionLauncher.ViewModels;
@@ -44,11 +46,15 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     [ObservableProperty]
     private string _versionDescription = string.Empty;
 
+    [ObservableProperty]
+    private System.Windows.Media.Color? _currentAccent;
+
     [RelayCommand]
     public void OnNavigatedTo(object parameter)
     {
         VersionDescription = $"{Properties.Resources.AppDisplayName} - {_applicationInfoService.GetVersion()}";
         Theme = _themeSelectorService.GetCurrentTheme();
+        CurrentAccent = _themeSelectorService.GetCurrentAccent();
     }
 
     [RelayCommand]
@@ -59,8 +65,13 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     private void OnSetTheme(string themeName)
     {
         var theme = (AppTheme)Enum.Parse(typeof(AppTheme), themeName);
-        _themeSelectorService.SetTheme(theme);
+        _themeSelectorService.SetTheme(theme, CurrentAccent);
+        CurrentAccent = _themeSelectorService.GetCurrentAccent();
+        Theme = _themeSelectorService.GetCurrentTheme();
     }
+
+    partial void OnCurrentAccentChanged(System.Windows.Media.Color? value) => OnSetTheme(Theme.ToString());
+
     [RelayCommand]
     private void OnPrivacyStatement()
         => _systemService.OpenInWebBrowser(_appConfig.PrivacyStatement);

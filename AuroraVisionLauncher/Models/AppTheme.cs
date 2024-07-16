@@ -2,7 +2,7 @@
 
 public enum AppTheme
 {
-    Default,
+    System,
     Light,
     Dark
 }

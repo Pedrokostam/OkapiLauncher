@@ -5,6 +5,7 @@
     xmlns:converters="clr-namespace:AuroraVisionLauncher.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:AuroraVisionLauncher.Models"
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
@@ -65,10 +66,10 @@
                             Content="{x:Static properties:Resources.SettingsPageRadioButtonWindowsDefaultTheme}"
                             FontSize="{StaticResource MediumFontSize}"
                             GroupName="AppTheme"
-                            IsChecked="{Binding Theme, Mode=OneWay, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Default}">
+                            IsChecked="{Binding Theme, Mode=OneWay, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=System}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Checked">
-                                    <i:InvokeCommandAction Command="{Binding SetThemeCommand}" CommandParameter="Default" />
+                                    <i:InvokeCommandAction Command="{Binding SetThemeCommand}" CommandParameter="System" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </RadioButton>
@@ -82,7 +83,6 @@
                             ToolTip="{x:Static properties:Resources.SettingsPageOpenInstallationFolderButtonTooltip}" />
                     </StackPanel>
                 </StackPanel>
-
                 <TextBlock
                     Margin="{StaticResource SmallTopMargin}"
                     Style="{StaticResource SubtitleTextStyle}"
@@ -95,7 +95,12 @@
                     Margin="{StaticResource XSmallTopMargin}"
                     Style="{StaticResource BodyTextStyle}"
                     Text="{x:Static properties:Resources.SettingsPageAboutText}" />
-
+                <mah:ColorPicker
+                    mah:TextBoxHelper.ClearTextButton="False"
+                    mah:TextBoxHelper.UseFloatingWatermark="True"
+                    mah:TextBoxHelper.Watermark="Select a color"
+                    IsEnabled="{Binding Theme, Mode=OneWay, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=!System}"
+                    SelectedColor="{Binding CurrentAccent}" />
                 <TextBlock Margin="{StaticResource SmallTopMargin}" AutomationProperties.Name="{Binding Text, ElementName=settingsPrivacyStatement}">
                     <Hyperlink AutomationProperties.Name="{Binding Text, ElementName=settingsPrivacyStatement}" Command="{Binding PrivacyStatementCommand}">
                         <TextBlock

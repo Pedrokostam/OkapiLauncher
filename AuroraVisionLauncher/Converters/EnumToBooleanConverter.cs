@@ -13,9 +13,14 @@ public class EnumToBooleanConverter : IValueConverter
         {
             if (Enum.IsDefined(EnumType!, value))
             {
+                bool isNegated = enumString.StartsWith('!');
+                if (isNegated)
+                {
+                    enumString = enumString[1..];
+                }
                 var enumValue = Enum.Parse(EnumType!, enumString);
 
-                return enumValue.Equals(value);
+                return enumValue.Equals(value) ^ isNegated;
             }
         }
 
