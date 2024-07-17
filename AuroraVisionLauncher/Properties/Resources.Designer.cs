@@ -115,7 +115,7 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TRUNK.
+        ///   Looks up a localized string similar to Dev.
         /// </summary>
         public static string AvAppDevelopmentVersion {
             get {
@@ -124,7 +124,7 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Empty rpoduct version field..
+        ///   Looks up a localized string similar to Empty product version field..
         /// </summary>
         public static string AvAppEmptyVersionField {
             get {

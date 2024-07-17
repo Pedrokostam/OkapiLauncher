@@ -205,7 +205,7 @@
     <value>N/A</value>
   </data>
   <data name="AvAppEmptyVersionField" xml:space="preserve">
-    <value>Empty rpoduct version field.</value>
+    <value>Empty product version field.</value>
   </data>
   <data name="LauncherCommandLineArgumentsSectionHeader" xml:space="preserve">
     <value>Command-line parameters</value>
