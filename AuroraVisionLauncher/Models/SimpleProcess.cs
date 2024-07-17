@@ -22,7 +22,7 @@ namespace AuroraVisionLauncher.Models
         private string _processName;
         [ObservableProperty]
         private DateTime _startTime;
-        private IntPtr _windowHandle;
+        private readonly IntPtr _windowHandle;
         public SimpleProcess(Process proc)
         {
             ProcessName = proc.ProcessName;
@@ -76,9 +76,51 @@ namespace AuroraVisionLauncher.Models
 
         [DllImport("user32.dll")]
         static extern bool SetForegroundWindow(IntPtr hWnd);
+        [StructLayout(LayoutKind.Sequential)]
+        struct POINT
+        {
+            public int X;
+            public int Y;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        struct RECT
+        {
+            public int left;
+            public int top;
+            public int right;
+            public int bottom;
+        }
+
+        [Serializable]
+        [StructLayout(LayoutKind.Sequential)]
+        struct WINDOWPLACEMENT
+        {
+            public int length;
+            public int flags;
+            public int showCmd;
+            public POINT ptMinPosition;
+            public POINT ptMaxPosition;
+            public RECT rcNormalPosition;
+        }
+
+        [DllImport("user32", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool GetWindowPlacement(IntPtr hWnd, ref WINDOWPLACEMENT lpwndpl);
+
+        [DllImport("user32", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool SetWindowPlacement(IntPtr hWnd, ref WINDOWPLACEMENT lpwndpl);
         [RelayCommand]
         private void BringToFocus()
         {
+            var placement = new WINDOWPLACEMENT();
+            GetWindowPlacement(_windowHandle, ref placement);
+            if(placement.showCmd == 2)
+            {
+                placement.showCmd = 1;
+                SetWindowPlacement(_windowHandle, ref placement);
+            }
             SetForegroundWindow(_windowHandle);
         }
 

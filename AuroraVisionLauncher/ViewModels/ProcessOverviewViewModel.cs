@@ -43,9 +43,14 @@ public partial class ProcessOverviewViewModel : ObservableObject, INavigationAwa
         var active = _processManagerService.GetActiveProcesses(AvApp);
         foreach (var p in active)
         {
-            if (!Processes.Contains(p))
+            var first = Processes.FirstOrDefault(x => x == p);
+            if (first is null)
             {
                 Processes.Add(p);
+            }
+            else
+            {
+                first.MainWindowTitle = p.MainWindowTitle;
             }
         }
         foreach (var item in Processes.ToList())

@@ -23,7 +23,7 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid DataContext="{Binding AvApp}">
+        <Grid DataContext="{Binding AvApp}" Margin="10,0,0,0">
             <Grid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Command="{Binding OpenContainingFolderCommand}" Header="{x:Static properties:Resources.AvAppOpenInstallationFolder}" />

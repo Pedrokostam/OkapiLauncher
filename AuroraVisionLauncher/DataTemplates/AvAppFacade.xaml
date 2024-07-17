@@ -21,10 +21,11 @@
                 Grid.RowSpan="2"
                 Grid.Column="0"
                 Padding="0,0,10,0">
-                <Image
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Source="{Binding  Converter={StaticResource AppToImageConverter}}" />
+                <Image HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Image.Source>
+                        <BitmapImage DecodePixelWidth="100" UriSource="{Binding Converter={StaticResource AppToImageConverter}}" />
+                    </Image.Source>
+                </Image>
             </Border>
             <StackPanel
                 Grid.Row="0"
@@ -35,20 +36,21 @@
                     <Run Text="{Binding Version, Mode=OneWay}" />
                     <Run Text="{Binding SecondaryVersion, Mode=OneWay, TargetNullValue='', StringFormat='{}({0}) '}" />
                 </TextBlock>
-                <Border CornerRadius="10" 
-                        Background="{DynamicResource MahApps.Brushes.Highlight}" 
-                        Opacity=".8"  
-                        Margin="0,4,0,4">
-                <TextBlock
-                    FontStyle="Normal"
-                    Margin="8,0,8,0"
-                    Opacity="1"  
-                    FontSize="{StaticResource MediumFontSize}"
-                    VerticalAlignment="Center"
-                    Foreground="{DynamicResource MahApps.Brushes.IdealForeground}"
-                    Style="{StaticResource AppTitleStyle}"
-                    Text="{x:Static properties:Resources.AvAppDevelopmentVersion}"
-                    Visibility="{Binding IsDevelopmentVersion, Converter={StaticResource BoolVisibilityConverter}}" />
+                <Border
+                    Margin="0,4,0,4"
+                    Background="{DynamicResource MahApps.Brushes.Highlight}"
+                    CornerRadius="10"
+                    Opacity=".8">
+                    <TextBlock
+                        Margin="8,0,8,0"
+                        VerticalAlignment="Center"
+                        FontSize="{StaticResource MediumFontSize}"
+                        FontStyle="Normal"
+                        Foreground="{DynamicResource MahApps.Brushes.IdealForeground}"
+                        Opacity="1"
+                        Style="{StaticResource AppTitleStyle}"
+                        Text="{x:Static properties:Resources.AvAppDevelopmentVersion}"
+                        Visibility="{Binding IsDevelopmentVersion, Converter={StaticResource BoolVisibilityConverter}}" />
                 </Border>
             </StackPanel>
             <TextBlock
