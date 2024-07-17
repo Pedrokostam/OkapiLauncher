@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using AuroraVisionLauncher.Core.Models.Projects;
 
 namespace AuroraVisionLauncher.Core.Models;
-internal enum AvBrand
+public enum AvBrand
 {
     Aurora,
     Adaptive,
@@ -45,7 +45,7 @@ public class ProductBrand:IComparable<ProductBrand>
     }
 
     public string Name { get; }
-    internal AvBrand Brand { get; }
+    public AvBrand Brand { get; }
     internal string NameNoSpace { get; }
     public IReadOnlyCollection<ProductBrand> SupportedBrands => _supportedBrands.AsReadOnly();
 

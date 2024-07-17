@@ -9,7 +9,6 @@ using AuroraVisionLauncher.Contracts.Services;
 using AuroraVisionLauncher.Contracts.ViewModels;
 using AuroraVisionLauncher.Helpers;
 using AuroraVisionLauncher.Models;
-using AuroraVisionLauncher.Services;
 using AuroraVisionLauncher.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;

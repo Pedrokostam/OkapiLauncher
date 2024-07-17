@@ -1,7 +1,6 @@
-﻿//namespace AuroraVisionLauncher.Core.Contracts.Services;
+﻿namespace AuroraVisionLauncher.Contracts.Services;
 
-//public interface IFileAssociationService
-//{
-//    Dictionary<string, string> GetCurrentAssociations();
-//    void SetAssociationsToApp(string mainAppExecutablePath, string? appName, IList<string>? extensionsToAssociate = null);
-//}
+public interface IFileAssociationService
+{
+    void SetAssociationsToApp(string? mainAppExecutablePath = null);
+}

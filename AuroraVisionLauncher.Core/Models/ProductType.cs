@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel;
 
 namespace AuroraVisionLauncher.Core.Models;
-internal enum AvType
+public enum AvType
 {
     Professional,
     Runtime,
@@ -22,12 +22,12 @@ public class ProductType : IComparable<ProductType>, IComparable
     private static readonly ProductType[] _types = [Professional, Runtime, DeepLearning, Library];
     public string Name { get; }
     private readonly List<ProductType> _supportedAvTypes = [];
-    internal AvType Type { get; }
+    public AvType Type { get; }
     private string ProductNameKeyword { get; }
     private string? FileSignatureKeyword { get; }
     public IReadOnlyCollection<ProductType> SupportedAvTypes => _supportedAvTypes.AsReadOnly();
 
-    internal static ProductType FromAvType(AvType type)
+    public static ProductType FromAvType(AvType type)
     {
         return type switch
         {

@@ -12,6 +12,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
                     <conv:FileToIconConverter x:Key="FileIconConverter" />
+                    <conv:AvAppToImageSourceConverter x:Key="AppToImageConverter" />
                     <conv:BoolToVisibilityConverter x:Key="BoolVisibilityConverter" />
                     <conv:NullToVisibilityConverter x:Key="NullVisibilityConverter" />
                     <conv:UtcDatetimeToLocalConverter x:Key="UtcToLocalConverter" />

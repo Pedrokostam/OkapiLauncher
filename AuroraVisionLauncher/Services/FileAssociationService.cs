@@ -8,6 +8,7 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Text;
 using System.Windows;
+using AuroraVisionLauncher.Contracts.Services;
 using AuroraVisionLauncher.Core.Contracts.Services;
 using AuroraVisionLauncher.Helpers;
 using AuroraVisionLauncher.Models;

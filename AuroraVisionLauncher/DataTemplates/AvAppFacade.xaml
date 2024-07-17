@@ -24,7 +24,7 @@
                 <Image
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Source="{Binding Path, Converter={StaticResource FileIconConverter}}" />
+                    Source="{Binding  Converter={StaticResource AppToImageConverter}}" />
             </Border>
             <StackPanel
                 Grid.Row="0"

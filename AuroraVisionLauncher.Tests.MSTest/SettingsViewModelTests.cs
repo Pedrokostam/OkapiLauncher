@@ -2,7 +2,6 @@
 using AuroraVisionLauncher.Core.Contracts.Services;
 using AuroraVisionLauncher.Core.Services;
 using AuroraVisionLauncher.Models;
-using AuroraVisionLauncher.Services;
 using AuroraVisionLauncher.ViewModels;
 
 using Microsoft.Extensions.Options;
@@ -79,6 +78,6 @@ public class SettingsViewModelTests
            mockFileAssociationService.Object);
         settingsVm.SetThemeCommand.Execute(AppTheme.Light.ToString());
 
-        mockThemeSelectorService.Verify(mock => mock.SetTheme(AppTheme.Light));
+        mockThemeSelectorService.Verify(mock => mock.SetTheme(AppTheme.Light,null));
     }
 }
