@@ -23,7 +23,7 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid DataContext="{Binding AvApp}" Margin="10,0,0,0">
+        <Grid Margin="10,0,0,0" DataContext="{Binding AvApp}">
             <Grid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Command="{Binding OpenContainingFolderCommand}" Header="{x:Static properties:Resources.AvAppOpenInstallationFolder}" />
@@ -37,7 +37,10 @@
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
-            <ContentControl Grid.Column="0" ContentTemplate="{StaticResource AppHeader}" Content="{Binding}"/>
+            <ContentControl
+                Grid.Column="0"
+                Content="{Binding}"
+                ContentTemplate="{StaticResource AppHeader}" />
             <Button
                 Grid.Column="1"
                 Width="40"
@@ -82,42 +85,42 @@
                                 <MenuItem Command="{Binding KillAskCommand}" Header="{x:Static properties:Resources.ProcessOverviewKill}" />
                             </ContextMenu>
                         </Grid.ContextMenu>
-                        <Button    Grid.Column="2"
+                        <Button
+                            Grid.Column="2"
                             Margin="10"
                             Command="{Binding BringToFocusCommand}"
                             DockPanel.Dock="Right"
                             ToolTip="{x:Static properties:Resources.ProcessOverviewBringToFocus}">
                             <mahicon:PackIconUnicons
-                                Width="40"
-                                Height="40"
+                                Width="50"
+                                Height="30"
                                 Kind="FocusAddLine" />
                         </Button>
-                        <Grid Grid.Column="1" ToolTip="{Binding MainWindowTitle}">
+                        <Grid Grid.Column="1" ToolTip="{Binding TrimmedTitle}">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="1*" />
-                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
                             </Grid.RowDefinitions>
                             <TextBlock
                                 VerticalAlignment="Center"
-                                FontSize="25"
-                                Text="{Binding MainWindowTitle}"
+                                Style="{StaticResource AppTitleStyle}"
+                                Text="{Binding TrimmedTitle}"
                                 TextTrimming="CharacterEllipsis" />
                             <TextBlock
                                 Grid.Row="1"
-                                VerticalAlignment="Center"
-                                FontSize="18"
-                                Opacity=".5"
+                                Style="{StaticResource AppFilePathStyle}"
                                 Text="{Binding StartTime, StringFormat={x:Static properties:Resources.DatetimeOpenedOn}}"
                                 TextTrimming="CharacterEllipsis" />
                         </Grid>
-                        <Button Grid.Column="0"
-                            Margin="10"
+                        <Button
+                            Grid.Column="0"
+                            Margin="5"
                             Command="{Binding KillAskCommand}"
                             DockPanel.Dock="Right"
                             ToolTip="{x:Static properties:Resources.ProcessOverviewKill}">
                             <mahicon:PackIconGameIcons
-                                Width="40"
-                                Height="40"
+                                Width="50"
+                                Height="30"
                                 Kind="PistolGun" />
                         </Button>
                     </Grid>

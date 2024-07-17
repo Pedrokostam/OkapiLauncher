@@ -17,6 +17,7 @@ namespace AuroraVisionLauncher.Models
         [ObservableProperty]
         private int _id;
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(TrimmedTitle))]
         private string _mainWindowTitle;
         [ObservableProperty]
         private string _processName;
@@ -30,6 +31,19 @@ namespace AuroraVisionLauncher.Models
             MainWindowTitle = proc.MainWindowTitle;
             StartTime = proc.StartTime;
             _windowHandle = proc.MainWindowHandle;
+        }
+
+        public string TrimmedTitle
+        {
+            get
+            {
+                var dash = MainWindowTitle.IndexOf('-', StringComparison.Ordinal);
+                if (dash >= 0)
+                {
+                    return MainWindowTitle[(dash + 1)..].Trim();
+                }
+                return MainWindowTitle;
+            }
         }
 
         public bool Equals(SimpleProcess? other)
@@ -116,7 +130,7 @@ namespace AuroraVisionLauncher.Models
         {
             var placement = new WINDOWPLACEMENT();
             GetWindowPlacement(_windowHandle, ref placement);
-            if(placement.showCmd == 2)
+            if (placement.showCmd == 2)
             {
                 placement.showCmd = 1;
                 SetWindowPlacement(_windowHandle, ref placement);
