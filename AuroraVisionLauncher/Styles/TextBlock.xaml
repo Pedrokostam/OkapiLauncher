@@ -93,7 +93,6 @@
         x:Key="AppTitleStyle"
         BasedOn="{StaticResource SubtitleTextStyle}"
         TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.Foreground}" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="FontSize" Value="{StaticResource LargeFontSize}" />
     </Style>
