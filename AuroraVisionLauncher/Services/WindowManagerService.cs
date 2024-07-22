@@ -10,6 +10,7 @@ using AuroraVisionLauncher.Core.Models.Apps;
 using AuroraVisionLauncher.Models;
 using AuroraVisionLauncher.ViewModels;
 using AuroraVisionLauncher.Views;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ControlzEx.Theming;
 using MahApps.Metro.Controls;
 using Windows.ApplicationModel.VoiceCommands;
@@ -123,8 +124,11 @@ public class WindowManagerService : IWindowManagerService
             if (window.Content is Frame frame)
             {
                 frame.Navigated -= OnNavigated;
+                if(frame.GetDataContext() is INavigationAware navigationAware)
+                {
+                    navigationAware.OnNavigatedFrom();
+                }
             }
-
             window.Closed -= OnWindowClosed;
         }
     }

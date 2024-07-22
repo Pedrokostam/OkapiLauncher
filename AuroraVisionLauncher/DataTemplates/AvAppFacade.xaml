@@ -50,6 +50,7 @@
                         Opacity="1"
                         Style="{StaticResource AppTitleStyle}"
                         Text="{x:Static properties:Resources.AvAppDevelopmentVersion}"
+                        ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"
                         Visibility="{Binding IsDevelopmentVersion, Converter={StaticResource BoolVisibilityConverter}}" />
                 </Border>
             </StackPanel>
@@ -57,7 +58,8 @@
                 Grid.Row="1"
                 Grid.Column="1"
                 Style="{StaticResource AppFilePathStyle}"
-                Text="{Binding Path}" />
+                Text="{Binding Path}"
+                ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}" />
         </Grid>
     </DataTemplate>
     <DataTemplate x:Key="AvAppFacadeDataTemplate" DataType="{x:Type mod:AvAppFacade}">

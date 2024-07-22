@@ -11,24 +11,40 @@ using AuroraVisionLauncher.Contracts;
 using AuroraVisionLauncher.Contracts.ViewModels;
 using AuroraVisionLauncher.Helpers;
 using AuroraVisionLauncher.Models;
+using AuroraVisionLauncher.Models.Messages;
 using AuroraVisionLauncher.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace AuroraVisionLauncher.ViewModels;
-public partial class ProcessOverviewViewModel : ObservableObject, INavigationAware, ITransientWindow
+public partial class ProcessOverviewViewModel : ObservableRecipient, INavigationAware, ITransientWindow, IRecipient<AppProcessChangedMessage>
 {
     private readonly IProcessManagerService _processManagerService;
     [ObservableProperty]
     private AvAppFacade _avApp = default!;
     private readonly DispatcherTimer _timer;
+    /// <summary>
+    /// Timer used to delay update request from <see cref="AppProcessChangedMessage"/>
+    /// </summary>
+    //private readonly DispatcherTimer _auxTimer;
+
     public ObservableCollection<SimpleProcess> Processes { get; } = [];
-    public ProcessOverviewViewModel(IProcessManagerService processManagerService)
+    public ProcessOverviewViewModel(IProcessManagerService processManagerService, IMessenger messenger) : base(messenger)
     {
         _processManagerService = processManagerService;
         _timer = TimerHelper.GetTimer();
         _timer.Tick += UpdateEvent;
+        //_auxTimer = TimerHelper.GetTimer(500);
+        //_auxTimer.Tick += DelayUpdate;
 
     }
+    //private void DelayUpdate(object? sender, EventArgs e)
+    //{
+    //    Update();
+    //    _auxTimer.Stop();
+    //    _timer.Start();
+    //}
+
     private void UpdateEvent(object? sender, EventArgs e)
     {
         Update();
@@ -66,13 +82,25 @@ public partial class ProcessOverviewViewModel : ObservableObject, INavigationAwa
     {
         _timer.Stop();
         _timer.Tick -= UpdateEvent;
+        IsActive = false;
     }
 
     public void OnNavigatedTo(object? parameter)
     {
+        IsActive = true;
         AvApp = parameter as AvAppFacade ?? throw new InvalidOperationException("Expected an AvApp");
         Update();
         _timer.Start();
+    }
+
+    public void Receive(AppProcessChangedMessage message)
+    {
+        if (message.AffectedAppPresent(AvApp))
+        {
+            _timer.Stop();
+            Update();
+            _timer.Start();
+        }
     }
 
 }

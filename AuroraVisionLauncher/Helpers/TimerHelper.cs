@@ -19,4 +19,15 @@ public static class TimerHelper
             Interval = TimeSpan.FromSeconds(3),
         };
     }
+    /// <summary>
+    /// Returns a standard <see cref="DispatcherTimer"/>. Not started.
+    /// </summary>
+    /// <returns>Unstarted <see cref="DispatcherTimer"/></returns>
+    public static DispatcherTimer GetTimer(int milliseconds)
+    {
+        return new DispatcherTimer()
+        {
+            Interval = TimeSpan.FromMilliseconds(milliseconds),
+        };
+    }
 }

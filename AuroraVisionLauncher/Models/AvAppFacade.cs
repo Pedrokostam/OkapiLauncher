@@ -13,9 +13,11 @@ using AuroraVisionLauncher.Core.Models;
 using AuroraVisionLauncher.Core.Models.Apps;
 using AuroraVisionLauncher.Core.Models.Projects;
 using AuroraVisionLauncher.Helpers;
+using AuroraVisionLauncher.Models.Messages;
 using AuroraVisionLauncher.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Windows.ApplicationModel.VoiceCommands;
 
 namespace AuroraVisionLauncher.Models;
@@ -30,7 +32,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     public AvVersionFacade Version { get; }
     public string NameWithVersion => $"{Name} {Version}";
     public bool IsDevelopmentVersion => Version.IsDevelopmentVersion;
-    public bool IsExecutable=>_avApp.IsExecutable;
+    public bool IsExecutable => _avApp.IsExecutable;
 
 
 
@@ -44,7 +46,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
 
     [ObservableProperty]
     private Compatibility? _compatibility = null;
-
+    private readonly IMessenger _messenger;
 
 
     [ObservableProperty]
@@ -53,71 +55,17 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
 
     public bool IsLaunched => ActiveProcessesNumber > 0;
 
-    public AvAppFacade(AvApp avApp, IWindowManagerService windowManagerService)
+    public AvAppFacade(AvApp avApp, IWindowManagerService windowManagerService, IMessenger messenger)
     {
         _avApp = avApp;
         _windowManagerService = new(windowManagerService);
         Version = new AvVersionFacade(avApp.Version);
         SecondaryVersion = avApp.SecondaryVersion is not null ? new AvVersionFacade(avApp.SecondaryVersion) : null;
+        _messenger = messenger;
     }
-    public ObservableCollection<SimpleProcess> ActiveProcesses { get; } = new();
-
     public ProductBrand Brand => _avApp.Brand;
 
     public ProductType Type => _avApp.Type;
-
-    /// <summary>
-    /// Checks if any process associated with the executable is running.
-    /// </summary>
-    /// <returns><see langword="true"/> if the process is running; <see langword="false"/> if it is not running, or it could not be checked.</returns>
-    public bool CheckIfProcessIsRunning()
-    {
-        try
-        {
-            var processes = Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(ProcessName));
-            List<int> keptIds = [];
-            List<int> indicesToRemove = [];
-            foreach (var process in processes)
-            {
-                if (!string.Equals(process.MainModule?.FileName, Path, StringComparison.OrdinalIgnoreCase))
-                {
-                    process.Dispose();
-                    continue;
-                }
-                var existing = ActiveProcesses.FirstOrDefault(x => x.Id == process.Id);
-                keptIds.Add(process.Id);
-                if (existing is null)
-                {
-                    ActiveProcesses.Add(new(process));
-                }
-                else
-                {
-                    existing.MainWindowTitle = process.MainWindowTitle;
-                    process.Dispose();
-                }
-            }
-
-            foreach (var (sp, i) in ActiveProcesses.Select((x, i) => (x, i)))
-            {
-                if (!keptIds.Contains(sp.Id))
-                {
-                    indicesToRemove.Add(i);
-                }
-            }
-
-            indicesToRemove.Reverse();
-            foreach (var index in indicesToRemove)
-            {
-                ActiveProcesses.RemoveAt(index);
-            }
-
-            return ActiveProcesses.Any();
-        }
-        catch (InvalidOperationException)
-        {
-            return false;
-        }
-    }
 
     public bool CanOpen(IVisionProject type) => _avApp.CanOpen(type);
     public bool IsNativeApp(IVisionProject type) => _avApp.IsNativeApp(type);
@@ -125,13 +73,17 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     [RelayCommand]
     private void OpenContainingFolder() => ExplorerHelper.OpenExplorer(RootPath);
     private bool CanLaunchExecutable() => IsExecutable;
-    [RelayCommand(CanExecute =nameof(CanLaunchExecutable))]
+    [RelayCommand(CanExecute = nameof(CanLaunchExecutable))]
     private void LaunchWithoutProgram()
     {
-        Process.Start(new ProcessStartInfo()
+        using var proc = Process.Start(new ProcessStartInfo()
         {
             FileName = _avApp.Path,
         });
+        if (proc is not null)
+        {
+            _messenger.Send(new AppProcessChangedMessage(this.Path));
+        }
     }
     [RelayCommand]
     private void CopyExecutablePath()
@@ -159,7 +111,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
             return true;
         }
 
-        if (ReferenceEquals(obj, null))
+        if (obj is null)
         {
             return false;
         }
@@ -167,15 +119,15 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
         return Equals(obj as AvAppFacade);
     }
 
-    public override int GetHashCode()=>_avApp.GetHashCode();
+    public override int GetHashCode() => _avApp.GetHashCode();
 
     public int CompareTo(IAvApp? other) => _avApp.CompareTo(other);
 
     public static bool operator ==(AvAppFacade left, AvAppFacade right)
     {
-        if (ReferenceEquals(left, null))
+        if (left is null)
         {
-            return ReferenceEquals(right, null);
+            return right is null;
         }
 
         return left.Equals(right);

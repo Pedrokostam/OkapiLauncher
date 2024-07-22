@@ -97,7 +97,6 @@ public class NavigationService : INavigationService
             {
                 navigationAware.OnNavigatedTo(e.ExtraData);
             }
-
             Navigated?.Invoke(sender, dataContext!.GetType().FullName!);
         }
     }

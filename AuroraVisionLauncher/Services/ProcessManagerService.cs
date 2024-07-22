@@ -7,12 +7,19 @@ using System.Threading.Tasks;
 using System.Windows.Threading;
 using AuroraVisionLauncher.Core.Models.Apps;
 using AuroraVisionLauncher.Models;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace AuroraVisionLauncher.Services
 {
     public class ProcessManagerService : IProcessManagerService
     {
-        private Dictionary<string, List<AvAppFacade>> _dictionary = new(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, List<AvAppFacade>> _dictionary = new(StringComparer.OrdinalIgnoreCase);
+        private readonly IMessenger _messenger;
+
+        public ProcessManagerService(IMessenger messenger)
+        {
+            _messenger = messenger;
+        }
         public void UpdateProcessActive(IEnumerable<AvAppFacade> apps)
         {
             _dictionary.Clear();
@@ -68,7 +75,7 @@ namespace AuroraVisionLauncher.Services
                 {
                     if (string.Equals(process.MainModule?.FileName, app.Path, StringComparison.OrdinalIgnoreCase))
                     {
-                        simples.Add(new(process));
+                        simples.Add(new(process, _messenger));
                     }
                 }
                 catch

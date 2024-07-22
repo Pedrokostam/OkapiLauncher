@@ -12,35 +12,70 @@ using System.ComponentModel;
 using System.Windows.Data;
 using AuroraVisionLauncher.Converters;
 using System.Text.RegularExpressions;
+using CommunityToolkit.Mvvm.Messaging;
+using AuroraVisionLauncher.Models.Messages;
+using Microsoft.VisualBasic;
 
 namespace AuroraVisionLauncher.ViewModels;
 
-public partial class InstalledAppsViewModel : ObservableObject, INavigationAware
+public abstract class ProcessRefreshViewModel : ObservableRecipient, INavigationAware, IRecipient<AppProcessChangedMessage>
 {
-    private readonly IAvAppFacadeFactory _appFactory;
-    private readonly IProcessManagerService _processManagerService;
+    abstract protected IList<AvAppFacade> _rawApps { get; }
     private readonly DispatcherTimer _timer;
-    [ObservableProperty]
-    private AppSortProperty _sortProperty = AppSortProperty.Name;
-    private readonly List<AvAppFacade> _rawApps;
-    public InstalledAppsViewModel(IAvAppFacadeFactory appFactory, IProcessManagerService processManagerService)
-    {
-        _appFactory = appFactory;
-        _processManagerService = processManagerService;
-        _rawApps = new(_appFactory.CreateAllFacades());
-        _apps = CollectionViewSource.GetDefaultView(_rawApps);
-        Regroup();
+    protected readonly IProcessManagerService _processManagerService;
+    protected readonly IAvAppFacadeFactory _appFactory;
 
-        //_appFactory.Populate(AvApps);
+    protected ProcessRefreshViewModel(
+                                   IProcessManagerService processManagerService,
+                                   IAvAppFacadeFactory appFactory, IMessenger messenger
+        ) : base(messenger)
+    {
         _timer = TimerHelper.GetTimer();
         _timer.Tick += Update;
-        _processManagerService.UpdateProcessActive(_rawApps);
-        _timer.Start();
+        _processManagerService = processManagerService;
+        _appFactory = appFactory;
     }
 
+    public void OnNavigatedTo(object parameter)
+    {
+        _processManagerService.UpdateProcessActive(_rawApps);
+        _timer.Start();
+        IsActive = true;
+    }
+
+    public void OnNavigatedFrom()
+    {
+        _timer.Stop();
+        _timer.Tick -= Update;
+        IsActive = false;
+    }
+
+    public void Receive(AppProcessChangedMessage message)
+    {
+        if (message.AffectedAppPresent(_rawApps, out _))
+        {
+            _timer.Stop();
+            _processManagerService.UpdateProcessActive(_rawApps);
+            _timer.Start();
+        }
+    }
     private void Update(object? sender, EventArgs e)
     {
         _processManagerService.UpdateProcessActive(_rawApps);
+    }
+}
+public sealed partial class InstalledAppsViewModel : ProcessRefreshViewModel
+{
+    [ObservableProperty]
+    private AppSortProperty _sortProperty = AppSortProperty.Name;
+    protected override IList<AvAppFacade> _rawApps { get; }
+    public InstalledAppsViewModel(IAvAppFacadeFactory appFactory,
+                                  IProcessManagerService processManagerService,
+                                  IMessenger messenger) : base(processManagerService, appFactory, messenger)
+    {
+        _rawApps = new List<AvAppFacade>(_appFactory.CreateAllFacades());
+        _apps = CollectionViewSource.GetDefaultView(_rawApps);
+        Regroup();
     }
 
     partial void OnSortPropertyChanged(AppSortProperty value)
@@ -62,17 +97,8 @@ public partial class InstalledAppsViewModel : ObservableObject, INavigationAware
         Apps.GroupDescriptions.Add(gd);
     }
 
-    public void OnNavigatedTo(object parameter)
-    {
-    }
-
-    public void OnNavigatedFrom()
-    {
-        _timer.Stop();
-        _timer.Tick -= Update;
-    }
-
 
     [ObservableProperty]
     private ICollectionView _apps;
+
 }

@@ -21,38 +21,27 @@ using AuroraVisionLauncher.Core.Models;
 
 namespace AuroraVisionLauncher.ViewModels;
 
-public sealed partial class LauncherViewModel : ObservableObject, INavigationAware
+public sealed partial class LauncherViewModel : ProcessRefreshViewModel
 {
-    private readonly IAvAppFacadeFactory _appFactory;
     private readonly INavigationService _navigationService;
     private readonly IRecentlyOpenedFilesService _lastOpenedFilesService;
-    private readonly IProcessManagerService _processManagerService;
-    private readonly DispatcherTimer _timer;
 
     public LauncherViewModel(IAvAppFacadeFactory appProvider,
                              INavigationService navigationService,
                              IRecentlyOpenedFilesService lastOpenedFilesService,
-                             IProcessManagerService processManagerService)
+                             IProcessManagerService processManagerService,
+                             IMessenger messenger) : base(processManagerService, appProvider, messenger)
     {
         _lastOpenedFilesService = lastOpenedFilesService;
-        _processManagerService = processManagerService;
-        _appFactory = appProvider;
         _navigationService = navigationService;
-        _timer = TimerHelper.GetTimer();
-        _timer.Tick += Update;
-        _processManagerService.UpdateProcessActive(Apps);
-        _timer.Start();
     }
 
-    private void Update(object? sender, EventArgs e)
-    {
-        _processManagerService.UpdateProcessActive(Apps);
-    }
 
 
     [ObservableProperty]
     private LaunchOptions? _launchOptions;
     public ObservableCollection<AvAppFacade> Apps { get; } = [];
+    protected override IList<AvAppFacade> _rawApps => Apps;
 
     private bool CanLaunch()
     {
@@ -158,7 +147,8 @@ public sealed partial class LauncherViewModel : ObservableObject, INavigationAwa
     }
     private static Compatibility JudgeCompatibility(IAvApp app, IVisionProject program)
     {
-        if (!app.Brand.SupportsBrand(program.Brand) ){
+        if (!app.Brand.SupportsBrand(program.Brand))
+        {
             return Compatibility.Incompatible;
         }
         if (!app.CanOpen(program))
@@ -188,16 +178,4 @@ public sealed partial class LauncherViewModel : ObservableObject, INavigationAwa
         return Compatibility.Outdated;
     }
 
-    public void OnNavigatedTo(object parameter)
-    {
-        if (parameter is string s)
-        {
-            OpenProject(s);
-        }
-    }
-
-    public void OnNavigatedFrom()
-    {
-        _timer.Stop();
-    }
 }
