@@ -102,24 +102,24 @@
         BasedOn="{StaticResource BaseTextBlockStyle}"
         TargetType="TextBlock">
         <Setter Property="FontSize" Value="{StaticResource LargeFontSize}" />
-        <!--<Setter Property="Foreground" Value="{DynamicResource Brushes.TextBlock.NotImportant}" />-->
+        <!--<Setter Property="Foreground" Value="{DynamicResource Custom.Brushes.TextBlock.NotImportant}" />-->
         <Setter Property="FontStyle" Value="Italic" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="Margin" Value="0,3,0,3" />
     </Style>
 
     <Style x:Key="CommandlineValueStyle" TargetType="Run">
-        <Setter Property="Foreground" Value="{DynamicResource Brushes.Commandline.Value}" />
+        <Setter Property="Foreground" Value="{DynamicResource Custom.Brushes.Commandline.Value}" />
         <Setter Property="FontWeight" Value="Bold" />
     </Style>
 
     <Style x:Key="CommandlineParameterStyle" TargetType="Run">
-        <Setter Property="Foreground" Value="{DynamicResource Brushes.Commandline.Parameter}" />
+        <Setter Property="Foreground" Value="{DynamicResource Custom.Brushes.Commandline.Parameter}" />
         <Setter Property="FontStyle" Value="Italic" />
     </Style>
 
     <Style x:Key="CommandlineAppStyle" TargetType="Run">
-        <Setter Property="Foreground" Value="{DynamicResource Brushes.Commandline.App}" />
+        <Setter Property="Foreground" Value="{DynamicResource Custom.Brushes.Commandline.App}" />
     </Style>
 
 </ResourceDictionary>

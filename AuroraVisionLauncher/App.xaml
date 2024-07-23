@@ -33,8 +33,8 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Light.Blue.xaml" />-->
                 <!--  Accent and AppTheme setting  -->
 
-                <!--<ResourceDictionary Source="/Styles/Themes/Light.xaml" />
-                <ResourceDictionary Source="/Styles/Themes/Dark.xaml" />-->
+                <ResourceDictionary Source="/Styles/Themes/Light.xaml" />
+                <ResourceDictionary Source="/Styles/Themes/Dark.xaml" />
 
                 <ResourceDictionary Source="/Styles/_FontSizes.xaml" />
                 <ResourceDictionary Source="/Styles/_Thickness.xaml" />

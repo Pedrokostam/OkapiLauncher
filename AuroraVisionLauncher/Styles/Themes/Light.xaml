@@ -1099,17 +1099,17 @@
     <markupWithAssembly:StaticResourceExtension x:Key="MahApps.Brushes.ToggleSwitch.KnobFillOnDisabled" ResourceKey="MahApps.Brushes.SystemControlPageBackgroundBaseLow" />
 
 
-    <SolidColorBrush x:Key="Brushes.Compatibility.Compatible" Color="ForestGreen" />
-    <SolidColorBrush x:Key="Brushes.Compatibility.Incompatible" Color="OrangeRed" />
-    <SolidColorBrush x:Key="Brushes.Compatibility.Outdated" Color="Goldenrod" />
-    <SolidColorBrush x:Key="Brushes.Compatibility.Unknown" Color="DimGray" />
-    <SolidColorBrush x:Key="Brushes.TextBlock.NotImportant" Color="#FF656565" />
+    <SolidColorBrush x:Key="Custom.Brushes.Compatibility.Compatible" Color="ForestGreen" />
+    <SolidColorBrush x:Key="Custom.Brushes.Compatibility.Incompatible" Color="OrangeRed" />
+    <SolidColorBrush x:Key="Custom.Brushes.Compatibility.Outdated" Color="Goldenrod" />
+    <SolidColorBrush x:Key="Custom.Brushes.Compatibility.Unknown" Color="DimGray" />
+    <SolidColorBrush x:Key="Custom.Brushes.TextBlock.NotImportant" Color="#FF656565" />
 
 
-    <SolidColorBrush x:Key="Brushes.Commandline.App" Color="#CB4B16" />
-    <SolidColorBrush x:Key="Brushes.Commandline.Parameter" Color="#586E75" />
-    <SolidColorBrush x:Key="Brushes.Commandline.Value" Color="#6C71C4" />
-    <SolidColorBrush x:Key="Brushes.Commandline.Background" Color="#FDF6E3" />
+    <SolidColorBrush x:Key="Custom.Brushes.Commandline.App" Color="#CB4B16" />
+    <SolidColorBrush x:Key="Custom.Brushes.Commandline.Parameter" Color="#586E75" />
+    <SolidColorBrush x:Key="Custom.Brushes.Commandline.Value" Color="#6C71C4" />
+    <SolidColorBrush x:Key="Custom.Brushes.Commandline.Background" Color="#FDF6E3" />
 
 
 

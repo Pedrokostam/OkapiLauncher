@@ -19,7 +19,7 @@
                     TargetType="TextBlock">
                     <Setter Property="TextAlignment" Value="Right" />
                     <Setter Property="FontStyle" Value="Italic" />
-                    <Setter Property="Foreground" Value="{DynamicResource Brushes.TextBlock.NotImportant}" />
+                    <Setter Property="Foreground" Value="{DynamicResource Custom.Brushes.TextBlock.NotImportant}" />
                 </Style>
                 <Style
                     x:Key="ValueStyle"

@@ -14,8 +14,8 @@ public class ThemeSelectorService : IThemeSelectorService
 {
     private const string _hcDarkTheme = "pack://application:,,,/Styles/Themes/HC.Dark.Blue.xaml";
     private const string _hcLightTheme = "pack://application:,,,/Styles/Themes/HC.Light.Blue.xaml";
-    private const string _darkTheme = "pack://application:,,,/Styles/Themes/Dark.xaml";
-    private const string _lightTheme = "pack://application:,,,/Styles/Themes/Light.xaml";
+    private const string DarkTheme = "pack://application:,,,/Styles/Themes/Dark.xaml";
+    private const string LightTheme = "pack://application:,,,/Styles/Themes/Light.xaml";
     private const string _customThemeColorKey = "CustomThemeColor";
     private const string _themeKey = "Theme";
 
@@ -30,8 +30,8 @@ public class ThemeSelectorService : IThemeSelectorService
         // Please complete these themes following the docs on https://mahapps.com/docs/themes/thememanager#creating-custom-themes
         ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(_hcDarkTheme), MahAppsLibraryThemeProvider.DefaultInstance));
         ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(_hcLightTheme), MahAppsLibraryThemeProvider.DefaultInstance));
-        ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(_darkTheme), MahAppsLibraryThemeProvider.DefaultInstance));
-        ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(_lightTheme), MahAppsLibraryThemeProvider.DefaultInstance));
+        ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(DarkTheme), MahAppsLibraryThemeProvider.DefaultInstance));
+        ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(LightTheme), MahAppsLibraryThemeProvider.DefaultInstance));
 
         var theme = GetCurrentTheme();
         var color = GetCurrentAccent();
@@ -57,6 +57,15 @@ public class ThemeSelectorService : IThemeSelectorService
                                    showcaseBrush: new SolidColorBrush(customColor.Value),
                                    isRuntimeGenerated: true,
                                    isHighContrast: false);
+                var baseTheme = ThemeManager.Current.GetTheme($"{themeEnum}", SystemParameters.HighContrast)!;
+                foreach (var key in baseTheme.Resources.Keys)
+                {
+                    if (key is not string customKey || !customKey.StartsWith("Custom.", StringComparison.Ordinal))
+                    {
+                        continue;
+                    }
+                    newTheme.Resources[customKey] = baseTheme.Resources[customKey];
+                }
                 ThemeManager.Current.ChangeTheme(Application.Current, newTheme);
             }
         }
