@@ -86,7 +86,7 @@
         <Setter Property="Opacity" Value="0.6" />
         <Setter Property="TextWrapping" Value="NoWrap" />
         <Setter Property="TextTrimming" Value="CharacterEllipsis" />
-        <!--<Setter Property="Tooltip" Value="{StaticResource SelfToolTipText}" />-->
+        <Setter Property="ToolTip" Value="{StaticResource SelfToolTipText}" />
     </Style>
 
     <Style

@@ -121,6 +121,7 @@
                         <Button
                             Command="{Binding CopyArgumentStringCommand}"
                             DockPanel.Dock="Right"
+                    Style="{StaticResource SymbolButton}"
                             ToolTip="{x:Static properties:Resources.CommandLineCopy}">
                             <mahicon:PackIconLucide Kind="ClipboardCopy" />
                         </Button>
