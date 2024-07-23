@@ -121,7 +121,7 @@
                         <Button
                             Command="{Binding CopyArgumentStringCommand}"
                             DockPanel.Dock="Right"
-                    Style="{StaticResource SymbolButton}"
+                            Style="{StaticResource SymbolButton}"
                             ToolTip="{x:Static properties:Resources.CommandLineCopy}">
                             <mahicon:PackIconLucide Kind="ClipboardCopy" />
                         </Button>
@@ -134,7 +134,8 @@
                             BorderThickness="0"
                             Document="{Binding LaunchOptions.ArgumentString, Converter={StaticResource CommandlineFormatter}}"
                             FontFamily="Consolas"
-                            FontSize="16" />
+                            FontSize="18"
+                            ToolTip="{Binding LaunchOptions.ArgumentString}" />
                     </DockPanel>
                 </GroupBox>
                 <Grid Grid.Row="1" Grid.Column="1">

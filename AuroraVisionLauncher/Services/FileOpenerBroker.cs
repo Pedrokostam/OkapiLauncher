@@ -14,7 +14,6 @@ namespace AuroraVisionLauncher.Services
     public class FileOpenerBroker :ObservableRecipient, IRecipient<FileRequestedMessage>
     {
         private readonly INavigationService _navigationService;
-
         public FileOpenerBroker(IMessenger messenger, INavigationService navigationService):base(messenger) 
         {
             _navigationService = navigationService;

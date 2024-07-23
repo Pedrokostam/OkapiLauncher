@@ -21,11 +21,6 @@
                     <conv:ProjectTypeToStringConverter x:Key="ProjectTypeToString" />
                     <conv:CompatibilityToDescriptionConverter x:Key="CompatibilityDescription" />
                 </ResourceDictionary>
-                <ResourceDictionary Source="/Styles/_FontSizes.xaml" />
-                <ResourceDictionary Source="/Styles/_Thickness.xaml" />
-                <ResourceDictionary Source="/Styles/MetroWindow.xaml" />
-                <ResourceDictionary Source="/Styles/TextBlock.xaml" />
-                <ResourceDictionary Source="/Styles/Button.xaml" />
                 <!--
                     MahApps.Metro resource dictionaries.
                     Learn more about using MahApps.Metro at https://mahapps.com/
@@ -37,10 +32,15 @@
                 <!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Dark.Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Light.Blue.xaml" />-->
                 <!--  Accent and AppTheme setting  -->
-                <ResourceDictionary Source="/Styles/Themes/Dark.xaml" />
-                <ResourceDictionary Source="/Styles/Themes/Light.xaml" />
 
+                <!--<ResourceDictionary Source="/Styles/Themes/Light.xaml" />
+                <ResourceDictionary Source="/Styles/Themes/Dark.xaml" />-->
 
+                <ResourceDictionary Source="/Styles/_FontSizes.xaml" />
+                <ResourceDictionary Source="/Styles/_Thickness.xaml" />
+                <ResourceDictionary Source="/Styles/MetroWindow.xaml" />
+                <ResourceDictionary Source="/Styles/TextBlock.xaml" />
+                <ResourceDictionary Source="/Styles/Button.xaml" />
 
                 <ResourceDictionary Source="/DataTemplates/AvAppFacade.xaml" />
                 <ResourceDictionary Source="/DataTemplates/CommandLineOptions.xaml" />

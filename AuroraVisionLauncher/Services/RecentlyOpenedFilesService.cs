@@ -20,6 +20,9 @@ public class RecentlyOpenedFilesService :ObservableRecipient, IRecentlyOpenedFil
     private readonly string Key = "LastOpenedFiles";
     const int FileCountLimit = 30;
     private List<RecentlyOpenedFile> LastOpenedPaths => (List<RecentlyOpenedFile>)App.Current.Properties[Key]!;
+
+    public string? LastOpenedFile { get; private set; }
+
     public RecentlyOpenedFilesService(IMessenger messenger):base(messenger)
     {
         //App.Current.Properties[Key] = new List<RecentlyOpenedFile>();
@@ -59,6 +62,7 @@ public class RecentlyOpenedFilesService :ObservableRecipient, IRecentlyOpenedFil
             LastOpenedPaths.RemoveAt(FileCountLimit);
         }
         IEnumerable<RecentlyOpenedFileFacade> enumerable = GetFacades();
+        LastOpenedFile = file;
         Messenger.Send(new RecentFilesChangedMessage(enumerable));
     }
 

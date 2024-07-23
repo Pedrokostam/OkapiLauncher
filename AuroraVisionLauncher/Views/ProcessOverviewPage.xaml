@@ -43,26 +43,22 @@
                 ContentTemplate="{StaticResource AppHeader}" />
             <Button
                 Grid.Column="2"
-                    Style="{StaticResource SymbolButton}"
-
                 Command="{Binding CopyExecutablePathCommand}"
+                Style="{StaticResource SymbolButton}"
                 ToolTip="{x:Static properties:Resources.AvAppCopyPath}">
                 <mahicon:PackIconLucide Kind="ClipboardCopy" />
             </Button>
             <Button
-
                 Grid.Column="3"
-                    Style="{StaticResource SymbolButton}"
-
                 Command="{Binding OpenContainingFolderCommand}"
+                Style="{StaticResource SymbolButton}"
                 ToolTip="{x:Static properties:Resources.AvAppOpenInstallationFolder}">
                 <mahicon:PackIconMaterial Kind="FolderOpen" />
             </Button>
             <Button
                 Grid.Column="1"
-                    Style="{StaticResource SymbolButton}"
-
                 Command="{Binding LaunchWithoutProgramCommand}"
+                Style="{StaticResource SymbolButton}"
                 ToolTip="{x:Static properties:Resources.AvAppLaunchWithNoProgram}">
                 <mahicon:PackIconMaterial Kind="Launch" />
             </Button>

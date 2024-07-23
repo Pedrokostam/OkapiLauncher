@@ -36,7 +36,7 @@ public abstract class ProcessRefreshViewModel : ObservableRecipient, INavigation
         _appFactory = appFactory;
     }
 
-    public void OnNavigatedTo(object parameter)
+    public virtual void OnNavigatedTo(object parameter)
     {
         _processManagerService.UpdateProcessActive(_rawApps);
         _timer.Start();

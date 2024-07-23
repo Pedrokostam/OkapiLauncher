@@ -177,5 +177,16 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
         }
         return Compatibility.Outdated;
     }
-
+    public override void OnNavigatedTo(object parameter)
+    {
+        base.OnNavigatedTo(parameter);
+        if(parameter is string path)
+        {
+            OpenProject(path);
+        }
+        else if (_lastOpenedFilesService.LastOpenedFile is string last)
+        {
+            OpenProject(last);
+        }
+    }
 }

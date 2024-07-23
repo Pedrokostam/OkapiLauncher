@@ -112,17 +112,15 @@
                 </TextBlock>
                 <Button
                     Grid.Column="1"
-
-                    Style="{StaticResource SymbolButton}"
                     Command="{Binding OpenProgramFolderCommand}"
+                    Style="{StaticResource SymbolButton}"
                     ToolTip="{x:Static properties:Resources.ProgramDetailsOpenFolder}">
                     <mahicon:PackIconMaterial Kind="FolderOpen" />
                 </Button>
                 <Button
                     Grid.Column="2"
-                    Style="{StaticResource SymbolButton}"
-
                     Command="{Binding CopyPathToClipboardCommand}"
+                    Style="{StaticResource SymbolButton}"
                     ToolTip="{x:Static properties:Resources.ProgramDetailsCopyPath}">
                     <mahicon:PackIconLucide Kind="ClipboardCopy" />
                 </Button>
