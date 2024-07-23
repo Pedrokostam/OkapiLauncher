@@ -54,7 +54,7 @@
                             mah:TextBoxHelper.UseFloatingWatermark="True"
                             mah:TextBoxHelper.Watermark="Select a color"
                             IsEnabled="{Binding Theme, Mode=OneWay, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=!System}"
-                            SelectedColor="{Binding CurrentAccent}" />
+                            SelectedColor="{Binding CurrentAccent, Delay=250}" />
                         <Button
                             Grid.Row="2"
                             Grid.Column="1"
