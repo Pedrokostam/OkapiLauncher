@@ -49,7 +49,7 @@ public record AvApp : IAvApp
         var balance = 1.0d;
         // revision doesnt really matter, started with so it will never move it below 0
         // in fact the score should never be exactly zero
-        balance += (version.Revision - baseVersion.Revision) / 100_000;
+        balance += (version.Revision - baseVersion.Revision) / 100_000.0;
         // different builds denotes changes in the API, so runtime cannot be lauched for example
         balance += (version.Build - baseVersion.Build) * 10;
         // minor indicate some larger changes, but noting too ground breaking
