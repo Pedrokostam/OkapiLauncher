@@ -9,9 +9,9 @@
     mc:Ignorable="options">
     <system:String x:Key="Theme.Name">Light</system:String>
     <system:String x:Key="Theme.Origin">MahApps.Metro</system:String>
-    <system:String x:Key="Theme.DisplayName">Blue (Light)</system:String>
+    <system:String x:Key="Theme.DisplayName">MyLight</system:String>
     <system:String x:Key="Theme.BaseColorScheme">Light</system:String>
-    <system:String x:Key="Theme.ColorScheme">Blue</system:String>
+    <system:String x:Key="Theme.ColorScheme">Blueish</system:String>
     <Color x:Key="Theme.PrimaryAccentColor">#FF0078D7</Color>
     <SolidColorBrush
         x:Key="Theme.ShowcaseBrush"
@@ -1099,7 +1099,7 @@
     <markupWithAssembly:StaticResourceExtension x:Key="MahApps.Brushes.ToggleSwitch.KnobFillOnDisabled" ResourceKey="MahApps.Brushes.SystemControlPageBackgroundBaseLow" />
 
 
-    <SolidColorBrush x:Key="Custom.Brushes.Compatibility.Compatible" Color="ForestGreen" />
+    <!--<SolidColorBrush x:Key="Custom.Brushes.Compatibility.Compatible" Color="ForestGreen" />
     <SolidColorBrush x:Key="Custom.Brushes.Compatibility.Incompatible" Color="OrangeRed" />
     <SolidColorBrush x:Key="Custom.Brushes.Compatibility.Outdated" Color="Goldenrod" />
     <SolidColorBrush x:Key="Custom.Brushes.Compatibility.Unknown" Color="DimGray" />
@@ -1109,7 +1109,7 @@
     <SolidColorBrush x:Key="Custom.Brushes.Commandline.App" Color="#CB4B16" />
     <SolidColorBrush x:Key="Custom.Brushes.Commandline.Parameter" Color="#586E75" />
     <SolidColorBrush x:Key="Custom.Brushes.Commandline.Value" Color="#6C71C4" />
-    <SolidColorBrush x:Key="Custom.Brushes.Commandline.Background" Color="#FDF6E3" />
+    <SolidColorBrush x:Key="Custom.Brushes.Commandline.Background" Color="#FDF6E3" />-->
 
 
 

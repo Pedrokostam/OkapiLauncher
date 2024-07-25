@@ -13,6 +13,7 @@ using AuroraVisionLauncher.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ControlzEx.Theming;
+using MahApps.Metro.Controls;
 using Microsoft.Extensions.Options;
 
 namespace AuroraVisionLauncher.ViewModels;
@@ -38,7 +39,17 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
         _systemService = systemService;
         _applicationInfoService = applicationInfoService;
         _fileAssociationService = fileAssociationService;
+        PrimaryColorNames = (Dictionary<System.Windows.Media.Color?, string>)_themeSelectorService.GetAvailablePrimaryAccents();
+        var colors = from c in PrimaryColorNames.Keys
+                     where c is not null
+                     let hsv = new HSVColor(c.Value)
+                     orderby hsv.Hue, hsv.Saturation, hsv.Value descending
+                     select c.Value;
+        PrimaryColors = new(colors);
     }
+    [ObservableProperty]
+    private Dictionary<System.Windows.Media.Color?, string> _primaryColorNames;
+    public ObservableCollection<System.Windows.Media.Color> PrimaryColors { get; }
 
     [ObservableProperty]
     private AppTheme _theme;
@@ -74,8 +85,8 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
 
     private bool CanResetColor() => CurrentAccent != null;
 
-    [RelayCommand(CanExecute =nameof(CanResetColor))]
-    private void ResetColor()=>CurrentAccent = null;
+    [RelayCommand(CanExecute = nameof(CanResetColor))]
+    private void ResetColor() => CurrentAccent = null;
 
     [RelayCommand]
     private void OnPrivacyStatement()

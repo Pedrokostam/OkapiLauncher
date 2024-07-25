@@ -1,0 +1,23 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:markup="clr-namespace:MahApps.Metro.Markup;assembly=MahApps.Metro"
+    xmlns:markupWithAssembly="clr-namespace:MahApps.Metro.Markup;assembly=MahApps.Metro"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    mc:Ignorable="options">
+
+    <SolidColorBrush x:Key="Custom.Brushes.Compatibility.Compatible" Color="ForestGreen" />
+    <SolidColorBrush x:Key="Custom.Brushes.Compatibility.Incompatible" Color="OrangeRed" />
+    <SolidColorBrush x:Key="Custom.Brushes.Compatibility.Outdated" Color="Goldenrod" />
+    <SolidColorBrush x:Key="Custom.Brushes.Compatibility.Unknown" Color="DimGray" />
+    <SolidColorBrush x:Key="Custom.Brushes.TextBlock.NotImportant" Color="#FF656565" />
+
+
+    <SolidColorBrush x:Key="Custom.Brushes.Commandline.App" Color="#CB4B16" />
+    <SolidColorBrush x:Key="Custom.Brushes.Commandline.Parameter" Color="#586E75" />
+    <SolidColorBrush x:Key="Custom.Brushes.Commandline.Value" Color="#6C71C4" />
+    <SolidColorBrush x:Key="Custom.Brushes.Commandline.Background" Color="#FDF6E3" />
+
+</ResourceDictionary>

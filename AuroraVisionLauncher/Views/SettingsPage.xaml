@@ -53,7 +53,11 @@
                             mah:TextBoxHelper.ClearTextButton="False"
                             mah:TextBoxHelper.UseFloatingWatermark="True"
                             mah:TextBoxHelper.Watermark="Select a color"
+                            AvailableColorPaletteItemsSource="{Binding PrimaryColors}"
+                            ColorNamesDictionary="{Binding PrimaryColorNames}"
                             IsEnabled="{Binding Theme, Mode=OneWay, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=!System}"
+                            IsRecentColorPaletteVisible="False"
+                            IsStandardColorPaletteVisible="False"
                             SelectedColor="{Binding CurrentAccent, Delay=250}" />
                         <Button
                             Grid.Row="2"
