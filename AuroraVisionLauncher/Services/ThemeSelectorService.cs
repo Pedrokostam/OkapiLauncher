@@ -35,14 +35,16 @@ public class ThemeSelectorService : IThemeSelectorService
         }
     }
 
-    public Dictionary<Color?, string> GetAvailablePrimaryAccents() => AvailablePrimaryAccents;
-
-    public void InitializeTheme()
+    public IEnumerable<Color> GetAvailablePrimaryAccents()
     {
         foreach (var t in ThemeManager.Current.Themes)
         {
-            Debug.WriteLine($"{t.ColorScheme} - {t.PrimaryAccentColor}");
+            yield return t.PrimaryAccentColor;
         }
+    }
+
+    public void InitializeTheme()
+    {
         // TODO: Mahapps.Metro supports syncronization with high contrast but you have to provide custom high contrast themes
         // We've added basic high contrast dictionaries for Dark and Light themes
         // Please complete these themes following the docs on https://mahapps.com/docs/themes/thememanager#creating-custom-themes
@@ -50,6 +52,10 @@ public class ThemeSelectorService : IThemeSelectorService
         ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(_lightTheme), MahAppsLibraryThemeProvider.DefaultInstance));
         ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(_hcDarkTheme), MahAppsLibraryThemeProvider.DefaultInstance));
         ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(_hcLightTheme), MahAppsLibraryThemeProvider.DefaultInstance));
+        foreach (var t in ThemeManager.Current.Themes)
+        {
+            MahApps.Metro.Controls.ColorHelper.ColorNamesDictionary.TryAdd(t.PrimaryAccentColor, t.ColorScheme);
+        }
         var theme = GetCurrentTheme();
         var color = GetCurrentAccent();
         SetTheme(theme, color);

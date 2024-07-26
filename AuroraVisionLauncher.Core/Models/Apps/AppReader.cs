@@ -30,7 +30,7 @@ public static class AppReader
             {
                 AvType.Professional => path,
                 AvType.Runtime => path,
-                AvType.DeepLearning => Path.Join(path, "tools", "DeepLearningEditor" ),
+                AvType.DeepLearning => Path.Join(path, "tools", "DeepLearningEditor"),
                 AvType.Library => Path.Join(path, "bin", "x64"),
                 _ => throw new NotSupportedException()
             };
@@ -128,7 +128,10 @@ public static class AppReader
                 RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture,
                 TimeSpan.FromMilliseconds(100)))
             {
-                paths.Add(value_string);
+                if (Directory.Exists(value_string))
+                {
+                    paths.Add(value_string);
+                }
             }
         }
         return paths;

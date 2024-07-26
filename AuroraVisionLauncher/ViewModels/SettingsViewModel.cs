@@ -39,16 +39,12 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
         _systemService = systemService;
         _applicationInfoService = applicationInfoService;
         _fileAssociationService = fileAssociationService;
-        PrimaryColorNames = (Dictionary<System.Windows.Media.Color?, string>)_themeSelectorService.GetAvailablePrimaryAccents();
-        var colors = from c in PrimaryColorNames.Keys
-                     where c is not null
-                     let hsv = new HSVColor(c.Value)
+        var colors = from c in _themeSelectorService.GetAvailablePrimaryAccents()
+                     let hsv = new HSVColor(c)
                      orderby hsv.Hue, hsv.Saturation, hsv.Value descending
-                     select c.Value;
-        PrimaryColors = new(colors);
+                     select c;
+        PrimaryColors = new(colors.Distinct());
     }
-    [ObservableProperty]
-    private Dictionary<System.Windows.Media.Color?, string> _primaryColorNames;
     public ObservableCollection<System.Windows.Media.Color> PrimaryColors { get; }
 
     [ObservableProperty]
