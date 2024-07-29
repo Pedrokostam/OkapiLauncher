@@ -83,7 +83,7 @@
         TargetType="TextBlock">
         <!--<Setter Property="Foreground" Value="Red" />-->
         <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.Foreground}" />
-        <Setter Property="Opacity" Value="0.6" />
+        <Setter Property="FontWeight" Value="Light" />
         <Setter Property="TextWrapping" Value="NoWrap" />
         <Setter Property="TextTrimming" Value="CharacterEllipsis" />
         <Setter Property="ToolTip" Value="{StaticResource SelfToolTipText}" />

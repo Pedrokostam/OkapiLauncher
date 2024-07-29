@@ -151,7 +151,7 @@
     <value>Light</value>
   </data>
   <data name="SettingsPageRadioButtonWindowsDefaultTheme" xml:space="preserve">
-    <value>Default</value>
+    <value>System</value>
   </data>
   <data name="ShellMenuItemViewsLauncherPageHeader" xml:space="preserve">
     <value>_Launcher</value>

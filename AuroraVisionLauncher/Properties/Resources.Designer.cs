@@ -619,7 +619,7 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Default.
+        ///   Looks up a localized string similar to System.
         /// </summary>
         public static string SettingsPageRadioButtonWindowsDefaultTheme {
             get {
