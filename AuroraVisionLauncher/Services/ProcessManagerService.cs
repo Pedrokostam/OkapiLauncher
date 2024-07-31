@@ -35,8 +35,10 @@ namespace AuroraVisionLauncher.Services
             _timer = new(2000);
             _timer.Elapsed += _timer_Elapsed;
             _timer.AutoReset = true;
+            Update(_avAppFacadeFactory.AvApps);
             _timer.Start();
             _messenger.RegisterAll(this);
+
         }
 
         private readonly object _lock = new();
