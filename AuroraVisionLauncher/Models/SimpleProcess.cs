@@ -40,6 +40,17 @@ namespace AuroraVisionLauncher.Models
             _path = proc.MainModule!.FileName ?? throw new ArgumentNullException("Fullname");
         }
 
+        public SimpleProcess(SimpleProcess other)
+        {
+            ProcessName = other.ProcessName;
+            Id = other.Id;
+            MainWindowTitle = other.MainWindowTitle;
+            StartTime = other.StartTime;
+            _windowHandle = other._windowHandle;
+            _messenger = other._messenger;
+            _path = other._path;
+        }
+
         public string TrimmedTitle
         {
             get
@@ -175,6 +186,20 @@ namespace AuroraVisionLauncher.Models
             return MainWindowTitle.CompareTo(other.MainWindowTitle);
         }
 
+        public SimpleProcess Clone()
+        {
+            return new SimpleProcess(this);
+        }
+
+        public void UpdateFrom(SimpleProcess donor)
+        {
+            ArgumentNullException.ThrowIfNull(donor);
+            if (Id != donor.Id)
+            {
+                return;
+            }
+            MainWindowTitle=donor.MainWindowTitle;
+        }
 
         public static bool operator ==(SimpleProcess left, SimpleProcess right)
         {

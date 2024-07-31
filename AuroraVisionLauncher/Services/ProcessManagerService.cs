@@ -3,87 +3,126 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading.Channels;
+using System.Timers;
 using System.Windows.Threading;
+using AuroraVisionLauncher.Contracts.Services;
 using AuroraVisionLauncher.Core.Models.Apps;
 using AuroraVisionLauncher.Models;
+using AuroraVisionLauncher.Models.Messages;
 using CommunityToolkit.Mvvm.Messaging;
 
 namespace AuroraVisionLauncher.Services
 {
-    public class ProcessManagerService : IProcessManagerService
+    public class ProcessManagerService : IProcessManagerService, IRecipient<AppProcessChangedMessage>
     {
-        private readonly Dictionary<string, List<AvAppFacade>> _dictionary = new(StringComparer.OrdinalIgnoreCase);
+        /// <summary>
+        /// Each records holds a list of all apps that share the process name.
+        /// Since the process name is the key, it is quite fast to look it up
+        /// ExecutablePath - simpleprocesses
+        /// </summary>
+        private readonly Dictionary<string, HashSet<SimpleProcess>> _dictionary = new(StringComparer.OrdinalIgnoreCase);
         private readonly IMessenger _messenger;
+        private readonly IAvAppFacadeFactory _avAppFacadeFactory;
+        private readonly System.Timers.Timer _timer;
 
-        public ProcessManagerService(IMessenger messenger)
+        public FreshAppProcesses GetCurrentState => new FreshAppProcesses(_dictionary);
+
+        public ProcessManagerService(IMessenger messenger, IAvAppFacadeFactory avAppFacadeFactory)
         {
             _messenger = messenger;
+            _avAppFacadeFactory = avAppFacadeFactory;
+            _timer = new(2000);
+            _timer.Elapsed += _timer_Elapsed;
+            _timer.AutoReset = true;
+            _timer.Start();
+            _messenger.RegisterAll(this);
         }
-        public void UpdateProcessActive(IEnumerable<AvAppFacade> apps)
-        {
-            _dictionary.Clear();
-            foreach (var item in apps)
-            {
-                if (_dictionary.TryGetValue(item.ProcessName, out var list))
-                {
-                    list.Add(item);
-                }
-                else
-                {
-                    _dictionary[item.ProcessName] = [item];
-                }
-            }
-            foreach (var app in apps)
-            {
-                app.ActiveProcessesNumber = 0;
-            }
-            var allProcesses = Process.GetProcesses();
 
-            foreach (var process in allProcesses)
+        private readonly object _lock = new();
+
+        private void _timer_Elapsed(object? sender, ElapsedEventArgs e)
+        {
+            Update(_avAppFacadeFactory.AvApps);
+        }
+
+
+        private void Update(IEnumerable<IAvApp> apps)
+        {
+            var st = Stopwatch.StartNew();
+            if (Monitor.TryEnter(_lock))
             {
                 try
                 {
-                    if (_dictionary.TryGetValue(process.ProcessName, out var appList))
+                    var changedApps = new List<string>();
+                    var processNames = apps.Select(x => x.ProcessName).ToHashSet(StringComparer.OrdinalIgnoreCase);
+                    // Cleared all previous records, we dont want old data
+                    // it may be better to instantiate the dict here, worth checking
+                    //_dictionary.Clear();
+                    //PopulateDictionary(apps);
+                    var rawProcesses = Process.GetProcesses();
+                    var groupedByExePath = rawProcesses
+                        .Where(x => processNames.Contains(x.ProcessName) && x.MainModule?.FileName is not null)
+                        .GroupBy(x => x.MainModule!.FileName!, x => new SimpleProcess(x, _messenger), StringComparer.OrdinalIgnoreCase);
+
+                    var missings = _dictionary.Keys.ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+                    foreach (var exePathGroup in groupedByExePath)
                     {
-                        foreach (var innerApp in appList)
+                        UpdateOneExe(exePathGroup);
+                        missings.Remove(exePathGroup.Key);
+                    }
+
+                    foreach (var missing in missings)
+                    {
+                        if (_dictionary.TryGetValue(missing, out var value))
                         {
-                            if (string.Equals(innerApp.Path, process.MainModule?.FileName, StringComparison.OrdinalIgnoreCase))
-                            {
-                                innerApp.ActiveProcessesNumber++;
-                            }
+                            value.Clear();
                         }
                     }
-                }
-                catch
-                {
+
+                    foreach (var proc in rawProcesses)
+                    {
+                        proc.Dispose();
+                    }
+                    _messenger.Send<FreshAppProcesses>(new FreshAppProcesses(_dictionary));
                 }
                 finally
                 {
-                    process.Dispose();
+                    Monitor.Exit(_lock);
                 }
             }
+            Debug.WriteLine(st.Elapsed.TotalMilliseconds);
         }
 
-        public IList<SimpleProcess> GetActiveProcesses(AvAppFacade app)
+        private void UpdateOneExe(IGrouping<string, SimpleProcess> exePathGroup)
         {
-            var processes = Process.GetProcessesByName(app.ProcessName);
-            var simples = new List<SimpleProcess>();
-            foreach (var process in processes)
+            if (!_dictionary.TryGetValue(exePathGroup.Key, out var set))
             {
-                try
+                set = [];
+                _dictionary[exePathGroup.Key] = set;
+            }
+            var freshSimples = exePathGroup.ToHashSet();
+            foreach (var newProc in freshSimples)
+            {
+                if (set.TryGetValue(newProc, out var oldProc))
                 {
-                    if (string.Equals(process.MainModule?.FileName, app.Path, StringComparison.OrdinalIgnoreCase))
-                    {
-                        simples.Add(new(process, _messenger));
-                    }
+                    oldProc.UpdateFrom(newProc);
                 }
-                catch
+                else
                 {
-                    process.Dispose();
+                    set.Add(newProc);
                 }
             }
-            return simples;
+            int prevCount = set.Count;
+            set.IntersectWith(freshSimples);
+        }
+
+        public void Receive(AppProcessChangedMessage message)
+        {
+            _timer.Stop();
+            Update(_avAppFacadeFactory.AvApps);
+            _timer.Start();
         }
     }
 }

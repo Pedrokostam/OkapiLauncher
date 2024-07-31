@@ -59,6 +59,62 @@
                 Text="{Binding Path}" />
         </Grid>
     </DataTemplate>
+    <DataTemplate x:Key="AppHeaderProcess">
+        <Grid Margin="0,0,10,0" VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Border
+                Grid.RowSpan="3"
+                Grid.Column="0"
+                Padding="0,0,10,0">
+                <Image HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Image.Source>
+                        <BitmapImage DecodePixelWidth="100" UriSource="{Binding Converter={StaticResource AppToImageConverter}}" />
+                    </Image.Source>
+                </Image>
+            </Border>
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="1"
+                Style="{StaticResource AppTitleStyle}">
+                <Run Text="{Binding Version, Mode=OneWay}" />
+                <Run Text="{Binding SecondaryVersion, Mode=OneWay, TargetNullValue='', StringFormat='{}({0}) '}" />
+            </TextBlock>
+            <StackPanel
+                Grid.Row="0"
+                Grid.Column="1"
+                Orientation="Horizontal">
+                <TextBlock Style="{StaticResource AppTitleStyle}" Text="{Binding Name, Mode=OneWay}" />
+                <Border
+                    Margin="0,4,0,4"
+                    Background="{DynamicResource MahApps.Brushes.Highlight}"
+                    CornerRadius="10"
+                    Opacity=".8">
+                    <TextBlock
+                        Margin="8,0,8,0"
+                        VerticalAlignment="Center"
+                        FontSize="{StaticResource MediumFontSize}"
+                        FontStyle="Normal"
+                        Foreground="{DynamicResource MahApps.Brushes.IdealForeground}"
+                        Style="{StaticResource AppTitleStyle}"
+                        Text="{x:Static properties:Resources.AvAppDevelopmentVersion}"
+                        Visibility="{Binding IsDevelopmentVersion, Converter={StaticResource BoolVisibilityConverter}}" />
+                </Border>
+            </StackPanel>
+            <TextBlock
+                Grid.Row="2"
+                Grid.Column="1"
+                Style="{StaticResource AppFilePathStyle}"
+                Text="{Binding Path}" />
+        </Grid>
+    </DataTemplate>
     <DataTemplate x:Key="AvAppFacadeDataTemplate" DataType="{x:Type mod:AvAppFacade}">
         <Grid HorizontalAlignment="Stretch">
             <Grid.ContextMenu>
@@ -115,8 +171,8 @@
                                     <DataTrigger Binding="{Binding IsLaunched}" Value="False">
                                         <Setter Property="Text" Value="Not running" />
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding IsLaunched}" Value="TRue">
-                                        <Setter Property="Text" Value="{Binding ActiveProcessesNumber, StringFormat={x:Static properties:Resources.AvAppProcessesActive}}" />
+                                    <DataTrigger Binding="{Binding IsLaunched}" Value="True">
+                                        <Setter Property="Text" Value="{Binding ActiveProcesses.Count, StringFormat={x:Static properties:Resources.AvAppProcessesActive}}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>

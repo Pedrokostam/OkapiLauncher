@@ -25,4 +25,5 @@ public interface IAvAppFacadeFactory
     /// Create facades for every detected application and returns it as an enumerable.
     /// </summary>
     IEnumerable<AvAppFacade> CreateAllFacades();
+    void RediscoverApps();
 }

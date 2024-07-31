@@ -19,6 +19,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Windows.ApplicationModel.VoiceCommands;
+using ObservableCollections;
 
 namespace AuroraVisionLauncher.Models;
 public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFacade>, IEquatable<AvAppFacade>
@@ -48,12 +49,9 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     private Compatibility? _compatibility = null;
     private readonly IMessenger _messenger;
 
+    public ObservableCollection<SimpleProcess> ActiveProcesses { get; } = new();
 
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsLaunched))]
-    private int _activeProcessesNumber;
-
-    public bool IsLaunched => ActiveProcessesNumber > 0;
+    public bool IsLaunched => ActiveProcesses.Count > 0;
 
     public AvAppFacade(AvApp avApp, IWindowManagerService windowManagerService, IMessenger messenger)
     {
@@ -62,7 +60,14 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
         Version = new AvVersionFacade(avApp.Version);
         SecondaryVersion = avApp.SecondaryVersion is not null ? new AvVersionFacade(avApp.SecondaryVersion) : null;
         _messenger = messenger;
+        ActiveProcesses.CollectionChanged += ActiveProcesses_CollectionChanged;
     }
+
+    private void ActiveProcesses_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    {
+       OnPropertyChanged(nameof(IsLaunched));
+    }
+
     public ProductBrand Brand => _avApp.Brand;
 
     public ProductType Type => _avApp.Type;

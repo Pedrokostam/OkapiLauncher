@@ -94,7 +94,7 @@ public partial class App : Application
         services.AddSingleton<IFileAssociationService, FileAssociationService>();
         services.AddSingleton<FileOpenerBroker>();
 
-        services.AddTransient<IProcessManagerService, ProcessManagerService>();
+        services.AddSingleton<IProcessManagerService, ProcessManagerService>();
         // Views and ViewModels
         services.AddSingleton<IShellWindow, ShellWindow>();
         services.AddSingleton<ShellViewModel>();

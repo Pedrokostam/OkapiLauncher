@@ -133,7 +133,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
             }
             _lastOpenedFilesService.AddLastFile(filepath);
             _navigationService.NavigateTo(GetType().FullName!);
-            _processManagerService.UpdateProcessActive(Apps);
+            _processManagerService.GetCurrentState.UpdateStates(Apps);
         }
         catch (InvalidDataException)
         {

@@ -16,22 +16,21 @@ namespace AuroraVisionLauncher.Services;
 public class AvAppFacadeFactory : IAvAppFacadeFactory
 {
     private const string AdditionalFoldersKey = "AdditionalExecutableFolderPaths";
-    readonly List<AvApp> _avApps;
+    readonly List<AvApp> _avApps = new();
     private readonly IWindowManagerService _windowManagerService;
     private readonly IMessenger _messenger;
 
     public ReadOnlyCollection<AvApp> AvApps => _avApps.AsReadOnly();
-    public AvAppFacadeFactory(IWindowManagerService windowManagerService,IMessenger messenger)
+    public AvAppFacadeFactory(IWindowManagerService windowManagerService, IMessenger messenger)
     {
-        var variables = Environment.GetEnvironmentVariables();
-        _avApps = AppReader.GetInstalledAvApps().ToList();
+        RediscoverApps();
         _windowManagerService = windowManagerService;
         _messenger = messenger;
     }
 
     public AvAppFacade Create(AvApp app)
     {
-        return new(app, _windowManagerService,_messenger);
+        return new(app, _windowManagerService, _messenger);
     }
 
     public void Populate(IList<AvAppFacade> appFacades, bool clear = true, Action<AvAppFacade>? perItemAction = null) => Populate(_avApps, appFacades, clear, perItemAction);
@@ -50,6 +49,13 @@ public class AvAppFacadeFactory : IAvAppFacadeFactory
         }
     }
 
-    public IEnumerable<AvAppFacade> CreateAllFacades()=>AvApps.Select(Create);
+    public void RediscoverApps()
+    {
+        _avApps.Clear();
+        var variables = Environment.GetEnvironmentVariables();
+        _avApps.AddRange(AppReader.GetInstalledAvApps());
+    }
+
+    public IEnumerable<AvAppFacade> CreateAllFacades() => AvApps.Select(Create);
 
 }
