@@ -11,4 +11,5 @@ public interface IThemeSelectorService
 
     AppTheme GetCurrentTheme();
     Color? GetCurrentAccent();
+    IEnumerable<Color> GetAvailablePrimaryAccents();
 }
