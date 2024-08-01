@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Channels;
 using System.Timers;
@@ -49,24 +50,30 @@ namespace AuroraVisionLauncher.Services
         }
 
 
+
         private void Update(IEnumerable<IAvApp> apps)
         {
-            var st = Stopwatch.StartNew();
+            var full = Stopwatch.StartNew();
+            var st = new Stopwatch();
             if (Monitor.TryEnter(_lock))
             {
                 try
                 {
+                    st.Restart();
                     var changedApps = new List<string>();
                     var processNames = apps.Select(x => x.ProcessName).ToHashSet(StringComparer.OrdinalIgnoreCase);
+                    st.Stop();
+                    Debug.WriteLine($"Names: {st.Elapsed.TotalMilliseconds}");
                     // Cleared all previous records, we dont want old data
                     // it may be better to instantiate the dict here, worth checking
                     //_dictionary.Clear();
                     //PopulateDictionary(apps);
+                    st.Restart();
                     var rawProcesses = Process.GetProcesses();
-                    var groupedByExePath = rawProcesses
-                        .Where(x => processNames.Contains(x.ProcessName) && x.MainModule?.FileName is not null)
-                        .GroupBy(x => x.MainModule!.FileName!, x => new SimpleProcess(x, _messenger), StringComparer.OrdinalIgnoreCase);
-
+                    st.Stop();
+                    Debug.WriteLine($"Processes: {st.Elapsed.TotalMilliseconds}");
+                    //List<IGrouping<string, SimpleProcess>> groupedByExePath = NewMethod(processNames, rawProcesses);
+                    var groupedByExePath = NewMethod2(processNames, rawProcesses, apps);
                     var missings = _dictionary.Keys.ToHashSet(StringComparer.OrdinalIgnoreCase);
 
                     foreach (var exePathGroup in groupedByExePath)
@@ -75,6 +82,7 @@ namespace AuroraVisionLauncher.Services
                         missings.Remove(exePathGroup.Key);
                     }
 
+                    st.Restart();
                     foreach (var missing in missings)
                     {
                         if (_dictionary.TryGetValue(missing, out var value))
@@ -82,12 +90,19 @@ namespace AuroraVisionLauncher.Services
                             value.Clear();
                         }
                     }
-
+                    st.Stop();
+                    Debug.WriteLine($"Clearing: {st.Elapsed.TotalMilliseconds}");
+                    st.Restart();
                     foreach (var proc in rawProcesses)
                     {
                         proc.Dispose();
                     }
+                    st.Stop();
+                    Debug.WriteLine($"Disposing: {st.Elapsed.TotalMilliseconds}");
+                    st.Restart();
                     _messenger.Send<FreshAppProcesses>(new FreshAppProcesses(_dictionary));
+                    st.Stop();
+                    Debug.WriteLine($"Messaging: {st.Elapsed.TotalMilliseconds}");
                 }
                 finally
                 {
@@ -95,16 +110,48 @@ namespace AuroraVisionLauncher.Services
                 }
             }
             Debug.WriteLine(st.Elapsed.TotalMilliseconds);
+            Trace.WriteLine($"FULL_{full.Elapsed.TotalMilliseconds}");
         }
 
-        private void UpdateOneExe(IGrouping<string, SimpleProcess> exePathGroup)
+        private List<IGrouping<string, SimpleProcess>> NewMethod(HashSet<string> processNames, Process[] rawProcesses)
+        {
+            var full = Stopwatch.StartNew();
+            var q = rawProcesses
+                                    .Where(x => processNames.Contains(x.ProcessName) && x.MainModule?.FileName is not null)
+                                    .GroupBy(x => x.MainModule!.FileName!, x => new SimpleProcess(x, _messenger), StringComparer.OrdinalIgnoreCase).ToList();
+            Debug.WriteLine($"Grouping: {full.Elapsed.TotalMilliseconds}");
+            return q;
+        }
+
+        private Dictionary<string, List<SimpleProcess>> NewMethod2(HashSet<string> processNames, Process[] rawProcesses, IEnumerable<IAvApp> apps)
+        {
+            var full = Stopwatch.StartNew();
+            var d = new Dictionary<string, List<SimpleProcess>>(StringComparer.OrdinalIgnoreCase);
+            foreach (var app in apps)
+            {
+                d[app.Path] = [];
+            }
+            foreach (var process in rawProcesses)
+            {
+                if (!(processNames.Contains(process.ProcessName) && process.MainModule?.FileName is string filepath))
+                {
+                    continue;
+                }
+                var sp = new SimpleProcess(process, _messenger,filepath);
+                d[filepath].Add(sp);
+            }
+            Debug.WriteLine($"DICTING: {full.Elapsed.TotalMilliseconds}");
+            return d;
+        }
+
+        private void UpdateOneExe(KeyValuePair<string, List<SimpleProcess>> exePathGroup)
         {
             if (!_dictionary.TryGetValue(exePathGroup.Key, out var set))
             {
                 set = [];
                 _dictionary[exePathGroup.Key] = set;
             }
-            var freshSimples = exePathGroup.ToHashSet();
+            var freshSimples = exePathGroup.Value.ToHashSet();
             foreach (var newProc in freshSimples)
             {
                 if (set.TryGetValue(newProc, out var oldProc))
@@ -116,7 +163,6 @@ namespace AuroraVisionLauncher.Services
                     set.Add(newProc);
                 }
             }
-            int prevCount = set.Count;
             set.IntersectWith(freshSimples);
         }
 

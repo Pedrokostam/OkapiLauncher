@@ -29,7 +29,8 @@ namespace AuroraVisionLauncher.Models
         private readonly IMessenger _messenger;
         private readonly string _path;
 
-        public SimpleProcess(Process proc, IMessenger messenger)
+
+        public SimpleProcess(Process proc, IMessenger messenger):this(proc,messenger, proc.MainModule!.FileName ?? throw new ArgumentNullException("Fullname"))
         {
             ProcessName = proc.ProcessName;
             Id = proc.Id;
@@ -38,6 +39,23 @@ namespace AuroraVisionLauncher.Models
             _windowHandle = proc.MainWindowHandle;
             _messenger = messenger;
             _path = proc.MainModule!.FileName ?? throw new ArgumentNullException("Fullname");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="proc"></param>
+        /// <param name="messenger"></param>
+        /// <param name="path">Path to the process' executable. Geting that path from process is possible, but might be slow.</param>
+        public SimpleProcess(Process proc, IMessenger messenger, string path)
+        {
+            ProcessName = proc.ProcessName;
+            Id = proc.Id;
+            MainWindowTitle = proc.MainWindowTitle;
+            StartTime = proc.StartTime;
+            _windowHandle = proc.MainWindowHandle;
+            _messenger = messenger;
+            _path = path;
         }
 
         public SimpleProcess(SimpleProcess other)
