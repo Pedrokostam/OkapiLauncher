@@ -91,7 +91,7 @@
                         <Grid.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Command="{Binding BringToFocusCommand}" Header="{x:Static properties:Resources.ProcessOverviewBringToFocus}" />
-                                <MenuItem Command="{Binding KillAskCommand}" Header="{x:Static properties:Resources.ProcessOverviewKill}" />
+                                <MenuItem Command="{Binding KillCommand}" Header="{x:Static properties:Resources.ProcessOverviewKill}" />
                             </ContextMenu>
                         </Grid.ContextMenu>
                         <Button
@@ -124,7 +124,7 @@
                         <Button
                             Grid.Column="0"
                             Margin="5"
-                            Command="{Binding KillAskCommand}"
+                            Command="{Binding KillCommand}"
                             DockPanel.Dock="Right"
                             ToolTip="{x:Static properties:Resources.ProcessOverviewKill}">
                             <mahicon:PackIconGameIcons

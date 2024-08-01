@@ -54,24 +54,9 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
         {
             return;
         }
-        ProcessStartInfo startInfo = new ProcessStartInfo
-        {
-            FileName = SelectedApp.Path,
-            UseShellExecute = true,  // Use the shell to start the process
-            CreateNoWindow = true, // Do not create a window
-        };
+        
         var args = LaunchOptions!.GetCommandLineArgs();
-        foreach (var arg in args)
-        {
-            startInfo.ArgumentList.Add(arg);
-        }
-        try
-        {
-            Process.Start(startInfo);
-        }
-        catch (System.ComponentModel.Win32Exception)
-        {
-        }
+        Messenger.Send(new OpenAppRequest(SelectedApp, args));
 
     }
     [RelayCommand(CanExecute = nameof(CanLaunch))]

@@ -65,7 +65,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
 
     private void ActiveProcesses_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
-       OnPropertyChanged(nameof(IsLaunched));
+        OnPropertyChanged(nameof(IsLaunched));
     }
 
     public ProductBrand Brand => _avApp.Brand;
@@ -81,14 +81,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     [RelayCommand(CanExecute = nameof(CanLaunchExecutable))]
     private void LaunchWithoutProgram()
     {
-        using var proc = Process.Start(new ProcessStartInfo()
-        {
-            FileName = _avApp.Path,
-        });
-        if (proc is not null)
-        {
-            _messenger.Send(new AppProcessChangedMessage(this.Path));
-        }
+        _messenger.Send(new OpenAppRequest(this));
     }
     [RelayCommand]
     private void CopyExecutablePath()
@@ -98,7 +91,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     [RelayCommand]
     private void KillAllProcesses()
     {
-        return;
+        _messenger.Send(new  KillAllProcessesRequest(this));
     }
 
     [RelayCommand]

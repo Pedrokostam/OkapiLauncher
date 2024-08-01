@@ -27,18 +27,11 @@ namespace AuroraVisionLauncher.Models
         private DateTime _startTime;
         private readonly IntPtr _windowHandle;
         private readonly IMessenger _messenger;
-        private readonly string _path;
+        public string Path { get; }
 
 
-        public SimpleProcess(Process proc, IMessenger messenger):this(proc,messenger, proc.MainModule!.FileName ?? throw new ArgumentNullException("Fullname"))
+        public SimpleProcess(Process proc, IMessenger messenger) : this(proc, messenger, proc.MainModule!.FileName ?? throw new ArgumentNullException("path"))
         {
-            ProcessName = proc.ProcessName;
-            Id = proc.Id;
-            MainWindowTitle = proc.MainWindowTitle;
-            StartTime = proc.StartTime;
-            _windowHandle = proc.MainWindowHandle;
-            _messenger = messenger;
-            _path = proc.MainModule!.FileName ?? throw new ArgumentNullException("Fullname");
         }
 
         /// <summary>
@@ -55,7 +48,7 @@ namespace AuroraVisionLauncher.Models
             StartTime = proc.StartTime;
             _windowHandle = proc.MainWindowHandle;
             _messenger = messenger;
-            _path = path;
+            Path = path;
         }
 
         public SimpleProcess(SimpleProcess other)
@@ -66,8 +59,9 @@ namespace AuroraVisionLauncher.Models
             StartTime = other.StartTime;
             _windowHandle = other._windowHandle;
             _messenger = other._messenger;
-            _path = other._path;
+            Path = other.Path;
         }
+
 
         public string TrimmedTitle
         {
@@ -103,46 +97,11 @@ namespace AuroraVisionLauncher.Models
         {
             return Equals(obj as SimpleProcess);
         }
-        [RelayCommand]
-        private async Task KillAsk()
-        {
-            var res = MessageBox.Show($"Are you sure you want to kill this process:\n{ProcessName} - {MainWindowTitle}?",
-                                      "Confirm processing ending",
-                                      MessageBoxButton.YesNo,
-                                      MessageBoxImage.Warning);
-            if (res == MessageBoxResult.No)
-            {
-                return;
-            }
-            await Kill().ConfigureAwait(false);
-        }
 
         [RelayCommand]
-        private async Task Kill()
+        private void Kill()
         {
-            Process? p = null;
-            do
-            {
-                try
-                {
-                    p = Process.GetProcessById(Id);
-                    Debug.WriteLine(p.Id);
-                    p.Kill();
-                    var exited = p.WaitForExit(100);
-                    p.Dispose();
-                    if (exited)
-                    {
-                        p = null;
-                    }
-                }
-                catch (ArgumentException)
-                {
-                    Debug.WriteLine("Ded");
-                    p = null;
-                }
-                await Task.Delay(50).ConfigureAwait(true);
-            } while (p is not null);
-            _messenger.Send(new AppProcessChangedMessage(_path));
+            _messenger.Send(new KillProcessRequest(this));
         }
 
         [DllImport("user32.dll")]
@@ -216,7 +175,7 @@ namespace AuroraVisionLauncher.Models
             {
                 return;
             }
-            MainWindowTitle=donor.MainWindowTitle;
+            MainWindowTitle = donor.MainWindowTitle;
         }
 
         public static bool operator ==(SimpleProcess left, SimpleProcess right)

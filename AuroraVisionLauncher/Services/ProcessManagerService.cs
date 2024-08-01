@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Channels;
 using System.Timers;
+using System.Windows;
 using System.Windows.Threading;
 using AuroraVisionLauncher.Contracts.Services;
 using AuroraVisionLauncher.Core.Models.Apps;
@@ -15,7 +16,7 @@ using CommunityToolkit.Mvvm.Messaging;
 
 namespace AuroraVisionLauncher.Services
 {
-    public class ProcessManagerService : IProcessManagerService, IRecipient<AppProcessChangedMessage>
+    public class ProcessManagerService : IProcessManagerService, IRecipient<OpenAppRequest>, IRecipient<KillProcessRequest>, IRecipient<KillAllProcessesRequest>
     {
         /// <summary>
         /// Each records holds a list of all apps that share the process name.
@@ -106,6 +107,12 @@ namespace AuroraVisionLauncher.Services
 
         private void UpdateSingle(IAvApp app)
         {
+            var diff = DateTime.UtcNow - _lastUpdate;
+            if (diff > _recheckThreshold)
+            {
+                // It's gonna be updated son enough, no need to force it
+                return;
+            }
             if (Monitor.TryEnter(_lock))
             {
                 try
@@ -126,8 +133,20 @@ namespace AuroraVisionLauncher.Services
 
             foreach (var proc in rawProcesses)
             {
-                simples.Add(new SimpleProcess(proc, _messenger, app.Path));
-                proc.Dispose();
+                try
+                {
+                    var simple = new SimpleProcess(proc, _messenger, app.Path);
+                    simples.Add(simple);
+
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e);
+                }
+                finally
+                {
+                    proc.Dispose();
+                }
             }
             UpdateOneExe(app.Path, simples);
             _messenger.Send<FreshAppProcesses>(GetCurrentState);
@@ -150,8 +169,15 @@ namespace AuroraVisionLauncher.Services
                 {
                     continue;
                 }
-                var sp = new SimpleProcess(process, _messenger, filepath);
-                stateDict[filepath].Add(sp);
+                try
+                {
+                    var sp = new SimpleProcess(process, _messenger, filepath);
+                    stateDict[filepath].Add(sp);
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e);
+                }
             }
             Debug.WriteLine($"DICTING: {full.Elapsed.TotalMilliseconds}");
             return stateDict;
@@ -183,18 +209,82 @@ namespace AuroraVisionLauncher.Services
             set.IntersectWith(freshSimples);
         }
 
-        public void Receive(AppProcessChangedMessage message)
+        public void Receive(KillProcessRequest message)
         {
-            var diff = DateTime.UtcNow - _lastUpdate;
-            if (diff > _recheckThreshold)
+            var res = MessageBox.Show($"Are you sure you want to kill this process:\n{message.Process.ProcessName} - {message.Process.MainWindowTitle}?",
+                                     "Confirm process ending",
+                                     MessageBoxButton.YesNo,
+                                     MessageBoxImage.Warning);
+            if (res == MessageBoxResult.No)
             {
-                // It's gonna be updated son enough, no need to force it
                 return;
             }
-            if (_avAppFacadeFactory.TryGetAppByPath(message.AppPath, out var app))
+            try
             {
-                UpdateSingle(app);
+                using var proc = Process.GetProcessById(message.Process.Id);
+                proc.Kill();
+                proc.WaitForExit();
+                if (_avAppFacadeFactory.TryGetAppByPath(message.Process.Path, out var app))
+                {
+                    UpdateSingle(app);
+                }
             }
+            catch (ArgumentException)
+            { }
+            catch (InvalidOperationException)
+            { }
+        }
+
+        public void Receive(OpenAppRequest message)
+        {
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = message.App.Path,
+                UseShellExecute = true,  // Use the shell to start the process
+                CreateNoWindow = true, // Do not create a window
+            };
+            foreach (var arg in message.Arguments)
+            {
+                startInfo.ArgumentList.Add(arg);
+            }
+            try
+            {
+                using var p = Process.Start(startInfo);
+            }
+            catch (System.ComponentModel.Win32Exception)
+            {
+            }
+            UpdateSingle(message.App);
+        }
+
+        public void Receive(KillAllProcessesRequest message)
+        {
+            if (message.AvApp.ActiveProcesses.Count == 0)
+            {
+                return;
+            }
+            var res = MessageBox.Show($"Are you sure you want to kill all processes of {message.AvApp.ProcessName} ({message.AvApp.ActiveProcesses} processes)?",
+                                    "Confirm process ending",
+                                    MessageBoxButton.YesNo,
+                                    MessageBoxImage.Warning);
+            if (res == MessageBoxResult.No)
+            {
+                return;
+            }
+            List<Process> procs = [];
+            foreach (var active in message.AvApp.ActiveProcesses)
+            {
+                var proc = Process.GetProcessById(active.Id);
+                procs.Add(proc);
+                proc.Kill();
+            }
+            foreach (var proc in procs)
+            {
+                proc.WaitForExit();
+                proc.Dispose();
+            }
+            UpdateSingle(message.AvApp);
+
         }
     }
 }
