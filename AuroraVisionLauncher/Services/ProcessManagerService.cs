@@ -26,14 +26,23 @@ namespace AuroraVisionLauncher.Services
         private readonly IMessenger _messenger;
         private readonly IAvAppFacadeFactory _avAppFacadeFactory;
         private readonly System.Timers.Timer _timer;
-
+        private DateTime _lastUpdate;
+        /// <summary>
+        /// How much time at minimum there must to the next scheduled updated to force it.
+        /// </summary>
+        private static readonly TimeSpan _gracePeriod = TimeSpan.FromMilliseconds(300);
+        private static readonly TimeSpan _timerPeriod = TimeSpan.FromMilliseconds(2000);
+        /// <summary>
+        /// Above this threshold updated should not be forced.
+        /// </summary>
+        private static readonly TimeSpan _recheckThreshold = _timerPeriod - _gracePeriod;
         public FreshAppProcesses GetCurrentState => new FreshAppProcesses(_dictionary);
 
         public ProcessManagerService(IMessenger messenger, IAvAppFacadeFactory avAppFacadeFactory)
         {
             _messenger = messenger;
             _avAppFacadeFactory = avAppFacadeFactory;
-            _timer = new(2000);
+            _timer = new(_timerPeriod.TotalMilliseconds);
             _timer.Elapsed += _timer_Elapsed;
             _timer.AutoReset = true;
             Update(_avAppFacadeFactory.AvApps);
@@ -51,85 +60,89 @@ namespace AuroraVisionLauncher.Services
 
 
 
-        private void Update(IEnumerable<IAvApp> apps)
+        private void Update(IReadOnlyCollection<IAvApp> apps)
         {
-            var full = Stopwatch.StartNew();
-            var st = new Stopwatch();
+            //var full = Stopwatch.StartNew();
             if (Monitor.TryEnter(_lock))
             {
                 try
                 {
-                    st.Restart();
-                    var changedApps = new List<string>();
-                    var processNames = apps.Select(x => x.ProcessName).ToHashSet(StringComparer.OrdinalIgnoreCase);
-                    st.Stop();
-                    Debug.WriteLine($"Names: {st.Elapsed.TotalMilliseconds}");
-                    // Cleared all previous records, we dont want old data
-                    // it may be better to instantiate the dict here, worth checking
-                    //_dictionary.Clear();
-                    //PopulateDictionary(apps);
-                    st.Restart();
-                    var rawProcesses = Process.GetProcesses();
-                    st.Stop();
-                    Debug.WriteLine($"Processes: {st.Elapsed.TotalMilliseconds}");
-                    //List<IGrouping<string, SimpleProcess>> groupedByExePath = NewMethod(processNames, rawProcesses);
-                    var groupedByExePath = NewMethod2(processNames, rawProcesses, apps);
-                    var missings = _dictionary.Keys.ToHashSet(StringComparer.OrdinalIgnoreCase);
-
-                    foreach (var exePathGroup in groupedByExePath)
-                    {
-                        UpdateOneExe(exePathGroup);
-                        missings.Remove(exePathGroup.Key);
-                    }
-
-                    st.Restart();
-                    foreach (var missing in missings)
-                    {
-                        if (_dictionary.TryGetValue(missing, out var value))
-                        {
-                            value.Clear();
-                        }
-                    }
-                    st.Stop();
-                    Debug.WriteLine($"Clearing: {st.Elapsed.TotalMilliseconds}");
-                    st.Restart();
-                    foreach (var proc in rawProcesses)
-                    {
-                        proc.Dispose();
-                    }
-                    st.Stop();
-                    Debug.WriteLine($"Disposing: {st.Elapsed.TotalMilliseconds}");
-                    st.Restart();
-                    _messenger.Send<FreshAppProcesses>(new FreshAppProcesses(_dictionary));
-                    st.Stop();
-                    Debug.WriteLine($"Messaging: {st.Elapsed.TotalMilliseconds}");
+                    Update_Impl(apps);
                 }
                 finally
                 {
                     Monitor.Exit(_lock);
                 }
             }
-            Debug.WriteLine(st.Elapsed.TotalMilliseconds);
-            Trace.WriteLine($"FULL_{full.Elapsed.TotalMilliseconds}");
+            //Trace.WriteLine($"FULL_{full.Elapsed.TotalMilliseconds}");
         }
 
-        private List<IGrouping<string, SimpleProcess>> NewMethod(HashSet<string> processNames, Process[] rawProcesses)
+        private void Update_Impl(IReadOnlyCollection<IAvApp> apps)
         {
-            var full = Stopwatch.StartNew();
-            var q = rawProcesses
-                                    .Where(x => processNames.Contains(x.ProcessName) && x.MainModule?.FileName is not null)
-                                    .GroupBy(x => x.MainModule!.FileName!, x => new SimpleProcess(x, _messenger), StringComparer.OrdinalIgnoreCase).ToList();
-            Debug.WriteLine($"Grouping: {full.Elapsed.TotalMilliseconds}");
-            return q;
+            var rawProcesses = Process.GetProcesses();
+            var stateDict = GetNewStateDict(rawProcesses, apps);
+            var missings = _dictionary.Keys.ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var kvp in stateDict)
+            {
+                UpdateOneExe(kvp);
+                missings.Remove(kvp.Key);
+            }
+
+            foreach (var missing in missings)
+            {
+                if (_dictionary.TryGetValue(missing, out var value))
+                {
+                    value.Clear();
+                }
+            }
+            foreach (var proc in rawProcesses)
+            {
+                proc.Dispose();
+            }
+            _messenger.Send<FreshAppProcesses>(GetCurrentState);
+            _lastUpdate = DateTime.UtcNow;
         }
 
-        private Dictionary<string, List<SimpleProcess>> NewMethod2(HashSet<string> processNames, Process[] rawProcesses, IEnumerable<IAvApp> apps)
+        private void UpdateSingle(IAvApp app)
+        {
+            if (Monitor.TryEnter(_lock))
+            {
+                try
+                {
+                    UpdateSingle_Impl(app);
+                }
+                finally
+                {
+                    Monitor.Exit(_lock);
+                }
+            }
+        }
+
+        private void UpdateSingle_Impl(IAvApp app)
+        {
+            var rawProcesses = Process.GetProcessesByName(app.ProcessName);
+            List<SimpleProcess> simples = new List<SimpleProcess>(rawProcesses.Length);
+
+            foreach (var proc in rawProcesses)
+            {
+                simples.Add(new SimpleProcess(proc, _messenger, app.Path));
+                proc.Dispose();
+            }
+            UpdateOneExe(app.Path, simples);
+            _messenger.Send<FreshAppProcesses>(GetCurrentState);
+        }
+
+        private Dictionary<string, List<SimpleProcess>> GetNewStateDict(Process[] rawProcesses, IReadOnlyCollection<IAvApp> apps)
         {
             var full = Stopwatch.StartNew();
-            var d = new Dictionary<string, List<SimpleProcess>>(StringComparer.OrdinalIgnoreCase);
+            int count = apps.Count;
+            var stateDict = new Dictionary<string, List<SimpleProcess>>(count, StringComparer.OrdinalIgnoreCase);
+            var processNames = new HashSet<string>(count, StringComparer.OrdinalIgnoreCase);
             foreach (var app in apps)
             {
-                d[app.Path] = [];
+                processNames.Add(app.ProcessName);
+                stateDict[app.Path] = [];
             }
             foreach (var process in rawProcesses)
             {
@@ -137,21 +150,25 @@ namespace AuroraVisionLauncher.Services
                 {
                     continue;
                 }
-                var sp = new SimpleProcess(process, _messenger,filepath);
-                d[filepath].Add(sp);
+                var sp = new SimpleProcess(process, _messenger, filepath);
+                stateDict[filepath].Add(sp);
             }
             Debug.WriteLine($"DICTING: {full.Elapsed.TotalMilliseconds}");
-            return d;
+            return stateDict;
         }
 
         private void UpdateOneExe(KeyValuePair<string, List<SimpleProcess>> exePathGroup)
         {
-            if (!_dictionary.TryGetValue(exePathGroup.Key, out var set))
+            UpdateOneExe(exePathGroup.Key, exePathGroup.Value);
+        }
+        private void UpdateOneExe(string filepath, IEnumerable<SimpleProcess> newProcesses)
+        {
+            if (!_dictionary.TryGetValue(filepath, out var set))
             {
                 set = [];
-                _dictionary[exePathGroup.Key] = set;
+                _dictionary[filepath] = set;
             }
-            var freshSimples = exePathGroup.Value.ToHashSet();
+            var freshSimples = newProcesses.ToHashSet();
             foreach (var newProc in freshSimples)
             {
                 if (set.TryGetValue(newProc, out var oldProc))
@@ -168,9 +185,16 @@ namespace AuroraVisionLauncher.Services
 
         public void Receive(AppProcessChangedMessage message)
         {
-            _timer.Stop();
-            Update(_avAppFacadeFactory.AvApps);
-            _timer.Start();
+            var diff = DateTime.UtcNow - _lastUpdate;
+            if (diff > _recheckThreshold)
+            {
+                // It's gonna be updated son enough, no need to force it
+                return;
+            }
+            if (_avAppFacadeFactory.TryGetAppByPath(message.AppPath, out var app))
+            {
+                UpdateSingle(app);
+            }
         }
     }
 }

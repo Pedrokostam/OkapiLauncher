@@ -1,11 +1,12 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using AuroraVisionLauncher.Core.Models.Apps;
 using AuroraVisionLauncher.Models;
 
 namespace AuroraVisionLauncher.Contracts.Services;
 public interface IAvAppFacadeFactory
 {
-    ReadOnlyCollection<AvApp> AvApps { get; }
+    IReadOnlyList<AvApp> AvApps { get; }
     AvAppFacade Create(AvApp app);
     /// <summary>
     /// Populates the given <paramref name="appFacades"/> with facades of the items in the <paramref name="apps"/>.
@@ -26,4 +27,5 @@ public interface IAvAppFacadeFactory
     /// </summary>
     IEnumerable<AvAppFacade> CreateAllFacades();
     void RediscoverApps();
+    public bool TryGetAppByPath(string path,[NotNullWhen(true)] out AvAppFacade? appFacade);
 }

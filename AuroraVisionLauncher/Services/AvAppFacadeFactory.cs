@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -20,7 +21,7 @@ public class AvAppFacadeFactory : IAvAppFacadeFactory
     private readonly IWindowManagerService _windowManagerService;
     private readonly IMessenger _messenger;
 
-    public ReadOnlyCollection<AvApp> AvApps => _avApps.AsReadOnly();
+    public IReadOnlyList<AvApp> AvApps => _avApps.AsReadOnly();
     public AvAppFacadeFactory(IWindowManagerService windowManagerService, IMessenger messenger)
     {
         RediscoverApps();
@@ -58,4 +59,15 @@ public class AvAppFacadeFactory : IAvAppFacadeFactory
 
     public IEnumerable<AvAppFacade> CreateAllFacades() => AvApps.Select(Create);
 
+    public bool TryGetAppByPath(string path, [NotNullWhen(true)] out AvAppFacade? appFacade)
+    {
+        var found = _avApps.FirstOrDefault(a => string.Equals(a.Path, path, StringComparison.OrdinalIgnoreCase));
+        if (found is not null)
+        {
+            appFacade=Create(found);
+            return true;
+        }
+        appFacade = null;
+        return false;
+    }
 }
