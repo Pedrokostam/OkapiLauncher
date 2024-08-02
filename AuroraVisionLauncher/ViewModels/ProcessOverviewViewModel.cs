@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Threading;
 using Accessibility;
 using AuroraVisionLauncher.Contracts;
@@ -57,6 +58,6 @@ public partial class ProcessOverviewViewModel : ObservableRecipient, INavigation
 
     public void Receive(FreshAppProcesses message)
     {
-        message.UpdateState(AvApp);
+        Application.Current?.Dispatcher.Invoke(() => message.UpdateState(AvApp));
     }
 }

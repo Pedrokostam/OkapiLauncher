@@ -25,7 +25,6 @@ namespace AuroraVisionLauncher.Models
         private string _processName;
         [ObservableProperty]
         private DateTime _startTime;
-        private readonly IntPtr _windowHandle;
         private readonly IMessenger _messenger;
         public string Path { get; }
 
@@ -46,7 +45,6 @@ namespace AuroraVisionLauncher.Models
             Id = proc.Id;
             MainWindowTitle = proc.MainWindowTitle;
             StartTime = proc.StartTime;
-            _windowHandle = proc.MainWindowHandle;
             _messenger = messenger;
             Path = path;
         }
@@ -57,7 +55,6 @@ namespace AuroraVisionLauncher.Models
             Id = other.Id;
             MainWindowTitle = other.MainWindowTitle;
             StartTime = other.StartTime;
-            _windowHandle = other._windowHandle;
             _messenger = other._messenger;
             Path = other.Path;
         }
@@ -144,14 +141,16 @@ namespace AuroraVisionLauncher.Models
         [RelayCommand]
         private void BringToFocus()
         {
+            using var proc = Process.GetProcessById(Id);
+            var handle = proc.MainWindowHandle;
             var placement = new WINDOWPLACEMENT();
-            GetWindowPlacement(_windowHandle, ref placement);
+            GetWindowPlacement(handle, ref placement);
             if (placement.showCmd == 2)
             {
                 placement.showCmd = 1;
-                SetWindowPlacement(_windowHandle, ref placement);
+                SetWindowPlacement(handle, ref placement);
             }
-            SetForegroundWindow(_windowHandle);
+            SetForegroundWindow(handle);
         }
 
         public int CompareTo(SimpleProcess? other)
@@ -176,6 +175,7 @@ namespace AuroraVisionLauncher.Models
                 return;
             }
             MainWindowTitle = donor.MainWindowTitle;
+            
         }
 
         public static bool operator ==(SimpleProcess left, SimpleProcess right)

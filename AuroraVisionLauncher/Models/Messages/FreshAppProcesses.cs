@@ -10,6 +10,8 @@ using AuroraVisionLauncher.Core.Models.Apps;
 using Microsoft.Extensions.Logging;
 using AuroraVisionLauncher.Core.Helpers;
 using System.Diagnostics;
+using System.Windows.Threading;
+using System.Windows;
 
 namespace AuroraVisionLauncher.Models.Messages;
 public class FreshAppProcesses
@@ -45,6 +47,7 @@ public class FreshAppProcesses
     public void UpdateState(AvAppFacade app)
     {
         ArgumentNullException.ThrowIfNull(app);
+
         if (!_dict.TryGetValue(app.Path, out var newProcs))
         {
             return;
@@ -75,7 +78,7 @@ public class FreshAppProcesses
         var brandNew = newProcs.Except(app.ActiveProcesses);
         foreach (var proc in brandNew)
         {
-            var insertionIndex = app.ActiveProcesses.FindInsertionIndex(x => x.Id > proc.Id);
+            var insertionIndex = app.ActiveProcesses.FindInsertionIndex(x => x.StartTime > proc.StartTime);
             try
             {
             app.ActiveProcesses.Insert(insertionIndex, proc.Clone());

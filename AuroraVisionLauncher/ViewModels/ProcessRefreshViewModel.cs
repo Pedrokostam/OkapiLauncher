@@ -7,6 +7,7 @@ using AuroraVisionLauncher.Helpers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using AuroraVisionLauncher.Models.Messages;
+using System.Windows;
 
 namespace AuroraVisionLauncher.ViewModels;
 
@@ -41,6 +42,6 @@ public abstract class ProcessRefreshViewModel : ObservableRecipient, INavigation
 
     public void Receive(FreshAppProcesses message)
     {
-        message.UpdateStates(_rawApps);
+        Application.Current?.Dispatcher.Invoke(() => message.UpdateStates(_rawApps));
     }
 }
