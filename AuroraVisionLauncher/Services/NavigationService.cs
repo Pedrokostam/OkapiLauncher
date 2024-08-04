@@ -83,8 +83,6 @@ public class NavigationService : INavigationService
     {
         if (sender is Frame frame)
         {
-            Debug.WriteLine($"History count: {frame?.BackStack?.Cast<object>()?.Count()}");
-            Debug.WriteLine($"Uri: {frame?.CurrentSource}");
             //bool clearNavigation = (bool)frame.Tag;
             //if (clearNavigation)
             //{

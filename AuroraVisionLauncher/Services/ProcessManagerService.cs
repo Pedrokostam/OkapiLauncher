@@ -179,7 +179,6 @@ namespace AuroraVisionLauncher.Services
                     Debug.WriteLine(e);
                 }
             }
-            Debug.WriteLine($"DICTING: {full.Elapsed.TotalMilliseconds}");
             return stateDict;
         }
 

@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Windows;
 using AuroraVisionLauncher.Contracts.Services;
+using AuroraVisionLauncher.Contracts.Views;
 using AuroraVisionLauncher.Core.Contracts.Services;
 using AuroraVisionLauncher.Core.Services;
 using AuroraVisionLauncher.Models;
@@ -43,21 +44,39 @@ public class PagesTests
         // Core Services
         services.AddSingleton<IFileService, FileService>();
 
-        // Services
-        services.AddSingleton<IThemeSelectorService, ThemeSelectorService>();
+        services.AddSingleton<IWindowManagerService, WindowManagerService>();
+        services.AddSingleton<IApplicationInfoService, ApplicationInfoService>();
         services.AddSingleton<ISystemService, SystemService>();
         services.AddSingleton<IPersistAndRestoreService, PersistAndRestoreService>();
-        services.AddSingleton<IApplicationInfoService, ApplicationInfoService>();
+        services.AddSingleton<IThemeSelectorService, ThemeSelectorService>();
         services.AddSingleton<IPageService, PageService>();
         services.AddSingleton<INavigationService, NavigationService>();
-        services.AddSingleton<IMessenger, WeakReferenceMessenger>();
+        services.AddSingleton<IRequestedFilesService, RequestedFilesService>();
+        services.AddSingleton<IMessenger, StrongReferenceMessenger>();
         services.AddSingleton<IAvAppFacadeFactory, AvAppFacadeFactory>();
         services.AddSingleton<IRecentlyOpenedFilesService, RecentlyOpenedFilesService>();
         services.AddSingleton<IFileAssociationService, FileAssociationService>();
+        services.AddSingleton<FileOpenerBroker>();
 
-        // ViewModels
-        services.AddTransient<SettingsViewModel>();
+        services.AddSingleton<IProcessManagerService, ProcessManagerService>();
+        // Views and ViewModels
+        services.AddSingleton<IShellWindow, ShellWindow>();
+        services.AddSingleton<ShellViewModel>();
+
         services.AddTransient<LauncherViewModel>();
+        services.AddTransient<LauncherPage>();
+
+        services.AddTransient<ProcessOverviewPage>();
+        services.AddTransient<ProcessOverviewViewModel>();
+
+        services.AddTransient<SettingsViewModel>();
+        services.AddTransient<SettingsPage>();
+
+        services.AddTransient<IShellDialogWindow, ShellDialogWindow>();
+        services.AddTransient<ShellDialogViewModel>();
+
+        services.AddTransient<InstalledAppsViewModel>();
+        services.AddTransient<InstalledAppsPage>();
 
         // Configuration
         services.Configure<AppConfig>(context.Configuration.GetSection(nameof(AppConfig)));
@@ -90,6 +109,14 @@ public class PagesTests
     public void TestLauncherViewModelCreation()
     {
         var vm = _host.Services.GetService(typeof(LauncherViewModel));
+        Assert.IsNotNull(vm);
+    }
+
+    // TODO: Add tests for functionality you add to MainViewModel.
+    [TestMethod]
+    public void TestInstalledAppsViewModelCreation()
+    {
+        var vm = _host.Services.GetService(typeof(InstalledAppsViewModel));
         Assert.IsNotNull(vm);
     }
 

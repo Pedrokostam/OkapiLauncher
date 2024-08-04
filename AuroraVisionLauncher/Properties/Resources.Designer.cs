@@ -538,7 +538,8 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nothing to talk about..
+        ///   Looks up a localized string similar to &quot;It&apos;s just a simple application, it can&apos;t take too long to code.&quot;
+        ///- Man who coded for a long time.
         /// </summary>
         public static string SettingsPageAboutText {
             get {
@@ -565,6 +566,15 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Repository link (report bugs and improvements).
+        /// </summary>
+        public static string SettingsPageGithubLink {
+            get {
+                return ResourceManager.GetString("SettingsPageGithubLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open app folder.
         /// </summary>
         public static string SettingsPageOpenInstallationFolderButton {
@@ -583,20 +593,20 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Other.
+        /// </summary>
+        public static string SettingsPageOtherTitle {
+            get {
+                return ResourceManager.GetString("SettingsPageOtherTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Personalization.
         /// </summary>
         public static string SettingsPagePersonalizationTitle {
             get {
                 return ResourceManager.GetString("SettingsPagePersonalizationTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Privacy Statement.
-        /// </summary>
-        public static string SettingsPagePrivacyStatementText {
-            get {
-                return ResourceManager.GetString("SettingsPagePrivacyStatementText", resourceCulture);
             }
         }
         

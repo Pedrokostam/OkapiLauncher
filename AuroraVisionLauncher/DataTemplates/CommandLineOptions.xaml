@@ -17,8 +17,9 @@
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="TextAlignment" Value="Center" />
         <Setter Property="FontSize" Value="30" />
+        <Setter Property="Opacity" Value="0.5" />
         <Setter Property="TextWrapping" Value="WrapWithOverflow" />
-        <Setter Property="FontFamily" Value="Lucida Calligraphy, Times New Roman" />
+        <!--<Setter Property="FontFamily" Value="Lucida Calligraphy, Times New Roman" />-->
     </Style>
     <DataTemplate x:Key="NoCommandLineOptionsTemplate" DataType="{x:Type mod:NoLaunchOptions}">
         <TextBlock Style="{StaticResource NoOptionsDisclaimer}" Text="{x:Static properties:Resources.LaunchOptionsNoOptions}" />

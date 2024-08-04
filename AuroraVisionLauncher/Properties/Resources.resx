@@ -130,7 +130,8 @@
     <value>Settings</value>
   </data>
   <data name="SettingsPageAboutText" xml:space="preserve">
-    <value>Nothing to talk about.</value>
+    <value>"It's just a simple application, it can't take too long to code."
+- Man who coded for a long time</value>
   </data>
   <data name="SettingsPageAboutTitle" xml:space="preserve">
     <value>About this application</value>
@@ -141,8 +142,8 @@
   <data name="SettingsPagePersonalizationTitle" xml:space="preserve">
     <value>Personalization</value>
   </data>
-  <data name="SettingsPagePrivacyStatementText" xml:space="preserve">
-    <value>Privacy Statement</value>
+  <data name="SettingsPageGithubLink" xml:space="preserve">
+    <value>Repository link (report bugs and improvements)</value>
   </data>
   <data name="SettingsPageRadioButtonDarkTheme" xml:space="preserve">
     <value>Dark</value>
@@ -357,5 +358,8 @@
   </data>
   <data name="ProgramDetailsDateModified" xml:space="preserve">
     <value>Date modified: </value>
+  </data>
+  <data name="SettingsPageOtherTitle" xml:space="preserve">
+    <value>Other</value>
   </data>
 </root>

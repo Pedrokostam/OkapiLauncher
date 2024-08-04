@@ -17,13 +17,13 @@ public sealed partial class InstalledAppsViewModel : ProcessRefreshViewModel
 {
     [ObservableProperty]
     private AppSortProperty _sortProperty = AppSortProperty.Name;
-    protected override IList<AvAppFacade> _rawApps { get; }
+    protected override IList<AvAppFacade> RawApps { get; }
     public InstalledAppsViewModel(IAvAppFacadeFactory appFactory,
                                   IProcessManagerService processManagerService,
                                   IMessenger messenger) : base(processManagerService, appFactory, messenger)
     {
-        _rawApps = new List<AvAppFacade>(_appFactory.CreateAllFacades());
-        _apps = CollectionViewSource.GetDefaultView(_rawApps);
+        RawApps = new List<AvAppFacade>(_appFactory.CreateAllFacades());
+        _apps = CollectionViewSource.GetDefaultView(RawApps);
         Regroup();
     }
 

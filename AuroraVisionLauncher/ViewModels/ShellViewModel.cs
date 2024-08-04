@@ -44,6 +44,7 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
         _navigationService.Navigated += OnNavigated;
     }
 
+
     [RelayCommand()]
     private void OnUnloaded()
     {

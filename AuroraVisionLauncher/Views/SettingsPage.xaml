@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:mahicon="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:AuroraVisionLauncher.Models"
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
@@ -99,13 +100,19 @@
                             </i:Interaction.Triggers>
                         </RadioButton>
                     </Grid>
+                    <TextBlock
+                        Margin="{StaticResource SmallTopMargin}"
+                        Style="{StaticResource SubtitleTextStyle}"
+                        Text="{x:Static properties:Resources.SettingsPageAboutTitle}" />
                     <Button
                         Command="{Binding AssociateAppWithExtensionsCommand}"
                         Content="{x:Static properties:Resources.SettingsPageSetFileAssociationsButton}"
+                        Style="{StaticResource SettingsButton}"
                         ToolTip="{x:Static properties:Resources.SettingsPageSetFileAssociationsButtonTooltip}" />
                     <Button
                         Command="{Binding OpenInstallationFolderCommand}"
                         Content="{x:Static properties:Resources.SettingsPageOpenInstallationFolderButton}"
+                        Style="{StaticResource SettingsButton}"
                         ToolTip="{x:Static properties:Resources.SettingsPageOpenInstallationFolderButtonTooltip}" />
                 </StackPanel>
                 <TextBlock
@@ -119,14 +126,24 @@
                 <TextBlock
                     Margin="{StaticResource XSmallTopMargin}"
                     Style="{StaticResource BodyTextStyle}"
-                    Text="{x:Static properties:Resources.SettingsPageAboutText}" />
+                    Text="{x:Static properties:Resources.SettingsPageAboutText}"
+                    TextAlignment="Right" />
 
-                <TextBlock Margin="{StaticResource SmallTopMargin}" AutomationProperties.Name="{Binding Text, ElementName=settingsPrivacyStatement}">
-                    <Hyperlink AutomationProperties.Name="{Binding Text, ElementName=settingsPrivacyStatement}" Command="{Binding PrivacyStatementCommand}">
-                        <TextBlock
-                            x:Name="settingsPrivacyStatement"
-                            Style="{StaticResource BodyTextStyle}"
-                            Text="{x:Static properties:Resources.SettingsPagePrivacyStatementText}" />
+                <TextBlock
+                    Margin="{StaticResource SmallTopMargin}"
+                    AutomationProperties.Name="{Binding Text, ElementName=settingsGithubLink}"
+                    ToolTip="{Binding Link}">
+                    <Hyperlink AutomationProperties.Name="{Binding Text, ElementName=settingsGithubLink}" Command="{Binding PrivacyStatementCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <mahicon:PackIconBoxIcons
+                                Margin="0,0,5,1.8"
+                                VerticalAlignment="Bottom"
+                                Kind="LogosGithub" />
+                            <TextBlock
+                                x:Name="settingsGithubLink"
+                                Style="{StaticResource BodyTextStyle}"
+                                Text="{x:Static properties:Resources.SettingsPageGithubLink}" />
+                        </StackPanel>
                     </Hyperlink>
                 </TextBlock>
             </StackPanel>

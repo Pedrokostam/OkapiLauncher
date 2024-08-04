@@ -41,7 +41,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
     [ObservableProperty]
     private LaunchOptions? _launchOptions;
     public ObservableCollection<AvAppFacade> Apps { get; } = [];
-    protected override IList<AvAppFacade> _rawApps => Apps;
+    protected override IList<AvAppFacade> RawApps => Apps;
 
     private bool CanLaunch()
     {

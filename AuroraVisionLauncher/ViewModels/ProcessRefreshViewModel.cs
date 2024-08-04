@@ -13,35 +13,31 @@ namespace AuroraVisionLauncher.ViewModels;
 
 public abstract class ProcessRefreshViewModel : ObservableRecipient, INavigationAware, IRecipient<FreshAppProcesses>
 {
-    abstract protected IList<AvAppFacade> _rawApps { get; }
-    private readonly DispatcherTimer _timer;
+    abstract protected IList<AvAppFacade> RawApps { get; }
     protected readonly IProcessManagerService _processManagerService;
     protected readonly IAvAppFacadeFactory _appFactory;
 
-    protected ProcessRefreshViewModel(
-                                   IProcessManagerService processManagerService,
-                                   IAvAppFacadeFactory appFactory, IMessenger messenger
-        ) : base(messenger)
+    protected ProcessRefreshViewModel(IProcessManagerService processManagerService,
+                                      IAvAppFacadeFactory appFactory,
+                                      IMessenger messenger) : base(messenger)
     {
-        _timer = TimerHelper.GetTimer();
         _processManagerService = processManagerService;
         _appFactory = appFactory;
     }
 
     public virtual void OnNavigatedTo(object parameter)
     {
-        _processManagerService.GetCurrentState.UpdateStates(_rawApps);
+        _processManagerService.GetCurrentState.UpdateStates(RawApps);
         IsActive = true;
     }
 
     public void OnNavigatedFrom()
     {
-        _timer.Stop();
         IsActive = false;
     }
 
     public void Receive(FreshAppProcesses message)
     {
-        Application.Current?.Dispatcher.Invoke(() => message.UpdateStates(_rawApps));
+        Application.Current?.Dispatcher.Invoke(() => message.UpdateStates(RawApps));
     }
 }

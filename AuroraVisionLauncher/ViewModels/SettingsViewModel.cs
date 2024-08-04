@@ -35,11 +35,15 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
                              )
     {
         _appConfig = appConfig.Value;
+        Link = _appConfig.GithubLink;
         _themeSelectorService = themeSelectorService;
         _systemService = systemService;
         _applicationInfoService = applicationInfoService;
         _fileAssociationService = fileAssociationService;
     }
+    [ObservableProperty]
+    private string _link;
+
     [ObservableProperty]
     private AppTheme _theme;
     [ObservableProperty]
@@ -79,7 +83,7 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
 
     [RelayCommand]
     private void OnPrivacyStatement()
-        => _systemService.OpenInWebBrowser(_appConfig.PrivacyStatement);
+        => _systemService.OpenInWebBrowser(Link);
     [RelayCommand]
     private void AssociateAppWithExtensions()
     {
