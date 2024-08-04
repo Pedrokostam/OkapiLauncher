@@ -557,6 +557,24 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check for updates (once a day).
+        /// </summary>
+        public static string SettingsPageCheckForUpdatesOnStartup {
+            get {
+                return ResourceManager.GetString("SettingsPageCheckForUpdatesOnStartup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If checked, the app will check for updates after being launched for the first time during the day.
+        /// </summary>
+        public static string SettingsPageCheckForUpdatesOnStartupTooltip {
+            get {
+                return ResourceManager.GetString("SettingsPageCheckForUpdatesOnStartupTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose Theme.
         /// </summary>
         public static string SettingsPageChooseThemeText {

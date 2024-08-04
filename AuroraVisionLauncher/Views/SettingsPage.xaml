@@ -61,7 +61,7 @@
                             Grid.Row="2"
                             Grid.Column="1"
                             Command="{Binding ResetColorCommand}"
-                            Content="Reset" />
+                            Content="Reset color" />
                         <RadioButton
                             Content="{x:Static properties:Resources.SettingsPageRadioButtonLightTheme}"
                             FontSize="{StaticResource MediumFontSize}"
@@ -103,7 +103,7 @@
                     <TextBlock
                         Margin="{StaticResource SmallTopMargin}"
                         Style="{StaticResource SubtitleTextStyle}"
-                        Text="{x:Static properties:Resources.SettingsPageAboutTitle}" />
+                        Text="{x:Static properties:Resources.SettingsPageOtherTitle}" />
                     <Button
                         Command="{Binding AssociateAppWithExtensionsCommand}"
                         Content="{x:Static properties:Resources.SettingsPageSetFileAssociationsButton}"
@@ -114,6 +114,11 @@
                         Content="{x:Static properties:Resources.SettingsPageOpenInstallationFolderButton}"
                         Style="{StaticResource SettingsButton}"
                         ToolTip="{x:Static properties:Resources.SettingsPageOpenInstallationFolderButtonTooltip}" />
+                    <CheckBox
+                        Content="{x:Static properties:Resources.SettingsPageCheckForUpdatesOnStartup}"
+                        FontSize="16"
+                        IsChecked="{Binding AutoCheckForUpdates}"
+                        ToolTip="{x:Static properties:Resources.SettingsPageCheckForUpdatesOnStartupTooltip}" />
                 </StackPanel>
                 <TextBlock
                     Margin="{StaticResource SmallTopMargin}"

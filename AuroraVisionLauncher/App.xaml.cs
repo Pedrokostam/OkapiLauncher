@@ -92,6 +92,7 @@ public partial class App : Application
         services.AddSingleton<IAvAppFacadeFactory, AvAppFacadeFactory>();
         services.AddSingleton<IRecentlyOpenedFilesService, RecentlyOpenedFilesService>();
         services.AddSingleton<IFileAssociationService, FileAssociationService>();
+        services.AddSingleton<IUpdateCheckService, UpdateCheckService>();
         services.AddSingleton<FileOpenerBroker>();
 
         services.AddSingleton<IProcessManagerService, ProcessManagerService>();

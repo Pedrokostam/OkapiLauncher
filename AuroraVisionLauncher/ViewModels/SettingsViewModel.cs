@@ -26,12 +26,14 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     private readonly ISystemService _systemService;
     private readonly IApplicationInfoService _applicationInfoService;
     private readonly IFileAssociationService _fileAssociationService;
+    private readonly IUpdateCheckService _updateCheckService;
 
     public SettingsViewModel(IOptions<AppConfig> appConfig,
                              IThemeSelectorService themeSelectorService,
                              ISystemService systemService,
                              IApplicationInfoService applicationInfoService,
-                             IFileAssociationService fileAssociationService
+                             IFileAssociationService fileAssociationService,
+                             IUpdateCheckService updateCheckService
                              )
     {
         _appConfig = appConfig.Value;
@@ -40,6 +42,8 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
         _systemService = systemService;
         _applicationInfoService = applicationInfoService;
         _fileAssociationService = fileAssociationService;
+        _updateCheckService = updateCheckService;
+        _autoCheckForUpdates = _updateCheckService.AutoCheckForUpdatesEnabled;
     }
     [ObservableProperty]
     private string _link;
@@ -52,6 +56,9 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(ResetColorCommand))]
     private System.Windows.Media.Color? _currentAccent;
+
+    [ObservableProperty]
+    bool _autoCheckForUpdates;
 
     [RelayCommand]
     public void OnNavigatedTo(object parameter)
@@ -89,6 +96,12 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     {
         _fileAssociationService.SetAssociationsToApp();
     }
+
+    partial void OnAutoCheckForUpdatesChanged(bool value)
+    {
+        _updateCheckService.AutoCheckForUpdatesEnabled = value;
+    }
+
     [RelayCommand]
     private static void OpenInstallationFolder()
     {

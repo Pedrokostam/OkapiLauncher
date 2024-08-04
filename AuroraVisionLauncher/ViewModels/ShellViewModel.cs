@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 
@@ -21,6 +22,7 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
 {
     private readonly INavigationService _navigationService;
     private readonly IRightPaneService _rightPaneService;
+    private readonly IUpdateCheckService _updateCheckService;
     private readonly Lazy<IWindowManagerService> _windowManagerService;
     private readonly IRecentlyOpenedFilesService _lastOpenedFilesService;
 
@@ -28,10 +30,12 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
                           IRightPaneService rightPaneService,
                           IMessenger messenger,
                           IWindowManagerService windowManagerService,
+                          IUpdateCheckService updateCheckService,
                           IRecentlyOpenedFilesService lastOpenedFilesService) : base(messenger)
     {
         _navigationService = navigationService;
         _rightPaneService = rightPaneService;
+        _updateCheckService = updateCheckService;
         _windowManagerService = new Lazy<IWindowManagerService>(windowManagerService);
         _lastOpenedFilesService = lastOpenedFilesService;
         RecentlyOpenedFiles = new ObservableCollection<RecentlyOpenedFileFacade>(_lastOpenedFilesService.GetLastOpenedFiles());
@@ -42,8 +46,11 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
     private void OnLoaded()
     {
         _navigationService.Navigated += OnNavigated;
-    }
+        _ = _updateCheckService.AutoCheckForUpdates().ContinueWith(t => Trace.WriteLine(t.Exception), TaskContinuationOptions.OnlyOnFaulted);
 
+    }
+    [RelayCommand()]
+    private async Task CheckForUpdates() => await _updateCheckService.CheckForUpdates().ConfigureAwait(true);
 
     [RelayCommand()]
     private void OnUnloaded()
@@ -81,7 +88,7 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
     [RelayCommand()]
     private void OnMenuViewsInstalledApps()
         => _navigationService.NavigateTo(typeof(InstalledAppsViewModel).FullName!, parameter: null);
-        //=> _navigationService.NavigateTo(typeof(InstalledAppsViewModel).FullName!, parameter: null, clearNavigation: true);
+    //=> _navigationService.NavigateTo(typeof(InstalledAppsViewModel).FullName!, parameter: null, clearNavigation: true);
     [RelayCommand()]
     private void OnMenuFileOpenProject()
     {

@@ -362,4 +362,10 @@
   <data name="SettingsPageOtherTitle" xml:space="preserve">
     <value>Other</value>
   </data>
+  <data name="SettingsPageCheckForUpdatesOnStartup" xml:space="preserve">
+    <value>Check for updates (once a day)</value>
+  </data>
+  <data name="SettingsPageCheckForUpdatesOnStartupTooltip" xml:space="preserve">
+    <value>If checked, the app will check for updates after being launched for the first time during the day</value>
+  </data>
 </root>
