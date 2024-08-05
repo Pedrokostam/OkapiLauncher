@@ -208,22 +208,23 @@ namespace AuroraVisionLauncher.Services
             set.IntersectWith(freshSimples);
         }
 
-        public void Receive(KillProcessRequest message)
+        public void Receive(KillProcessRequest message) => Kill(message.Process);
+        private void Kill(SimpleProcess process)
         {
-            var res = MessageBox.Show($"Are you sure you want to kill this process:\n{message.Process.ProcessName} - {message.Process.MainWindowTitle}?",
-                                     "Confirm process ending",
-                                     MessageBoxButton.YesNo,
-                                     MessageBoxImage.Warning);
+            var res = MessageBox.Show($"Are you sure you want to kill this process:\n{process.ProcessName} - {process.MainWindowTitle}?",
+                                                 "Confirm process ending",
+                                                 MessageBoxButton.YesNo,
+                                                 MessageBoxImage.Warning);
             if (res == MessageBoxResult.No)
             {
                 return;
             }
             try
             {
-                using var proc = Process.GetProcessById(message.Process.Id);
+                using var proc = Process.GetProcessById(process.Id);
                 proc.Kill();
                 proc.WaitForExit();
-                if (_avAppFacadeFactory.TryGetAppByPath(message.Process.Path, out var app))
+                if (_avAppFacadeFactory.TryGetAppByPath(process.Path, out var app))
                 {
                     UpdateSingle(app);
                 }
@@ -234,15 +235,16 @@ namespace AuroraVisionLauncher.Services
             { }
         }
 
-        public void Receive(OpenAppRequest message)
+        public void Receive(OpenAppRequest message) => Open(message.App, message.Arguments);
+        private void Open(IAvApp App, IEnumerable<string> arguments)
         {
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
-                FileName = message.App.Path,
+                FileName = App.Path,
                 UseShellExecute = true,  // Use the shell to start the process
                 CreateNoWindow = true, // Do not create a window
             };
-            foreach (var arg in message.Arguments)
+            foreach (var arg in arguments)
             {
                 startInfo.ArgumentList.Add(arg);
             }
@@ -253,16 +255,16 @@ namespace AuroraVisionLauncher.Services
             catch (System.ComponentModel.Win32Exception)
             {
             }
-            UpdateSingle(message.App);
+            UpdateSingle(App);
         }
-
-        public void Receive(KillAllProcessesRequest message)
+        public void Receive(KillAllProcessesRequest message) => KillAll(message.AvApp);
+        private void KillAll(AvAppFacade avApp)
         {
-            if (message.AvApp.ActiveProcesses.Count == 0)
+            if (avApp.ActiveProcesses.Count == 0)
             {
                 return;
             }
-            var res = MessageBox.Show($"Are you sure you want to kill all processes of {message.AvApp.ProcessName} ({message.AvApp.ActiveProcesses} processes)?",
+            var res = MessageBox.Show($"Are you sure you want to kill all processes of {avApp.ProcessName} ({avApp.ActiveProcesses.Count} processes)?",
                                     "Confirm process ending",
                                     MessageBoxButton.YesNo,
                                     MessageBoxImage.Warning);
@@ -271,7 +273,7 @@ namespace AuroraVisionLauncher.Services
                 return;
             }
             List<Process> procs = [];
-            foreach (var active in message.AvApp.ActiveProcesses)
+            foreach (var active in avApp.ActiveProcesses)
             {
                 var proc = Process.GetProcessById(active.Id);
                 procs.Add(proc);
@@ -282,8 +284,7 @@ namespace AuroraVisionLauncher.Services
                 proc.WaitForExit();
                 proc.Dispose();
             }
-            UpdateSingle(message.AvApp);
-
+            UpdateSingle(avApp);
         }
     }
 }
