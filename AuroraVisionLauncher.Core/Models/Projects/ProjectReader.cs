@@ -44,7 +44,7 @@ public static class ProjectReader
         {
             throw new FileNotFoundException();
         }
-        if (finfo.Length < 250)
+        if (finfo.Length < 100)
         {
             throw new InvalidDataException("The specified file is too small");
         }
