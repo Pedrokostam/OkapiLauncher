@@ -15,6 +15,7 @@ using AuroraVisionLauncher.Models;
 using MahApps.Metro.Converters;
 using Microsoft.Extensions.Options;
 using Microsoft.Win32;
+using Windows.Networking.NetworkOperators;
 
 namespace AuroraVisionLauncher.Services;
 public class FileAssociationService : IFileAssociationService
@@ -196,7 +197,6 @@ public class FileAssociationService : IFileAssociationService
         }
 
     }
-
     private void RemoveExplorerAssociations()
     {
 
@@ -205,8 +205,25 @@ public class FileAssociationService : IFileAssociationService
         {
             try
             {
-                fileExts.DeleteSubKeyTree(assoc.Extension, throwOnMissingSubKey: false);
+                // UserChoice is protected by default, but since its in ClassUser we can change the permissions
+                using var userChoice = fileExts.OpenSubKey(CreateRegistryPathString(assoc.Extension, "UserChoice"), RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryRights.ChangePermissions);
+                if (userChoice is not null)
+                {
+                    string username = WindowsIdentity.GetCurrent().Name;
+                    RegistrySecurity security = userChoice.GetAccessControl();
+                    AuthorizationRuleCollection accRules = security.GetAccessRules(true, true, typeof(NTAccount));
 
+                    foreach (RegistryAccessRule accRule in accRules)
+                    {
+                        if (accRule.IdentityReference.Value.Equals(username, StringComparison.OrdinalIgnoreCase)
+                            && accRule.AccessControlType == AccessControlType.Deny)
+                        {
+                            security.RemoveAccessRule(accRule);
+                        }
+                    }
+                    userChoice.SetAccessControl(security);
+                }
+                fileExts.DeleteSubKeyTree(assoc.Extension, false);
             }
             catch (Exception e)
             {
