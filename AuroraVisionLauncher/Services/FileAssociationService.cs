@@ -84,23 +84,30 @@ public class FileAssociationService : IFileAssociationService
     {
         foreach (var association in associations)
         {
-            // create name for registry key, like AuroraVisionLauncher.avproj
-            var registryKeyName = GetExtensionRegistryName(association);
-            // delete existing keys
-            string extensionSubkey = CreateRegistryPathString("Software", "Classes", registryKeyName);
-            Registry.CurrentUser.DeleteSubKeyTree(extensionSubkey, throwOnMissingSubKey: false);
-            //Registry.CurrentUser.Close();
-            using var appKey = CreateOrOpenRegistryPathWritable("Software", "Classes", registryKeyName);
+            try
+            {
+                // create name for registry key, like AuroraVisionLauncher.avproj
+                var registryKeyName = GetExtensionRegistryName(association);
+                // delete existing keys
+                string extensionSubkey = CreateRegistryPathString("Software", "Classes", registryKeyName);
+                Registry.CurrentUser.DeleteSubKeyTree(extensionSubkey, throwOnMissingSubKey: false);
+                //Registry.CurrentUser.Close();
+                using var appKey = CreateOrOpenRegistryPathWritable("Software", "Classes", registryKeyName);
 
-            using var iconKey = appKey.CreateSubKey("DefaultIcon", writable: true);
+                using var iconKey = appKey.CreateSubKey("DefaultIcon", writable: true);
 
-            var iconPath = GetIconName(association);
-            // No need to enclose in quotes; 0 means use the first icon available
-            iconKey.SetValue(name: null, $"{iconPath},0");
+                var iconPath = GetIconName(association);
+                // No need to enclose in quotes; 0 means use the first icon available
+                iconKey.SetValue(name: null, $"{iconPath},0");
 
-            using var commandOpenShellKey = appKey.CreateSubKey(CreateRegistryPathString("shell", "open", "command"));
+                using var commandOpenShellKey = appKey.CreateSubKey(CreateRegistryPathString("shell", "open", "command"));
 
-            commandOpenShellKey.SetValue(name: null, $"\"{mainAppPath}\" \"%1\"");
+                commandOpenShellKey.SetValue(name: null, $"\"{mainAppPath}\" \"%1\"");
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"On set shell keys and icons {association.Extension}", e);
+            }
         }
 
     }
@@ -185,7 +192,7 @@ public class FileAssociationService : IFileAssociationService
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.Message);
+            MessageBox.Show($"{ex.Message}\n{ex.InnerException}");
         }
 
     }
@@ -196,8 +203,16 @@ public class FileAssociationService : IFileAssociationService
         using var fileExts = CreateOrOpenRegistryPathWritable("Software", "Microsoft", "Windows", "CurrentVersion", "Explorer", "FileExts");
         foreach (var assoc in associations)
         {
-            using var subkey = fileExts.OpenSubKey(assoc.Extension,writable:true);
-            subkey?.DeleteSubKeyTree("", throwOnMissingSubKey: false);
+            try
+            {
+                fileExts.DeleteSubKeyTree(assoc.Extension, throwOnMissingSubKey: false);
+
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception($"On delete {fileExts.Name + "\\" + assoc.Extension}", e);
+            }
         }
     }
 
@@ -206,8 +221,15 @@ public class FileAssociationService : IFileAssociationService
         foreach (var association in associations)
         {
             var registryKeyName = GetExtensionRegistryName(association);
-            using var extKey = CreateOrOpenRegistryPathWritable("Software", "Classes", association.Extension);
-            extKey.SetValue(name: null, registryKeyName);
+            try
+            {
+                using var extKey = CreateOrOpenRegistryPathWritable("Software", "Classes", association.Extension);
+                extKey.SetValue(name: null, registryKeyName);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"On associate {registryKeyName}", e);
+            }
         }
     }
 }
