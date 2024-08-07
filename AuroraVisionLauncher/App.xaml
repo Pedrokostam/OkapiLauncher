@@ -21,6 +21,7 @@
                     <conv:PathToFilenameConverter x:Key="PathToFilenameConverter" />
                     <conv:ProjectTypeToStringConverter x:Key="ProjectTypeToString" />
                     <conv:CompatibilityToDescriptionConverter x:Key="CompatibilityDescription" />
+                    <conv:ProductTypeToShortStringConverter x:Key="ProductTypeToShortString" />
                     <theming:SuperLibraryThemeProvider x:Key="{x:Static theming:SuperLibraryThemeProvider.DefaultInstance}" />
                 </ResourceDictionary>
                 <!--
@@ -47,8 +48,7 @@
                 <ResourceDictionary Source="/DataTemplates/AvAppFacade.xaml" />
                 <ResourceDictionary Source="/DataTemplates/CommandLineOptions.xaml" />
                 <ResourceDictionary Source="/DataTemplates/ProgramInformation.xaml" />
-                <ResourceDictionary>
-                </ResourceDictionary>
+                <ResourceDictionary />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

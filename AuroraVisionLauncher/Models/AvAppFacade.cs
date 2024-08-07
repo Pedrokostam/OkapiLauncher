@@ -20,6 +20,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Windows.ApplicationModel.VoiceCommands;
 using ObservableCollections;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AuroraVisionLauncher.Models;
 public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFacade>, IEquatable<AvAppFacade>
@@ -35,7 +36,8 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     public bool IsDevelopmentVersion => Version.IsDevelopmentVersion;
     public bool IsExecutable => _avApp.IsExecutable;
 
-
+    public string? Description => _avApp.Description ?? Name;
+    public bool IsCustom => Description is not null;
 
     public AvVersionFacade? SecondaryVersion { get; }
 
@@ -91,7 +93,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     [RelayCommand]
     private void KillAllProcesses()
     {
-        _messenger.Send(new  KillAllProcessesRequest(this));
+        _messenger.Send(new KillAllProcessesRequest(this));
     }
 
     [RelayCommand]

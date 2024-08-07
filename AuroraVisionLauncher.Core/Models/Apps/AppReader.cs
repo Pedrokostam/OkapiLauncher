@@ -9,8 +9,9 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace AuroraVisionLauncher.Core.Models.Apps;
-public static class AppReader
+public static partial class AppReader
 {
+
     private record struct PathInfo(DirectoryInfo BasePath, AvType Type)
     {
         public static implicit operator (DirectoryInfo basePath, AvType type)(PathInfo value)
@@ -58,20 +59,17 @@ public static class AppReader
             return Path.Join(GetRootDllExeFolderPath(), GetRootDllExeName(brand, this.Type));
         }
     }
-    public static IEnumerable<AvApp> GetInstalledAvApps(IEnumerable<string>? additionalPaths = null)
+    public static IEnumerable<AvApp> GetInstalledAvApps(IEnumerable<IAppSource>? additionalPaths = null)
     {
-        var paths = GetAllRelevantPaths(additionalPaths);
-        List<PathInfo> infos = [];
-        foreach (var path in paths)
-        {
-            if (GetPathInfo(path) is PathInfo info)
-            {
-                infos.Add(info);
-            }
-        }
+        var sources = GetAllRelevantPaths(additionalPaths);
         List<AvApp> apps = [];
-        foreach (var info in infos)
+        foreach (var source in sources)
         {
+            PathInfo? maybeInfo = GetPathInfo(source.SourcePath);
+            if (maybeInfo is not PathInfo info)
+            {
+                continue;
+            }
             var brand = ProductBrand.FindBrandByLicense(info.BasePath.FullName);
             var exePath = info.GetRootDllExePath(brand.Brand);
             var type = ProductType.FromAvType(info.Type);
@@ -82,7 +80,8 @@ public static class AppReader
                 secondaryVersion,
                 type,
                 brand,
-                info.BasePath.FullName);
+                info.BasePath.FullName,
+                source.Description);
             apps.Add(app);
         }
         apps.Sort();
@@ -107,13 +106,16 @@ public static class AppReader
         }
         return null;
     }
-    private static List<string> GetAllRelevantPaths(IEnumerable<string>? additionalPaths)
+    private static IEnumerable<AppSource> GetAllRelevantPaths(IEnumerable<IAppSource>? additionalPaths)
     {
         var variables = Environment.GetEnvironmentVariables();
-        List<string> paths = [];
+        List<AppSource> paths = [];
         if (additionalPaths is not null)
         {
-            paths.AddRange(additionalPaths);
+            foreach (var path in additionalPaths)
+            {
+                paths.Add(AppSource.FromInterface(path));
+            }
         }
         foreach (DictionaryEntry entry in variables)
         {
@@ -130,11 +132,11 @@ public static class AppReader
             {
                 if (Directory.Exists(value_string))
                 {
-                    paths.Add(value_string);
+                    paths.Add(new(null, value_string, true));
                 }
             }
         }
-        return paths;
+        return paths.DistinctBy(x => x.SourcePath, StringComparer.OrdinalIgnoreCase);
     }
 
 

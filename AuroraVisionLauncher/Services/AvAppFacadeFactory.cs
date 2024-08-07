@@ -16,6 +16,7 @@ using CommunityToolkit.Mvvm.Messaging;
 namespace AuroraVisionLauncher.Services;
 public class AvAppFacadeFactory : IAvAppFacadeFactory
 {
+
     private const string AdditionalFoldersKey = "AdditionalExecutableFolderPaths";
     readonly List<AvApp> _avApps = new();
     private readonly IWindowManagerService _windowManagerService;
@@ -54,20 +55,24 @@ public class AvAppFacadeFactory : IAvAppFacadeFactory
     {
         _avApps.Clear();
         var variables = Environment.GetEnvironmentVariables();
-        _avApps.AddRange(AppReader.GetInstalledAvApps());
+        _avApps.AddRange(AppReader.GetInstalledAvApps([new A("Kuklerz", @"C:\Program Files\Aurora Vision\Aurora Vision Studio 5.4 Runtime - Copy")]));
     }
 
     public IEnumerable<AvAppFacade> CreateAllFacades() => AvApps.Select(Create);
 
     public bool TryGetAppByPath(string path, [NotNullWhen(true)] out AvAppFacade? appFacade)
     {
-        var found = _avApps.FirstOrDefault(a => string.Equals(a.Path, path, StringComparison.OrdinalIgnoreCase));
+        var found = _avApps.Find(a => string.Equals(a.Path, path, StringComparison.OrdinalIgnoreCase));
         if (found is not null)
         {
-            appFacade=Create(found);
+            appFacade = Create(found);
             return true;
         }
         appFacade = null;
         return false;
     }
+}
+public record A(string? Description, string SourcePath) : IAppSource
+{
+
 }

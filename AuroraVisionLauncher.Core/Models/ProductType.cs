@@ -19,12 +19,9 @@ public class ProductType : IComparable<ProductType>, IComparable
     public static readonly ProductType Runtime = new("Runtime", AvType.Runtime);
     public static readonly ProductType DeepLearning = new("DeepLearning", AvType.DeepLearning);
     public static readonly ProductType Library = new("Library", AvType.Library);
-    private static readonly ProductType[] _types = [Professional, Runtime, DeepLearning, Library];
     public string Name { get; }
     private readonly List<ProductType> _supportedAvTypes = [];
     public AvType Type { get; }
-    private string ProductNameKeyword { get; }
-    private string? FileSignatureKeyword { get; }
     public IReadOnlyCollection<ProductType> SupportedAvTypes => _supportedAvTypes.AsReadOnly();
 
     public static ProductType FromAvType(AvType type)
