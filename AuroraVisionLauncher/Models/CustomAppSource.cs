@@ -8,14 +8,21 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace AuroraVisionLauncher.Models;
-public partial class CustomAppSource:ObservableObject,IAppSource
+public partial class CustomAppSource : ObservableObject, IAppSource
 {
     [ObservableProperty]
     private string? _description;
     [ObservableProperty]
-    private string _path="";
+    private string _path = "";
 
-    public string SourcePath => Path;
+    public string SourcePath
+    {
+        get
+        {
+            var temp = Path.Replace("~", "%USERPOFILE%", StringComparison.Ordinal);
+            return Environment.ExpandEnvironmentVariables(temp);
+        }
+    }
 
     public CustomAppSource()
     {
