@@ -165,7 +165,9 @@ namespace AuroraVisionLauncher.Services
             }
             foreach (var process in rawProcesses)
             {
-                if (!(processNames.Contains(process.ProcessName) && process.MainModule?.FileName is string filepath))
+                if (!(processNames.Contains(process.ProcessName)
+                    && process.MainModule?.FileName is string filepath
+                    && stateDict.ContainsKey(filepath)))
                 {
                     continue;
                 }
