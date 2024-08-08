@@ -114,7 +114,10 @@ public static partial class AppReader
         {
             foreach (var path in additionalPaths)
             {
-                paths.Add(AppSource.FromInterface(path));
+                if (File.Exists(path.SourcePath))
+                {
+                    paths.Add(AppSource.FromInterface(path));
+                }
             }
         }
         foreach (DictionaryEntry entry in variables)
