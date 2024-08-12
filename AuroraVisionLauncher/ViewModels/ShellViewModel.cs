@@ -11,6 +11,7 @@ using AuroraVisionLauncher.Properties;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace AuroraVisionLauncher.ViewModels;
 
@@ -31,6 +32,7 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
                           IMessenger messenger,
                           IWindowManagerService windowManagerService,
                           IUpdateCheckService updateCheckService,
+
                           IRecentlyOpenedFilesService lastOpenedFilesService) : base(messenger)
     {
         _navigationService = navigationService;
@@ -137,6 +139,7 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
             RecentlyOpenedFiles.Add(item);
         }
     }
+    
 
     [RelayCommand]
     private void Collect()

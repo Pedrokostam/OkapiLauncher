@@ -14,7 +14,7 @@ using AuroraVisionLauncher.ViewModels;
 using AuroraVisionLauncher.Views;
 
 using CommunityToolkit.Mvvm.Messaging;
-
+using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -81,11 +81,13 @@ public partial class App : Application
 
         // Services
         services.AddSingleton<IWindowManagerService, WindowManagerService>();
+        services.AddSingleton<IDialogCoordinator, DialogCoordinator>();
         services.AddSingleton<IApplicationInfoService, ApplicationInfoService>();
         services.AddSingleton<ISystemService, SystemService>();
         services.AddSingleton<IPersistAndRestoreService, PersistAndRestoreService>();
         services.AddSingleton<IThemeSelectorService, ThemeSelectorService>();
         services.AddSingleton<IPageService, PageService>();
+        services.AddSingleton<IContentDialogService, ContentDialogService>();
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IRequestedFilesService, RequestedFilesService>();
         services.AddSingleton<IMessenger, StrongReferenceMessenger>();
@@ -111,6 +113,7 @@ public partial class App : Application
 
         services.AddTransient<IShellDialogWindow, ShellDialogWindow>();
         services.AddTransient<ShellDialogViewModel>();
+        services.AddTransient<CustomSourceEditingWindow>();
 
         services.AddTransient<InstalledAppsViewModel>();
         services.AddTransient<InstalledAppsPage>();

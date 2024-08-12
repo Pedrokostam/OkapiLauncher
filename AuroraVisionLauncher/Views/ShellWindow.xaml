@@ -13,6 +13,7 @@
     Title="{x:Static properties:Resources.AppDisplayName}"
     MinWidth="1000"
     MinHeight="800"
+    controls:DialogParticipation.Register="{Binding}"
     d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False,
                                      Type={x:Type vms:ShellViewModel}}"
     AllowDrop="True"
@@ -88,114 +89,144 @@
         </controls:WindowCommands>
     </controls:MetroWindow.LeftWindowCommands>
     <controls:MetroWindow.Content>
-        <controls:SplitView
-            x:Name="splitView"
-            Focusable="False"
-            OpenPaneLength="500"
-            PanePlacement="Right">
-            <controls:SplitView.Pane>
-                <Border
-                    Background="{DynamicResource MahApps.Brushes.Control.Background}"
-                    BorderBrush="{DynamicResource MahApps.Brushes.Controls.Border}"
-                    BorderThickness="1,1,0,0">
-                    <Frame
-                        x:Name="rightPaneFrame"
-                        Focusable="False"
-                        NavigationUIVisibility="Hidden" />
-                </Border>
-            </controls:SplitView.Pane>
-            <controls:SplitView.Content>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <Menu Grid.Row="0" Focusable="False">
-                        <MenuItem
-                            x:Name="FileMenu"
-                            AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
-                            Header="{x:Static properties:Resources.ShellMenuFileHeader}">
+        <Grid>
+
+            <controls:SplitView
+                x:Name="splitView"
+                Focusable="False"
+                OpenPaneLength="500"
+                PanePlacement="Right">
+                <controls:SplitView.Pane>
+                    <Border
+                        Background="{DynamicResource MahApps.Brushes.Control.Background}"
+                        BorderBrush="{DynamicResource MahApps.Brushes.Controls.Border}"
+                        BorderThickness="1,1,0,0">
+                        <Frame
+                            x:Name="rightPaneFrame"
+                            Focusable="False"
+                            NavigationUIVisibility="Hidden" />
+                    </Border>
+                </controls:SplitView.Pane>
+                <controls:SplitView.Content>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Menu Grid.Row="0" Focusable="False">
                             <MenuItem
+                                x:Name="FileMenu"
                                 AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
-                                Command="{Binding MenuFileOpenProjectCommand}"
-                                Header="{x:Static properties:Resources.ShellMenuItemFileSettingsOpenProject}"
-                                InputGestureText="Ctrl + O">
-                                <MenuItem.Icon>
-                                    <mahicon:PackIconMaterialDesign Kind="FolderOpen" />
-                                </MenuItem.Icon>
+                                Header="{x:Static properties:Resources.ShellMenuFileHeader}">
+                                <MenuItem
+                                    AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
+                                    Command="{Binding MenuFileOpenProjectCommand}"
+                                    Header="{x:Static properties:Resources.ShellMenuItemFileSettingsOpenProject}"
+                                    InputGestureText="Ctrl + O">
+                                    <MenuItem.Icon>
+                                        <mahicon:PackIconMaterialDesign Kind="FolderOpen" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem
+                                    AlternationCount="2"
+                                    AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
+                                    Header="{x:Static properties:Resources.ShellMenuRecentFiles}"
+                                    ItemsSource="{Binding RecentlyOpenedFiles}">
+                                    <MenuItem.ItemContainerStyle>
+                                        <Style BasedOn="{StaticResource MahApps.Styles.MenuItem}" TargetType="MenuItem">
+                                            <Setter Property="Header" Value="{Binding FilePath, Converter={StaticResource PathToFilenameConverter}, ConverterParameter=50}" />
+                                            <Setter Property="ToolTip">
+                                                <Setter.Value>
+                                                    <StackPanel>
+                                                        <TextBlock Text="{Binding FilePath}" />
+                                                        <TextBlock Text="{Binding OpenedOn, StringFormat={x:Static properties:Resources.DatetimeOpenedOn}, Converter={StaticResource UtcToLocalConverter}}" />
+                                                    </StackPanel>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter Property="Command" Value="{Binding DataContext.MenuOpenRecentFileCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                                            <Setter Property="CommandParameter" Value="{Binding}" />
+                                            <Setter Property="InputGestureText" Value="{Binding Index, Converter={StaticResource IndexConverter}, StringFormat={}Alt + {0}}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Index, Converter={StaticResource IndexConverter}}" Value="{x:Null}">
+                                                    <Setter Property="InputGestureText" Value="" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </MenuItem.ItemContainerStyle>
+                                </MenuItem>
+                                <MenuItem
+                                    AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
+                                    Command="{Binding MenuFileSettingsCommand}"
+                                    Header="{x:Static properties:Resources.ShellMenuItemFileSettingsPageHeader}">
+                                    <MenuItem.Icon>
+                                        <mahicon:PackIconVaadinIcons Kind="Tools" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <Separator />
+                                <MenuItem
+                                    AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
+                                    Command="{Binding MenuFileExitCommand}"
+                                    Header="{x:Static properties:Resources.ShellMenuItemFileExitHeader}">
+                                    <MenuItem.Icon>
+                                        <mahicon:PackIconFontAwesome Kind="PowerOffSolid" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <Separator />
+                                <MenuItem
+    AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
+    Command="{Binding ShowDialogCommand}"
+    Header="Diali">
+                                    <MenuItem.Icon>
+                                        <mahicon:PackIconFontAwesome Kind="PowerOffSolid" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
                             </MenuItem>
-                            <MenuItem
-                                AlternationCount="2"
-                                AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
-                                Header="{x:Static properties:Resources.ShellMenuRecentFiles}"
-                                ItemsSource="{Binding RecentlyOpenedFiles}">
-                                <MenuItem.ItemContainerStyle>
-                                    <Style BasedOn="{StaticResource MahApps.Styles.MenuItem}" TargetType="MenuItem">
-                                        <Setter Property="Header" Value="{Binding FilePath, Converter={StaticResource PathToFilenameConverter}, ConverterParameter=50}" />
-                                        <Setter Property="ToolTip">
-                                            <Setter.Value>
-                                                <StackPanel>
-                                                    <TextBlock Text="{Binding FilePath}" />
-                                                    <TextBlock Text="{Binding OpenedOn, StringFormat={x:Static properties:Resources.DatetimeOpenedOn}, Converter={StaticResource UtcToLocalConverter}}" />
-                                                </StackPanel>
-                                            </Setter.Value>
-                                        </Setter>
-                                        <Setter Property="Command" Value="{Binding DataContext.MenuOpenRecentFileCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
-                                        <Setter Property="CommandParameter" Value="{Binding}" />
-                                        <Setter Property="InputGestureText" Value="{Binding Index, Converter={StaticResource IndexConverter}, StringFormat={}Alt + {0}}" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Index, Converter={StaticResource IndexConverter}}" Value="{x:Null}">
-                                                <Setter Property="InputGestureText" Value="" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </MenuItem.ItemContainerStyle>
+                            <MenuItem AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}" Header="{x:Static properties:Resources.ShellMenuViewsHeader}">
+                                <!--  TODO: Review the MenuItem headers in Resources.resx file for all of your views and place '_' before the letter that you want to use for menu keyboard usage  -->
+                                <MenuItem
+                                    AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
+                                    Command="{Binding MenuViewsLauncherCommand}"
+                                    Header="{x:Static properties:Resources.ShellMenuItemViewsLauncherPageHeader}">
+                                    <MenuItem.Icon>
+                                        <mahicon:PackIconCodicons Kind="DebugStart" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem
+                                    AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
+                                    Command="{Binding MenuViewsInstalledAppsCommand}"
+                                    Header="{x:Static properties:Resources.ShellMenuItemViewsInstalledAppsPageHeader}">
+                                    <MenuItem.Icon>
+                                        <mahicon:PackIconVaadinIcons Kind="GridSmallOutline" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
                             </MenuItem>
-                            <MenuItem
-                                AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
-                                Command="{Binding MenuFileSettingsCommand}"
-                                Header="{x:Static properties:Resources.ShellMenuItemFileSettingsPageHeader}">
-                                <MenuItem.Icon>
-                                    <mahicon:PackIconVaadinIcons Kind="Tools" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <Separator />
-                            <MenuItem
-                                AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
-                                Command="{Binding MenuFileExitCommand}"
-                                Header="{x:Static properties:Resources.ShellMenuItemFileExitHeader}">
-                                <MenuItem.Icon>
-                                    <mahicon:PackIconFontAwesome Kind="PowerOffSolid" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                        </MenuItem>
-                        <MenuItem AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}" Header="{x:Static properties:Resources.ShellMenuViewsHeader}">
-                            <!--  TODO: Review the MenuItem headers in Resources.resx file for all of your views and place '_' before the letter that you want to use for menu keyboard usage  -->
-                            <MenuItem
-                                AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
-                                Command="{Binding MenuViewsLauncherCommand}"
-                                Header="{x:Static properties:Resources.ShellMenuItemViewsLauncherPageHeader}">
-                                <MenuItem.Icon>
-                                    <mahicon:PackIconCodicons Kind="DebugStart" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <MenuItem
-                                AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
-                                Command="{Binding MenuViewsInstalledAppsCommand}"
-                                Header="{x:Static properties:Resources.ShellMenuItemViewsInstalledAppsPageHeader}">
-                                <MenuItem.Icon>
-                                    <mahicon:PackIconVaadinIcons Kind="GridSmallOutline" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                        </MenuItem>
-                    </Menu>
-                    <Frame
-                        x:Name="shellFrame"
-                        Grid.Row="1"
-                        Focusable="False"
-                        NavigationUIVisibility="Hidden" />
-                </Grid>
-            </controls:SplitView.Content>
-        </controls:SplitView>
+                        </Menu>
+                        <Frame
+                            x:Name="shellFrame"
+                            Grid.Row="1"
+                            Focusable="False"
+                            NavigationUIVisibility="Hidden" />
+                    </Grid>
+                </controls:SplitView.Content>
+            </controls:SplitView>
+            <Popup
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                AllowsTransparency="True"
+                IsOpen="False"
+                Placement="Center"
+                PlacementTarget="{Binding ElementName=splitView}"
+                PopupAnimation="Slide">
+                <TextBlock>
+                    jsbncvckhjsdbcvbsdhjbnchjksdbncjihksdbhjkcbsdjhkbcihjksdbicbshdbcihjksdbc sd
+                    sfsdfs
+                    dfs
+                    df
+                    sd
+                    fs
+                    dfsdfsdfsdf
+                </TextBlock>
+            </Popup>
+        </Grid>
     </controls:MetroWindow.Content>
 </controls:MetroWindow>

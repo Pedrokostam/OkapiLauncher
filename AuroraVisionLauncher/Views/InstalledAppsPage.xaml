@@ -36,13 +36,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <DataGrid Grid.Row="2" ItemsSource="{Binding Apps}" AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="Version" Binding="{Binding Version}"/>
-                <DataGridTextColumn Header="Dec" Binding="{Binding IsDevelopmentVersion}"/>
-            </DataGrid.Columns>
-        </DataGrid>
+        <Button Grid.Row="2" Command="{Binding ShowDialogCommand}"/>
         <DockPanel>
             <ComboBox
                 x:Name="Combi"

@@ -11,6 +11,7 @@ using AuroraVisionLauncher.Converters;
 using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.VisualBasic;
+using AuroraVisionLauncher.Views;
 
 namespace AuroraVisionLauncher.ViewModels;
 public sealed partial class InstalledAppsViewModel : ProcessRefreshViewModel
@@ -20,11 +21,15 @@ public sealed partial class InstalledAppsViewModel : ProcessRefreshViewModel
     protected override IList<AvAppFacade> RawApps { get; }
     public InstalledAppsViewModel(IAvAppFacadeFactory appFactory,
                                   IProcessManagerService processManagerService,
+                                  IWindowManagerService windowManagerService,
+                                  IContentDialogService contentDialogService,
                                   IMessenger messenger) : base(processManagerService, appFactory, messenger)
     {
         RawApps = new List<AvAppFacade>(_appFactory.CreateAllFacades());
         _apps = CollectionViewSource.GetDefaultView(RawApps);
         Regroup();
+        _windowManagerService = windowManagerService;
+        _contentDialogService = contentDialogService;
     }
 
     partial void OnSortPropertyChanged(AppSortProperty value)
@@ -46,8 +51,21 @@ public sealed partial class InstalledAppsViewModel : ProcessRefreshViewModel
         Apps.GroupDescriptions.Add(gd);
     }
 
+    [RelayCommand]
+    private void TEST()
+    {
+
+        _windowManagerService.OpenSourceEditingWindows(new CustomAppSource() { Description="tets",Path="~"});
+    }
+
+    [RelayCommand]
+    private async Task ShowDialog()
+    {
+        await _contentDialogService.ShowError("Is this loss?", "| || || |_").ConfigureAwait(true);
+    }
 
     [ObservableProperty]
     private ICollectionView _apps;
-
+    private readonly IWindowManagerService _windowManagerService;
+    private readonly IContentDialogService _contentDialogService;
 }
