@@ -113,7 +113,6 @@ public partial class App : Application
 
         services.AddTransient<IShellDialogWindow, ShellDialogWindow>();
         services.AddTransient<ShellDialogViewModel>();
-        services.AddTransient<CustomSourceEditingWindow>();
 
         services.AddTransient<InstalledAppsViewModel>();
         services.AddTransient<InstalledAppsPage>();

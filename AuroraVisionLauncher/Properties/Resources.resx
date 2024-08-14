@@ -368,4 +368,19 @@
   <data name="SettingsPageCheckForUpdatesOnStartupTooltip" xml:space="preserve">
     <value>If checked, the app will check for updates after being launched for the first time during the day</value>
   </data>
+  <data name="CustomSourceEditorDescriptionHeader" xml:space="preserve">
+    <value>Description: </value>
+  </data>
+  <data name="CustomSourceEditorPathHeader" xml:space="preserve">
+    <value>Path: </value>
+  </data>
+  <data name="CustomSourceEditorSourcePathHeader" xml:space="preserve">
+    <value>Effective Path: </value>
+  </data>
+  <data name="CustomSourceEditorButtonOK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="CustomSourceEditorButtonCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
 </root>

@@ -52,10 +52,9 @@ public sealed partial class InstalledAppsViewModel : ProcessRefreshViewModel
     }
 
     [RelayCommand]
-    private void TEST()
+    private async Task TEST()
     {
-
-        _windowManagerService.OpenSourceEditingWindows(new CustomAppSource() { Description="tets",Path="~"});
+        await _contentDialogService.ShowSourceEditor(new CustomAppSource() { Description="ksdf",Path="~"}).ConfigureAwait(true);
     }
 
     [RelayCommand]

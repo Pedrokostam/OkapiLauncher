@@ -10,17 +10,23 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace AuroraVisionLauncher.Views;
 /// <summary>
-/// Interaction logic for CustomSourceEditingWindow.xaml
+/// Interaction logic for CustomSourceEditorDialog.xaml
 /// </summary>
-public partial class CustomSourceEditingWindow : MetroWindow
+public partial class CustomSourceEditorDialog : CustomDialog
 {
-    public CustomSourceEditingWindow()
+    public CustomSourceEditorDialog():base()
     {
         InitializeComponent();
+    }
+    private  void Button_Click(object sender, RoutedEventArgs e)
+    {
+       base.ParentDialogWindow.Close();
     }
 }

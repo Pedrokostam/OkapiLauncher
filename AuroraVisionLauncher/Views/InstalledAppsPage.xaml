@@ -36,7 +36,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Button Grid.Row="2" Command="{Binding ShowDialogCommand}"/>
+        <Button Grid.Row="2" Command="{Binding TESTCommand}"/>
         <DockPanel>
             <ComboBox
                 x:Name="Combi"

@@ -13,5 +13,5 @@ public interface IWindowManagerService
 
     Window? GetWindow(string pageKey);
     void CloseChildWindows();
-    bool? OpenSourceEditingWindows(CustomAppSource source);
+    //bool? OpenSourceEditingWindows(CustomAppSource source);
 }

@@ -214,6 +214,51 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string CustomSourceEditorButtonCancel {
+            get {
+                return ResourceManager.GetString("CustomSourceEditorButtonCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        public static string CustomSourceEditorButtonOK {
+            get {
+                return ResourceManager.GetString("CustomSourceEditorButtonOK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description: .
+        /// </summary>
+        public static string CustomSourceEditorDescriptionHeader {
+            get {
+                return ResourceManager.GetString("CustomSourceEditorDescriptionHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Path: .
+        /// </summary>
+        public static string CustomSourceEditorPathHeader {
+            get {
+                return ResourceManager.GetString("CustomSourceEditorPathHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Effective Path: .
+        /// </summary>
+        public static string CustomSourceEditorSourcePathHeader {
+            get {
+                return ResourceManager.GetString("CustomSourceEditorSourcePathHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Opened on {0:yyyy-MM-dd HH:mm:ss}.
         /// </summary>
         public static string DatetimeOpenedOn {

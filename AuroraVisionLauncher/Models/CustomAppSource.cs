@@ -15,16 +15,15 @@ public partial class CustomAppSource : ObservableObject, IAppSource
     [ObservableProperty]
     private string _path = "";
 
-    public string SourcePath
-    {
-        get
-        {
-            var temp = Path.Replace("~", "%USERPOFILE%", StringComparison.Ordinal);
-            return Environment.ExpandEnvironmentVariables(temp);
-        }
-    }
+    public string SourcePath => ExpandPath(Path);
 
     public CustomAppSource()
     {
+    }
+
+    public static string ExpandPath(string path)
+    {
+        var temp = path.Replace("~", "%USERPROFILE%", StringComparison.Ordinal);
+        return Environment.ExpandEnvironmentVariables(temp);
     }
 }
