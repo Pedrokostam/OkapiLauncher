@@ -28,18 +28,25 @@ public partial class CustomSourceDialogEditorViewModel : ObservableObject
     private string _path;
     public string SourcePath => CustomAppSource.ExpandPath(Path);
 
+    private TaskCompletionSource _done=new TaskCompletionSource();
+
+    public Task WaitForExit()
+    {
+        return _done.Task;
+    }
+
     [RelayCommand]
-    private async Task Accept()
+    private void Accept()
     {
         Debug.WriteLine("Accept");
         _source.Path = Path;
         _source.Description = Description;
-        await CloseDialog.Invoke().ConfigureAwait(true);
+        _done.SetResult();
     }
 
     [RelayCommand]
-    private async Task Cancel()
+    private void Cancel()
     {
-        await CloseDialog.Invoke().ConfigureAwait(true);
+        _done.SetResult();
     }
 }

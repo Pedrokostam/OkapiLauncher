@@ -21,13 +21,15 @@ public class AvAppFacadeFactory : IAvAppFacadeFactory
     readonly List<AvApp> _avApps = new();
     private readonly IWindowManagerService _windowManagerService;
     private readonly IMessenger _messenger;
+    private readonly ICustomAppSourceService _customAppSourceService;
 
     public IReadOnlyList<AvApp> AvApps => _avApps.AsReadOnly();
-    public AvAppFacadeFactory(IWindowManagerService windowManagerService, IMessenger messenger)
+    public AvAppFacadeFactory(IWindowManagerService windowManagerService, IMessenger messenger, ICustomAppSourceService customAppSourceService)
     {
-        RediscoverApps();
+        _customAppSourceService = customAppSourceService;
         _windowManagerService = windowManagerService;
         _messenger = messenger;
+        RediscoverApps();
     }
 
     public AvAppFacade Create(AvApp app)
@@ -54,8 +56,8 @@ public class AvAppFacadeFactory : IAvAppFacadeFactory
     public void RediscoverApps()
     {
         _avApps.Clear();
-        var variables = Environment.GetEnvironmentVariables();
-        _avApps.AddRange(AppReader.GetInstalledAvApps([new A("Kuklerz", @"C:\Program Files\Aurora Vision\Aurora Vision Studio 5.4 Runtime - Copy")]));
+        var detected = AppReader.GetInstalledAvApps(_customAppSourceService.CustomSources);
+        _avApps.AddRange(detected);
     }
 
     public IEnumerable<AvAppFacade> CreateAllFacades() => AvApps.Select(Create);
@@ -71,8 +73,4 @@ public class AvAppFacadeFactory : IAvAppFacadeFactory
         appFacade = null;
         return false;
     }
-}
-public record A(string? Description, string SourcePath) : IAppSource
-{
-
 }

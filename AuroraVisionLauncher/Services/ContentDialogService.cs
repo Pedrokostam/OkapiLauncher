@@ -22,13 +22,15 @@ public class ContentDialogService : IContentDialogService
     {
         return _dialogCoordinator.ShowMessageAsync(_context, title, message);
     }
-    public Task ShowSourceEditor(CustomAppSource source)
+    public async Task ShowSourceEditor(CustomAppSource source)
     {
         var dialog = new CustomSourceEditorDialog();
-        var vm = new CustomSourceDialogEditorViewModel(source,async ()=>await _dialogCoordinator.HideMetroDialogAsync(_context,dialog).ConfigureAwait(true));
+        var vm = new CustomSourceDialogEditorViewModel(source, async () => Task.FromResult(true));
         dialog.DataContext = vm;
 
-        return _dialogCoordinator.ShowMetroDialogAsync(_context,dialog);
+        await _dialogCoordinator.ShowMetroDialogAsync(_context, dialog);
+        await vm.WaitForExit();
+        await _dialogCoordinator.HideMetroDialogAsync(_context, dialog).ConfigureAwait(true);
     }
 
     public ContentDialogService(IDialogCoordinator dialogCoordinator, ShellViewModel mainWindow)

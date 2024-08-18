@@ -16,39 +16,79 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     Style="{DynamicResource MahApps.Styles.Page}"
+    x:Name="RootPage"
     mc:Ignorable="d">
     <Page.Resources>
         <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" EnumType="models:AppTheme" />
     </Page.Resources>
-    <ScrollViewer>
-        <Grid Margin="{StaticResource SmallTopBottomMargin}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="48" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <TextBlock Style="{StaticResource PageTitleStyle}" Text="{x:Static properties:Resources.SettingsPageTitle}" />
-            <StackPanel
+    <Grid x:Name="RootGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="48" />
+                    <RowDefinition Height="48" />
+                    <RowDefinition  />
+                </Grid.RowDefinitions>
+                <TextBlock
+                     Margin="{StaticResource SmallTopMargin}"
+                     Style="{StaticResource SubtitleTextStyle}"
+                     Text="Custom paths" />
+                <Button Grid.Row="1" Content="Add" Command="{Binding AddNewSourceCommand}"/>
+                <ListView ItemsSource="{Binding CustomSources}" Grid.Row="2">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="{Binding Description}"/>
+                                    <TextBlock Text="{Binding SourcePath}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1">
+                                    <Button Content="Edit" Command="{Binding ElementName=RootPage, Path=DataContext.EditSourceCommand}" CommandParameter="{Binding}"/>
+                                    <Button Content="Remove" Command="{Binding ElementName=RootPage, Path=DataContext.RemoveSourceCommand}" CommandParameter="{Binding}"/>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+
+        </Grid>
+        <ScrollViewer>
+            <Grid Margin="{StaticResource SmallTopBottomMargin}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="48" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock Style="{StaticResource PageTitleStyle}" Text="{x:Static properties:Resources.SettingsPageTitle}" />
+                <StackPanel
                 x:Name="ContentArea"
                 Grid.Row="1"
                 Margin="{StaticResource MediumLeftRightMargin}">
-
-                <TextBlock
+                    <TextBlock
                     Margin="{StaticResource SmallTopMargin}"
                     Style="{StaticResource SubtitleTextStyle}"
                     Text="{x:Static properties:Resources.SettingsPagePersonalizationTitle}" />
-                <StackPanel Margin="{StaticResource SmallTopBottomMargin}">
-                    <TextBlock Style="{StaticResource BodyTextStyle}" Text="{x:Static properties:Resources.SettingsPageChooseThemeText}" />
-                    <Grid Margin="{StaticResource XSmallTopMargin}">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="auto" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*" />
-                            <ColumnDefinition Width="1*" />
-                        </Grid.ColumnDefinitions>
-                        <mah:ColorPicker
+                    <StackPanel Margin="{StaticResource SmallTopBottomMargin}">
+                        <TextBlock Style="{StaticResource BodyTextStyle}" Text="{x:Static properties:Resources.SettingsPageChooseThemeText}" />
+                        <Grid Margin="{StaticResource XSmallTopMargin}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+                            <mah:ColorPicker
                             Grid.RowSpan="2"
                             Grid.Column="1"
                             mah:TextBoxHelper.ClearTextButton="False"
@@ -57,84 +97,84 @@
                             IsEnabled="{Binding Theme, Mode=OneWay, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=!System}"
                             IsRecentColorPaletteVisible="False"
                             SelectedColor="{Binding CurrentAccent, Delay=250}" />
-                        <Button
+                            <Button
                             Grid.Row="2"
                             Grid.Column="1"
                             Command="{Binding ResetColorCommand}"
                             Content="Reset color" />
-                        <RadioButton
+                            <RadioButton
                             Content="{x:Static properties:Resources.SettingsPageRadioButtonLightTheme}"
                             FontSize="{StaticResource MediumFontSize}"
                             GroupName="AppTheme"
                             IsChecked="{Binding Theme, Mode=OneWay, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Light}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="Checked">
-                                    <i:InvokeCommandAction Command="{Binding SetThemeCommand}" CommandParameter="Light" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </RadioButton>
-                        <RadioButton
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Checked">
+                                        <i:InvokeCommandAction Command="{Binding SetThemeCommand}" CommandParameter="Light" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </RadioButton>
+                            <RadioButton
                             Grid.Row="1"
                             Margin="{StaticResource XSmallTopMargin}"
                             Content="{x:Static properties:Resources.SettingsPageRadioButtonDarkTheme}"
                             FontSize="{StaticResource MediumFontSize}"
                             GroupName="AppTheme"
                             IsChecked="{Binding Theme, Mode=OneWay, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="Checked">
-                                    <i:InvokeCommandAction Command="{Binding SetThemeCommand}" CommandParameter="Dark" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </RadioButton>
-                        <RadioButton
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Checked">
+                                        <i:InvokeCommandAction Command="{Binding SetThemeCommand}" CommandParameter="Dark" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </RadioButton>
+                            <RadioButton
                             Grid.Row="2"
                             Margin="{StaticResource XSmallTopMargin}"
                             Content="{x:Static properties:Resources.SettingsPageRadioButtonWindowsDefaultTheme}"
                             FontSize="{StaticResource MediumFontSize}"
                             GroupName="AppTheme"
                             IsChecked="{Binding Theme, Mode=OneWay, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=System}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="Checked">
-                                    <i:InvokeCommandAction Command="{Binding SetThemeCommand}" CommandParameter="System" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </RadioButton>
-                    </Grid>
-                    <TextBlock
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Checked">
+                                        <i:InvokeCommandAction Command="{Binding SetThemeCommand}" CommandParameter="System" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </RadioButton>
+                        </Grid>
+                        <TextBlock
                         Margin="{StaticResource SmallTopMargin}"
                         Style="{StaticResource SubtitleTextStyle}"
                         Text="{x:Static properties:Resources.SettingsPageOtherTitle}" />
-                    <Button
+                        <Button
                         Command="{Binding AssociateAppWithExtensionsCommand}"
                         Content="{x:Static properties:Resources.SettingsPageSetFileAssociationsButton}"
                         Style="{StaticResource SettingsButton}"
                         ToolTip="{x:Static properties:Resources.SettingsPageSetFileAssociationsButtonTooltip}" />
-                    <Button
+                        <Button
                         Command="{Binding OpenInstallationFolderCommand}"
                         Content="{x:Static properties:Resources.SettingsPageOpenInstallationFolderButton}"
                         Style="{StaticResource SettingsButton}"
                         ToolTip="{x:Static properties:Resources.SettingsPageOpenInstallationFolderButtonTooltip}" />
-                    <CheckBox
+                        <CheckBox
                         Content="{x:Static properties:Resources.SettingsPageCheckForUpdatesOnStartup}"
                         FontSize="16"
                         IsChecked="{Binding AutoCheckForUpdates}"
                         ToolTip="{x:Static properties:Resources.SettingsPageCheckForUpdatesOnStartupTooltip}" />
-                </StackPanel>
-                <TextBlock
+                    </StackPanel>
+                    <TextBlock
                     Margin="{StaticResource SmallTopMargin}"
                     Style="{StaticResource SubtitleTextStyle}"
                     Text="{x:Static properties:Resources.SettingsPageAboutTitle}" />
-                <TextBlock
+                    <TextBlock
                     Margin="{StaticResource XSmallTopMargin}"
                     Style="{StaticResource BodyTextStyle}"
                     Text="{Binding VersionDescription, Mode=OneWay}" />
-                <TextBlock
+                    <TextBlock
                     Margin="{StaticResource XSmallTopMargin}"
                     Style="{StaticResource BodyTextStyle}"
                     Text="{x:Static properties:Resources.SettingsPageAboutText}"
                     TextAlignment="Right" />
 
-                <TextBlock
+                    <TextBlock
                     Margin="{StaticResource SmallTopMargin}"
                     AutomationProperties.Name="{Binding Text, ElementName=settingsGithubLink}"
                     ToolTip="{Binding Link}">
@@ -151,7 +191,8 @@
                         </StackPanel>
                     </Hyperlink>
                 </TextBlock>
-            </StackPanel>
-        </Grid>
-    </ScrollViewer>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
 </Page>

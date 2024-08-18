@@ -28,13 +28,18 @@ public class SettingsViewModelTests
         var mockFileUpdateService = new Mock<IUpdateCheckService>();
         var mockApplicationInfoService = new Mock<IApplicationInfoService>();
         var mockFileAssociationService = new Mock<IFileAssociationService>();
+        var mockCustomAppSourceService = new Mock<ICustomAppSourceService>();
+        var mockContentDialogService = new Mock<IContentDialogService>();
 
         var settingsVm = new SettingsViewModel(mockAppConfig.Object,
             mockThemeSelectorService.Object,
             mockSystemService.Object,
             mockApplicationInfoService.Object,
             mockFileAssociationService.Object,
-            mockFileUpdateService.Object);
+            mockFileUpdateService.Object,
+            mockCustomAppSourceService.Object,
+            mockContentDialogService.Object
+            );
         settingsVm.OnNavigatedTo(null);
 
         Assert.AreEqual(AppTheme.Light, settingsVm.Theme);
