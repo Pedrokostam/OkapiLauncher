@@ -54,13 +54,13 @@ public sealed partial class InstalledAppsViewModel : ProcessRefreshViewModel
     [RelayCommand]
     private async Task TEST()
     {
-        await _contentDialogService.ShowSourceEditor(new CustomAppSource() { Description="ksdf",Path="~"}).ConfigureAwait(true);
+        await _contentDialogService.ShowSourceEditor(new CustomAppSource() { Description="ksdf",Path="~"});
     }
 
     [RelayCommand]
     private async Task ShowDialog()
     {
-        await _contentDialogService.ShowError("Is this loss?", "| || || |_").ConfigureAwait(true);
+        await _contentDialogService.ShowError("Is this loss?", "| || || |_");
     }
 
     [ObservableProperty]

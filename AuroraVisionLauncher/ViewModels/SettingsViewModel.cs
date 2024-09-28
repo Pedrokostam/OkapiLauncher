@@ -30,6 +30,7 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     private readonly IUpdateCheckService _updateCheckService;
     private readonly ICustomAppSourceService _customAppSourceService;
     private readonly IContentDialogService _contentDialogService;
+    private readonly IAvAppFacadeFactory _avAppFacadeFactory;
 
     public SettingsViewModel(IOptions<AppConfig> appConfig,
                              IThemeSelectorService themeSelectorService,
@@ -38,7 +39,8 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
                              IFileAssociationService fileAssociationService,
                              IUpdateCheckService updateCheckService,
                              ICustomAppSourceService customAppSourceService,
-                             IContentDialogService contentDialogService
+                             IContentDialogService contentDialogService,
+                             IAvAppFacadeFactory avAppFacadeFactory
                              )
     {
         _appConfig = appConfig.Value;
@@ -50,6 +52,7 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
         _updateCheckService = updateCheckService;
         _customAppSourceService = customAppSourceService;
         _contentDialogService = contentDialogService;
+        _avAppFacadeFactory = avAppFacadeFactory;
         _autoCheckForUpdates = _updateCheckService.AutoCheckForUpdatesEnabled;
     }
 
@@ -115,12 +118,13 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     private async Task AddNewSource()
     {
         var source = new CustomAppSource();
-        await _contentDialogService.ShowSourceEditor(source).ConfigureAwait(true);
+        await _contentDialogService.ShowSourceEditor(source);
         if (source.IsDefault())
         {
             return;
         }
         CustomSources.Add(source);
+        _avAppFacadeFactory.RediscoverApps();
     }
     [RelayCommand]
     private void RemoveSource(object toDelete)
@@ -128,6 +132,7 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
         if (toDelete is CustomAppSource source)
         {
             CustomSources.Remove(source);
+            _avAppFacadeFactory.RediscoverApps();
         }
     }
     [RelayCommand]
@@ -135,7 +140,8 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     {
         if (toEdit is CustomAppSource source)
         {
-            await _contentDialogService.ShowSourceEditor(source).ConfigureAwait(true);
+            await _contentDialogService.ShowSourceEditor(source);
+            _avAppFacadeFactory.RediscoverApps();
         }
     }
     [RelayCommand]

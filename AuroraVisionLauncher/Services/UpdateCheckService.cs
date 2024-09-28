@@ -34,10 +34,10 @@ public class UpdateCheckService : IUpdateCheckService
     {
         if (AutoCheckForUpdatesEnabled && LastCheckDate.Date != DateTime.UtcNow.Date)
         {
-            await CheckForUpdates_impl(true).ConfigureAwait(true);
+            await CheckForUpdates_impl(true);
         }
     }
-    public async Task CheckForUpdates()=> await CheckForUpdates_impl(false).ConfigureAwait(true);
+    public async Task CheckForUpdates()=> await CheckForUpdates_impl(false);
     private async Task CheckForUpdates_impl(bool isAuto)
     {
         using (HttpClient client = new HttpClient())
@@ -46,10 +46,10 @@ public class UpdateCheckService : IUpdateCheckService
 
             try
             {
-                HttpResponseMessage response = await client.GetAsync("https://api.github.com/repos/PedroKostam/AuroraVisionLauncher/releases/latest").ConfigureAwait(true);
+                HttpResponseMessage response = await client.GetAsync("https://api.github.com/repos/PedroKostam/AuroraVisionLauncher/releases/latest");
                 response.EnsureSuccessStatusCode();
 
-                string responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+                string responseBody = await response.Content.ReadAsStringAsync();
                 Console.WriteLine($"Latest release info: {responseBody}");
                 JObject releaseInfo = JObject.Parse(responseBody);
 

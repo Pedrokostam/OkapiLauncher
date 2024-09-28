@@ -11,10 +11,12 @@ namespace AuroraVisionLauncher.Services;
 public class CustomAppSourceService : ICustomAppSourceService
 {
     private static string _customSourcesKey = "CustomSources";
+
     public CustomAppSourceService()
     {
         GetCustomSources();
     }
+
     public ObservableCollection<CustomAppSource> CustomSources { get; } = new();
     private void GetCustomSources()
     {

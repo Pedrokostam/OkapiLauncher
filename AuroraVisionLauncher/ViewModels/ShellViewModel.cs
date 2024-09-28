@@ -52,7 +52,7 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
 
     }
     [RelayCommand()]
-    private async Task CheckForUpdates() => await _updateCheckService.CheckForUpdates().ConfigureAwait(true);
+    private async Task CheckForUpdates() => await _updateCheckService.CheckForUpdates();
 
     [RelayCommand()]
     private void OnUnloaded()

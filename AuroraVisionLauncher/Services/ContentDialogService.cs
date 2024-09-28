@@ -5,10 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Effects;
 using AuroraVisionLauncher.Contracts.Services;
+using AuroraVisionLauncher.Contracts.ViewModels;
 using AuroraVisionLauncher.Contracts.Views;
 using AuroraVisionLauncher.Models;
 using AuroraVisionLauncher.ViewModels;
 using AuroraVisionLauncher.Views;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MahApps.Metro.Controls.Dialogs;
 
@@ -25,12 +27,20 @@ public class ContentDialogService : IContentDialogService
     public async Task ShowSourceEditor(CustomAppSource source)
     {
         var dialog = new CustomSourceEditorDialog();
-        var vm = new CustomSourceDialogEditorViewModel(source, async () => Task.FromResult(true));
-        dialog.DataContext = vm;
+        var vm = new CustomSourceDialogEditorViewModel(source, async () => await Task.FromResult(true));
+        await DoDoDa(vm, dialog);
+    }
 
+    private async Task DoDoDa(IDialogViewModel viewModel, BaseMetroDialog dialog)
+    {
+        dialog.DataContext = viewModel;
         await _dialogCoordinator.ShowMetroDialogAsync(_context, dialog);
-        await vm.WaitForExit();
-        await _dialogCoordinator.HideMetroDialogAsync(_context, dialog).ConfigureAwait(true);
+        if (viewModel is INavigationAware nav)
+        {
+            nav.OnNavigatedTo(null!);
+        }
+        await viewModel.WaitForExit();
+        await _dialogCoordinator.HideMetroDialogAsync(_context, dialog);
     }
 
     public ContentDialogService(IDialogCoordinator dialogCoordinator, ShellViewModel mainWindow)
