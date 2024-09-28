@@ -11,6 +11,8 @@ using AuroraVisionLauncher.Models;
 using AuroraVisionLauncher.Validators;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Win32;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace AuroraVisionLauncher.ViewModels;
 
@@ -76,5 +78,20 @@ public partial class CustomSourceDialogEditorViewModel : ObservableValidator, IN
 
     public void OnNavigatedFrom()
     {
+    }
+    [RelayCommand]
+    private void OpenFilePicker()
+    {
+        string initialDir = string.IsNullOrWhiteSpace(Path) ? Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) : Path;
+        var picker = new CommonOpenFileDialog()
+        {
+            InitialDirectory = initialDir,
+        };
+        picker.Title = "Select executable or dynamic library";
+        var res = picker.ShowDialog();
+        if (res == CommonFileDialogResult.Ok)
+        {
+            Path = picker.FileName;
+        }
     }
 }

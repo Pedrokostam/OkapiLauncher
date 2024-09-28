@@ -5,6 +5,7 @@
     xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:AuroraVisionLauncher.Views"
+    xmlns:mahicon="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
     xmlns:vms="clr-namespace:AuroraVisionLauncher.ViewModels"
@@ -40,6 +41,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition />
+                <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
@@ -54,17 +56,23 @@
             <TextBox
                 x:Name="DescriptionBox"
                 Grid.Column="1"
+                Grid.ColumnSpan="2"
                 Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
             <TextBox
                 x:Name="PathBox"
                 Grid.Row="1"
                 Grid.Column="1"
+                Grid.ColumnSpan="1"
                 Text="{Binding Path, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock
                 Grid.Row="2"
                 Grid.Column="1"
+                Grid.ColumnSpan="2"
                 Text="{Binding SourcePath, Mode=OneWay}"
                 TextAlignment="Left" />
+            <Button Grid.Row="1" Grid.Column="2" Command="{Binding OpenFilePickerCommand}">
+                <mahicon:PackIconFontAwesome VerticalAlignment="Center" Kind="EllipsisSolid" />
+            </Button>
         </Grid>
     </DockPanel>
 </controls:CustomDialog>
