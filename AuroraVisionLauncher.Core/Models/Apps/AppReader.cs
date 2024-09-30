@@ -13,6 +13,18 @@ namespace AuroraVisionLauncher.Core.Models.Apps;
 public static partial class AppReader
 {
 
+    private static readonly string[] _AdaptiveVisionStudioName = ["AdaptiveVisionStudio.exe"];
+    private static readonly string[] _AuroraVisionStudioName = ["AuroraVisionStudio.exe"];
+    private static readonly string[] _FabImageStudioName = ["FabImageStudio.exe"];
+    private static readonly string[] _AdaptiveVisionExecutorName = ["AdaptiveVisionExecutor.exe"];
+    private static readonly string[] _AuroraVisionExecutorName = ["AuroraVisionExecutor.exe"];
+    private static readonly string[] _FabImageExecutorName = ["FabImageExecutor.exe"];
+    private static readonly string[] _AuroraAVLName = ["Aurora Vision Library", "AVL.dll"];
+    private static readonly string[] _AdaptiveAVLName = ["Adaptive Vision Library", "AVL.dll"];
+    private static readonly string[] _FILName = ["FabImage Library", "FIL.dll"];
+
+
+
     private record struct PathInfo(DirectoryInfo BasePath, AvType Type)
     {
         public static implicit operator (DirectoryInfo basePath, AvType type)(PathInfo value)
@@ -59,7 +71,26 @@ public static partial class AppReader
         {
             return Path.Join(GetRootDllExeFolderPath(), GetRootDllExeName(brand, this.Type));
         }
+        //public static PathInfo FromBaseFolder(string folderPath)
+        //{
+        //    var opt = new EnumerationOptions()
+        //    {
+        //        MaxRecursionDepth = 2,
+        //        RecurseSubdirectories = true,
+        //        MatchCasing = MatchCasing.CaseInsensitive,
+        //        AttributesToSkip = FileAttributes.Directory | FileAttributes.Hidden,
+        //    };
+        //    var pattern  = // get all potential filenames names of exes/dlls
+        //        // then some way to differentaite between aurora and adaptive library
+        //    Directory.GetFiles(folderPath, "", opt);
+        //}
     }
+    /// <summary>
+    /// Finds and return all relevant applications, including custom locations
+    /// </summary>
+    /// <param name="additionalPaths"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static IEnumerable<AvApp> GetInstalledAvApps(IEnumerable<IAppSource>? additionalPaths = null)
     {
         var sources = GetAllRelevantPaths(additionalPaths);
@@ -107,6 +138,11 @@ public static partial class AppReader
         }
         return null;
     }
+    /// <summary>
+    /// Gets all relevant paths (environmental and custom) and returns them as <see cref="AppSource">AppSources</see>.
+    /// </summary>
+    /// <param name="additionalPaths"></param>
+    /// <returns>Enumerable of <see cref="AppSource">AppSources</see></returns>
     private static IEnumerable<AppSource> GetAllRelevantPaths(IEnumerable<IAppSource>? additionalPaths)
     {
         var variables = Environment.GetEnvironmentVariables();
@@ -115,7 +151,7 @@ public static partial class AppReader
         {
             foreach (var path in additionalPaths)
             {
-                if (File.Exists(path.SourcePath))
+                if (Directory.Exists(path.SourcePath))
                 {
                     paths.Add(AppSource.FromInterface(path));
                 }
@@ -172,7 +208,6 @@ public static partial class AppReader
         {
             // deep learning also points to library, so 1 step back and the go for deeplearning editor
             return (dir.Parent!, AvType.DeepLearning);
-            dir = new DirectoryInfo(System.IO.Path.Join(dir.Parent!.FullName, "Tools", "DeepLearningEditor"));
         }
         if (PathMatch(dir.Name, "Runtime"))
         {
@@ -185,9 +220,7 @@ public static partial class AppReader
         return null;
     }
     static MultiVersion? FindInfo(string folder)
-
     {
-
         if (string.IsNullOrWhiteSpace(folder))
         {
             return null;

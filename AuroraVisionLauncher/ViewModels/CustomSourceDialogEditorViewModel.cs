@@ -86,6 +86,7 @@ public partial class CustomSourceDialogEditorViewModel : ObservableValidator, IN
         var picker = new CommonOpenFileDialog()
         {
             InitialDirectory = initialDir,
+            IsFolderPicker = true,
         };
         picker.Title = "Select executable or dynamic library";
         var res = picker.ShowDialog();
