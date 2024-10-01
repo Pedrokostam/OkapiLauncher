@@ -160,3 +160,15 @@ namespace AuroraVisionLauncher.Core.Models.Apps
 
         }
     }
+    class PathStem
+    {
+        private string[] _parts;
+        public ReadOnlySpan<string> Parts => (ReadOnlySpan<string>)_parts;
+        public string Filename => _parts[^1];
+        public ReadOnlySpan<string> Preceding => new(_parts, 0, _parts.Length - 1);
+        public PathStem(params string[] parts)
+        {
+            _parts = parts;
+        }
+    }
+}
