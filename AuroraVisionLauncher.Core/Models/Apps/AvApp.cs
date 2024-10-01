@@ -43,6 +43,7 @@ public record AvApp : IAvApp
         Description = description;
         RootPath = rootInstallationPath;
     }
+  
     public bool CanOpen(IVisionProject project)
     {
         return SupportedProgramTypes.Contains(project.Type) && Brand.SupportsBrand(project.Brand);

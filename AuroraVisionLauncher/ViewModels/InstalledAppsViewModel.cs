@@ -51,11 +51,7 @@ public sealed partial class InstalledAppsViewModel : ProcessRefreshViewModel
         Apps.GroupDescriptions.Add(gd);
     }
 
-    [RelayCommand]
-    private async Task TEST()
-    {
-        await _contentDialogService.ShowSourceEditor(new CustomAppSource() { Description="ksdf",Path="~"});
-    }
+   
 
     [RelayCommand]
     private async Task ShowDialog()

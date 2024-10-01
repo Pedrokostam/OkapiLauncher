@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace AuroraVisionLauncher.Core.Models.Apps
 {
-    readonly record struct PathInfo2(string RootFolder, string RelativeExePath, AvType AppType, AvBrand AppBrand)
+    readonly record struct PathInfo2(string RootFolder, string RelativeExePath)
     {
         public string ExePath => Path.Combine(RootFolder, RelativeExePath);
     }
@@ -38,59 +42,59 @@ namespace AuroraVisionLauncher.Core.Models.Apps
             AppBrand = appBrand;
 
         }
-        public PathInfo2? TryFind(string? path)
-        {
-            if (File.Exists(path))
-            {
-                path = Directory.GetParent(path)?.FullName;
-            }
-            ArgumentNullException.ThrowIfNull(path);
-            var options = new EnumerationOptions()
-            {
-                MaxRecursionDepth = MaxDepth,
-                RecurseSubdirectories = true,
-                MatchCasing = MatchCasing.CaseInsensitive,
-            };
-            List<string> possibleFiles = [];
-            var fileEnumerator = Directory.EnumerateFiles(path, ExeName, options);
-            if (_relativeMatcher is null)
-            {
-                // only 1 match is permitted
-                possibleFiles.AddRange(fileEnumerator);
-            }
-            else
-            {
-                foreach (var item in fileEnumerator)
-                {
-                    if (_relativeMatcher.IsMatch(item))
-                    {
-                        possibleFiles.Add(item);
-                    }
-                }
-            }
-            if (possibleFiles.Count > 1)
-            {
-                throw new InvalidOperationException("Multiple matching files found");
-            }
-            if (possibleFiles.Count == 0)
-            {
-                return null;
-            }
-            string filePath = Path.GetFullPath(possibleFiles[0]);
-            DirectoryInfo rootFolder = Directory.GetParent(filePath)!;
-            for (int i = 0; i < MaxDepth; i++)
-            {
-                rootFolder = rootFolder!.Parent!;
-            }
-            string relativePath = Path.GetRelativePath(rootFolder!.FullName, filePath);
-            if (AppBrand is not null)
-            {
-                return new PathInfo2(rootFolder.FullName, relativePath, AppType, AppBrand.Value);
-            }
-            var brand = ProductBrand.FindBrandByLicense(rootFolder.FullName);
-            return new PathInfo2(rootFolder.FullName, relativePath, AppType, brand.Brand);
+        //public PathInfo2? TryFind(string? path)
+        //{
+        //    if (File.Exists(path))
+        //    {
+        //        path = Directory.GetParent(path)?.FullName;
+        //    }
+        //    ArgumentNullException.ThrowIfNull(path);
+        //    var options = new EnumerationOptions()
+        //    {
+        //        MaxRecursionDepth = MaxDepth,
+        //        RecurseSubdirectories = true,
+        //        MatchCasing = MatchCasing.CaseInsensitive,
+        //    };
+        //    List<string> possibleFiles = [];
+        //    var fileEnumerator = Directory.EnumerateFiles(path, ExeName, options);
+        //    if (_relativeMatcher is null)
+        //    {
+        //        // only 1 match is permitted
+        //        possibleFiles.AddRange(fileEnumerator);
+        //    }
+        //    else
+        //    {
+        //        foreach (var item in fileEnumerator)
+        //        {
+        //            if (_relativeMatcher.IsMatch(item))
+        //            {
+        //                possibleFiles.Add(item);
+        //            }
+        //        }
+        //    }
+        //    if (possibleFiles.Count > 1)
+        //    {
+        //        throw new InvalidOperationException("Multiple matching files found");
+        //    }
+        //    if (possibleFiles.Count == 0)
+        //    {
+        //        return null;
+        //    }
+        //    string filePath = Path.GetFullPath(possibleFiles[0]);
+        //    DirectoryInfo rootFolder = Directory.GetParent(filePath)!;
+        //    for (int i = 0; i < MaxDepth; i++)
+        //    {
+        //        rootFolder = rootFolder!.Parent!;
+        //    }
+        //    string relativePath = Path.GetRelativePath(rootFolder!.FullName, filePath);
+        //    if (AppBrand is not null)
+        //    {
+        //        return new PathInfo2(rootFolder.FullName, relativePath, AppType, AppBrand.Value);
+        //    }
+        //    var brand = ProductBrand.FindBrandByLicense(rootFolder.FullName);
+        //    return new PathInfo2(rootFolder.FullName, relativePath, AppType, brand.Brand);
 
-        }
+        //}
     }
     public static class AppReader2
     {
@@ -138,10 +142,7 @@ namespace AuroraVisionLauncher.Core.Models.Apps
         };
         private class RootRelativeLocator
         {
-            public RootRelativeLocator(string )
-            {
 
-            }
         }
 
         public static void JudgePath(string path)
@@ -160,15 +161,71 @@ namespace AuroraVisionLauncher.Core.Models.Apps
 
         }
     }
+    [DebuggerDisplay("{Filename}")]
     class PathStem
     {
         private string[] _parts;
         public ReadOnlySpan<string> Parts => (ReadOnlySpan<string>)_parts;
         public string Filename => _parts[^1];
+        public int MaxDepth => _parts.Length;
+        private string? _ending = null;
+        /// <summary>
+        /// Folders which, if the path ends in them should be exited for their parent
+        /// </summary>
+        public string[] FoldersToLeave { get; init; } = [];
+        public string Ending
+        {
+            get
+            {
+                _ending ??= string.Join(Path.DirectorySeparatorChar, _parts).ToLowerInvariant();
+                return _ending;
+            }
+        }
         public ReadOnlySpan<string> Preceding => new(_parts, 0, _parts.Length - 1);
         public PathStem(params string[] parts)
         {
             _parts = parts;
+        }
+        public string? MatchPathInfo(string path)
+        {
+            if (File.Exists(path))
+            {
+                path = Directory.GetParent(path)?.FullName!;
+            }
+            // Environmental variables can point to not-root folders
+            // Here we go up until we are not in an avoidable folder
+            if (FoldersToLeave.Length > 0)
+            {
+                while (FoldersToLeave.Contains(Path.GetFileName(path), StringComparer.OrdinalIgnoreCase))
+                {
+                    path = Path.GetDirectoryName(path)!;
+                    if (path is null)
+                    { throw new InvalidOperationException($"Infinite loop at avoiding folders for {path}"); }
+                }
+            }
+            ArgumentNullException.ThrowIfNull(path);
+            var options = new EnumerationOptions()
+            {
+                MaxRecursionDepth = MaxDepth,
+                RecurseSubdirectories = true,
+                MatchCasing = MatchCasing.CaseInsensitive,
+            };
+            var fileEnumerator = Directory.EnumerateFiles(path, Filename, options);
+            string? exeFilepath = null;
+            foreach (var file in fileEnumerator)
+            {
+                if (!file.EndsWith(Ending, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+                if (exeFilepath is not null)
+                {
+                    throw new InvalidOperationException("Multiple matching files found");
+                }
+                exeFilepath = file;
+            }
+            return exeFilepath;
+
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
 using System.Text.RegularExpressions;
 using AuroraVisionLauncher.Core.Models.Projects;
 
@@ -9,7 +11,7 @@ public enum AvBrand
     Adaptive,
     FabImage,
 }
-public class ProductBrand:IComparable<ProductBrand>
+public class ProductBrand : IComparable<ProductBrand>
 {
     public static readonly ProductBrand Aurora = new ProductBrand("Aurora Vision", AvBrand.Aurora);
     public static readonly ProductBrand Adaptive = new ProductBrand("Adaptive Vision", AvBrand.Adaptive);
@@ -62,13 +64,13 @@ public class ProductBrand:IComparable<ProductBrand>
     /// <param name="rootFolder">Root folder of the app, where License.txt is.</param>
     /// <returns></returns>
     /// <exception cref="NotSupportedException"></exception>
-    public static ProductBrand FindBrandByLicense(string rootFolder)
+    public static ProductBrand? FindBrandByLicense(string rootFolder)
     {
         ArgumentNullException.ThrowIfNull(rootFolder);
         FileInfo? licenseFile = new FileInfo(Path.Combine(rootFolder, "License.txt"));
         if (licenseFile is null || !licenseFile.Exists)
         {
-            throw new NotSupportedException("Cannot determine brand without the license file");
+            return null;
         }
         using var licenseStream = licenseFile.OpenText();
         var line = licenseStream.ReadLine();
@@ -84,6 +86,31 @@ public class ProductBrand:IComparable<ProductBrand>
         }
         throw new NotSupportedException("Cannot determine brand from the license file");
     }
+    public static ProductBrand? FindBrandFromHeaderFile(string rootFolder)
+    {
+        ArgumentNullException.ThrowIfNull(rootFolder);
+        // STD.h does not change name between brands and all header file should contain the brand name anyway
+        FileInfo? headerFile = new FileInfo(Path.Combine(rootFolder, "include", "STD.h"));
+        if (headerFile is null || !headerFile.Exists)
+        {
+            return null;
+        }
+        using var headerStream = headerFile.OpenText();
+        var line = headerStream.ReadLine();
+        while (line is not null)
+        {
+            if (!line.Contains("Library", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+            var match = _brandFinder.Match(line);
+            if (match.Success)
+            {
+                return GetBrandByName(match.Value);
+            }
+        }
+        throw new NotSupportedException("Cannot determine brand from the header file");
+    }
     public static ProductBrand GetBrandByName(string name)
     {
         ArgumentNullException.ThrowIfNull(name);
@@ -95,6 +122,47 @@ public class ProductBrand:IComparable<ProductBrand>
         if (string.Equals(name, Adaptive.Name, comp))
             return Adaptive;
         throw new ArgumentException($"{name} does not match any brand.", nameof(name));
+    }
+    public static ProductBrand? GetBrandByExeName(string filepath)
+    {
+        string? name = Path.GetFileName(filepath);
+        ArgumentNullException.ThrowIfNull(name);
+        var comp = StringComparison.OrdinalIgnoreCase;
+        if (name.Contains(Aurora.NameNoSpace, comp))
+            return Aurora;
+        if (name.Contains(FabImage.NameNoSpace, comp))
+            return FabImage;
+        if (name.Contains(Adaptive.NameNoSpace, comp))
+            return Adaptive;
+        return null;
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="filepath">Filepath to the executable.</param>
+    /// <param name="type">Optional <see cref="ProductType"/>. If present, will not determione type from filepath.</param>
+    /// <returns>Matched <see cref="ProductBrand"/></returns>
+    /// <exception cref="NotSupportedException"></exception>
+    public static ProductBrand FromFilepath(string filepath, ProductType? type = null)
+    {
+        type ??= ProductType.FromFilepath(filepath);
+        string root = type.GetRootFolder(filepath);
+        var brand = ProductBrand.GetBrandByExeName(filepath);
+        if (brand is not null)
+        {
+            return brand;
+        }
+        brand = FindBrandByLicense(root);
+        if (brand is not null)
+        {
+            return brand;
+        }
+        brand = FindBrandFromHeaderFile(root);
+        if (brand is null)
+        {
+            throw new NotSupportedException("Cannot determine brand for this filepath");
+        }
+        return brand;
     }
     /// <summary>
     /// 
@@ -122,7 +190,8 @@ public class ProductBrand:IComparable<ProductBrand>
 
     public int CompareTo(ProductBrand? other)
     {
-        if(other == null) return 1;
+        if (other == null)
+            return 1;
         return Brand.CompareTo(other.Brand);
     }
     public override string ToString() => Name;
