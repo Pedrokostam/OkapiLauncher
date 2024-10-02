@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using AuroraVisionLauncher.Core.Helpers;
 using AuroraVisionLauncher.Core.Exceptions;
 using System.Data;
-using AuroraVisionLauncher.Core.Models.Apps.Detection;
 
 namespace AuroraVisionLauncher.Core.Models.Apps;
 public static partial class AppReader

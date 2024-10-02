@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 
-namespace AuroraVisionLauncher.Core.Models.Apps.Detection
+namespace AuroraVisionLauncher.Core.Models.Apps
 {
     /// <summary>
     /// Class which specifeid how an app path should look.
