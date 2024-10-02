@@ -9,6 +9,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AuroraVisionLauncher.Core.Helpers;
+using AuroraVisionLauncher.Core.Exceptions;
+using System.Data;
 
 namespace AuroraVisionLauncher.Core.Models.Apps;
 internal record struct PathInfo(DirectoryInfo BasePath, AvType Type)
@@ -158,20 +160,31 @@ public static partial class AppReader
             new("bin","x64","FIL.dll"),
             new("Tools","DeepLearningEditor","DeepLearningEditor.exe"){FoldersToLeave=["Library"]},
         ];
-
+    /// <summary>
+    /// Finds and return all relevant applications, including custom locations
+    /// </summary>
+    /// <param name="additionalPaths"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static IEnumerable<AvApp> GetInstalledAvApps(IEnumerable<IAppSource>? additionalPaths = null)
     {
         List<AvApp> apps = [];
         var sources = GetAllRelevantPaths(additionalPaths);
         foreach (var source in sources)
         {
-            apps.AddNotNull(Getutu(source));
+            apps.AddNotNull(GetAvAppFromSource(source));
         }
         apps.Sort();
         return apps;
     }
-
-    private static AvApp? Getutu(AppSource source)
+    /// <summary>
+    /// Checks the given source and returns an <see cref="AvApp"/> for it or null.
+    /// </summary>
+    /// <param name="source"></param>
+    /// <exception cref="UndeterminableBrandException"/>
+    /// <exception cref="VersionNotFoundException"/>
+    /// <returns>An instance of <see cref="AvApp"/> or null</returns>
+    private static AvApp? GetAvAppFromSource(AppSource source)
     {
         string? filepath = null;
         foreach (var stem in _pathStems)

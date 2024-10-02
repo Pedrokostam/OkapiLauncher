@@ -48,7 +48,8 @@
             <TextBlock
                 Padding="0,0,8,0"
                 Style="{StaticResource AppTitleStyle}"
-                Text="{Binding Description}" />
+                Text="{Binding Description}"
+                TextDecorations="{Binding IsCustom, Converter={StaticResource CustomToUnderlineConverter}}" />
             <TextBlock
                 Grid.Row="1"
                 Grid.Column="1"

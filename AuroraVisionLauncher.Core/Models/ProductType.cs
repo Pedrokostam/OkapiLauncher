@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AuroraVisionLauncher.Core.Exceptions;
 using Windows.ApplicationModel;
 
 namespace AuroraVisionLauncher.Core.Models;
@@ -91,6 +92,12 @@ public class ProductType : IComparable<ProductType>, IComparable
         return Type.CompareTo(other.Type);
     }
     public override string ToString() => Name;
+    /// <summary>
+    /// Find matching <see cref="AvType"/> based on the filename.
+    /// </summary>
+    /// <param name="filepath">Path to a file, or its name.</param>
+    /// <returns>Matching <see cref="AvType"/></returns>
+    /// <exception cref="InvalidAppTypeNameException"></exception>
     public static AvType GetAvTypeFromFilename(string filepath)
     {
         string name = Path.GetFileName(filepath).ToLowerInvariant();
@@ -108,9 +115,15 @@ public class ProductType : IComparable<ProductType>, IComparable
             "fil.dll" => AvType.Library,
             //
             "deeplearningeditor.exe" => AvType.DeepLearning,
-            _ => throw new NotSupportedException()
+            _ => throw new InvalidAppTypeNameException(name)
         };
     }
+    /// <summary>
+    /// Find matching <see cref="ProductType"/> based on the filename.
+    /// </summary>
+    /// <returns>Matching <see cref="ProductType"/></returns>
+    /// <inheritdoc cref="GetAvTypeFromFilename(string)(string)"/>
     public static ProductType FromFilepath(string filepath) => FromAvType(GetAvTypeFromFilename(filepath));
+    public bool IsExecutable => Type != AvType.Library;
     public int CompareTo(object? obj) => CompareTo(obj as ProductType);
 }

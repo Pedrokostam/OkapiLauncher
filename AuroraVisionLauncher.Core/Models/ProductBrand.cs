@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
+using AuroraVisionLauncher.Core.Exceptions;
 using AuroraVisionLauncher.Core.Models.Projects;
 
 namespace AuroraVisionLauncher.Core.Models;
@@ -63,7 +64,8 @@ public class ProductBrand : IComparable<ProductBrand>
     /// </summary>
     /// <param name="rootFolder">Root folder of the app, where License.txt is.</param>
     /// <returns></returns>
-    /// <exception cref="NotSupportedException"></exception>
+    /// <exception cref="UndeterminableBrandException"></exception>
+    /// <exception cref="ArgumentNullException"></exception>
     public static ProductBrand? FindBrandByLicense(string rootFolder)
     {
         ArgumentNullException.ThrowIfNull(rootFolder);
@@ -84,8 +86,10 @@ public class ProductBrand : IComparable<ProductBrand>
             }
             return GetBrandByName(match.Value);
         }
-        throw new NotSupportedException("Cannot determine brand from the license file");
+        throw UndeterminableBrandException.ForLicense(licenseFile.FullName, null);
     }
+    /// <exception cref="UndeterminableBrandException"></exception>
+    /// <exception cref="ArgumentNullException"></exception>
     public static ProductBrand? FindBrandFromHeaderFile(string rootFolder)
     {
         ArgumentNullException.ThrowIfNull(rootFolder);
@@ -109,8 +113,10 @@ public class ProductBrand : IComparable<ProductBrand>
                 return GetBrandByName(match.Value);
             }
         }
-        throw new NotSupportedException("Cannot determine brand from the header file");
+        throw UndeterminableBrandException.ForHeader(headerFile.FullName);
     }
+    /// <exception cref="UndeterminableBrandException"></exception>
+    /// <exception cref="ArgumentNullException"></exception>
     public static ProductBrand GetBrandByName(string name)
     {
         ArgumentNullException.ThrowIfNull(name);
@@ -121,8 +127,9 @@ public class ProductBrand : IComparable<ProductBrand>
             return FabImage;
         if (string.Equals(name, Adaptive.Name, comp))
             return Adaptive;
-        throw new ArgumentException($"{name} does not match any brand.", nameof(name));
+        throw new InvalidBrandNameException(name);
     }
+    /// <exception cref="ArgumentNullException"></exception>
     public static ProductBrand? GetBrandByExeName(string filepath)
     {
         string? name = Path.GetFileName(filepath);
@@ -142,7 +149,7 @@ public class ProductBrand : IComparable<ProductBrand>
     /// <param name="filepath">Filepath to the executable.</param>
     /// <param name="type">Optional <see cref="ProductType"/>. If present, will not determione type from filepath.</param>
     /// <returns>Matched <see cref="ProductBrand"/></returns>
-    /// <exception cref="NotSupportedException"></exception>
+    /// <exception cref="UndeterminableBrandException"></exception>
     public static ProductBrand FromFilepath(string filepath, ProductType? type = null)
     {
         type ??= ProductType.FromFilepath(filepath);
@@ -160,7 +167,7 @@ public class ProductBrand : IComparable<ProductBrand>
         brand = FindBrandFromHeaderFile(root);
         if (brand is null)
         {
-            throw new NotSupportedException("Cannot determine brand for this filepath");
+            throw UndeterminableBrandException.ForAllApplicable(filepath, type.Type);
         }
         return brand;
     }
@@ -169,6 +176,8 @@ public class ProductBrand : IComparable<ProductBrand>
     /// </summary>
     /// <param name="signature">The name of the root element in .__proj file.</param>
     /// <returns></returns>
+    /// <exception cref="ArgumentNullException"></exception>
+    /// <exception cref="UndeterminableBrandException"></exception>
     public static ProductBrand GetBrandByProjSignature(string signature)
     {
         ArgumentNullException.ThrowIfNull(signature);
@@ -179,7 +188,7 @@ public class ProductBrand : IComparable<ProductBrand>
             return FabImage;
         if (signature.StartsWith(Adaptive.Name, comp))
             return Adaptive;
-        throw new ArgumentException($"{signature} does not match any brand signature.", nameof(signature));
+        throw new InvalidBrandNameException(signature);
     }
 
 

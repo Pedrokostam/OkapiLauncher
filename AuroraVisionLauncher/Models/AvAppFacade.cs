@@ -37,7 +37,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     public bool IsExecutable => _avApp.IsExecutable;
 
     public string? Description => _avApp.Description ?? Name;
-    public bool IsCustom => Description is not null;
+    public bool IsCustom =>_avApp.IsCustom;
 
     public AvVersionFacade? SecondaryVersion { get; }
 

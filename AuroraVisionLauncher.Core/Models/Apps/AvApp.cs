@@ -19,7 +19,7 @@ public record AvApp : IAvApp
     public string? Description { get; }
     public bool IsCustom => Description is not null;
     public string ProcessName { get; }
-    public bool IsExecutable => Type != ProductType.Library;
+    public bool IsExecutable => Type.IsExecutable;
     public bool IsDevelopmentVersion => Version.Build >= 1000;
     public CommandLineInterface Interface { get; }
     protected IReadOnlyCollection<ProductType> SupportedProgramTypes => Type.SupportedAvTypes;
@@ -30,7 +30,16 @@ public record AvApp : IAvApp
 
     public ProductBrand Brand { get; }
     public ProductType Type { get; }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="mainInfo"></param>
+    /// <param name="secondaryVersion"></param>
+    /// <param name="type"></param>
+    /// <param name="brand"></param>
+    /// <param name="rootInstallationPath"></param>
+    /// <param name="description"></param>
+    /// <exception cref="VersionNotFoundException"></exception>
     internal AvApp(FileVersionInfo mainInfo, AvVersion? secondaryVersion, ProductType type, ProductBrand brand, string rootInstallationPath, string? description = null)
     {
         Path = mainInfo.FileName;

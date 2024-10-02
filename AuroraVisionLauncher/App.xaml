@@ -22,6 +22,7 @@
                     <conv:ProjectTypeToStringConverter x:Key="ProjectTypeToString" />
                     <conv:CompatibilityToDescriptionConverter x:Key="CompatibilityDescription" />
                     <conv:ProductTypeToShortStringConverter x:Key="ProductTypeToShortString" />
+                    <conv:BoolSelectorConverter x:Key="CustomToUnderlineConverter" TrueValue="Underline" FalseValue="None" />
                     <theming:SuperLibraryThemeProvider x:Key="{x:Static theming:SuperLibraryThemeProvider.DefaultInstance}" />
                 </ResourceDictionary>
                 <!--
