@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AuroraVisionLauncher.Contracts.ViewModels;
+using AuroraVisionLauncher.Core.Models.Apps;
 using AuroraVisionLauncher.Models;
 using AuroraVisionLauncher.Validators;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -27,13 +28,14 @@ public partial class CustomSourceDialogEditorViewModel : ObservableValidator, IN
         _source = source;
         _description = source.Description ?? "";
         _path = source.Path;
+        UpdateMatchedApp();
     }
     [ObservableProperty]
     [MinLength(1)]
     [NotifyDataErrorInfo]
     private string _description;
     [ObservableProperty]
-    [MustBeDirectory]
+    //[MustBeDirectory]
     [NotifyPropertyChangedFor(nameof(SourcePath))]
     [NotifyCanExecuteChangedFor(nameof(AcceptCommand))]
     [NotifyDataErrorInfo]
@@ -41,9 +43,21 @@ public partial class CustomSourceDialogEditorViewModel : ObservableValidator, IN
     private string _path;
     public string SourcePath => CustomAppSource.ExpandPath(Path);
 
+    partial void OnPathChanged(string value)
+    {
+        UpdateMatchedApp();
+    }
+
+    private void UpdateMatchedApp()
+    {
+        MatchedApp = AppReader.GetAvAppFromSource(new CustomAppSource() { Description = Description, Path = Path });
+    }
+
     public bool PathExists => File.Exists(Path);
 
     private TaskCompletionSource _done = new TaskCompletionSource();
+    [ObservableProperty]
+    private AvApp? _matchedApp = null;
 
     public Task WaitForExit()
     {

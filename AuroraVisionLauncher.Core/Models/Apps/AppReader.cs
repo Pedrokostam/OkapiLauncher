@@ -184,7 +184,7 @@ public static partial class AppReader
     /// <exception cref="UndeterminableBrandException"/>
     /// <exception cref="VersionNotFoundException"/>
     /// <returns>An instance of <see cref="AvApp"/> or null</returns>
-    private static AvApp? GetAvAppFromSource(AppSource source)
+    public static AvApp? GetAvAppFromSource(IAppSource source)
     {
         string? filepath = null;
         foreach (var stem in _pathStems)

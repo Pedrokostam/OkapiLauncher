@@ -204,6 +204,10 @@ namespace AuroraVisionLauncher.Core.Models.Apps
                 }
             }
             ArgumentNullException.ThrowIfNull(path);
+            if (!Directory.Exists(path))
+            {
+                return null;
+            }
             var options = new EnumerationOptions()
             {
                 MaxRecursionDepth = MaxDepth,

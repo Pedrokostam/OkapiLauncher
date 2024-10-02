@@ -2,6 +2,7 @@
     x:Class="AuroraVisionLauncher.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Dialog="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:conv="clr-namespace:AuroraVisionLauncher.Converters"
     xmlns:theming="clr-namespace:AuroraVisionLauncher.Services"
     DispatcherUnhandledException="OnDispatcherUnhandledException"
@@ -22,8 +23,12 @@
                     <conv:ProjectTypeToStringConverter x:Key="ProjectTypeToString" />
                     <conv:CompatibilityToDescriptionConverter x:Key="CompatibilityDescription" />
                     <conv:ProductTypeToShortStringConverter x:Key="ProductTypeToShortString" />
-                    <conv:BoolSelectorConverter x:Key="CustomToUnderlineConverter" TrueValue="Underline" FalseValue="None" />
+                    <conv:BoolSelectorConverter
+                        x:Key="CustomToUnderlineConverter"
+                        FalseValue="None"
+                        TrueValue="Underline" />
                     <theming:SuperLibraryThemeProvider x:Key="{x:Static theming:SuperLibraryThemeProvider.DefaultInstance}" />
+
                 </ResourceDictionary>
                 <!--
                     MahApps.Metro resource dictionaries.
@@ -45,6 +50,7 @@
                 <ResourceDictionary Source="/Styles/MetroWindow.xaml" />
                 <ResourceDictionary Source="/Styles/TextBlock.xaml" />
                 <ResourceDictionary Source="/Styles/Button.xaml" />
+                <ResourceDictionary Source="/Styles/Dialog.xaml" />
 
                 <ResourceDictionary Source="/DataTemplates/AvAppFacade.xaml" />
                 <ResourceDictionary Source="/DataTemplates/CommandLineOptions.xaml" />
