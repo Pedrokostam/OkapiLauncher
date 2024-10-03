@@ -214,6 +214,15 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The path did not match any app :-(.
+        /// </summary>
+        public static string CustomSourceEditorAppNotMatched {
+            get {
+                return ResourceManager.GetString("CustomSourceEditorAppNotMatched", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string CustomSourceEditorButtonCancel {
@@ -237,6 +246,24 @@ namespace AuroraVisionLauncher.Properties {
         public static string CustomSourceEditorDescriptionHeader {
             get {
                 return ResourceManager.GetString("CustomSourceEditorDescriptionHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Detected App.
+        /// </summary>
+        public static string CustomSourceEditorDetectedAppHeader {
+            get {
+                return ResourceManager.GetString("CustomSourceEditorDetectedAppHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Provide path to the main directory of the application.
+        /// </summary>
+        public static string CustomSourceEditorHeader {
+            get {
+                return ResourceManager.GetString("CustomSourceEditorHeader", resourceCulture);
             }
         }
         
@@ -583,8 +610,7 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &quot;It&apos;s just a simple application, it can&apos;t take too long to code.&quot;
-        ///- Man who coded for a long time.
+        ///   Looks up a localized string similar to &quot;It&apos;s just a simple application, it can&apos;t take too long to code.&quot;.
         /// </summary>
         public static string SettingsPageAboutText {
             get {
@@ -598,6 +624,15 @@ namespace AuroraVisionLauncher.Properties {
         public static string SettingsPageAboutTitle {
             get {
                 return ResourceManager.GetString("SettingsPageAboutTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add new custom source.
+        /// </summary>
+        public static string SettingsPageAddCustomSourceButton {
+            get {
+                return ResourceManager.GetString("SettingsPageAddCustomSourceButton", resourceCulture);
             }
         }
         
@@ -625,6 +660,15 @@ namespace AuroraVisionLauncher.Properties {
         public static string SettingsPageChooseThemeText {
             get {
                 return ResourceManager.GetString("SettingsPageChooseThemeText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom sources.
+        /// </summary>
+        public static string SettingsPageCustomSourcesHeader {
+            get {
+                return ResourceManager.GetString("SettingsPageCustomSourcesHeader", resourceCulture);
             }
         }
         

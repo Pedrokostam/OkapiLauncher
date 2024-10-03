@@ -1,11 +1,15 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
     <!--  Base Styles  -->
     <Style
         x:Key="SymbolButton"
         BasedOn="{StaticResource {x:Type Button}}"
         TargetType="{x:Type Button}">
-        <Setter Property="Margin" Value="3,5,3,5" />
-        <Setter Property="Width" Value="40" />
+        <Setter Property="Margin" Value="2" />
+        <Setter Property="Padding" Value="10" />
     </Style>
     <Style
         x:Key="SettingsButton"
@@ -15,5 +19,28 @@
         <Setter Property="FontSize" Value="13" />
         <Setter Property="Margin" Value="0,5,0,5" />
     </Style>
+    <sys:Double x:Key="ButtonNormalSize">1</sys:Double>
+    <sys:Double x:Key="ButtonLargeSize">22</sys:Double>
+    <!--  DataTemplates  -->
+    <DataTemplate x:Key="IconCopy">
+        <Viewbox>
+            <iconPacks:PackIconLucide Kind="ClipboardCopy" />
+        </Viewbox>
+    </DataTemplate>
+    <DataTemplate x:Key="IconOpenFolder">
+        <Viewbox>
+            <iconPacks:PackIconLucide Kind="FolderOpen" />
+        </Viewbox>
+    </DataTemplate>
+    <DataTemplate x:Key="IconLaunch">
+        <Viewbox>
+            <iconPacks:PackIconLucide Kind="ExternalLink" />
+        </Viewbox>
+    </DataTemplate>
+    <DataTemplate x:Key="IconInstalledApps">
+        <Viewbox>
+            <iconPacks:PackIconVaadinIcons Kind="GridSmallOutline" />
+        </Viewbox>
+    </DataTemplate>
 
 </ResourceDictionary>

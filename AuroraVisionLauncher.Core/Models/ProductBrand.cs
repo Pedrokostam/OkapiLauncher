@@ -93,7 +93,7 @@ public class ProductBrand : IComparable<ProductBrand>
     public static ProductBrand? FindBrandFromHeaderFile(string rootFolder)
     {
         ArgumentNullException.ThrowIfNull(rootFolder);
-        // STD.h does not change name between brands and all header file should contain the brand name anyway
+        // STD.h does not change name between brands and all header files should contain the brand name anyway
         FileInfo? headerFile = new FileInfo(Path.Combine(rootFolder, "include", "STD.h"));
         if (headerFile is null || !headerFile.Exists)
         {

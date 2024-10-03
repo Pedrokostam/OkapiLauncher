@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Dialog="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:conv="clr-namespace:AuroraVisionLauncher.Converters"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:theming="clr-namespace:AuroraVisionLauncher.Services"
     DispatcherUnhandledException="OnDispatcherUnhandledException"
     Exit="OnExit"

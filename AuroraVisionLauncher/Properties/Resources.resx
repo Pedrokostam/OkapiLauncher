@@ -130,8 +130,7 @@
     <value>Settings</value>
   </data>
   <data name="SettingsPageAboutText" xml:space="preserve">
-    <value>"It's just a simple application, it can't take too long to code."
-- Man who coded for a long time</value>
+    <value>"It's just a simple application, it can't take too long to code."</value>
   </data>
   <data name="SettingsPageAboutTitle" xml:space="preserve">
     <value>About this application</value>
@@ -382,5 +381,20 @@
   </data>
   <data name="CustomSourceEditorButtonCancel" xml:space="preserve">
     <value>Cancel</value>
+  </data>
+  <data name="CustomSourceEditorHeader" xml:space="preserve">
+    <value>Provide path to the main directory of the application</value>
+  </data>
+  <data name="CustomSourceEditorAppNotMatched" xml:space="preserve">
+    <value>The path did not match any app :-(</value>
+  </data>
+  <data name="CustomSourceEditorDetectedAppHeader" xml:space="preserve">
+    <value>Detected App</value>
+  </data>
+  <data name="SettingsPageAddCustomSourceButton" xml:space="preserve">
+    <value>Add new custom source</value>
+  </data>
+  <data name="SettingsPageCustomSourcesHeader" xml:space="preserve">
+    <value>Custom sources</value>
   </data>
 </root>

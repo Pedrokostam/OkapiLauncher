@@ -18,10 +18,7 @@
         </StackPanel>
     </DataTemplate>
     <DataTemplate x:Key="Header_VersionRow" DataType="{x:Type mod:AvAppFacade}">
-        <StackPanel
-            Grid.Row="0"
-            Grid.Column="1"
-            Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal">
             <TextBlock Style="{StaticResource AppTitleStyle}">
                 <Run Text="{Binding Version, Mode=OneWay}" />
                 <Run Text="{Binding SecondaryVersion, Mode=OneWay, TargetNullValue='', StringFormat='{}({0}) '}" />
@@ -205,26 +202,26 @@
                 </StackPanel>
                 <Button
                     Grid.Column="2"
+                    Width="40"
                     Command="{Binding LaunchWithoutProgramCommand}"
+                    ContentTemplate="{StaticResource IconLaunch}"
                     Style="{StaticResource SymbolButton}"
                     ToolTip="{x:Static properties:Resources.AvAppLaunchWithNoProgram}"
-                    Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <mahicon:PackIconMaterial Kind="Launch" />
-                </Button>
+                    Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 <Button
                     Grid.Column="3"
+                    Width="40"
                     Command="{Binding CopyExecutablePathCommand}"
+                    ContentTemplate="{StaticResource IconCopy}"
                     Style="{StaticResource SymbolButton}"
-                    ToolTip="{x:Static properties:Resources.AvAppCopyPath}">
-                    <mahicon:PackIconLucide Kind="ClipboardCopy" />
-                </Button>
+                    ToolTip="{x:Static properties:Resources.AvAppCopyPath}" />
                 <Button
                     Grid.Column="4"
+                    Width="40"
                     Command="{Binding OpenContainingFolderCommand}"
+                    ContentTemplate="{StaticResource IconOpenFolder}"
                     Style="{StaticResource SymbolButton}"
-                    ToolTip="{x:Static properties:Resources.AvAppOpenInstallationFolder}">
-                    <mahicon:PackIconMaterial Kind="FolderOpen" />
-                </Button>
+                    ToolTip="{x:Static properties:Resources.AvAppOpenInstallationFolder}" />
             </Grid>
         </Grid>
     </DataTemplate>

@@ -17,7 +17,7 @@
     mc:Ignorable="d">
     <controls:CustomDialog.Resources>
         <DataTemplate x:Key="NotDetectedAppTemplate">
-            <TextBlock>The path did not match any app :-(</TextBlock>
+            <TextBlock Style="{StaticResource AppFilePathStyle}" Text="{x:Static properties:Resources.CustomSourceEditorAppNotMatched}" />
         </DataTemplate>
         <DataTemplate x:Key="DetectedAppTemplate">
             <StackPanel>
@@ -40,7 +40,7 @@
             <TextBlock
                 Padding="0,0,0,10"
                 Style="{StaticResource SubtitleTextStyle}"
-                Text="Provide path to the main directory of the application" />
+                Text="{x:Static properties:Resources.CustomSourceEditorPathHeader}" />
         </StackPanel>
         <StackPanel
             HorizontalAlignment="Right"
@@ -90,7 +90,7 @@
                         ToolTip="{Binding SourcePath}" />
                 </Grid>
             </GroupBox>
-            <GroupBox BorderThickness="0" Header="Detected app">
+            <GroupBox BorderThickness="0" Header="{x:Static properties:Resources.CustomSourceEditorDetectedAppHeader}">
                 <ContentControl Content="{Binding MatchedApp}" ContentTemplateSelector="{StaticResource NullAppSelector}" />
             </GroupBox>
         </StackPanel>
