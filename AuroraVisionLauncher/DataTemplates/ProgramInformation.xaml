@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mahicon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:mdicons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
     xmlns:mod="clr-namespace:AuroraVisionLauncher.Models"
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties">
     <DataTemplate DataType="{x:Type mod:VisionProjectFacade}">
@@ -115,14 +115,15 @@
                     Command="{Binding OpenProgramFolderCommand}"
                     Style="{StaticResource SymbolButton}"
                     ToolTip="{x:Static properties:Resources.ProgramDetailsOpenFolder}">
-                    <mahicon:PackIconMaterial Kind="FolderOpen" />
+                    <mdicons:MaterialIcon Kind="{StaticResource IconOpenFolder}" />
+
                 </Button>
                 <Button
                     Grid.Column="2"
                     Command="{Binding CopyPathToClipboardCommand}"
                     Style="{StaticResource SymbolButton}"
                     ToolTip="{x:Static properties:Resources.ProgramDetailsCopyPath}">
-                    <mahicon:PackIconLucide Kind="ClipboardCopy" />
+                    <mdicons:MaterialIcon Kind="{StaticResource IconCopy}" />
                 </Button>
             </Grid>
         </Grid>

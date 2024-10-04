@@ -5,8 +5,8 @@
     xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:mahicon="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mdicons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:vms="clr-namespace:AuroraVisionLauncher.ViewModels"
@@ -84,7 +84,7 @@
     <controls:MetroWindow.LeftWindowCommands>
         <controls:WindowCommands>
             <Button Command="{Binding KillAllChildrenCommand}" ToolTip="{x:Static properties:Resources.ShellKillChildrenButton}">
-                <mahicon:PackIconMaterial Kind="SkullCrossbonesOutline" />
+                <mdicons:MaterialIcon Kind="Skull" />
             </Button>
         </controls:WindowCommands>
     </controls:MetroWindow.LeftWindowCommands>
@@ -124,7 +124,7 @@
                                     Header="{x:Static properties:Resources.ShellMenuItemFileSettingsOpenProject}"
                                     InputGestureText="Ctrl + O">
                                     <MenuItem.Icon>
-                                        <mahicon:PackIconMaterialDesign Kind="FolderOpen" />
+                                        <mdicons:MaterialIcon Kind="{StaticResource IconOpenFolder}" />
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <MenuItem
@@ -159,7 +159,7 @@
                                     Command="{Binding MenuFileSettingsCommand}"
                                     Header="{x:Static properties:Resources.ShellMenuItemFileSettingsPageHeader}">
                                     <MenuItem.Icon>
-                                        <mahicon:PackIconVaadinIcons Kind="Tools" />
+                                        <mdicons:MaterialIcon Kind="{StaticResource IconSettings}" />
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <Separator />
@@ -168,18 +168,11 @@
                                     Command="{Binding MenuFileExitCommand}"
                                     Header="{x:Static properties:Resources.ShellMenuItemFileExitHeader}">
                                     <MenuItem.Icon>
-                                        <mahicon:PackIconFontAwesome Kind="PowerOffSolid" />
+                                        <mdicons:MaterialIcon Kind="{StaticResource IconTurnOff}" />
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <Separator />
-                                <MenuItem
-                                    AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
-                                    Command="{Binding ShowDialogCommand}"
-                                    Header="Diali">
-                                    <MenuItem.Icon>
-                                        <mahicon:PackIconFontAwesome Kind="PowerOffSolid" />
-                                    </MenuItem.Icon>
-                                </MenuItem>
+
                             </MenuItem>
                             <MenuItem AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}" Header="{x:Static properties:Resources.ShellMenuViewsHeader}">
                                 <!--  TODO: Review the MenuItem headers in Resources.resx file for all of your views and place '_' before the letter that you want to use for menu keyboard usage  -->
@@ -188,7 +181,7 @@
                                     Command="{Binding MenuViewsLauncherCommand}"
                                     Header="{x:Static properties:Resources.ShellMenuItemViewsLauncherPageHeader}">
                                     <MenuItem.Icon>
-                                        <mahicon:PackIconCodicons Kind="DebugStart" />
+                                        <mdicons:MaterialIcon Kind="{StaticResource IconLauncher}" />
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <MenuItem
@@ -196,7 +189,7 @@
                                     Command="{Binding MenuViewsInstalledAppsCommand}"
                                     Header="{x:Static properties:Resources.ShellMenuItemViewsInstalledAppsPageHeader}">
                                     <MenuItem.Icon>
-                                        <mahicon:PackIconVaadinIcons Kind="GridSmallOutline" />
+                                        <mdicons:MaterialIcon Kind="{StaticResource IconInstalledApps}" />
                                     </MenuItem.Icon>
                                 </MenuItem>
                             </MenuItem>

@@ -6,8 +6,8 @@
     xmlns:conv="clr-namespace:AuroraVisionLauncher.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-    xmlns:mahicon="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mdicons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
     xmlns:mod="clr-namespace:AuroraVisionLauncher.Models"
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
@@ -117,14 +117,11 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <GroupBox Grid.ColumnSpan="2" Header="{x:Static properties:Resources.LaunchOptionsCommandLineString}">
-                    <DockPanel>
-                        <Button
-                            Command="{Binding CopyArgumentStringCommand}"
-                            DockPanel.Dock="Right"
-                            Style="{StaticResource SymbolButton}"
-                            ToolTip="{x:Static properties:Resources.CommandLineCopy}">
-                            <mahicon:PackIconLucide Kind="ClipboardCopy" />
-                        </Button>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
                         <controls:BindableRichTextBox
                             x:Name="RichCommandLine"
                             Margin="0"
@@ -136,7 +133,14 @@
                             FontFamily="Consolas"
                             FontSize="18"
                             ToolTip="{Binding LaunchOptions.ArgumentString}" />
-                    </DockPanel>
+                        <Button
+                            Grid.Column="1"
+                            Command="{Binding CopyArgumentStringCommand}"
+                            Style="{StaticResource SymbolButton}"
+                            ToolTip="{x:Static properties:Resources.CommandLineCopy}">
+                            <mdicons:MaterialIcon Kind="{StaticResource IconCopy}" />
+                        </Button>
+                    </Grid>
                 </GroupBox>
                 <Grid Grid.Row="1" Grid.Column="1">
                     <Grid.RowDefinitions>

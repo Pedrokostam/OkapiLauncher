@@ -397,4 +397,13 @@
   <data name="SettingsPageCustomSourcesHeader" xml:space="preserve">
     <value>Custom sources</value>
   </data>
+  <data name="CustomSourceButtonEditTooltip" xml:space="preserve">
+    <value>Edit source</value>
+  </data>
+  <data name="CustomSourceButtonDeleteTooltip" xml:space="preserve">
+    <value>Delete source</value>
+  </data>
+  <data name="CustomSourceEditorButtonFolderPickerTooltip" xml:space="preserve">
+    <value>Find folder through Explorer</value>
+  </data>
 </root>

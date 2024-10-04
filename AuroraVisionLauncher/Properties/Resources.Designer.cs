@@ -214,6 +214,24 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete source.
+        /// </summary>
+        public static string CustomSourceButtonDeleteTooltip {
+            get {
+                return ResourceManager.GetString("CustomSourceButtonDeleteTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit source.
+        /// </summary>
+        public static string CustomSourceButtonEditTooltip {
+            get {
+                return ResourceManager.GetString("CustomSourceButtonEditTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The path did not match any app :-(.
         /// </summary>
         public static string CustomSourceEditorAppNotMatched {
@@ -228,6 +246,15 @@ namespace AuroraVisionLauncher.Properties {
         public static string CustomSourceEditorButtonCancel {
             get {
                 return ResourceManager.GetString("CustomSourceEditorButtonCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find folder through Explorer.
+        /// </summary>
+        public static string CustomSourceEditorButtonFolderPickerTooltip {
+            get {
+                return ResourceManager.GetString("CustomSourceEditorButtonFolderPickerTooltip", resourceCulture);
             }
         }
         

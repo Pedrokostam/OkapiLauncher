@@ -6,8 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-    xmlns:mahicon="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mdicons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
     xmlns:models="clr-namespace:AuroraVisionLauncher.Models"
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
     xmlns:vms="clr-namespace:AuroraVisionLauncher.ViewModels"
@@ -48,7 +48,7 @@
                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Grid >
+                            <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition />
                                     <ColumnDefinition Width="auto" />
@@ -78,16 +78,18 @@
                                     Grid.Column="2"
                                     Command="{Binding ElementName=RootPage, Path=DataContext.EditSourceCommand}"
                                     CommandParameter="{Binding}"
-                                    ContentTemplate="{StaticResource IconCopy}"
-                                    Style="{DynamicResource SettingsButton}">
-                                 
+                                    Style="{DynamicResource SettingsButton}"
+                                    ToolTip="{x:Static properties:Resources.CustomSourceButtonEditTooltip}">
+                                    <mdicons:MaterialIcon Kind="{StaticResource IconEdit}" />
                                 </Button>
                                 <Button
                                     Grid.Column="3"
                                     Command="{Binding ElementName=RootPage, Path=DataContext.RemoveSourceCommand}"
                                     CommandParameter="{Binding}"
-                                    ContentTemplate="{StaticResource IconCopy}"
-                                    Style="{DynamicResource SettingsButton}" />
+                                    Style="{DynamicResource SettingsButton}"
+                                    ToolTip="{x:Static properties:Resources.CustomSourceButtonDeleteTooltip}">
+                                    <mdicons:MaterialIcon Kind="{StaticResource IconDelete}" />
+                                </Button>
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
@@ -214,10 +216,7 @@
                         ToolTip="{Binding Link}">
                         <Hyperlink AutomationProperties.Name="{Binding Text, ElementName=settingsGithubLink}" Command="{Binding PrivacyStatementCommand}">
                             <StackPanel Orientation="Horizontal">
-                                <mahicon:PackIconBoxIcons
-                                    Margin="0,0,5,1.8"
-                                    VerticalAlignment="Bottom"
-                                    Kind="LogosGithub" />
+                                <mdicons:MaterialIcon VerticalAlignment="Bottom" Kind="{StaticResource IconGithub}" />
                                 <TextBlock
                                     x:Name="settingsGithubLink"
                                     Style="{StaticResource BodyTextStyle}"

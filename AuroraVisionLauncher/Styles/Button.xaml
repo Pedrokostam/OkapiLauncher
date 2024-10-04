@@ -2,6 +2,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:icons="clr-namespace:Material.Icons;assembly=Material.Icons"
     xmlns:sys="clr-namespace:System;assembly=System.Runtime">
     <!--  Base Styles  -->
     <Style
@@ -22,7 +23,7 @@
     <sys:Double x:Key="ButtonNormalSize">1</sys:Double>
     <sys:Double x:Key="ButtonLargeSize">22</sys:Double>
     <!--  DataTemplates  -->
-    <DataTemplate x:Key="IconCopy">
+    <!--<DataTemplate x:Key="IconCopy">
         <Viewbox>
             <iconPacks:PackIconLucide Kind="ClipboardCopy" />
         </Viewbox>
@@ -41,6 +42,24 @@
         <Viewbox>
             <iconPacks:PackIconVaadinIcons Kind="GridSmallOutline" />
         </Viewbox>
-    </DataTemplate>
+    </DataTemplate>-->
+
+    <x:Static x:Key="IconCopy" Member="icons:MaterialIconKind.ContentCopy" />
+    <x:Static x:Key="IconPaste" Member="icons:MaterialIconKind.ContentPaste" />
+    <x:Static x:Key="IconInstalledApps" Member="icons:MaterialIconKind.Apps" />
+    <x:Static x:Key="IconLaunch" Member="icons:MaterialIconKind.Launch" />
+    <x:Static x:Key="IconOpenFolder" Member="icons:MaterialIconKind.FolderOpen" />
+    <x:Static x:Key="IconDelete" Member="icons:MaterialIconKind.Delete" />
+    <x:Static x:Key="IconEdit" Member="icons:MaterialIconKind.Pencil" />
+    <x:Static x:Key="IconGithub" Member="icons:MaterialIconKind.Github" />
+    <x:Static x:Key="IconLauncher" Member="icons:MaterialIconKind.CogPlay" />
+    <x:Static x:Key="IconTurnOff" Member="icons:MaterialIconKind.CloseThick" />
+    <x:Static x:Key="IconSettings" Member="icons:MaterialIconKind.Tools" />
+    <x:Static x:Key="IconKill" Member="icons:MaterialIconKind.Pistol" />
+    <x:Static x:Key="IconFocusOn" Member="icons:MaterialIconKind.TargetVariant" />
+    <x:Static x:Key="IconKillAll" Member="icons:MaterialIconKind.Nuke" />
+    <x:Static x:Key="IconOpenFolderPicker" Member="icons:MaterialIconKind.FolderSearch" />
+    <x:Static x:Key="IconIsLaunched" Member="icons:MaterialIconKind.PowerPlug" />
+    <x:Static x:Key="IconIsNotLaunched" Member="icons:MaterialIconKind.PowerPlugOff" />
 
 </ResourceDictionary>

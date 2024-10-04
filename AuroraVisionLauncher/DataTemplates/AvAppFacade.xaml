@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:conv="[conv ]clr-namespace:AuroraVisionLauncher.Converters"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-    xmlns:mahicon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:mdicons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
     xmlns:mod="clr-namespace:AuroraVisionLauncher.Models"
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
     xmlns:vms="clr-namespace:AuroraVisionLauncher.ViewModels">
@@ -171,20 +171,20 @@
                     VerticalAlignment="Center"
                     Orientation="Horizontal"
                     Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <mahicon:PackIconMaterialDesign VerticalAlignment="Center">
-                        <mahicon:PackIconMaterialDesign.Style>
-                            <Style TargetType="{x:Type mahicon:PackIconMaterialDesign}">
+                    <mdicons:MaterialIcon VerticalAlignment="Center">
+                        <mdicons:MaterialIcon.Style>
+                            <Style TargetType="{x:Type mdicons:MaterialIcon}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsLaunched}" Value="False">
-                                        <Setter Property="Kind" Value="PowerOff" />
+                                        <Setter Property="Kind" Value="{StaticResource IconIsNotLaunched}" />
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding IsLaunched}" Value="True">
-                                        <Setter Property="Kind" Value="PowerOutline" />
+                                        <Setter Property="Kind" Value="{StaticResource IconIsLaunched}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
-                        </mahicon:PackIconMaterialDesign.Style>
-                    </mahicon:PackIconMaterialDesign>
+                        </mdicons:MaterialIcon.Style>
+                    </mdicons:MaterialIcon>
                     <TextBlock Margin="5,0,0,0">
                         <TextBlock.Style>
                             <Style BasedOn="{StaticResource BaseTextBlockStyle}" TargetType="{x:Type TextBlock}">
@@ -204,24 +204,27 @@
                     Grid.Column="2"
                     Width="40"
                     Command="{Binding LaunchWithoutProgramCommand}"
-                    ContentTemplate="{StaticResource IconLaunch}"
                     Style="{StaticResource SymbolButton}"
                     ToolTip="{x:Static properties:Resources.AvAppLaunchWithNoProgram}"
-                    Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <mdicons:MaterialIcon Kind="{StaticResource IconLaunch}" />
+                </Button>
                 <Button
                     Grid.Column="3"
                     Width="40"
                     Command="{Binding CopyExecutablePathCommand}"
-                    ContentTemplate="{StaticResource IconCopy}"
                     Style="{StaticResource SymbolButton}"
-                    ToolTip="{x:Static properties:Resources.AvAppCopyPath}" />
+                    ToolTip="{x:Static properties:Resources.AvAppCopyPath}">
+                    <mdicons:MaterialIcon Kind="{StaticResource IconCopy}" />
+                </Button>
                 <Button
                     Grid.Column="4"
                     Width="40"
                     Command="{Binding OpenContainingFolderCommand}"
-                    ContentTemplate="{StaticResource IconOpenFolder}"
                     Style="{StaticResource SymbolButton}"
-                    ToolTip="{x:Static properties:Resources.AvAppOpenInstallationFolder}" />
+                    ToolTip="{x:Static properties:Resources.AvAppOpenInstallationFolder}">
+                    <mdicons:MaterialIcon Kind="{StaticResource IconOpenFolder}" />
+                </Button>
             </Grid>
         </Grid>
     </DataTemplate>

@@ -7,8 +7,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:AuroraVisionLauncher.Helpers"
     xmlns:local="clr-namespace:AuroraVisionLauncher.Views"
-    xmlns:mahicon="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mdicons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
     xmlns:vms="clr-namespace:AuroraVisionLauncher.ViewModels"
     d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False,
@@ -69,23 +69,28 @@
                 <TextBox
                     x:Name="DescriptionBox"
                     controls:TextBoxHelper.ClearTextButton="True"
+                    MaxLines="1"
                     Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
             </GroupBox>
             <GroupBox Header="{x:Static properties:Resources.CustomSourceEditorPathHeader}">
-                <Grid>
+                <Grid Height="30">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
                     <Button
                         Grid.Column="1"
+                        Padding="3"
                         Command="{Binding OpenFilePickerCommand}"
-                        DockPanel.Dock="Right">
-                        <mahicon:PackIconFontAwesome VerticalAlignment="Center" Kind="EllipsisSolid" />
+                        ToolTip="{x:Static properties:Resources.CustomSourceEditorButtonFolderPickerTooltip}">
+                        <mdicons:MaterialIcon Kind="{StaticResource IconOpenFolderPicker}" />
                     </Button>
                     <TextBox
                         x:Name="PathBox"
+                        Height="auto"
+                        VerticalContentAlignment="Center"
                         controls:TextBoxHelper.ClearTextButton="True"
+                        MaxLines="1"
                         Text="{Binding Path, UpdateSourceTrigger=PropertyChanged, Delay=250}"
                         ToolTip="{Binding SourcePath}" />
                 </Grid>
