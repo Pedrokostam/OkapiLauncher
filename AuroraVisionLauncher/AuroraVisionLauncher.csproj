@@ -72,7 +72,8 @@
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
 		<PackageReference Include="ObservableCollections" Version="3.1.0" />
-		<PackageReference Include="System.Drawing.Common" Version="8.0.8" />
+		<PackageReference Include="System.Drawing.Common" Version="8.0.6" />
+		<PackageReference Include="System.Text.Json" Version="8.0.4" />
 		<PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
 	</ItemGroup>
 

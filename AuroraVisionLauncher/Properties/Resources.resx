@@ -271,7 +271,7 @@
     <value>Copy file path to clipboard</value>
   </data>
   <data name="AvAppLaunchWithNoProgram" xml:space="preserve">
-    <value>Launch the application without loading any program</value>
+    <value>Launch the application WITHOUT loading any program</value>
   </data>
   <data name="AvAppOpenInstallationFolder" xml:space="preserve">
     <value>Open installation folder</value>

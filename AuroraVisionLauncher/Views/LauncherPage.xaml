@@ -11,7 +11,9 @@
     xmlns:mod="clr-namespace:AuroraVisionLauncher.Models"
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
     xmlns:vms="clr-namespace:AuroraVisionLauncher.ViewModels"
+    x:Name="ThisLauncherPage"
     d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False,
                                      Type={x:Type vms:LauncherViewModel}}"
     d:DesignHeight="450"
@@ -144,24 +146,59 @@
                 </GroupBox>
                 <Grid Grid.Row="1" Grid.Column="1">
                     <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
+                    <!--<mah:SplitButton
+                        Grid.Row="2"
+                        Command="{Binding LaunchCommand}"
+                        CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource Self}}"
+                        SelectedItem="{Binding ShouldExitByDefault, Mode=TwoWay}"
+                        Tag="{Binding SelectedApp.NameWithVersion, TargetNullValue=..., StringFormat={x:Static properties:Resources.LauncherLaunchWithAndClose}}">
+                        <mah:SplitButton.Items>
+                            <sys:Boolean>false</sys:Boolean>
+                            <sys:Boolean>true</sys:Boolean>
+                        </mah:SplitButton.Items>
+                        <mah:SplitButton.ItemTemplate>
+                            <DataTemplate DataType="sys:Boolean">
+                                <TextBlock FontSize="50" TextWrapping="Wrap">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding}" Value="true">
+                                                    <Setter Property="Text" Value="{Binding DataContext.SelectedApp.NameWithVersion, ElementName=ThisLauncherPage, TargetNullValue=..., StringFormat={x:Static properties:Resources.LauncherLaunchWithAndClose}}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding}" Value="false">
+                                                    <Setter Property="Text" Value="{Binding DataContext.SelectedApp.NameWithVersion, ElementName=ThisLauncherPage, TargetNullValue=..., StringFormat={x:Static properties:Resources.LauncherLaunchWith}}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </DataTemplate>
+                        </mah:SplitButton.ItemTemplate>
+                    </mah:SplitButton>-->
+
                     <Button
                         x:Name="StandardLaunchButton"
                         Command="{Binding LaunchCommand}"
                         TextBlock.FontSize="20">
+                        <Button.CommandParameter>
+                            <sys:Boolean>false</sys:Boolean>
+                        </Button.CommandParameter>
                         <TextBlock
                             Text="{Binding SelectedApp.NameWithVersion, TargetNullValue=..., StringFormat={x:Static properties:Resources.LauncherLaunchWith}}"
                             TextAlignment="Center"
                             TextWrapping="Wrap" />
                     </Button>
-
                     <Button
                         x:Name="CloseLaunchButton"
                         Grid.Row="1"
-                        Command="{Binding LaunchAndCloseCommand}"
+                        Command="{Binding LaunchCommand}"
                         TextBlock.FontSize="20">
+                        <Button.CommandParameter>
+                            <sys:Boolean>true</sys:Boolean>
+                        </Button.CommandParameter>
                         <TextBlock
                             Text="{Binding SelectedApp.NameWithVersion, TargetNullValue=..., StringFormat={x:Static properties:Resources.LauncherLaunchWithAndClose}}"
                             TextAlignment="Center"

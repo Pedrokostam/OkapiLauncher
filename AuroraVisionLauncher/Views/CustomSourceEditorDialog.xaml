@@ -73,15 +73,15 @@
                     Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
             </GroupBox>
             <GroupBox Header="{x:Static properties:Resources.CustomSourceEditorPathHeader}">
-                <Grid Height="30">
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
                     <Button
                         Grid.Column="1"
-                        Padding="3"
                         Command="{Binding OpenFilePickerCommand}"
+                        Style="{StaticResource InlineSettingsButton}"
                         ToolTip="{x:Static properties:Resources.CustomSourceEditorButtonFolderPickerTooltip}">
                         <mdicons:MaterialIcon Kind="{StaticResource IconOpenFolderPicker}" />
                     </Button>

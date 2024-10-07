@@ -142,7 +142,7 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Launch the application without loading any program.
+        ///   Looks up a localized string similar to Launch the application WITHOUT loading any program.
         /// </summary>
         public static string AvAppLaunchWithNoProgram {
             get {

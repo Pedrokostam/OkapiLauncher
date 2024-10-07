@@ -78,7 +78,7 @@
                                     Grid.Column="2"
                                     Command="{Binding ElementName=RootPage, Path=DataContext.EditSourceCommand}"
                                     CommandParameter="{Binding}"
-                                    Style="{DynamicResource SettingsButton}"
+                                    Style="{DynamicResource InlineSettingsButton}"
                                     ToolTip="{x:Static properties:Resources.CustomSourceButtonEditTooltip}">
                                     <mdicons:MaterialIcon Kind="{StaticResource IconEdit}" />
                                 </Button>
@@ -86,7 +86,7 @@
                                     Grid.Column="3"
                                     Command="{Binding ElementName=RootPage, Path=DataContext.RemoveSourceCommand}"
                                     CommandParameter="{Binding}"
-                                    Style="{DynamicResource SettingsButton}"
+                                    Style="{DynamicResource InlineSettingsButton}"
                                     ToolTip="{x:Static properties:Resources.CustomSourceButtonDeleteTooltip}">
                                     <mdicons:MaterialIcon Kind="{StaticResource IconDelete}" />
                                 </Button>

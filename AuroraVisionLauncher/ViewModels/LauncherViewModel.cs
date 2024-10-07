@@ -23,8 +23,10 @@ namespace AuroraVisionLauncher.ViewModels;
 
 public sealed partial class LauncherViewModel : ProcessRefreshViewModel
 {
+
     private readonly INavigationService _navigationService;
     private readonly IRecentlyOpenedFilesService _lastOpenedFilesService;
+
 
     public LauncherViewModel(IAvAppFacadeFactory appProvider,
                              INavigationService navigationService,
@@ -35,7 +37,11 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
         _lastOpenedFilesService = lastOpenedFilesService;
         _navigationService = navigationService;
     }
-
+    public bool ShouldExitByDefault
+    {
+        get => ((App)App.Current).IsStartedWithArgument;
+        set => ((App)App.Current).IsStartedWithArgument=value;
+    }
 
 
     [ObservableProperty]
@@ -48,18 +54,31 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
         return SelectedApp is not null && (VisionProject?.Exists ?? false);
     }
     [RelayCommand(CanExecute = nameof(CanLaunch))]
+    private void Launch(object obj)
+    {
+        if (obj is not bool booly)
+        {
+            return;
+        }
+        if (booly)
+            LaunchAndClose();
+        else
+            Launch();
+    }
+
+    //[RelayCommand(CanExecute = nameof(CanLaunch))]
     private void Launch()
     {
         if (SelectedApp is null || !(VisionProject?.Exists ?? false))
         {
             return;
         }
-        
+
         var args = LaunchOptions!.GetCommandLineArgs();
         Messenger.Send(new OpenAppRequest(SelectedApp, args));
 
     }
-    [RelayCommand(CanExecute = nameof(CanLaunch))]
+    //[RelayCommand(CanExecute = nameof(CanLaunch))]
     private void LaunchAndClose()
     {
         Launch();
@@ -165,7 +184,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
     public override void OnNavigatedTo(object parameter)
     {
         base.OnNavigatedTo(parameter);
-        if(parameter is string path)
+        if (parameter is string path)
         {
             OpenProject(path);
         }

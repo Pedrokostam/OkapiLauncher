@@ -20,30 +20,14 @@
         <Setter Property="FontSize" Value="13" />
         <Setter Property="Margin" Value="0,5,0,5" />
     </Style>
-    <sys:Double x:Key="ButtonNormalSize">1</sys:Double>
-    <sys:Double x:Key="ButtonLargeSize">22</sys:Double>
-    <!--  DataTemplates  -->
-    <!--<DataTemplate x:Key="IconCopy">
-        <Viewbox>
-            <iconPacks:PackIconLucide Kind="ClipboardCopy" />
-        </Viewbox>
-    </DataTemplate>
-    <DataTemplate x:Key="IconOpenFolder">
-        <Viewbox>
-            <iconPacks:PackIconLucide Kind="FolderOpen" />
-        </Viewbox>
-    </DataTemplate>
-    <DataTemplate x:Key="IconLaunch">
-        <Viewbox>
-            <iconPacks:PackIconLucide Kind="ExternalLink" />
-        </Viewbox>
-    </DataTemplate>
-    <DataTemplate x:Key="IconInstalledApps">
-        <Viewbox>
-            <iconPacks:PackIconVaadinIcons Kind="GridSmallOutline" />
-        </Viewbox>
-    </DataTemplate>-->
-
+    <Style
+        x:Key="InlineSettingsButton"
+        BasedOn="{StaticResource SettingsButton}"
+        TargetType="{x:Type Button}">
+        <Setter Property="Margin" Value="2,2,2,2" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="Padding" Value="4.5" />
+    </Style>
     <x:Static x:Key="IconCopy" Member="icons:MaterialIconKind.ContentCopy" />
     <x:Static x:Key="IconPaste" Member="icons:MaterialIconKind.ContentPaste" />
     <x:Static x:Key="IconInstalledApps" Member="icons:MaterialIconKind.Apps" />
