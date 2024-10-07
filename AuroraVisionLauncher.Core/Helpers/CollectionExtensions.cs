@@ -18,4 +18,18 @@ public static class CollectionExtensions
         }
         return collection.Count;
     }
+    /// <summary>
+    /// Adds the item if it is not null.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="list"></param>
+    /// <param name="item"></param>
+    public static void AddNotNull<T>(this ICollection<T> list, T? item)
+    {
+        if (item is null)
+        {
+            return;
+        }
+        list.Add(item);
+    }
 }

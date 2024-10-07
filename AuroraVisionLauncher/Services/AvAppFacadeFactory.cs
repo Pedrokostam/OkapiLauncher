@@ -16,17 +16,20 @@ using CommunityToolkit.Mvvm.Messaging;
 namespace AuroraVisionLauncher.Services;
 public class AvAppFacadeFactory : IAvAppFacadeFactory
 {
+
     private const string AdditionalFoldersKey = "AdditionalExecutableFolderPaths";
     readonly List<AvApp> _avApps = new();
     private readonly IWindowManagerService _windowManagerService;
     private readonly IMessenger _messenger;
+    private readonly ICustomAppSourceService _customAppSourceService;
 
     public IReadOnlyList<AvApp> AvApps => _avApps.AsReadOnly();
-    public AvAppFacadeFactory(IWindowManagerService windowManagerService, IMessenger messenger)
+    public AvAppFacadeFactory(IWindowManagerService windowManagerService, IMessenger messenger, ICustomAppSourceService customAppSourceService)
     {
-        RediscoverApps();
+        _customAppSourceService = customAppSourceService;
         _windowManagerService = windowManagerService;
         _messenger = messenger;
+        RediscoverApps();
     }
 
     public AvAppFacade Create(AvApp app)
@@ -53,18 +56,18 @@ public class AvAppFacadeFactory : IAvAppFacadeFactory
     public void RediscoverApps()
     {
         _avApps.Clear();
-        var variables = Environment.GetEnvironmentVariables();
-        _avApps.AddRange(AppReader.GetInstalledAvApps());
+        var detected = AppReader.GetInstalledAvApps(_customAppSourceService.CustomSources);
+        _avApps.AddRange(detected);
     }
 
     public IEnumerable<AvAppFacade> CreateAllFacades() => AvApps.Select(Create);
 
     public bool TryGetAppByPath(string path, [NotNullWhen(true)] out AvAppFacade? appFacade)
     {
-        var found = _avApps.FirstOrDefault(a => string.Equals(a.Path, path, StringComparison.OrdinalIgnoreCase));
+        var found = _avApps.Find(a => string.Equals(a.Path, path, StringComparison.OrdinalIgnoreCase));
         if (found is not null)
         {
-            appFacade=Create(found);
+            appFacade = Create(found);
             return true;
         }
         appFacade = null;

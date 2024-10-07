@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using AuroraVisionLauncher.Models;
 
 namespace AuroraVisionLauncher.Contracts.Services;
 
@@ -12,4 +13,5 @@ public interface IWindowManagerService
 
     Window? GetWindow(string pageKey);
     void CloseChildWindows();
+    //bool? OpenSourceEditingWindows(CustomAppSource source);
 }

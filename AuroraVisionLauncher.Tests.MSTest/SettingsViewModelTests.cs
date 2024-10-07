@@ -25,15 +25,21 @@ public class SettingsViewModelTests
         mockThemeSelectorService.Setup(mock => mock.GetCurrentTheme()).Returns(AppTheme.Light);
         var mockAppConfig = new Mock<IOptions<AppConfig>>();
         var mockSystemService = new Mock<ISystemService>();
+        var mockFileUpdateService = new Mock<IUpdateCheckService>();
         var mockApplicationInfoService = new Mock<IApplicationInfoService>();
         var mockFileAssociationService = new Mock<IFileAssociationService>();
+        var mockCustomAppSourceService = new Mock<ICustomAppSourceService>();
+        var mockContentDialogService = new Mock<IContentDialogService>();
 
-        var settingsVm = new SettingsViewModel(
-            mockAppConfig.Object,
+        var settingsVm = new SettingsViewModel(mockAppConfig.Object,
             mockThemeSelectorService.Object,
             mockSystemService.Object,
             mockApplicationInfoService.Object,
-            mockFileAssociationService.Object);
+            mockFileAssociationService.Object,
+            mockFileUpdateService.Object,
+            mockCustomAppSourceService.Object,
+            mockContentDialogService.Object
+            );
         settingsVm.OnNavigatedTo(null);
 
         Assert.AreEqual(AppTheme.Light, settingsVm.Theme);
@@ -51,13 +57,12 @@ public class SettingsViewModelTests
         var testVersion = new Version(1, 2, 3, 4);
         mockApplicationInfoService.Setup(mock => mock.GetVersion()).Returns(testVersion);
 
-        var settingsVm = new SettingsViewModel(
-           mockAppConfig.Object,
-           mockThemeSelectorService.Object,
-           mockSystemService.Object,
-           mockApplicationInfoService.Object,
-           mockFileAssociationService.Object,
-  mockFileUpdateService.Object);
+        var settingsVm = new SettingsViewModel(mockAppConfig.Object,
+            mockThemeSelectorService.Object,
+            mockSystemService.Object,
+            mockApplicationInfoService.Object,
+            mockFileAssociationService.Object,
+            mockFileUpdateService.Object);
         settingsVm.OnNavigatedTo(null);
 
         Assert.AreEqual($"Aurora Vision Launcher - {testVersion}", settingsVm.VersionDescription);
@@ -68,16 +73,17 @@ public class SettingsViewModelTests
     {
         var mockThemeSelectorService = new Mock<IThemeSelectorService>();
         var mockAppConfig = new Mock<IOptions<AppConfig>>();
+        var mockFileUpdateService = new Mock<IUpdateCheckService>();
         var mockSystemService = new Mock<ISystemService>();
         var mockApplicationInfoService = new Mock<IApplicationInfoService>();
         var mockFileAssociationService = new Mock<IFileAssociationService>();
 
-        var settingsVm = new SettingsViewModel(
-           mockAppConfig.Object,
-           mockThemeSelectorService.Object,
-           mockSystemService.Object,
-           mockApplicationInfoService.Object,
-           mockFileAssociationService.Object);
+        var settingsVm = new SettingsViewModel(mockAppConfig.Object,
+            mockThemeSelectorService.Object,
+            mockSystemService.Object,
+            mockApplicationInfoService.Object,
+            mockFileAssociationService.Object,
+            mockFileUpdateService.Object);
         settingsVm.SetThemeCommand.Execute(AppTheme.Light.ToString());
 
         mockThemeSelectorService.Verify(mock => mock.SetTheme(AppTheme.Light, null));

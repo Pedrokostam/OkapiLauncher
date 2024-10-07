@@ -7,6 +7,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using AuroraVisionLauncher.Contracts.Services;
 using AuroraVisionLauncher.Contracts.ViewModels;
+using AuroraVisionLauncher.Core.Models;
 using AuroraVisionLauncher.Helpers;
 using AuroraVisionLauncher.Models;
 using AuroraVisionLauncher.Views;
@@ -27,13 +28,19 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     private readonly IApplicationInfoService _applicationInfoService;
     private readonly IFileAssociationService _fileAssociationService;
     private readonly IUpdateCheckService _updateCheckService;
+    private readonly ICustomAppSourceService _customAppSourceService;
+    private readonly IContentDialogService _contentDialogService;
+    private readonly IAvAppFacadeFactory _avAppFacadeFactory;
 
     public SettingsViewModel(IOptions<AppConfig> appConfig,
                              IThemeSelectorService themeSelectorService,
                              ISystemService systemService,
                              IApplicationInfoService applicationInfoService,
                              IFileAssociationService fileAssociationService,
-                             IUpdateCheckService updateCheckService
+                             IUpdateCheckService updateCheckService,
+                             ICustomAppSourceService customAppSourceService,
+                             IContentDialogService contentDialogService,
+                             IAvAppFacadeFactory avAppFacadeFactory
                              )
     {
         _appConfig = appConfig.Value;
@@ -43,8 +50,12 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
         _applicationInfoService = applicationInfoService;
         _fileAssociationService = fileAssociationService;
         _updateCheckService = updateCheckService;
+        _customAppSourceService = customAppSourceService;
+        _contentDialogService = contentDialogService;
+        _avAppFacadeFactory = avAppFacadeFactory;
         _autoCheckForUpdates = _updateCheckService.AutoCheckForUpdatesEnabled;
     }
+
     [ObservableProperty]
     private string _link;
 
@@ -81,6 +92,8 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
         Theme = _themeSelectorService.GetCurrentTheme();
     }
 
+    public ObservableCollection<CustomAppSource> CustomSources => _customAppSourceService.CustomSources;
+
     partial void OnCurrentAccentChanged(System.Windows.Media.Color? value) => OnSetTheme(Theme.ToString());
 
     private bool CanResetColor() => CurrentAccent != null;
@@ -101,7 +114,36 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     {
         _updateCheckService.AutoCheckForUpdatesEnabled = value;
     }
-
+    [RelayCommand]
+    private async Task AddNewSource()
+    {
+        var source = new CustomAppSource();
+        await _contentDialogService.ShowSourceEditor(source);
+        if (source.IsDefault())
+        {
+            return;
+        }
+        CustomSources.Add(source);
+        _avAppFacadeFactory.RediscoverApps();
+    }
+    [RelayCommand]
+    private void RemoveSource(object toDelete)
+    {
+        if (toDelete is CustomAppSource source)
+        {
+            CustomSources.Remove(source);
+            _avAppFacadeFactory.RediscoverApps();
+        }
+    }
+    [RelayCommand]
+    private async Task EditSource(object toEdit)
+    {
+        if (toEdit is CustomAppSource source)
+        {
+            await _contentDialogService.ShowSourceEditor(source);
+            _avAppFacadeFactory.RediscoverApps();
+        }
+    }
     [RelayCommand]
     private static void OpenInstallationFolder()
     {

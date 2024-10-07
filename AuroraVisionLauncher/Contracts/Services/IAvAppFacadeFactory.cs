@@ -29,3 +29,4 @@ public interface IAvAppFacadeFactory
     void RediscoverApps();
     public bool TryGetAppByPath(string path,[NotNullWhen(true)] out AvAppFacade? appFacade);
 }
+

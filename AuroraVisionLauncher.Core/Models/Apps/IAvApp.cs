@@ -14,4 +14,6 @@ public interface IAvApp : IProduct, IComparable<IAvApp>
     bool CanOpen(IVisionProject type);
     bool IsNativeApp(IVisionProject type);
     public bool IsExecutable { get; }
+    string? Description { get; }
+    bool IsCustom { get; }
 }

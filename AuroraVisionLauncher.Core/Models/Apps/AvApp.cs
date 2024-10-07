@@ -16,8 +16,10 @@ public record AvApp : IAvApp
     public AvVersion Version { get; }
     public AvVersion? SecondaryVersion { get; }
     public string Name { get; }
+    public string? Description { get; }
+    public bool IsCustom => Description is not null;
     public string ProcessName { get; }
-    public bool IsExecutable => Type != ProductType.Library;
+    public bool IsExecutable => Type.IsExecutable;
     public bool IsDevelopmentVersion => Version.Build >= 1000;
     public CommandLineInterface Interface { get; }
     protected IReadOnlyCollection<ProductType> SupportedProgramTypes => Type.SupportedAvTypes;
@@ -28,8 +30,17 @@ public record AvApp : IAvApp
 
     public ProductBrand Brand { get; }
     public ProductType Type { get; }
-
-    internal AvApp(FileVersionInfo mainInfo, AvVersion? secondaryVersion, ProductType type, ProductBrand brand, string rootInstallationPath)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="mainInfo"></param>
+    /// <param name="secondaryVersion"></param>
+    /// <param name="type"></param>
+    /// <param name="brand"></param>
+    /// <param name="rootInstallationPath"></param>
+    /// <param name="description"></param>
+    /// <exception cref="VersionNotFoundException"></exception>
+    internal AvApp(FileVersionInfo mainInfo, AvVersion? secondaryVersion, ProductType type, ProductBrand brand, string rootInstallationPath, string? description = null)
     {
         Path = mainInfo.FileName;
         Version = AvVersion.Parse(mainInfo) ?? throw new VersionNotFoundException("The ProductVersion field is empty");
@@ -38,8 +49,10 @@ public record AvApp : IAvApp
         ProcessName = System.IO.Path.GetFileNameWithoutExtension(mainInfo.InternalName!);
         Type = type;
         Brand = brand;
+        Description = description;
         RootPath = rootInstallationPath;
     }
+  
     public bool CanOpen(IVisionProject project)
     {
         return SupportedProgramTypes.Contains(project.Type) && Brand.SupportsBrand(project.Brand);

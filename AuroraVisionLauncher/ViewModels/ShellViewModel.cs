@@ -11,6 +11,7 @@ using AuroraVisionLauncher.Properties;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace AuroraVisionLauncher.ViewModels;
 
@@ -31,6 +32,7 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
                           IMessenger messenger,
                           IWindowManagerService windowManagerService,
                           IUpdateCheckService updateCheckService,
+
                           IRecentlyOpenedFilesService lastOpenedFilesService) : base(messenger)
     {
         _navigationService = navigationService;
@@ -50,7 +52,7 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
 
     }
     [RelayCommand()]
-    private async Task CheckForUpdates() => await _updateCheckService.CheckForUpdates().ConfigureAwait(true);
+    private async Task CheckForUpdates() => await _updateCheckService.CheckForUpdates();
 
     [RelayCommand()]
     private void OnUnloaded()
@@ -83,7 +85,8 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
 
     [RelayCommand()]
     private void OnMenuFileSettings()
-        => _rightPaneService.OpenInRightPane(typeof(SettingsViewModel).FullName!);
+        => _navigationService.NavigateTo(typeof(SettingsViewModel).FullName!, parameter: null);
+    //=> _rightPaneService.OpenInRightPane(typeof(SettingsViewModel).FullName!);
 
     [RelayCommand()]
     private void OnMenuViewsInstalledApps()
@@ -137,6 +140,7 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
             RecentlyOpenedFiles.Add(item);
         }
     }
+    
 
     [RelayCommand]
     private void Collect()

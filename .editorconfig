@@ -67,6 +67,14 @@ dotnet_naming_style._field.required_suffix =
 dotnet_naming_style._field.word_separator = 
 dotnet_naming_style._field.capitalization = camel_case
 dotnet_diagnostic.MA0076.severity = none
+csharp_style_prefer_local_over_anonymous_function = true:suggestion
+csharp_style_prefer_switch_expression = true:suggestion
+csharp_style_prefer_pattern_matching = true:silent
+csharp_style_pattern_matching_over_is_with_cast_check = true:suggestion
+csharp_style_pattern_matching_over_as_with_null_check = true:suggestion
+csharp_style_prefer_not_pattern = true:suggestion
+csharp_style_prefer_extended_property_pattern = true:suggestion
+dotnet_diagnostic.MA0004.severity = none
 
 [*.{cs,vb}]
 #### Naming styles ####

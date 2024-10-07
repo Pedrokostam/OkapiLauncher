@@ -86,6 +86,8 @@
         <Setter Property="FontWeight" Value="Light" />
         <Setter Property="TextWrapping" Value="NoWrap" />
         <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="FontStyle" Value="Italic" />
         <Setter Property="ToolTip" Value="{StaticResource SelfToolTipText}" />
     </Style>
 
@@ -95,6 +97,16 @@
         TargetType="TextBlock">
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="FontSize" Value="{StaticResource LargeFontSize}" />
+    </Style>
+
+    <Style
+        x:Key="AppTypeStyle"
+        BasedOn="{StaticResource SubtitleTextStyle}"
+        TargetType="TextBlock">
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontStyle" Value="Italic" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="FontSize" Value="{StaticResource MediumFontSize}" />
     </Style>
 
     <Style

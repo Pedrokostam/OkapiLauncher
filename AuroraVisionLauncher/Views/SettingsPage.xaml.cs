@@ -30,4 +30,5 @@ public partial class SettingsPage : Page
         //    ThemeManager.Current.ChangeTheme(Application.Current, newTheme);
         //}
     }
+
 }

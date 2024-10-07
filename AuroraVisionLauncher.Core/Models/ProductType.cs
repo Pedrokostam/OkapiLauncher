@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AuroraVisionLauncher.Core.Exceptions;
 using Windows.ApplicationModel;
 
 namespace AuroraVisionLauncher.Core.Models;
@@ -19,12 +20,9 @@ public class ProductType : IComparable<ProductType>, IComparable
     public static readonly ProductType Runtime = new("Runtime", AvType.Runtime);
     public static readonly ProductType DeepLearning = new("DeepLearning", AvType.DeepLearning);
     public static readonly ProductType Library = new("Library", AvType.Library);
-    private static readonly ProductType[] _types = [Professional, Runtime, DeepLearning, Library];
     public string Name { get; }
     private readonly List<ProductType> _supportedAvTypes = [];
     public AvType Type { get; }
-    private string ProductNameKeyword { get; }
-    private string? FileSignatureKeyword { get; }
     public IReadOnlyCollection<ProductType> SupportedAvTypes => _supportedAvTypes.AsReadOnly();
 
     public static ProductType FromAvType(AvType type)
@@ -45,6 +43,28 @@ public class ProductType : IComparable<ProductType>, IComparable
         Type = type;
     }
 
+    /// <summary>
+    /// Finds the path to the root folder.
+    /// </summary>
+    /// <param name="filepath">Path to the executable file of this type</param>
+    /// <returns>Path to the root folder accoring to the filepath and type</returns>
+    public string GetRootFolder(string filepath)
+    {
+        // the same thing tat is calculated in PathStem, but larger by 1
+        // Can possibly avoid code duplication?
+        int steps = this.Type switch
+        {
+            AvType.Professional => 1,
+            AvType.Runtime => 1,
+            AvType.DeepLearning => 3,
+            AvType.Library => 3,
+            _ => throw new NotSupportedException(),
+        };
+        string[] dots = new string[steps];
+        Array.Fill(dots, "..");
+        string ladder = string.Join(Path.DirectorySeparatorChar, dots);
+        return Path.GetFullPath(Path.Combine(filepath, ladder));
+    }
 
     static ProductType()
     {
@@ -72,6 +92,38 @@ public class ProductType : IComparable<ProductType>, IComparable
         return Type.CompareTo(other.Type);
     }
     public override string ToString() => Name;
-
+    /// <summary>
+    /// Find matching <see cref="AvType"/> based on the filename.
+    /// </summary>
+    /// <param name="filepath">Path to a file, or its name.</param>
+    /// <returns>Matching <see cref="AvType"/></returns>
+    /// <exception cref="InvalidAppTypeNameException"></exception>
+    public static AvType GetAvTypeFromFilename(string filepath)
+    {
+        string name = Path.GetFileName(filepath).ToLowerInvariant();
+        return name switch
+        {
+            "adaptivevisionstudio.exe" => AvType.Professional,
+            "auroravisionstudio.exe" => AvType.Professional,
+            "fabimagestudio.exe" => AvType.Professional,
+            //
+            "adaptivevisionexecutor.exe" => AvType.Runtime,
+            "auroravisionexecutor.exe" => AvType.Runtime,
+            "fabimageexecutor.exe" => AvType.Runtime,
+            //
+            "avl.dll" => AvType.Library,
+            "fil.dll" => AvType.Library,
+            //
+            "deeplearningeditor.exe" => AvType.DeepLearning,
+            _ => throw new InvalidAppTypeNameException(name)
+        };
+    }
+    /// <summary>
+    /// Find matching <see cref="ProductType"/> based on the filename.
+    /// </summary>
+    /// <returns>Matching <see cref="ProductType"/></returns>
+    /// <inheritdoc cref="GetAvTypeFromFilename(string)(string)"/>
+    public static ProductType FromFilepath(string filepath) => FromAvType(GetAvTypeFromFilename(filepath));
+    public bool IsExecutable => Type != AvType.Library;
     public int CompareTo(object? obj) => CompareTo(obj as ProductType);
 }

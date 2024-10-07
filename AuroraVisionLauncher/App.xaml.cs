@@ -14,7 +14,7 @@ using AuroraVisionLauncher.ViewModels;
 using AuroraVisionLauncher.Views;
 
 using CommunityToolkit.Mvvm.Messaging;
-
+using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -38,6 +38,7 @@ public partial class App : Application
     public App()
     {
     }
+    public bool IsStartedWithArgument { get;  set; } = false;
 
     private async void OnStartup(object sender, StartupEventArgs e)
     {
@@ -46,7 +47,7 @@ public partial class App : Application
             MessageBox.Show($"Launcher expects at most one argument.\nProvided arguments: {e.Args.Length}.", "Invalid startup arguments", MessageBoxButton.OK, MessageBoxImage.Error);
             throw new ArgumentException("Received too many arguments.");
         }
-        var appLocation = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location);
+        var appLocation = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location)!;
 
         // For more information about .NET generic host see  https://docs.microsoft.com/aspnet/core/fundamentals/host/generic-host?view=aspnetcore-3.0
         _host = Host.CreateDefaultBuilder(e.Args)
@@ -56,13 +57,12 @@ public partial class App : Application
                 })
                 .ConfigureServices(ConfigureServices)
                 .Build();
-        Uri iconUri = new Uri("pack://application:,,,/Resources/Icons/AppIcon.ico");
-        var i = new System.Windows.Media.Imaging.BitmapImage(iconUri);
         await _host.StartAsync();
         // initialize launcher vm, so that it can start listening to FileRequestMessages
         GetService<FileOpenerBroker>();
         if (e.Args.Length == 1)
         {
+            IsStartedWithArgument = true;
             GetService<IMessenger>().Send(new FileRequestedMessage(e.Args[0]));
         }
     }
@@ -81,11 +81,13 @@ public partial class App : Application
 
         // Services
         services.AddSingleton<IWindowManagerService, WindowManagerService>();
+        services.AddSingleton<IDialogCoordinator, DialogCoordinator>();
         services.AddSingleton<IApplicationInfoService, ApplicationInfoService>();
         services.AddSingleton<ISystemService, SystemService>();
         services.AddSingleton<IPersistAndRestoreService, PersistAndRestoreService>();
         services.AddSingleton<IThemeSelectorService, ThemeSelectorService>();
         services.AddSingleton<IPageService, PageService>();
+        services.AddSingleton<IContentDialogService, ContentDialogService>();
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IRequestedFilesService, RequestedFilesService>();
         services.AddSingleton<IMessenger, StrongReferenceMessenger>();
@@ -94,6 +96,7 @@ public partial class App : Application
         services.AddSingleton<IFileAssociationService, FileAssociationService>();
         services.AddSingleton<IUpdateCheckService, UpdateCheckService>();
         services.AddSingleton<FileOpenerBroker>();
+        services.AddSingleton<ICustomAppSourceService,CustomAppSourceService>();
 
         services.AddSingleton<IProcessManagerService, ProcessManagerService>();
         // Views and ViewModels

@@ -7,6 +7,7 @@ using AuroraVisionLauncher.ViewModels;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace AuroraVisionLauncher.Views;
 

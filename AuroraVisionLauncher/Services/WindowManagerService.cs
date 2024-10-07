@@ -13,6 +13,7 @@ using AuroraVisionLauncher.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ControlzEx.Theming;
 using MahApps.Metro.Controls;
+using Microsoft.Extensions.DependencyInjection;
 using Windows.ApplicationModel.VoiceCommands;
 
 namespace AuroraVisionLauncher.Services;
@@ -88,8 +89,28 @@ public class WindowManagerService : IWindowManagerService
         shellWindow.Closed += OnWindowClosed;
         var page = _pageService.GetPage(key);
         var navigated = frame.Navigate(page, parameter);
+
+        var currentTheme = ThemeManager.Current.DetectTheme(Application.Current)!;
+        var inverse = ThemeManager.Current.GetInverseTheme(currentTheme);
+        ThemeManager.Current.ChangeTheme(shellWindow, inverse!);
+        ThemeManager.Current.ChangeTheme(shellWindow, currentTheme);
+
         return shellWindow.ShowDialog();
     }
+
+    //public bool? OpenSourceEditingWindows(CustomAppSource source)
+    //{
+
+    //    //var shellWindow = (Window)_serviceProvider.GetService(typeof(CustomSourceEditingWindow))!;
+    //    //shellWindow.DataContext= source;
+    //    ////var frame = ((IShellDialogWindow)shellWindow).GetDialogFrame();
+    //    ////frame.Navigated += OnNavigated;
+    //    ////shellWindow.Closed += OnWindowClosed;
+    //    ////var page = _pageService.GetPage(key);
+    //    ////var navigated = frame.Navigate(page, parameter);
+    //    //shellWindow.Owner = (Window)_serviceProvider.GetService<IShellWindow>()!;
+    //    //return shellWindow.ShowDialog();
+    //}
 
     public Window? GetWindow(string key)
     {

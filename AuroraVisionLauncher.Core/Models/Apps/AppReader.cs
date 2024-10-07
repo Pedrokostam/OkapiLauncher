@@ -4,98 +4,90 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AuroraVisionLauncher.Core.Helpers;
+using AuroraVisionLauncher.Core.Exceptions;
+using System.Data;
 
 namespace AuroraVisionLauncher.Core.Models.Apps;
-public static class AppReader
+public static partial class AppReader
 {
-    private record struct PathInfo(DirectoryInfo BasePath, AvType Type)
+    private static readonly PathStem[] _pathStems = [
+            new("AdaptiveVisionStudio.exe"){FoldersToLeave=["SDK"]},
+            new("AuroraVisionStudio.exe"){FoldersToLeave=["SDK"]},
+            new("FabImageStudio.exe"){FoldersToLeave=["SDK"]},
+            new("AdaptiveVisionExecutor.exe"),
+            new("AuroraVisionExecutor.exe"),
+            new("FabImageExecutor.exe"),
+            new("bin","x64","AVL.dll"),
+            new("bin","x64","FIL.dll"),
+            new("Tools","DeepLearningEditor","DeepLearningEditor.exe"){FoldersToLeave=["Library"]},
+        ];
+    /// <summary>
+    /// Finds and return all relevant applications, including custom locations
+    /// </summary>
+    /// <param name="additionalPaths"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
+    public static IEnumerable<AvApp> GetInstalledAvApps(IEnumerable<IAppSource>? additionalPaths = null)
     {
-        public static implicit operator (DirectoryInfo basePath, AvType type)(PathInfo value)
-        {
-            return (value.BasePath, value.Type);
-        }
-
-        public static implicit operator PathInfo((DirectoryInfo basePath, AvType type) value)
-        {
-            return new PathInfo(value.basePath, value.type);
-        }
-
-        public string? GetRootDllExeFolderPath()
-        {
-            string path = BasePath.FullName;
-            var folder = Type switch
-            {
-                AvType.Professional => path,
-                AvType.Runtime => path,
-                AvType.DeepLearning => Path.Join(path, "tools", "DeepLearningEditor"),
-                AvType.Library => Path.Join(path, "bin", "x64"),
-                _ => throw new NotSupportedException()
-            };
-            return folder;
-        }
-        private static string GetRootDllExeName(AvBrand brand, AvType type)
-        {
-            return (brand, type) switch
-            {
-                (AvBrand.Adaptive, AvType.Professional) => "AdaptiveVisionStudio.exe",
-                (AvBrand.Aurora, AvType.Professional) => "AuroraVisionStudio.exe",
-                (AvBrand.FabImage, AvType.Professional) => "FabImageStudio.exe",
-                (AvBrand.Adaptive, AvType.Runtime) => "AdaptiveVisionExecutor.exe",
-                (AvBrand.Aurora, AvType.Runtime) => "AuroraVisionExecutor.exe",
-                (AvBrand.FabImage, AvType.Runtime) => "FabImageExecutor.exe",
-                (AvBrand.Adaptive, AvType.Library) => "AVL.dll",
-                (AvBrand.Aurora, AvType.Library) => "AVL.dll",
-                (AvBrand.FabImage, AvType.Library) => "FIL.dll",
-                (_, AvType.DeepLearning) => "DeepLearningEditor.exe",
-                _ => throw new NotSupportedException()
-            };
-        }
-        public string GetRootDllExePath(AvBrand brand)
-        {
-            return Path.Join(GetRootDllExeFolderPath(), GetRootDllExeName(brand, this.Type));
-        }
-    }
-    public static IEnumerable<AvApp> GetInstalledAvApps(IEnumerable<string>? additionalPaths = null)
-    {
-        var paths = GetAllRelevantPaths(additionalPaths);
-        List<PathInfo> infos = [];
-        foreach (var path in paths)
-        {
-            if (GetPathInfo(path) is PathInfo info)
-            {
-                infos.Add(info);
-            }
-        }
         List<AvApp> apps = [];
-        foreach (var info in infos)
+        var sources = GetAllRelevantPaths(additionalPaths);
+        foreach (var source in sources)
         {
-            var brand = ProductBrand.FindBrandByLicense(info.BasePath.FullName);
-            var exePath = info.GetRootDllExePath(brand.Brand);
-            var type = ProductType.FromAvType(info.Type);
-            var primaryVersion = AvVersion.FromFile(exePath) ?? throw new ArgumentException($"Specified file does not contain primary version information: {exePath}");
-            var secondaryVersion = GetSecondaryVersion(info);
-            AvApp app = new(
-                FileVersionInfo.GetVersionInfo(exePath),
-                secondaryVersion,
-                type,
-                brand,
-                info.BasePath.FullName);
-            apps.Add(app);
+            apps.AddNotNull(GetAvAppFromSource(source));
         }
         apps.Sort();
         return apps;
     }
-
-    private static AvVersion? GetSecondaryVersion(PathInfo info)
+    /// <summary>
+    /// Checks the given source and returns an <see cref="AvApp"/> for it or null.
+    /// </summary>
+    /// <param name="source"></param>
+    /// <exception cref="UndeterminableBrandException"/>
+    /// <exception cref="VersionNotFoundException"/>
+    /// <returns>An instance of <see cref="AvApp"/> or null</returns>
+    public static AvApp? GetAvAppFromSource(IAppSource source)
     {
-        if (info.Type != AvType.DeepLearning)
+        string? filepath = null;
+        foreach (var stem in _pathStems)
+        {
+            filepath = stem.MatchPathInfo(source.SourcePath);
+            if (filepath is not null)
+            {
+                break;
+            }
+        }
+        if (filepath is null)
         {
             return null;
         }
-        var uninstallers = info.BasePath.GetFiles("unins*.exe");
+        var type = ProductType.FromFilepath(filepath);
+        var root = type.GetRootFolder(filepath);
+        var brand = ProductBrand.FromFilepath(filepath, type);
+        //var primaryVersion = AvVersion.FromFile(filepath) ?? throw new ArgumentException($"Specified file does not contain primary version information: {filepath}");
+        var fileVersion = FileVersionInfo.GetVersionInfo(filepath);
+        var secondaryVersion = GetSecondaryVersion(root, type.Type);
+        AvApp app = new(
+                fileVersion,
+                secondaryVersion,
+                type,
+                brand,
+                root,
+                source.Description);
+        return app;
+    }
+
+    private static AvVersion? GetSecondaryVersion(string rootFolder, AvType type)
+    {
+        if (type != AvType.DeepLearning)
+        {
+            return null;
+        }
+        var uninstallers = new DirectoryInfo(rootFolder).GetFiles("unins*.exe");
         if (uninstallers.Any())
         {
             var finfo = FileVersionInfo.GetVersionInfo(uninstallers[0].FullName);
@@ -107,15 +99,38 @@ public static class AppReader
         }
         return null;
     }
-    private static List<string> GetAllRelevantPaths(IEnumerable<string>? additionalPaths)
+    /// <summary>
+    /// Gets all relevant paths (environmental and custom) and returns them as <see cref="AppSource">AppSources</see>.
+    /// </summary>
+    /// <param name="additionalPaths"></param>
+    /// <returns>Enumerable of <see cref="AppSource">AppSources</see></returns>
+    private static IEnumerable<AppSource> GetAllRelevantPaths(IEnumerable<IAppSource>? additionalPaths)
     {
         var variables = Environment.GetEnvironmentVariables();
-        List<string> paths = [];
+        List<AppSource> paths = [];
         if (additionalPaths is not null)
         {
-            paths.AddRange(additionalPaths);
+            foreach (var path in additionalPaths)
+            {
+                if (Directory.Exists(path.SourcePath))
+                {
+                    paths.Add(AppSource.FromInterface(path));
+                }
+            }
         }
-        foreach (DictionaryEntry entry in variables)
+#if DEBUG
+        // convert dictionary to ordereb list
+        var listvars = new List<DictionaryEntry>(variables.Count);
+        foreach (DictionaryEntry e in variables)
+        {
+            listvars.Add(e);
+        }
+        listvars = [.. listvars.OrderBy(x => x.Key)];
+#else
+        // work on dictionary directly
+        var listvars  = variables;
+#endif
+        foreach (DictionaryEntry entry in listvars)
         {
             var key_string = entry.Key?.ToString();
             var value_string = entry.Value?.ToString();
@@ -130,85 +145,10 @@ public static class AppReader
             {
                 if (Directory.Exists(value_string))
                 {
-                    paths.Add(value_string);
+                    paths.Add(new(null, value_string, true));
                 }
             }
         }
-        return paths;
-    }
-
-
-
-
-    private static bool PathMatch(string path, string matcher)
-    {
-        return path.Contains(matcher, StringComparison.OrdinalIgnoreCase);
-    }
-    private static PathInfo? GetPathInfo(string folderPath)
-    {
-        var dir = new DirectoryInfo(folderPath);
-        if (PathMatch(dir.Name, "sdk"))
-        {
-            // environment variables for studio proffesional points to AVL libraries, which are in the SDK subfolder
-            return (dir.Parent!, AvType.Professional);
-        }
-        if (PathMatch(dir.Parent!.Name, "Deep Learning"))
-        {
-            // deep learning also points to library, so 1 step back and the go for deeplearning editor
-            return (dir.Parent!, AvType.DeepLearning);
-            dir = new DirectoryInfo(System.IO.Path.Join(dir.Parent!.FullName, "Tools", "DeepLearningEditor"));
-        }
-        if (PathMatch(dir.Name, "Runtime"))
-        {
-            return (dir, AvType.Runtime);
-        }
-        if (PathMatch(dir.Name, "Library"))
-        {
-            return (dir, AvType.Library);
-        }
-        return null;
-    }
-    static MultiVersion? FindInfo(string folder)
-
-    {
-
-        if (string.IsNullOrWhiteSpace(folder))
-        {
-            return null;
-        }
-        var dir = new DirectoryInfo(folder);
-
-        if (dir.Name.Contains("sdk", StringComparison.OrdinalIgnoreCase))
-        {
-            // environment variables for studio proffesional points to AVL libraries, which are in the SDK subfolder
-            dir = dir.Parent!;
-        }
-        else if (dir.Parent!.Name.Contains("Deep Learning", StringComparison.OrdinalIgnoreCase))
-        {
-            // deep learning also points to library, so 1 step back and the go for deeplearning editor
-            dir = new DirectoryInfo(Path.Join(dir.Parent!.FullName, "Tools", "DeepLearningEditor"));
-        }
-
-        var exes = dir.GetFiles("*.exe");
-
-        if (folder.Contains("Professional", StringComparison.OrdinalIgnoreCase))
-        {
-            var primary = exes.FirstOrDefault(x => x.Name.Contains("Studio", StringComparison.OrdinalIgnoreCase));
-            return MultiVersion.Create(primary);
-        }
-        if (folder.Contains("Runtime", StringComparison.OrdinalIgnoreCase))
-        {
-            var primary = exes.FirstOrDefault(x => x.Name.Contains("Executor", StringComparison.OrdinalIgnoreCase));
-            return MultiVersion.Create(primary);
-        }
-        if (folder.Contains("Deep Learning", StringComparison.OrdinalIgnoreCase))
-        {
-            // deep learning editor
-            var primary = exes.FirstOrDefault(x => x.Name.Contains("Editor", StringComparison.OrdinalIgnoreCase));
-            // uninstaller - it has the version of DL listed on the site (what hack?)
-            var secondary = dir.Parent!.Parent!.GetFiles("*.exe").FirstOrDefault(x => x.Name.Contains("unins", StringComparison.OrdinalIgnoreCase));
-            return MultiVersion.Create(primary, secondary);
-        }
-        return null;
+        return paths.DistinctBy(x => x.SourcePath, StringComparer.OrdinalIgnoreCase);
     }
 }
