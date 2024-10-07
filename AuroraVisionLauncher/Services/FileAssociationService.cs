@@ -16,6 +16,8 @@ using MahApps.Metro.Converters;
 using Microsoft.Extensions.Options;
 using Microsoft.Win32;
 using Windows.Networking.NetworkOperators;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace AuroraVisionLauncher.Services;
 public class FileAssociationService : IFileAssociationService
@@ -43,12 +45,12 @@ public class FileAssociationService : IFileAssociationService
         return string.Join('\\', steps);
     }
 
-    private readonly record struct AssociationPackage(string IconResourcePath, string Extension)
+    private readonly record struct AssociationPackage(string IconPath, string Extension)
     {
-        public string IconName => Path.GetFileName(IconResourcePath);
+        public string IconName => Path.GetFileName(IconPath);
     }
 
-    private readonly AssociationPackage[] associations = [
+    private readonly AssociationPackage[] _associations = [
         new AssociationPackage("Resources/Icons/AuroraVisionExecutor.ico",".avexe"),
         new AssociationPackage("Resources/Icons/AuroraVisionStudio.ico",".avproj"),
         new AssociationPackage("Resources/Icons/FabImageStudio.ico",".fiproj"),
@@ -83,7 +85,7 @@ public class FileAssociationService : IFileAssociationService
     /// <param name="appName"></param>
     private void SetAppShellKeys(string mainAppPath)
     {
-        foreach (var association in associations)
+        foreach (var association in _associations)
         {
             try
             {
@@ -97,7 +99,7 @@ public class FileAssociationService : IFileAssociationService
 
                 using var iconKey = appKey.CreateSubKey("DefaultIcon", writable: true);
 
-                var iconPath = GetIconName(association);
+                var iconPath = GetFullIconPath(association);
                 // No need to enclose in quotes; 0 means use the first icon available
                 iconKey.SetValue(name: null, $"{iconPath},0");
 
@@ -127,17 +129,17 @@ public class FileAssociationService : IFileAssociationService
         var appdata = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         var iconFolder = Path.Combine(appdata, _appConfig.IconsFolder);
         Directory.CreateDirectory(iconFolder);
-        foreach (var assoc in associations)
+        foreach (var assoc in _associations)
         {
-            var iconStream = ResourceHelper.GetResourceStream(assoc.IconResourcePath);
+            var iconStream = ResourceHelper.GetResourceStream(assoc.IconPath);
             iconStream.Seek(0, SeekOrigin.Begin);
-            string iconPath = GetIconName(assoc);
+            string iconPath = GetFullIconPath(assoc);
             using FileStream fs = new FileStream(iconPath, FileMode.Create);
             iconStream.CopyTo(fs);
         }
     }
 
-    private string GetIconName(AssociationPackage assoc)
+    private string GetFullIconPath(AssociationPackage assoc)
     {
         var appdata = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         var iconFolder = Path.Combine(appdata, _appConfig.IconsFolder);
@@ -149,59 +151,55 @@ public class FileAssociationService : IFileAssociationService
         WindowsPrincipal principal = new WindowsPrincipal(identity);
         return principal.IsInRole(WindowsBuiltInRole.Administrator);
     }
-
+    private ProcessStartInfo GetStartInfo(string mainAppExecutablePath, bool runAsAdministrator)
+    {
+        var startInfo = new ProcessStartInfo()
+        {
+            FileName = "powershell",
+            UseShellExecute = true,
+        };
+        if (runAsAdministrator)
+        {
+            startInfo.Verb = "runAsAdministrator";
+        }
+        startInfo.ArgumentList.Add("-ExecutionPolicy");
+        startInfo.ArgumentList.Add("Bypass");
+        startInfo.ArgumentList.Add("-NoLogo");
+        startInfo.ArgumentList.Add("-NoProfile");
+        //startInfo.ArgumentList.Add("-NoExit");
+        startInfo.ArgumentList.Add("-NonInteractive");
+        startInfo.ArgumentList.Add("-File");
+        // TODO move file to resource 
+        startInfo.ArgumentList.Add("C:\\Users\\Pedro\\source\\repos\\AuroraVisionLauncher\\AuroraVisionLauncher\\Services\\ps.ps1");
+        startInfo.ArgumentList.Add(GetKeyPhrase());
+        startInfo.ArgumentList.Add(RegistryAppName);
+        startInfo.ArgumentList.Add(mainAppExecutablePath);
+        startInfo.ArgumentList.Add(GetParameterJson());
+        return startInfo;
+    }
     public void SetAssociationsToApp(string? mainAppExecutablePath = null)
     {
-        if (!IsAdministrator())
-        {
-            var res = MessageBox.Show("""
-                                      To change file association administrative privileges are required.
-                                      Do you want to restart the application with those rights?
-                                      """,
-                                      "Administrative privileges required",
-                                      MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
-            if (res == MessageBoxResult.No)
-            {
-                return;
-            }
-            try
-            {
-                Process.Start(new ProcessStartInfo()
-                {
-                    FileName = Environment.ProcessPath,
-                    UseShellExecute = true,
-                    Verb = "runas",
-                });
-                Environment.Exit(0);
-            }
-            catch (System.ComponentModel.Win32Exception)
-            {
-                MessageBox.Show("User cancelled elevation", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
+        mainAppExecutablePath ??= Environment.ProcessPath!;
+
+        RestoreIconFiles();
+        var startInfo = GetStartInfo(mainAppExecutablePath, runAsAdministrator:true);
         try
         {
-            mainAppExecutablePath ??= Environment.ProcessPath!;
-
-            RestoreIconFiles();
-
-            RemoveExplorerAssociations();
-
-            SetAppShellKeys(mainAppExecutablePath);
-
-            SetAssociations();
+            Process.Start(startInfo);
         }
-        catch (Exception ex)
+        catch (System.ComponentModel.Win32Exception)
         {
-            MessageBox.Show($"{ex.Message}\n{ex.InnerException}");
+            //TODO add a dialog that tells you that all bets are off if you want to do it without admin
+            startInfo = GetStartInfo(mainAppExecutablePath, runAsAdministrator:false);
+            Process.Start(startInfo);
         }
-
+        // TODO add checking whether association are correct
     }
     private void RemoveExplorerAssociations()
     {
 
         using var fileExts = CreateOrOpenRegistryPathWritable("Software", "Microsoft", "Windows", "CurrentVersion", "Explorer", "FileExts");
-        foreach (var assoc in associations)
+        foreach (var assoc in _associations)
         {
             try
             {
@@ -235,7 +233,7 @@ public class FileAssociationService : IFileAssociationService
 
     private void SetAssociations()
     {
-        foreach (var association in associations)
+        foreach (var association in _associations)
         {
             var registryKeyName = GetExtensionRegistryName(association);
             try
@@ -248,5 +246,17 @@ public class FileAssociationService : IFileAssociationService
                 throw new Exception($"On associate {registryKeyName}", e);
             }
         }
+    }
+    private string GetKeyPhrase()
+    {
+        var crypto = System.Security.Cryptography.MD5.Create();
+        var bytes = System.Text.Encoding.UTF8.GetBytes(RegistryAppName);
+        var hash = crypto.ComputeHash(bytes);
+        return string.Concat(hash.Select(x => x.ToString("x2")));
+    }
+    private string GetParameterJson()
+    {
+        var assoc = _associations.Select(x=>x with { IconPath = GetFullIconPath(x) });
+        return JsonSerializer.Serialize(assoc, new JsonSerializerOptions { WriteIndented = false });
     }
 }
