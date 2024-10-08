@@ -93,7 +93,8 @@ public class FileAssociationService : IFileAssociationService
                 var registryKeyName = GetExtensionRegistryName(association);
                 // delete existing keys
                 string extensionSubkey = CreateRegistryPathString("Software", "Classes", registryKeyName);
-                Registry.CurrentUser.DeleteSubKeyTree(extensionSubkey, throwOnMissingSubKey: false);
+                MegaDeleteTree(Registry.CurrentUser, extensionSubkey);
+                //Registry.CurrentUser.DeleteSubKeyTree(extensionSubkey, throwOnMissingSubKey: false);
                 //Registry.CurrentUser.Close();
                 using var appKey = CreateOrOpenRegistryPathWritable("Software", "Classes", registryKeyName);
 
@@ -153,6 +154,20 @@ public class FileAssociationService : IFileAssociationService
     }
     private ProcessStartInfo GetStartInfo(string mainAppExecutablePath, bool runAsAdministrator)
     {
+        Assembly assembly = Assembly.GetExecutingAssembly();
+        var tempPath = Path.GetTempFileName();
+        File.Delete(tempPath);
+        tempPath = Path.ChangeExtension(tempPath, ".ps1");
+        using (Stream? stream = assembly.GetManifestResourceStream("AuroraVisionLauncher.Services.Set-FileAssociations.ps1"))
+        {
+            
+            if (stream is not null)
+            {
+                using FileStream filestream = new FileStream(tempPath, FileMode.Create,FileAccess.Write);
+                stream.CopyTo(filestream);
+            }
+        }
+
         var startInfo = new ProcessStartInfo()
         {
             FileName = "powershell",
@@ -166,15 +181,15 @@ public class FileAssociationService : IFileAssociationService
         startInfo.ArgumentList.Add("Bypass");
         startInfo.ArgumentList.Add("-NoLogo");
         startInfo.ArgumentList.Add("-NoProfile");
-        //startInfo.ArgumentList.Add("-NoExit");
+        startInfo.ArgumentList.Add("-NoExit");
         startInfo.ArgumentList.Add("-NonInteractive");
         startInfo.ArgumentList.Add("-File");
-        // TODO move file to resource 
-        startInfo.ArgumentList.Add("C:\\Users\\Pedro\\source\\repos\\AuroraVisionLauncher\\AuroraVisionLauncher\\Services\\ps.ps1");
+        startInfo.ArgumentList.Add(tempPath);
         startInfo.ArgumentList.Add(GetKeyPhrase());
         startInfo.ArgumentList.Add(RegistryAppName);
         startInfo.ArgumentList.Add(mainAppExecutablePath);
         startInfo.ArgumentList.Add(GetParameterJson());
+        File.Delete(tempPath);
         return startInfo;
     }
     public void SetAssociationsToApp(string? mainAppExecutablePath = null)
@@ -182,7 +197,11 @@ public class FileAssociationService : IFileAssociationService
         mainAppExecutablePath ??= Environment.ProcessPath!;
 
         RestoreIconFiles();
-        var startInfo = GetStartInfo(mainAppExecutablePath, runAsAdministrator:true);
+        //RemoveExplorerAssociations();
+        //SetAppShellKeys(mainAppExecutablePath);
+        //SetAssociations();
+        //return;
+        var startInfo = GetStartInfo(mainAppExecutablePath, runAsAdministrator: true);
         try
         {
             Process.Start(startInfo);
@@ -190,7 +209,7 @@ public class FileAssociationService : IFileAssociationService
         catch (System.ComponentModel.Win32Exception)
         {
             //TODO add a dialog that tells you that all bets are off if you want to do it without admin
-            startInfo = GetStartInfo(mainAppExecutablePath, runAsAdministrator:false);
+            startInfo = GetStartInfo(mainAppExecutablePath, runAsAdministrator: false);
             Process.Start(startInfo);
         }
         // TODO add checking whether association are correct
@@ -203,31 +222,59 @@ public class FileAssociationService : IFileAssociationService
         {
             try
             {
-                // UserChoice is protected by default, but since its in ClassUser we can change the permissions
-                using var userChoice = fileExts.OpenSubKey(CreateRegistryPathString(assoc.Extension, "UserChoice"), RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryRights.ChangePermissions);
-                if (userChoice is not null)
-                {
-                    string username = WindowsIdentity.GetCurrent().Name;
-                    RegistrySecurity security = userChoice.GetAccessControl();
-                    AuthorizationRuleCollection accRules = security.GetAccessRules(true, true, typeof(NTAccount));
+                MegaDeleteTree(fileExts, assoc.Extension);
+                //// UserChoice is protected by default, but since its in ClassUser we can change the permissions
+                //using var userChoice = fileExts.OpenSubKey(CreateRegistryPathString(assoc.Extension, "UserChoice"), RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryRights.ChangePermissions);
+                //if (userChoice is not null)
+                //{
+                //    string username = WindowsIdentity.GetCurrent().Name;
+                //    RegistrySecurity security = userChoice.GetAccessControl();
+                //    AuthorizationRuleCollection accRules = security.GetAccessRules(true, true, typeof(NTAccount));
 
-                    foreach (RegistryAccessRule accRule in accRules)
-                    {
-                        if (accRule.IdentityReference.Value.Equals(username, StringComparison.OrdinalIgnoreCase)
-                            && accRule.AccessControlType == AccessControlType.Deny)
-                        {
-                            security.RemoveAccessRule(accRule);
-                        }
-                    }
-                    userChoice.SetAccessControl(security);
-                }
-                fileExts.DeleteSubKeyTree(assoc.Extension, false);
+                //    foreach (RegistryAccessRule accRule in accRules)
+                //    {
+                //        if (accRule.IdentityReference.Value.Equals(username, StringComparison.OrdinalIgnoreCase)
+                //            && accRule.AccessControlType == AccessControlType.Deny)
+                //        {
+                //            security.RemoveAccessRule(accRule);
+                //        }
+                //    }
+                //    userChoice.SetAccessControl(security);
+                //}
+                //fileExts.DeleteSubKeyTree(assoc.Extension, false);
             }
             catch (Exception e)
             {
-
                 throw new Exception($"On delete {fileExts.Name + "\\" + assoc.Extension}", e);
             }
+        }
+    }
+    private static void MegaDeleteTree(RegistryKey key, string treeName)
+    {
+        try
+        {
+            key.DeleteSubKeyTree(treeName, true);
+            var names = key.GetSubKeyNames();
+            if (names.Contains(treeName, StringComparer.OrdinalIgnoreCase))
+            {
+                key.DeleteSubKey(treeName);
+            }
+        }
+        catch (ArgumentException)
+        {
+            var subkey = key.OpenSubKey(treeName, false);
+            if (subkey is null)
+            {
+                return;
+            }
+            var names = subkey.GetSubKeyNames();
+            foreach (var item in subkey.GetSubKeyNames())
+            {
+                MegaDeleteTree(subkey, item);
+            }
+            var names2 = subkey.GetSubKeyNames();
+            subkey.Close();
+            key.DeleteSubKey(treeName, false);
         }
     }
 
@@ -256,7 +303,7 @@ public class FileAssociationService : IFileAssociationService
     }
     private string GetParameterJson()
     {
-        var assoc = _associations.Select(x=>x with { IconPath = GetFullIconPath(x) });
+        var assoc = _associations.Select(x => x with { IconPath = GetFullIconPath(x) });
         return JsonSerializer.Serialize(assoc, new JsonSerializerOptions { WriteIndented = false });
     }
 }

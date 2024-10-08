@@ -13,8 +13,9 @@ param (
     [string]
     $ProtoAssociations   
 )
+ 
 try {
-
+  
     function Get-Hash([string]$value) {
         $byteArray = [System.Text.Encoding]::UTF8.GetBytes($value)
         $md5 = [System.Security.Cryptography.MD5]::Create()
@@ -25,7 +26,7 @@ try {
 
     $passwordGood = (Get-Hash $RegistryAppName) -eq $KeyPhrase
     if (-not $passwordGood) {
-        # Write-Error 'Do not call this script manually!' -ErrorAction Stop
+        Write-Error 'Do not call this script manually!' -ErrorAction Stop
     }
 
 
@@ -43,10 +44,6 @@ try {
     $Associations = foreach ($json in $jsons) {
         [RegistryAssocation]::new($json)
     }
-    $VerbosePreference='Continue'
-    # $WhatIfPreference = $true
-    # exit
-    # Write-Error 'Do not call this script manually!' -ErrorAction Stop
 
     if ($PSVersionTable.PSVersion.Major -lt 7) {
         function concat {
@@ -87,11 +84,50 @@ try {
         }
     }
 
+    function Format-NewItem{
+        [CmdletBinding()]
+        param (
+            [Parameter(ValueFromPipeline)]
+            $item,
+            [Parameter()]
+            $base
+        )
+        process {
+            if ($base) {
+                $Base = $base.replace('HKCU:', 'HKEY_CURRENT_USER')
+            } else {
+                $base = ' '
+            }
+            $name = $item.Name
+            $prop = $item.property
+            if ($prop -eq '(default)') {
+                $prop = ''
+            }
+            $propVal = $item.GetValue($prop)
+            $subkeyname = ($name.replace($base, ''))
+            if ($prop -eq '') {
+                if ($subkeyname) {
+                    Write-Host -foreground yellow 'Subkey: ' -NoNewline
+                    Write-Host ($name.replace($base, ''))
+                }
+                Write-Host -foreground green 'Value: ' -NoNewline
+                Write-Host "$propVal"
+            } else {
+                if ($subkeyname) {
+                    Write-Host -foreground yellow 'Subkey: ' -NoNewline
+                    Write-Host ($name.replace($base, ''))
+                }
+                Write-Host -foreground green "$prop`: " -NoNewline
+                Write-Host "$propVal"
+            }
+        }
+    }
+
     function Remove-KeyRobust([string]$path) {
         if (Test-Path $path) {
             $netPath = (Split-Path $path -NoQualifier).Trim('\')
             try {
-                Remove-Item $path -Recurse -Verbose -ErrorAction Stop
+                Remove-Item $path -Recurse -ErrorAction Stop
             } catch {
                 $key = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey($netPath, $true)
                 $subkeyNames = $key.GetSubKeyNames()
@@ -100,7 +136,7 @@ try {
                     $key.DeleteSubKey($subkeyName, $false)
                 }
                 $key.Close()
-                Remove-Item $path -Verbose
+                Remove-Item $path 
             }
         }
     }
@@ -125,15 +161,18 @@ try {
         )
         $registryName = $RegistryAppName + $Association.Extension
         $registryKeyPath = concat HKCU: Software Classes $registryName
-        Remove-KeyRobust $registryKeyPath -Verbose
+        Remove-KeyRobust $registryKeyPath 
+
+        Write-Host 'Created key: ' -NoNewline -ForegroundColor Magenta
+        Write-Host $registryKeyPath
 
         $defaultIconRegistryPath = concat $registryKeyPath DefaultIcon
         $iconPath = "$($Association.IconPath),0"
-        New-Item $defaultIconRegistryPath -Force -Value $iconPath -Verbose
+        New-Item $defaultIconRegistryPath -Force -Value $iconPath | Format-NewItem -base $registryKeyPath
     
         $command = "`"$MainAppExecutablePath`" `"%1`""
         $commandOpenSubkeyPath = concat $registryKeyPath shell open command
-        New-Item $commandOpenSubkeyPath -Force -Value $command -Verbose
+        New-Item $commandOpenSubkeyPath -Force -Value $command | Format-NewItem -base $registryKeyPath
     }
 
     function Set-Association {
@@ -144,15 +183,27 @@ try {
             $Association
         )
         $registryName = $RegistryAppName + $Association.Extension
-        $keyPath = concat HKCU: Software Classes $Association.Extension
-        Remove-KeyRobust $keyPath
-        New-Item $keyPath -Force -Value $registryName -Verbose
+        $registryKeyPath = concat HKCU: Software Classes $Association.Extension
+        Remove-KeyRobust $registryKeyPath
+        Write-Host 'Created key: ' -NoNewline -ForegroundColor Magenta
+        Write-Host $registryKeyPath
+        New-Item $registryKeyPath -Force -Value $registryName | Format-NewItem -base $registryKeyPath
     }
+    Write-Host "----  Removing previous associations  ----`n" -ForegroundColor Cyan
     foreach ($association in $Associations) {
-        Remove-ExplorerAssociation $association
+        Write-Host "$($association.Extension)" -NoNewline
+        $null = Remove-ExplorerAssociation $association
+        Write-Host ' - Gone'
+    }
+    Write-Host "`n--------  Setting app shell keys ---------`n" -foreground Cyan
+    foreach ($association in $Associations) {
         Set-AppShellKey $association
+    }
+    Write-Host "`n---------  Setting associations  ---------`n" -ForegroundColor Cyan
+    foreach ($association in $Associations) {
         Set-Association $association
     }
 } catch {
     $error
+    Read-Host 'Press Enter after you read the error and hopefully passed it to the dev.'
 }
