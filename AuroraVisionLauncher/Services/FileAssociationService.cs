@@ -57,6 +57,10 @@ public class FileAssociationService : IFileAssociationService
     {
         return CreateOrOpenRegistrPathImpl(steps, writable: true);
     }
+    private static RegistryKey CreateOrOpenRegistryPathNonWritable(params string[] steps)
+    {
+        return CreateOrOpenRegistrPathImpl(steps, writable: false);
+    }
 
 
     /// <summary>
@@ -206,6 +210,7 @@ public class FileAssociationService : IFileAssociationService
     }
     public void SetAssociationsToApp(string? mainAppExecutablePath = null)
     {
+        var t = CheckCurrentAssociations(mainAppExecutablePath);
         mainAppExecutablePath ??= Environment.ProcessPath!;
         RestoreIconFiles();
         //RemoveExplorerAssociations();
@@ -220,15 +225,6 @@ public class FileAssociationService : IFileAssociationService
             return;
         }
         process.WaitForExit();
-        //try
-        //{
-        //}
-        //catch (System.ComponentModel.Win32Exception)
-        //{
-        //    //TODO add a dialog that tells you that all bets are off if you want to do it without admin
-        //    startInfo = GetStartInfo(mainAppExecutablePath, runAsAdministrator: false);
-        //    Process.Start(startInfo);
-        //}
         // TODO add checking whether association are correct
     }
     private void RemoveExplorerAssociations()
@@ -279,7 +275,7 @@ public class FileAssociationService : IFileAssociationService
         }
         catch (ArgumentException)
         {
-            var subkey = key.OpenSubKey(treeName, false);
+            var subkey = key.OpenSubKey(treeName, writable: false);
             if (subkey is null)
             {
                 return;
@@ -291,7 +287,7 @@ public class FileAssociationService : IFileAssociationService
             }
             var names2 = subkey.GetSubKeyNames();
             subkey.Close();
-            key.DeleteSubKey(treeName, false);
+            key.DeleteSubKey(treeName, throwOnMissingSubKey: false);
         }
     }
 
@@ -311,10 +307,10 @@ public class FileAssociationService : IFileAssociationService
             }
         }
     }
-    private string GetKeyPhrase()
+    private static string GetKeyPhrase()
     {
         var crypto = System.Security.Cryptography.MD5.Create();
-        var bytes = System.Text.Encoding.UTF8.GetBytes(RegistryAppName);
+        var bytes = Encoding.UTF8.GetBytes(RegistryAppName);
         var hash = crypto.ComputeHash(bytes);
         return string.Concat(hash.Select(x => x.ToString("x2")));
     }
@@ -322,5 +318,37 @@ public class FileAssociationService : IFileAssociationService
     {
         var assoc = _associations.Select(x => x with { IconPath = GetFullIconPath(x) });
         return JsonSerializer.Serialize(assoc, new JsonSerializerOptions { WriteIndented = false });
+    }
+
+    private static T? GetValue<T>(RegistryKey? key, string? name = null) where T : class
+    {
+        if (key is null)
+        {
+            return null;
+        }
+        return key.GetValue(name, defaultValue: null) as T;
+    }
+
+    public IEnumerable<FileAssociationStatus> CheckCurrentAssociations(string? mainAppExecutablePath = null)
+    {
+        var list = new List<FileAssociationStatus>();
+        mainAppExecutablePath ??= Environment.ProcessPath!;
+        string mainAppName = Path.GetFileName(mainAppExecutablePath);
+        foreach (var association in _associations)
+        {
+            var registryKeyName = GetExtensionRegistryName(association);
+            using var commandKey = CreateOrOpenRegistryPathNonWritable("Software", "Classes", registryKeyName, "shell", "open", "command");
+            bool commandGood = GetValue<string>(commandKey)?.Contains(mainAppExecutablePath, StringComparison.OrdinalIgnoreCase) ?? false;
+
+            using var classesKey = CreateOrOpenRegistryPathNonWritable("Software", "Classes", association.Extension);
+            bool classesGood = string.Equals(GetValue<string>(classesKey), registryKeyName, StringComparison.OrdinalIgnoreCase);
+
+            using var userchoice = CreateOrOpenRegistryPathNonWritable("Software", "Microsoft", "Windows", "CurrentVersion", "Explorer", "FileExts", association.Extension, "UserChoice");
+            var userChoiceValue = GetValue<string>(userchoice, "ProgId");
+            bool userChoiceGood = userChoiceValue is null || string.Equals(userChoiceValue , mainAppName, StringComparison.OrdinalIgnoreCase);
+   
+            list.Add(new(association.Extension, classesGood && commandGood && userChoiceGood));
+        }
+        return list;
     }
 }

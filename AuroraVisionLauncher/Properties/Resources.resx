@@ -292,10 +292,10 @@
     <value>Could not determine version</value>
   </data>
   <data name="SettingsPageSetFileAssociationsButton" xml:space="preserve">
-    <value>Set this app as default for all related files</value>
+    <value>Set this app as default for all related extensions</value>
   </data>
   <data name="SettingsPageSetFileAssociationsButtonTooltip" xml:space="preserve">
-    <value>Sets this app as the dafult app to open all vision project and runtime files</value>
+    <value>Sets this app as the default app to open all vision project and runtime files</value>
   </data>
   <data name="SettingsPageOpenInstallationFolderButton" xml:space="preserve">
     <value>Open app folder</value>
@@ -405,5 +405,8 @@
   </data>
   <data name="CustomSourceEditorButtonFolderPickerTooltip" xml:space="preserve">
     <value>Find folder through Explorer</value>
+  </data>
+  <data name="SettingsPageFileAssociationHeader" xml:space="preserve">
+    <value>File associations</value>
   </data>
 </root>

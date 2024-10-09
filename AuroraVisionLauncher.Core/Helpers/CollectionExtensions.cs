@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 namespace AuroraVisionLauncher.Core.Helpers;
 public static class CollectionExtensions
 {
-    public static int FindInsertionIndex<T>(this IList<T> collection, Predicate<T> condition)
+    public static int FindInsertionIndex<T>(this IList<T> collection, Func<T,bool> condition)
     {
         for (int i = 0; i < collection.Count; i++)
         {
-            if (condition.Invoke(collection[i]))
+            if (condition(collection[i]))
             {
                 return i;
             }
