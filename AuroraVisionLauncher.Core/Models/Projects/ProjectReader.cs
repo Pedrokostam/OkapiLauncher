@@ -67,7 +67,7 @@ public static class ProjectReader
                 return entry;
             }
         }
-        throw new ArgumentException("Could not determine project type.", nameof(path));
+        throw new UnknownProjectTypeException(path, nameof(path));
     }
 
     private static (AvVersion Version, string Name) GetVersionFromXml(string filepath)

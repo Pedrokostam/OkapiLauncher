@@ -18,6 +18,8 @@ using AuroraVisionLauncher.Contracts.ViewModels;
 using AuroraVisionLauncher.Helpers;
 using Microsoft.VisualBasic;
 using AuroraVisionLauncher.Core.Models;
+using AuroraVisionLauncher.Properties;
+using AuroraVisionLauncher.Views;
 
 namespace AuroraVisionLauncher.ViewModels;
 
@@ -26,21 +28,22 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
 
     private readonly INavigationService _navigationService;
     private readonly IRecentlyOpenedFilesService _lastOpenedFilesService;
-
+    private readonly IContentDialogService _contentDialogService;
 
     public LauncherViewModel(IAvAppFacadeFactory appProvider,
                              INavigationService navigationService,
                              IRecentlyOpenedFilesService lastOpenedFilesService,
-                             IProcessManagerService processManagerService,
+                             IProcessManagerService processManagerService, IContentDialogService contentDialogService,
                              IMessenger messenger) : base(processManagerService, appProvider, messenger)
     {
         _lastOpenedFilesService = lastOpenedFilesService;
+        _contentDialogService = contentDialogService;
         _navigationService = navigationService;
     }
     public bool ShouldExitByDefault
     {
         get => ((App)App.Current).IsStartedWithArgument;
-        set => ((App)App.Current).IsStartedWithArgument=value;
+        set => ((App)App.Current).IsStartedWithArgument = value;
     }
 
 
@@ -102,18 +105,16 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
     [RelayCommand(CanExecute = nameof(CanCopyArgumentString))]
     private void CopyArgumentString()
     {
+        var t = Thread.CurrentThread;
         if (LaunchOptions?.ArgumentString is not null)
         {
             Clipboard.SetText(LaunchOptions.ArgumentString);
         }
     }
 
-    private void OpenProject(string filepath)
+    private async Task<bool> OpenProject(string filepath)
     {
-        if (!File.Exists(filepath))
-        {
-            MessageBox.Show("File does not exist");
-        }
+        
         try
         {
             var project = ProjectReader.OpenProject(filepath);
@@ -138,10 +139,27 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
             _lastOpenedFilesService.AddLastFile(filepath);
             _navigationService.NavigateTo(GetType().FullName!);
             _processManagerService.GetCurrentState.UpdateStates(Apps);
+            return true;
+        }
+        catch (FileNotFoundException)
+        {
+            await _contentDialogService.ShowError(Resources.ErrorFileDoesNotExist);
+            return false;
         }
         catch (InvalidDataException)
         {
-            MessageBox.Show("File is neither a projects file nor a runtime executable.");
+            await _contentDialogService.ShowError(Resources.ErrorUnrecognizedFile);
+            return false;
+        }
+        catch (UriFormatException)
+        {
+            await _contentDialogService.ShowError(Resources.ErrorInvalidXml);
+            return false;
+        }
+        catch (UnknownProjectTypeException)
+        {
+            await _contentDialogService.ShowError(Resources.ErrorUnknownFileType);
+            return false;
         }
 
     }
@@ -181,16 +199,30 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
         }
         return Compatibility.Outdated;
     }
-    public override void OnNavigatedTo(object parameter)
+    public override async void OnNavigatedTo(object parameter)
     {
+        var t = Thread.CurrentThread;
         base.OnNavigatedTo(parameter);
+
+        var lastFile = _lastOpenedFilesService.LastOpenedFile;
         if (parameter is string path)
         {
-            OpenProject(path);
+            bool loadGood = await OpenProject(path);
+            if (!loadGood)
+            {
+                if (lastFile is string s)
+                {
+                    await OpenProject(s);
+                }
+                else
+                {
+                    _navigationService.NavigateTo(typeof(InstalledAppsViewModel).FullName!);
+                }
+            }
         }
-        else if (_lastOpenedFilesService.LastOpenedFile is string last)
+        else if (lastFile is string last)
         {
-            OpenProject(last);
+            await OpenProject(last);
         }
     }
 }

@@ -409,6 +409,7 @@
   <data name="SettingsPageFileAssociationHeader" xml:space="preserve">
     <value>File associations</value>
   </data>
+
   <data name="VersionCheckDialogMessageFormat" xml:space="preserve">
     <value>A new update ({0}) released at {1:yyyy-MM-dd} is available for download.</value>
   </data>
@@ -432,5 +433,19 @@
   </data>
   <data name="VersionCheckDialogHeader" xml:space="preserve">
     <value>Newer version detected</value>
+  <data name="ErrorUnrecognizedFile" xml:space="preserve">
+    <value>File is neither a project file nor a runtime executable.</value>
+  </data>
+  <data name="ErrorInvalidXml" xml:space="preserve">
+    <value>The XML file appears to be corrupted.</value>
+  </data>
+  <data name="ErrorDialogHeader" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="ErrorFileDoesNotExist" xml:space="preserve">
+    <value>Specified file does not exist.</value>
+  </data>
+  <data name="ErrorUnknownFileType" xml:space="preserve">
+    <value>Could not determine type of project.</value>
   </data>
 </root>

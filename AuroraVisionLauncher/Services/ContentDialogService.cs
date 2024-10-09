@@ -8,6 +8,7 @@ using AuroraVisionLauncher.Contracts.Services;
 using AuroraVisionLauncher.Contracts.ViewModels;
 using AuroraVisionLauncher.Contracts.Views;
 using AuroraVisionLauncher.Models;
+using AuroraVisionLauncher.Properties;
 using AuroraVisionLauncher.ViewModels;
 using AuroraVisionLauncher.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -20,9 +21,9 @@ public class ContentDialogService : IContentDialogService
     private readonly IDialogCoordinator _dialogCoordinator;
     private  Lazy<ShellViewModel> _context= new Lazy<ShellViewModel>(()=>((App)App.Current).GetService<ShellViewModel>());
 
-    public Task ShowError(string title, string message)
+    public Task ShowError(string message, string? title = null)
     {
-        return _dialogCoordinator.ShowMessageAsync(_context.Value, title, message);
+        return _dialogCoordinator.ShowMessageAsync(_context.Value, title ?? Resources.ErrorDialogHeader, message);
     }
     public async Task ShowSourceEditor(CustomAppSource source)
     {
