@@ -22,7 +22,36 @@ using System.Text.Json.Serialization;
 namespace AuroraVisionLauncher.Services;
 public class FileAssociationService : IFileAssociationService
 {
+    private class VanishingScript : IDisposable
+    {
+        public string FilePath { get; }
+        public VanishingScript()
+        {
+            var name = DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss-f'.ps1'",null);
+            FilePath = Path.Join(Path.GetTempPath(),name);
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            using Stream? stream = assembly.GetManifestResourceStream("AuroraVisionLauncher.Services.Set-FileAssociations.ps1");
+            ArgumentNullException.ThrowIfNull(stream);
+            using FileStream filestream = new FileStream(FilePath, FileMode.Create, FileAccess.Write);
+            stream.CopyTo(filestream);
+        }
 
+        public void Dispose()
+        {
+            try
+            {
+                if (File.Exists(FilePath))
+                {
+                    File.Delete(FilePath);
+                }
+
+            }
+            catch (DirectoryNotFoundException) { }
+            catch (IOException) { }
+            catch (UnauthorizedAccessException) { }
+        }
+        public static implicit operator string(VanishingScript fg) => fg.FilePath;
+    }
     private static RegistryKey CreateOrOpenRegistryPathWritable(params string[] steps)
     {
         return CreateOrOpenRegistrPathImpl(steps, writable: true);
@@ -152,66 +181,48 @@ public class FileAssociationService : IFileAssociationService
         WindowsPrincipal principal = new WindowsPrincipal(identity);
         return principal.IsInRole(WindowsBuiltInRole.Administrator);
     }
-    private ProcessStartInfo GetStartInfo(string mainAppExecutablePath, bool runAsAdministrator)
+    private ProcessStartInfo GetStartInfo(string mainAppExecutablePath, VanishingScript scriptToRun, bool runAsAdministrator)
     {
-        Assembly assembly = Assembly.GetExecutingAssembly();
-        var tempPath = Path.GetTempFileName();
-        File.Delete(tempPath);
-        tempPath = Path.ChangeExtension(tempPath, ".ps1");
-        using (Stream? stream = assembly.GetManifestResourceStream("AuroraVisionLauncher.Services.Set-FileAssociations.ps1"))
-        {
-            
-            if (stream is not null)
-            {
-                using FileStream filestream = new FileStream(tempPath, FileMode.Create,FileAccess.Write);
-                stream.CopyTo(filestream);
-            }
-        }
-
         var startInfo = new ProcessStartInfo()
         {
             FileName = "powershell",
             UseShellExecute = true,
+            Verb = runAsAdministrator ? "runas" : "",
         };
-        if (runAsAdministrator)
-        {
-            startInfo.Verb = "runAsAdministrator";
-        }
         startInfo.ArgumentList.Add("-ExecutionPolicy");
         startInfo.ArgumentList.Add("Bypass");
         startInfo.ArgumentList.Add("-NoLogo");
         startInfo.ArgumentList.Add("-NoProfile");
-        startInfo.ArgumentList.Add("-NoExit");
-        startInfo.ArgumentList.Add("-NonInteractive");
+        //startInfo.ArgumentList.Add("-NoExit");
+        //startInfo.ArgumentList.Add("-NonInteractive");
         startInfo.ArgumentList.Add("-File");
-        startInfo.ArgumentList.Add(tempPath);
+        startInfo.ArgumentList.Add(scriptToRun.FilePath);
         startInfo.ArgumentList.Add(GetKeyPhrase());
         startInfo.ArgumentList.Add(RegistryAppName);
         startInfo.ArgumentList.Add(mainAppExecutablePath);
         startInfo.ArgumentList.Add(GetParameterJson());
-        File.Delete(tempPath);
         return startInfo;
     }
     public void SetAssociationsToApp(string? mainAppExecutablePath = null)
     {
         mainAppExecutablePath ??= Environment.ProcessPath!;
-
         RestoreIconFiles();
         //RemoveExplorerAssociations();
         //SetAppShellKeys(mainAppExecutablePath);
         //SetAssociations();
         //return;
-        var startInfo = GetStartInfo(mainAppExecutablePath, runAsAdministrator: true);
-        try
-        {
-            Process.Start(startInfo);
-        }
-        catch (System.ComponentModel.Win32Exception)
-        {
-            //TODO add a dialog that tells you that all bets are off if you want to do it without admin
-            startInfo = GetStartInfo(mainAppExecutablePath, runAsAdministrator: false);
-            Process.Start(startInfo);
-        }
+        using var tempScript = new VanishingScript();
+        var startInfo = GetStartInfo(mainAppExecutablePath, tempScript, runAsAdministrator: false);
+        Process.Start(startInfo)?.WaitForExit();
+        //try
+        //{
+        //}
+        //catch (System.ComponentModel.Win32Exception)
+        //{
+        //    //TODO add a dialog that tells you that all bets are off if you want to do it without admin
+        //    startInfo = GetStartInfo(mainAppExecutablePath, runAsAdministrator: false);
+        //    Process.Start(startInfo);
+        //}
         // TODO add checking whether association are correct
     }
     private void RemoveExplorerAssociations()

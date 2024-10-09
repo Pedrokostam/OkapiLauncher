@@ -38,7 +38,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Include="Services\Set-FileAssociations.ps1" />
+	  <EmbeddedResource Include="Services\Set-FileAssociations.ps1">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </EmbeddedResource>
 	</ItemGroup>
 
 	<ItemGroup>
