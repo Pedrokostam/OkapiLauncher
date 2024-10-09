@@ -14,6 +14,7 @@
     xmlns:sys="clr-namespace:System;assembly=System.Runtime"
     xmlns:vms="clr-namespace:AuroraVisionLauncher.ViewModels"
     x:Name="ThisLauncherPage"
+    d:Background="Gray"
     d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False,
                                      Type={x:Type vms:LauncherViewModel}}"
     d:DesignHeight="450"
@@ -77,6 +78,7 @@
             <ContentPresenter Content="{Binding VisionProject}" />
             <ListView
                 Grid.Row="1"
+                d:ItemsSource="{d:SampleData ItemCount=5}"
                 ItemTemplate="{StaticResource AvAppFacadeDataTemplate}"
                 ItemsSource="{Binding Source={StaticResource CustomViewSource}}"
                 SelectedItem="{Binding SelectedApp, Mode=TwoWay}">

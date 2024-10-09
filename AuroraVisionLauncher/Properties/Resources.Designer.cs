@@ -700,6 +700,15 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File associations.
+        /// </summary>
+        public static string SettingsPageFileAssociationHeader {
+            get {
+                return ResourceManager.GetString("SettingsPageFileAssociationHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Repository link (report bugs and improvements).
         /// </summary>
         public static string SettingsPageGithubLink {
@@ -772,7 +781,7 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set this app as default for all related files.
+        ///   Looks up a localized string similar to Set this app as default for all related extensions.
         /// </summary>
         public static string SettingsPageSetFileAssociationsButton {
             get {
@@ -781,7 +790,7 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sets this app as the dafult app to open all vision project and runtime files.
+        ///   Looks up a localized string similar to Sets this app as the default app to open all vision project and runtime files.
         /// </summary>
         public static string SettingsPageSetFileAssociationsButtonTooltip {
             get {

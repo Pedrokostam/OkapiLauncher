@@ -16,14 +16,50 @@ using MahApps.Metro.Converters;
 using Microsoft.Extensions.Options;
 using Microsoft.Win32;
 using Windows.Networking.NetworkOperators;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 
 namespace AuroraVisionLauncher.Services;
 public class FileAssociationService : IFileAssociationService
 {
+    private class VanishingScript : IDisposable
+    {
+        public string FilePath { get; }
+        public VanishingScript()
+        {
+            var name = Guid.NewGuid() + ".ps1";
+            FilePath = Path.Join(Path.GetTempPath(), name);
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            using Stream? stream = assembly.GetManifestResourceStream("AuroraVisionLauncher.Services.Set-FileAssociations.ps1");
+            ArgumentNullException.ThrowIfNull(stream);
+            using FileStream filestream = new FileStream(FilePath, FileMode.Create, FileAccess.Write);
+            stream.CopyTo(filestream);
+        }
 
+        public void Dispose()
+        {
+            try
+            {
+                if (File.Exists(FilePath))
+                {
+                    File.Delete(FilePath);
+                }
+
+            }
+            catch (DirectoryNotFoundException) { }
+            catch (IOException) { }
+            catch (UnauthorizedAccessException) { }
+        }
+        public static implicit operator string(VanishingScript fg) => fg.FilePath;
+    }
     private static RegistryKey CreateOrOpenRegistryPathWritable(params string[] steps)
     {
         return CreateOrOpenRegistrPathImpl(steps, writable: true);
+    }
+    private static RegistryKey CreateOrOpenRegistryPathNonWritable(params string[] steps)
+    {
+        return CreateOrOpenRegistrPathImpl(steps, writable: false);
     }
 
 
@@ -43,12 +79,12 @@ public class FileAssociationService : IFileAssociationService
         return string.Join('\\', steps);
     }
 
-    private readonly record struct AssociationPackage(string IconResourcePath, string Extension)
+    private readonly record struct AssociationPackage(string IconPath, string Extension)
     {
-        public string IconName => Path.GetFileName(IconResourcePath);
+        public string IconName => Path.GetFileName(IconPath);
     }
 
-    private readonly AssociationPackage[] associations = [
+    private readonly AssociationPackage[] _associations = [
         new AssociationPackage("Resources/Icons/AuroraVisionExecutor.ico",".avexe"),
         new AssociationPackage("Resources/Icons/AuroraVisionStudio.ico",".avproj"),
         new AssociationPackage("Resources/Icons/FabImageStudio.ico",".fiproj"),
@@ -83,7 +119,7 @@ public class FileAssociationService : IFileAssociationService
     /// <param name="appName"></param>
     private void SetAppShellKeys(string mainAppPath)
     {
-        foreach (var association in associations)
+        foreach (var association in _associations)
         {
             try
             {
@@ -91,13 +127,14 @@ public class FileAssociationService : IFileAssociationService
                 var registryKeyName = GetExtensionRegistryName(association);
                 // delete existing keys
                 string extensionSubkey = CreateRegistryPathString("Software", "Classes", registryKeyName);
-                Registry.CurrentUser.DeleteSubKeyTree(extensionSubkey, throwOnMissingSubKey: false);
+                MegaDeleteTree(Registry.CurrentUser, extensionSubkey);
+                //Registry.CurrentUser.DeleteSubKeyTree(extensionSubkey, throwOnMissingSubKey: false);
                 //Registry.CurrentUser.Close();
                 using var appKey = CreateOrOpenRegistryPathWritable("Software", "Classes", registryKeyName);
 
                 using var iconKey = appKey.CreateSubKey("DefaultIcon", writable: true);
 
-                var iconPath = GetIconName(association);
+                var iconPath = GetFullIconPath(association);
                 // No need to enclose in quotes; 0 means use the first icon available
                 iconKey.SetValue(name: null, $"{iconPath},0");
 
@@ -127,17 +164,17 @@ public class FileAssociationService : IFileAssociationService
         var appdata = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         var iconFolder = Path.Combine(appdata, _appConfig.IconsFolder);
         Directory.CreateDirectory(iconFolder);
-        foreach (var assoc in associations)
+        foreach (var assoc in _associations)
         {
-            var iconStream = ResourceHelper.GetResourceStream(assoc.IconResourcePath);
+            var iconStream = ResourceHelper.GetResourceStream(assoc.IconPath);
             iconStream.Seek(0, SeekOrigin.Begin);
-            string iconPath = GetIconName(assoc);
+            string iconPath = GetFullIconPath(assoc);
             using FileStream fs = new FileStream(iconPath, FileMode.Create);
             iconStream.CopyTo(fs);
         }
     }
 
-    private string GetIconName(AssociationPackage assoc)
+    private string GetFullIconPath(AssociationPackage assoc)
     {
         var appdata = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         var iconFolder = Path.Combine(appdata, _appConfig.IconsFolder);
@@ -149,93 +186,114 @@ public class FileAssociationService : IFileAssociationService
         WindowsPrincipal principal = new WindowsPrincipal(identity);
         return principal.IsInRole(WindowsBuiltInRole.Administrator);
     }
-
+    private ProcessStartInfo GetStartInfo(string mainAppExecutablePath, VanishingScript scriptToRun, bool runAsAdministrator)
+    {
+        var startInfo = new ProcessStartInfo()
+        {
+            FileName = "powershell",
+            UseShellExecute = true,
+            Verb = runAsAdministrator ? "runas" : "",
+        };
+        startInfo.ArgumentList.Add("-ExecutionPolicy");
+        startInfo.ArgumentList.Add("Bypass");
+        startInfo.ArgumentList.Add("-NoLogo");
+        startInfo.ArgumentList.Add("-NoProfile");
+        //startInfo.ArgumentList.Add("-NoExit");
+        //startInfo.ArgumentList.Add("-NonInteractive");
+        startInfo.ArgumentList.Add("-File");
+        startInfo.ArgumentList.Add(scriptToRun.FilePath);
+        startInfo.ArgumentList.Add(GetKeyPhrase());
+        startInfo.ArgumentList.Add(RegistryAppName);
+        startInfo.ArgumentList.Add(mainAppExecutablePath);
+        startInfo.ArgumentList.Add(GetParameterJson());
+        return startInfo;
+    }
     public void SetAssociationsToApp(string? mainAppExecutablePath = null)
     {
-        if (!IsAdministrator())
+        var t = CheckCurrentAssociations(mainAppExecutablePath);
+        mainAppExecutablePath ??= Environment.ProcessPath!;
+        RestoreIconFiles();
+        //RemoveExplorerAssociations();
+        //SetAppShellKeys(mainAppExecutablePath);
+        //SetAssociations();
+        //return;
+        using var tempScript = new VanishingScript();
+        var startInfo = GetStartInfo(mainAppExecutablePath, tempScript, runAsAdministrator: false);
+        var process = Process.Start(startInfo);
+        if (process is null)
         {
-            var res = MessageBox.Show("""
-                                      To change file association administrative privileges are required.
-                                      Do you want to restart the application with those rights?
-                                      """,
-                                      "Administrative privileges required",
-                                      MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
-            if (res == MessageBoxResult.No)
-            {
-                return;
-            }
-            try
-            {
-                Process.Start(new ProcessStartInfo()
-                {
-                    FileName = Environment.ProcessPath,
-                    UseShellExecute = true,
-                    Verb = "runas",
-                });
-                Environment.Exit(0);
-            }
-            catch (System.ComponentModel.Win32Exception)
-            {
-                MessageBox.Show("User cancelled elevation", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            return;
         }
-        try
-        {
-            mainAppExecutablePath ??= Environment.ProcessPath!;
-
-            RestoreIconFiles();
-
-            RemoveExplorerAssociations();
-
-            SetAppShellKeys(mainAppExecutablePath);
-
-            SetAssociations();
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show($"{ex.Message}\n{ex.InnerException}");
-        }
-
+        process.WaitForExit();
+        // TODO add checking whether association are correct
     }
     private void RemoveExplorerAssociations()
     {
 
         using var fileExts = CreateOrOpenRegistryPathWritable("Software", "Microsoft", "Windows", "CurrentVersion", "Explorer", "FileExts");
-        foreach (var assoc in associations)
+        foreach (var assoc in _associations)
         {
             try
             {
-                // UserChoice is protected by default, but since its in ClassUser we can change the permissions
-                using var userChoice = fileExts.OpenSubKey(CreateRegistryPathString(assoc.Extension, "UserChoice"), RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryRights.ChangePermissions);
-                if (userChoice is not null)
-                {
-                    string username = WindowsIdentity.GetCurrent().Name;
-                    RegistrySecurity security = userChoice.GetAccessControl();
-                    AuthorizationRuleCollection accRules = security.GetAccessRules(true, true, typeof(NTAccount));
+                MegaDeleteTree(fileExts, assoc.Extension);
+                //// UserChoice is protected by default, but since its in ClassUser we can change the permissions
+                //using var userChoice = fileExts.OpenSubKey(CreateRegistryPathString(assoc.Extension, "UserChoice"), RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryRights.ChangePermissions);
+                //if (userChoice is not null)
+                //{
+                //    string username = WindowsIdentity.GetCurrent().Name;
+                //    RegistrySecurity security = userChoice.GetAccessControl();
+                //    AuthorizationRuleCollection accRules = security.GetAccessRules(true, true, typeof(NTAccount));
 
-                    foreach (RegistryAccessRule accRule in accRules)
-                    {
-                        if (accRule.IdentityReference.Value.Equals(username, StringComparison.OrdinalIgnoreCase)
-                            && accRule.AccessControlType == AccessControlType.Deny)
-                        {
-                            security.RemoveAccessRule(accRule);
-                        }
-                    }
-                    userChoice.SetAccessControl(security);
-                }
-                fileExts.DeleteSubKeyTree(assoc.Extension, false);
+                //    foreach (RegistryAccessRule accRule in accRules)
+                //    {
+                //        if (accRule.IdentityReference.Value.Equals(username, StringComparison.OrdinalIgnoreCase)
+                //            && accRule.AccessControlType == AccessControlType.Deny)
+                //        {
+                //            security.RemoveAccessRule(accRule);
+                //        }
+                //    }
+                //    userChoice.SetAccessControl(security);
+                //}
+                //fileExts.DeleteSubKeyTree(assoc.Extension, false);
             }
             catch (Exception e)
             {
-
                 throw new Exception($"On delete {fileExts.Name + "\\" + assoc.Extension}", e);
             }
+        }
+    }
+    private static void MegaDeleteTree(RegistryKey key, string treeName)
+    {
+        try
+        {
+            key.DeleteSubKeyTree(treeName, true);
+            var names = key.GetSubKeyNames();
+            if (names.Contains(treeName, StringComparer.OrdinalIgnoreCase))
+            {
+                key.DeleteSubKey(treeName);
+            }
+        }
+        catch (ArgumentException)
+        {
+            var subkey = key.OpenSubKey(treeName, writable: false);
+            if (subkey is null)
+            {
+                return;
+            }
+            var names = subkey.GetSubKeyNames();
+            foreach (var item in subkey.GetSubKeyNames())
+            {
+                MegaDeleteTree(subkey, item);
+            }
+            var names2 = subkey.GetSubKeyNames();
+            subkey.Close();
+            key.DeleteSubKey(treeName, throwOnMissingSubKey: false);
         }
     }
 
     private void SetAssociations()
     {
-        foreach (var association in associations)
+        foreach (var association in _associations)
         {
             var registryKeyName = GetExtensionRegistryName(association);
             try
@@ -248,5 +306,49 @@ public class FileAssociationService : IFileAssociationService
                 throw new Exception($"On associate {registryKeyName}", e);
             }
         }
+    }
+    private static string GetKeyPhrase()
+    {
+        var crypto = System.Security.Cryptography.MD5.Create();
+        var bytes = Encoding.UTF8.GetBytes(RegistryAppName);
+        var hash = crypto.ComputeHash(bytes);
+        return string.Concat(hash.Select(x => x.ToString("x2")));
+    }
+    private string GetParameterJson()
+    {
+        var assoc = _associations.Select(x => x with { IconPath = GetFullIconPath(x) });
+        return JsonSerializer.Serialize(assoc, new JsonSerializerOptions { WriteIndented = false });
+    }
+
+    private static T? GetValue<T>(RegistryKey? key, string? name = null) where T : class
+    {
+        if (key is null)
+        {
+            return null;
+        }
+        return key.GetValue(name, defaultValue: null) as T;
+    }
+
+    public IEnumerable<FileAssociationStatus> CheckCurrentAssociations(string? mainAppExecutablePath = null)
+    {
+        var list = new List<FileAssociationStatus>();
+        mainAppExecutablePath ??= Environment.ProcessPath!;
+        string mainAppName = Path.GetFileName(mainAppExecutablePath);
+        foreach (var association in _associations)
+        {
+            var registryKeyName = GetExtensionRegistryName(association);
+            using var commandKey = CreateOrOpenRegistryPathNonWritable("Software", "Classes", registryKeyName, "shell", "open", "command");
+            bool commandGood = GetValue<string>(commandKey)?.Contains(mainAppExecutablePath, StringComparison.OrdinalIgnoreCase) ?? false;
+
+            using var classesKey = CreateOrOpenRegistryPathNonWritable("Software", "Classes", association.Extension);
+            bool classesGood = string.Equals(GetValue<string>(classesKey), registryKeyName, StringComparison.OrdinalIgnoreCase);
+
+            using var userchoice = CreateOrOpenRegistryPathNonWritable("Software", "Microsoft", "Windows", "CurrentVersion", "Explorer", "FileExts", association.Extension, "UserChoice");
+            var userChoiceValue = GetValue<string>(userchoice, "ProgId");
+            bool userChoiceGood = userChoiceValue is null || string.Equals(userChoiceValue , mainAppName, StringComparison.OrdinalIgnoreCase);
+   
+            list.Add(new(association.Extension, classesGood && commandGood && userChoiceGood));
+        }
+        return list;
     }
 }

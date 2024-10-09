@@ -77,6 +77,8 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
         VersionDescription = $"{Properties.Resources.AppDisplayName} - {_applicationInfoService.GetVersion()}";
         Theme = _themeSelectorService.GetCurrentTheme();
         CurrentAccent = _themeSelectorService.GetCurrentAccent();
+        UpdateStatus();
+
     }
 
     [RelayCommand]
@@ -92,6 +94,7 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
         Theme = _themeSelectorService.GetCurrentTheme();
     }
 
+    public ObservableCollection<FileAssociationStatus> FileAssociationStatus { get; } = new();
     public ObservableCollection<CustomAppSource> CustomSources => _customAppSourceService.CustomSources;
 
     partial void OnCurrentAccentChanged(System.Windows.Media.Color? value) => OnSetTheme(Theme.ToString());
@@ -104,12 +107,28 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     [RelayCommand]
     private void OnPrivacyStatement()
         => _systemService.OpenInWebBrowser(Link);
-    [RelayCommand]
-    private void AssociateAppWithExtensions()
-    {
-        _fileAssociationService.SetAssociationsToApp();
-    }
 
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(AssociateAppWithExtensionsCommand))]
+    private bool _associationInProgress;
+    public bool CanExecuteAssociateAppWithExtensions() => !AssociationInProgress && FileAssociationStatus.Any(x=>!x.Associated);
+    [RelayCommand(CanExecute = nameof(CanExecuteAssociateAppWithExtensions))]
+    private async Task AssociateAppWithExtensions()
+    {
+        AssociationInProgress = true;
+        await Task.Run(() => _fileAssociationService.SetAssociationsToApp());
+        AssociationInProgress = false;
+        UpdateStatus();
+    }
+    private void UpdateStatus()
+    {
+        FileAssociationStatus.Clear();
+        foreach (var fs in _fileAssociationService.CheckCurrentAssociations())
+        {
+            FileAssociationStatus.Add(fs);
+        }
+
+    }
     partial void OnAutoCheckForUpdatesChanged(bool value)
     {
         _updateCheckService.AutoCheckForUpdatesEnabled = value;

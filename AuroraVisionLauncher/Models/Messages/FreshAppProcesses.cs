@@ -79,16 +79,7 @@ public class FreshAppProcesses
         foreach (var proc in brandNew)
         {
             var insertionIndex = app.ActiveProcesses.FindInsertionIndex(x => x.StartTime > proc.StartTime);
-            try
-            {
             app.ActiveProcesses.Insert(insertionIndex, proc.Clone());
-
-            }
-            catch (Exception e)
-            {
-                throw;
-            }
-            var t = 12;
         }
     }
 

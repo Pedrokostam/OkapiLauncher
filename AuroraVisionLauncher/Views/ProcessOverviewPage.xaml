@@ -11,6 +11,7 @@
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
     xmlns:vms="clr-namespace:AuroraVisionLauncher.ViewModels"
     Title="ProcessOverviewPage"
+    d:Background="Gray"
     MinWidth="600"
     d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False,
                                      Type={x:Type vms:ProcessOverviewViewModel}}"
@@ -79,7 +80,7 @@
         <ListView
             Grid.Row="1"
             ItemsSource="{Binding AvApp.ActiveProcesses}"
-            ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled" d:ItemsSource="{d:SampleData ItemCount=5}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid Margin="0">
