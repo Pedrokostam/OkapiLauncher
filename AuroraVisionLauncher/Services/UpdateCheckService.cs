@@ -32,56 +32,54 @@ public class UpdateCheckService : IUpdateCheckService
     }
     public async Task AutoCheckForUpdates()
     {
-        if (AutoCheckForUpdatesEnabled && LastCheckDate.Date != DateTime.UtcNow.Date)
+        //if (AutoCheckForUpdatesEnabled && LastCheckDate.Date != DateTime.UtcNow.Date)
         {
-            await CheckForUpdates_impl(true);
+            await CheckForUpdates_impl(isAuto: true);
         }
     }
-    public async Task CheckForUpdates()=> await CheckForUpdates_impl(false);
+    public async Task CheckForUpdates()=> await CheckForUpdates_impl(isAuto:false);
     private async Task CheckForUpdates_impl(bool isAuto)
     {
-        using (HttpClient client = new HttpClient())
+        using HttpClient client = new HttpClient();
+        client.DefaultRequestHeaders.Add("User-Agent", "AuroraVisionLauncher"); // GitHub requires a user-agent header
+
+        try
         {
-            client.DefaultRequestHeaders.Add("User-Agent", "AuroraVisionLauncher"); // GitHub requires a user-agent header
+            HttpResponseMessage response = await client.GetAsync("https://api.github.com/repos/PedroKostam/AuroraVisionLauncher/releases/latest");
+            response.EnsureSuccessStatusCode();
 
-            try
+            string responseBody = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"Latest release info: {responseBody}");
+            JObject releaseInfo = JObject.Parse(responseBody);
+
+            // Extract specific information
+            string? tagName = releaseInfo["tag_name"]?.ToString();
+            string? releaseName = releaseInfo["name"]?.ToString();
+            string? publishedAt = releaseInfo["published_at"]?.ToString();
+            if (tagName is null || releaseName is null || publishedAt is null)
             {
-                HttpResponseMessage response = await client.GetAsync("https://api.github.com/repos/PedroKostam/AuroraVisionLauncher/releases/latest");
-                response.EnsureSuccessStatusCode();
-
-                string responseBody = await response.Content.ReadAsStringAsync();
-                Console.WriteLine($"Latest release info: {responseBody}");
-                JObject releaseInfo = JObject.Parse(responseBody);
-
-                // Extract specific information
-                string? tagName = releaseInfo["tag_name"]?.ToString();
-                string? releaseName = releaseInfo["name"]?.ToString();
-                string? publishedAt = releaseInfo["published_at"]?.ToString();
-                if (tagName is null || releaseName is null || publishedAt is null)
+                return;
+            }
+            var version = new Version(tagName);
+            if (version >= Assembly.GetExecutingAssembly().GetName().Version)
+            {
+                var msg = $"There is a newer version available:\n{version} ({releaseName}) release on {publishedAt}\nDo you want to open the download page?";
+                if (isAuto)
                 {
-                    return;
+                    msg += "\n(You can disable automatic check in settings)";
                 }
-                var version = new Version(tagName);
-                if (version > Assembly.GetExecutingAssembly().GetName().Version)
+                var res = MessageBox.Show(msg, "New version available", MessageBoxButton.YesNo);
+                if (res == MessageBoxResult.Yes)
                 {
-                    var msg = $"There is a newer version available:\n{version} ({releaseName}) release on {publishedAt}\nDo you want to open the download page?";
-                    if (isAuto)
-                    {
-                        msg += "\n(You can disable automatic check in settings)";
-                    }
-                    var res = MessageBox.Show(msg, "New version available", MessageBoxButton.YesNo);
-                    if (res == MessageBoxResult.Yes)
-                    {
-                        _systemService.OpenInWebBrowser(_appConfig.GithubLink + "/releases/latest");
-                    }
+                    _systemService.OpenInWebBrowser(_appConfig.GithubLink + "/releases/latest");
                 }
             }
-            catch (HttpRequestException e)
-            {
-                Console.WriteLine($"Request error: {e.Message}");
-            }
-            LastCheckDate = DateTime.UtcNow;
         }
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine($"Request error: {e.Message}");
+        }
+        LastCheckDate = DateTime.UtcNow;
     }
     public UpdateCheckService(IOptions<AppConfig> appConfig, ISystemService systemService)
     {
