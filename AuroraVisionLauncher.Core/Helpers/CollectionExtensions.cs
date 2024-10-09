@@ -18,6 +18,46 @@ public static class CollectionExtensions
         }
         return collection.Count;
     }
+    public static int IndexOfMax<T>(this IEnumerable<T> collection, IComparer<T>? comparer = null)
+    {
+        if (!collection.Any())
+        {
+            return -1;
+        }
+        return collection
+             .Select((item, index) => (item, index))
+             .MaxBy(x => x.item,comparer).index;
+    }
+    public static int IndexOfMin<T>(this IEnumerable<T> collection,IComparer<T>? comparer=null)
+    {
+        if (!collection.Any())
+        {
+            return -1;
+        }
+        return collection
+             .Select((item, index) => (item, index))
+             .MinBy(x => x.item,comparer).index;
+    }
+    public static int IndexOfMax<T,TKey>(this IEnumerable<T> collection,Func<T,TKey> selector, IComparer<TKey>? comparer = null)
+    {
+        if (!collection.Any())
+        {
+            return -1;
+        }
+        return collection
+            .Select((item, index) => (item, index))
+            .MaxBy(x => selector(x.item),comparer).index;
+    }
+    public static int IndexOfMin<T, TKey>(this IEnumerable<T> collection, Func<T, TKey> selector, IComparer<TKey>? comparer = null)
+    {
+        if (!collection.Any())
+        {
+            return -1;
+        }
+        return collection
+             .Select((item, index) => (item, index))
+             .MinBy(x => selector(x.item),comparer).index;
+    }
     /// <summary>
     /// Adds the item if it is not null.
     /// </summary>

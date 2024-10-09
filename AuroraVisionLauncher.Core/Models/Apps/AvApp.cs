@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Timers;
+using AuroraVisionLauncher.Core.Helpers;
 using AuroraVisionLauncher.Core.Models.Projects;
 
 namespace AuroraVisionLauncher.Core.Models.Apps;
@@ -83,6 +84,11 @@ public record AvApp : IAvApp
     }
     public static int GetClosestApp(IEnumerable<IAvApp> apps, IVisionProject project)
     {
+        if (project.Type.Type == AvType.Runtime)
+        {
+            // Avexes dont have a version, so we just select the newest available runtime
+             return apps.IndexOfMax(x=>x.Version);
+        }
         var weights = new List<double>();
         bool hasPositive = false;
         bool hasNegative = false;
