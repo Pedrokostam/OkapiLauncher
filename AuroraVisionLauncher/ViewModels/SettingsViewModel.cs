@@ -104,10 +104,17 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     [RelayCommand]
     private void OnPrivacyStatement()
         => _systemService.OpenInWebBrowser(Link);
-    [RelayCommand]
-    private void AssociateAppWithExtensions()
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(AssociateAppWithExtensionsCommand))]
+    private bool _associationInProgress;
+    public bool CanExecuteAssociateAppWithExtensions() => !AssociationInProgress;
+    [RelayCommand(CanExecute =nameof(CanExecuteAssociateAppWithExtensions))]
+    private async Task AssociateAppWithExtensions()
     {
-        _fileAssociationService.SetAssociationsToApp();
+        AssociationInProgress = true;
+        await Task.Run(() => _fileAssociationService.SetAssociationsToApp());
+        AssociationInProgress = false;
     }
 
     partial void OnAutoCheckForUpdatesChanged(bool value)

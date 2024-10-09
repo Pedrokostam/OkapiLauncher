@@ -18,6 +18,7 @@ using Microsoft.Win32;
 using Windows.Networking.NetworkOperators;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 
 namespace AuroraVisionLauncher.Services;
 public class FileAssociationService : IFileAssociationService
@@ -28,7 +29,7 @@ public class FileAssociationService : IFileAssociationService
         public VanishingScript()
         {
             var name = Guid.NewGuid() + ".ps1";
-            FilePath = Path.Join(Path.GetTempPath(),name);
+            FilePath = Path.Join(Path.GetTempPath(), name);
             Assembly assembly = Assembly.GetExecutingAssembly();
             using Stream? stream = assembly.GetManifestResourceStream("AuroraVisionLauncher.Services.Set-FileAssociations.ps1");
             ArgumentNullException.ThrowIfNull(stream);
@@ -213,7 +214,12 @@ public class FileAssociationService : IFileAssociationService
         //return;
         using var tempScript = new VanishingScript();
         var startInfo = GetStartInfo(mainAppExecutablePath, tempScript, runAsAdministrator: false);
-        Process.Start(startInfo)?.WaitForExit();
+        var process = Process.Start(startInfo);
+        if (process is null)
+        {
+            return;
+        }
+        process.WaitForExit();
         //try
         //{
         //}
