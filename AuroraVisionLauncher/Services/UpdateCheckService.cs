@@ -73,7 +73,7 @@ public class UpdateCheckService : IUpdateCheckService
             {
                 return;
             }
-            if (true || publishedAt > GetBuildDate())
+            if (publishedAt > GetBuildDate())
             {
                 var newinfo = new NewVersionInformation(publishedAt, tagName, isAuto);
                 await _contentDialogService.ShowVersionDecisionDialog(newinfo);
