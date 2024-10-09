@@ -56,7 +56,7 @@ public sealed partial class InstalledAppsViewModel : ProcessRefreshViewModel
     [RelayCommand]
     private async Task ShowDialog()
     {
-        await _contentDialogService.ShowError("Is this loss?", "| || || |_");
+        await _contentDialogService.ShowError("| || || |_", "Is this loss?");
     }
 
     [ObservableProperty]

@@ -133,6 +133,6 @@ public partial class App : Application
 
     private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
-        MessageBox.Show(e.Exception.ToString(), "Error", MessageBoxButton.OK);
+        MessageBox.Show(e.Exception.ToString(), "Error", MessageBoxButton.OK,MessageBoxImage.Error);
     }
 }
