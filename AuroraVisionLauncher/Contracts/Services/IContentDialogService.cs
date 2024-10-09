@@ -6,4 +6,5 @@ public interface IContentDialogService
 {
     Task ShowError(string message, string? title=null);
     Task ShowSourceEditor(CustomAppSource source);
+    Task ShowVersionDecisionDialog(NewVersionInformation newVersionInformation);
 }

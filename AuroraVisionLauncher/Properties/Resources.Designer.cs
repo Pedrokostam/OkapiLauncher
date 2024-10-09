@@ -977,5 +977,77 @@ namespace AuroraVisionLauncher.Properties {
                 return ResourceManager.GetString("ValidationArgumentNoWhitespace", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ignore.
+        /// </summary>
+        public static string VersionCheckDialogCancelButtonContent {
+            get {
+                return ResourceManager.GetString("VersionCheckDialogCancelButtonContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disables automatic checks.
+        /// </summary>
+        public static string VersionCheckDialogDisableAutoChecksButtonContent {
+            get {
+                return ResourceManager.GetString("VersionCheckDialogDisableAutoChecksButtonContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Newer version detected.
+        /// </summary>
+        public static string VersionCheckDialogHeader {
+            get {
+                return ResourceManager.GetString("VersionCheckDialogHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open download page.
+        /// </summary>
+        public static string VersionCheckDialogLaunchPageButtonContent {
+            get {
+                return ResourceManager.GetString("VersionCheckDialogLaunchPageButtonContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A new update ({0}) released at {1:yyyy-MM-dd} is available for download..
+        /// </summary>
+        public static string VersionCheckDialogMessageFormat {
+            get {
+                return ResourceManager.GetString("VersionCheckDialogMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What do you want to do?.
+        /// </summary>
+        public static string VersionCheckDialogQuestion {
+            get {
+                return ResourceManager.GetString("VersionCheckDialogQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skip this version.
+        /// </summary>
+        public static string VersionCheckDialogSkipVersionButtonContent {
+            get {
+                return ResourceManager.GetString("VersionCheckDialogSkipVersionButtonContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Install update.
+        /// </summary>
+        public static string VersionCheckDialogUpdateButtonContent {
+            get {
+                return ResourceManager.GetString("VersionCheckDialogUpdateButtonContent", resourceCulture);
+            }
+        }
     }
 }

@@ -12,17 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 
 namespace AuroraVisionLauncher.Views;
 /// <summary>
-/// Interaction logic for CustomSourceEditorDialog.xaml
+/// Interaction logic for VersionDecisionDialog.xaml
 /// </summary>
-public partial class CustomSourceEditorDialog : CustomDialog
+public partial class VersionDecisionDialog : CustomDialog
 {
-    public CustomSourceEditorDialog():base()
+    public VersionDecisionDialog()
     {
         InitializeComponent();
     }
+
 }

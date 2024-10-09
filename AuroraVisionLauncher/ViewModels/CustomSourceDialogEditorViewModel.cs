@@ -20,11 +20,11 @@ namespace AuroraVisionLauncher.ViewModels;
 
 public partial class CustomSourceDialogEditorViewModel : ObservableValidator, INavigationAware, IDialogViewModel
 {
-    public Func<Task> CloseDialog { get; }
-    private CustomAppSource _source;
+    //public Func<Task> CloseDialog { get; }
+    private readonly CustomAppSource _source;
     public CustomSourceDialogEditorViewModel(CustomAppSource source, Func<Task> closeDialogAction)
     {
-        CloseDialog = closeDialogAction;
+        //CloseDialog = closeDialogAction;
         _source = source;
         _description = source.Description ?? "";
         _path = source.Path;
@@ -55,7 +55,7 @@ public partial class CustomSourceDialogEditorViewModel : ObservableValidator, IN
 
     public bool PathExists => File.Exists(Path);
 
-    private TaskCompletionSource _done = new TaskCompletionSource();
+    private readonly TaskCompletionSource _done = new();
     [ObservableProperty]
     private AvApp? _matchedApp = null;
 
