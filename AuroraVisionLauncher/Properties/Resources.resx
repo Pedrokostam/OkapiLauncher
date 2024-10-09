@@ -409,4 +409,28 @@
   <data name="SettingsPageFileAssociationHeader" xml:space="preserve">
     <value>File associations</value>
   </data>
+  <data name="VersionCheckDialogMessageFormat" xml:space="preserve">
+    <value>A new update ({0}) released at {1:yyyy-MM-dd} is available for download.</value>
+  </data>
+  <data name="VersionCheckDialogQuestion" xml:space="preserve">
+    <value>What do you want to do?</value>
+  </data>
+  <data name="VersionCheckDialogCancelButtonContent" xml:space="preserve">
+    <value>Ignore</value>
+  </data>
+  <data name="VersionCheckDialogSkipVersionButtonContent" xml:space="preserve">
+    <value>Skip this version</value>
+  </data>
+  <data name="VersionCheckDialogLaunchPageButtonContent" xml:space="preserve">
+    <value>Open download page</value>
+  </data>
+  <data name="VersionCheckDialogUpdateButtonContent" xml:space="preserve">
+    <value>Install update</value>
+  </data>
+  <data name="VersionCheckDialogDisableAutoChecksButtonContent" xml:space="preserve">
+    <value>Disables automatic checks</value>
+  </data>
+  <data name="VersionCheckDialogHeader" xml:space="preserve">
+    <value>Newer version detected</value>
+  </data>
 </root>
