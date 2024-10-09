@@ -27,7 +27,7 @@ public class FileAssociationService : IFileAssociationService
         public string FilePath { get; }
         public VanishingScript()
         {
-            var name = DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss-f'.ps1'",null);
+            var name = Guid.NewGuid() + ".ps1";
             FilePath = Path.Join(Path.GetTempPath(),name);
             Assembly assembly = Assembly.GetExecutingAssembly();
             using Stream? stream = assembly.GetManifestResourceStream("AuroraVisionLauncher.Services.Set-FileAssociations.ps1");
