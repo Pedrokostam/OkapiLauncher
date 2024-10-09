@@ -322,6 +322,51 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string ErrorDialogHeader {
+            get {
+                return ResourceManager.GetString("ErrorDialogHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specified file does not exist..
+        /// </summary>
+        public static string ErrorFileDoesNotExist {
+            get {
+                return ResourceManager.GetString("ErrorFileDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The XML file appears to be corrupted..
+        /// </summary>
+        public static string ErrorInvalidXml {
+            get {
+                return ResourceManager.GetString("ErrorInvalidXml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not determine type of project..
+        /// </summary>
+        public static string ErrorUnknownFileType {
+            get {
+                return ResourceManager.GetString("ErrorUnknownFileType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File is neither a project file nor a runtime executable..
+        /// </summary>
+        public static string ErrorUnrecognizedFile {
+            get {
+                return ResourceManager.GetString("ErrorUnrecognizedFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Group by:  .
         /// </summary>
         public static string InstalledAppsGroupBy {
