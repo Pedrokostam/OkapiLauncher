@@ -17,6 +17,7 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -30,6 +31,10 @@
             Text="{Binding Message}" />
         <TextBlock
             Grid.Row="2"
+            Style="{StaticResource BodyTextStyle}"
+            Text="{Binding Information.Title, StringFormat={x:Static properties:Resources.VersionCheckDialogMessageSecondFormat}}" />
+        <TextBlock
+            Grid.Row="3"
             Style="{StaticResource BodyTextStyle}"
             Text="{x:Static properties:Resources.VersionCheckDialogQuestion}" />
         <Grid Grid.Row="4">

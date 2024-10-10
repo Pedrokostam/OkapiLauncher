@@ -1024,6 +1024,15 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The release title is: {0}.
+        /// </summary>
+        public static string VersionCheckDialogMessageSecondFormat {
+            get {
+                return ResourceManager.GetString("VersionCheckDialogMessageSecondFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What do you want to do?.
         /// </summary>
         public static string VersionCheckDialogQuestion {
