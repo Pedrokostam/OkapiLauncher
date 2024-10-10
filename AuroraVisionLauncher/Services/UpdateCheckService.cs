@@ -35,7 +35,7 @@ public class UpdateCheckService : IUpdateCheckService
     }
     public string? IgnoredVersion
     {
-        get=>App.Current.Properties[IgnoredReleaseKey] as string;
+        get => App.Current.Properties[IgnoredReleaseKey] as string;
         set => App.Current.Properties[IgnoredReleaseKey] = value;
     }
     public async Task AutoCheckForUpdates()
@@ -73,27 +73,28 @@ public class UpdateCheckService : IUpdateCheckService
             {
                 return;
             }
-            if (publishedAt > GetBuildDate())
+            if (!CheckLastReleaseIsNewer(publishedAt,tagName))
             {
-                var newinfo = new NewVersionInformation(publishedAt, tagName, isAuto);
-                await _contentDialogService.ShowVersionDecisionDialog(newinfo);
-                if (newinfo.DisableAutomaticUpdates)
-                {
-                    AutoCheckForUpdatesEnabled = false;
-                }
-                switch (newinfo.UserDecision)
-                {
-                    case NewVersionInformation.Decision.Cancel:
-                        break;
-                    case NewVersionInformation.Decision.SkipVersion:
-                        IgnoredVersion = tagName;
-                        break;
-                    case NewVersionInformation.Decision.OpenPage:
-                        _systemService.OpenInWebBrowser(_appConfig.GithubLink + "/releases/latest");
-                        break;
-                    case NewVersionInformation.Decision.LaunchUpdater:
-                        break;
-                }
+                return;
+            }
+            var newinfo = new NewVersionInformation(publishedAt, tagName, isAuto);
+            await _contentDialogService.ShowVersionDecisionDialog(newinfo);
+            if (newinfo.DisableAutomaticUpdates)
+            {
+                AutoCheckForUpdatesEnabled = false;
+            }
+            switch (newinfo.UserDecision)
+            {
+                case NewVersionInformation.Decision.Cancel:
+                    break;
+                case NewVersionInformation.Decision.SkipVersion:
+                    IgnoredVersion = tagName;
+                    break;
+                case NewVersionInformation.Decision.OpenPage:
+                    _systemService.OpenInWebBrowser(_appConfig.GithubLink + "/releases/latest");
+                    break;
+                case NewVersionInformation.Decision.LaunchUpdater:
+                    break;
             }
         }
         catch (HttpRequestException e)
@@ -134,6 +135,23 @@ public class UpdateCheckService : IUpdateCheckService
         {
             App.Current.Properties[IgnoredReleaseKey] = null;
         }
+    }
+    private static readonly TimeSpan UploadTolerance = TimeSpan.FromHours(6);
+    private bool CheckLastReleaseIsNewer(DateTime releaseDate, string tag)
+    {
+        var buildDate = GetBuildDate();
+        var difference = releaseDate - buildDate;
+        if (difference < TimeSpan.Zero)
+        {
+            return false;
+        }
+        if (difference < UploadTolerance)
+        {
+            var currentVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString();
+            bool tagsMatch = string.Equals(currentVersion, tag, StringComparison.OrdinalIgnoreCase);
+            return !tagsMatch;
+        }
+        return true;
     }
     private static DateTime GetBuildDate()
     {
