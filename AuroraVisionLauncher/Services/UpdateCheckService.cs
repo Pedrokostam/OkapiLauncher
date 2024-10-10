@@ -73,11 +73,11 @@ public class UpdateCheckService : IUpdateCheckService
             {
                 return;
             }
-            if (!CheckLastReleaseIsNewer(publishedAt,tagName))
+            if (!CheckLastReleaseIsNewer(publishedAt, tagName))
             {
                 return;
             }
-            var newinfo = new NewVersionInformation(publishedAt, tagName, isAuto);
+            var newinfo = new NewVersionInformation(publishedAt, tagName, releaseName, isAuto);
             await _contentDialogService.ShowVersionDecisionDialog(newinfo);
             if (newinfo.DisableAutomaticUpdates)
             {

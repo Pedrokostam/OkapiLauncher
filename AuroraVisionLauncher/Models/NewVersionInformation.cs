@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace AuroraVisionLauncher.Models;
-public record NewVersionInformation(DateTime ReleaseDate, string Version, bool IsAutomaticCheck)
+public record NewVersionInformation(DateTime ReleaseDate, string Version, string Title, bool IsAutomaticCheck)
 {
     public enum Decision
     {
@@ -14,6 +14,6 @@ public record NewVersionInformation(DateTime ReleaseDate, string Version, bool I
         OpenPage,
         LaunchUpdater
     }
-   public bool DisableAutomaticUpdates { get; set; }
+    public bool DisableAutomaticUpdates { get; set; }
     public Decision UserDecision { get; set; }
 }
