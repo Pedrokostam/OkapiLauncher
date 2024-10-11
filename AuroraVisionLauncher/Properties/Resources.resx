@@ -451,4 +451,13 @@
   <data name="VersionCheckDialogMessageSecondFormat" xml:space="preserve">
     <value>The release title is: {0}</value>
   </data>
+  <data name="VersionCheckDialogNoUpdatesMessage" xml:space="preserve">
+    <value>🎉🎉 You have the newest version! 🎉🎉</value>
+  </data>
+  <data name="VersionCheckDialogNoUpdatesHeader" xml:space="preserve">
+    <value>No updates found</value>
+  </data>
+  <data name="SettingsPageCheckUpdatesButtonContent" xml:space="preserve">
+    <value>Check for updates</value>
+  </data>
 </root>

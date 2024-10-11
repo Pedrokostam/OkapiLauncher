@@ -242,7 +242,7 @@
                                     Grid.Column="1"
                                     Margin="10,5,0,0"
                                     Command="{Binding CheckForUpdatesCommand}"
-                                    Content="Check for updates"
+                                    Content="{x:Static properties:Resources.SettingsPageCheckUpdatesButtonContent}"
                                     Style="{StaticResource SettingsButton}" />
                             </Grid>
                         </StackPanel>

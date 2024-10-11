@@ -69,7 +69,7 @@ public class UpdateCheckService : IUpdateCheckService
             }
             if (shouldPrompt == HtmlVersionResponse.PromptAction.ShowNoUpdatesMessageDialog)
             {
-                await _contentDialogService.ShowMessage("🎉🎉 You have the newest version! 🎉🎉", "No updates found");
+                await _contentDialogService.ShowMessage(Properties.Resources.VersionCheckDialogNoUpdatesMessage, Properties.Resources.VersionCheckDialogNoUpdatesHeader);
                 return;
             }
             var promptResult = await _contentDialogService.ShowVersionDecisionDialog(versionResponse);

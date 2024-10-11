@@ -727,6 +727,15 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check for updates.
+        /// </summary>
+        public static string SettingsPageCheckUpdatesButtonContent {
+            get {
+                return ResourceManager.GetString("SettingsPageCheckUpdatesButtonContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose Theme.
         /// </summary>
         public static string SettingsPageChooseThemeText {
@@ -1029,6 +1038,24 @@ namespace AuroraVisionLauncher.Properties {
         public static string VersionCheckDialogMessageSecondFormat {
             get {
                 return ResourceManager.GetString("VersionCheckDialogMessageSecondFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No updates found.
+        /// </summary>
+        public static string VersionCheckDialogNoUpdatesHeader {
+            get {
+                return ResourceManager.GetString("VersionCheckDialogNoUpdatesHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🎉🎉 You have the newest version! 🎉🎉.
+        /// </summary>
+        public static string VersionCheckDialogNoUpdatesMessage {
+            get {
+                return ResourceManager.GetString("VersionCheckDialogNoUpdatesMessage", resourceCulture);
             }
         }
         
