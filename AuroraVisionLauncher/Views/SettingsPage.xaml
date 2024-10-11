@@ -228,11 +228,23 @@
                                 Content="{x:Static properties:Resources.SettingsPageOpenInstallationFolderButton}"
                                 Style="{StaticResource SettingsButton}"
                                 ToolTip="{x:Static properties:Resources.SettingsPageOpenInstallationFolderButtonTooltip}" />
-                            <CheckBox
-                                Content="{x:Static properties:Resources.SettingsPageCheckForUpdatesOnStartup}"
-                                FontSize="16"
-                                IsChecked="{Binding AutoCheckForUpdates}"
-                                ToolTip="{x:Static properties:Resources.SettingsPageCheckForUpdatesOnStartupTooltip}" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="1*" />
+                                </Grid.ColumnDefinitions>
+                                <CheckBox
+                                    Content="{x:Static properties:Resources.SettingsPageCheckForUpdatesOnStartup}"
+                                    FontSize="16"
+                                    IsChecked="{Binding AutoCheckForUpdates}"
+                                    ToolTip="{x:Static properties:Resources.SettingsPageCheckForUpdatesOnStartupTooltip}" />
+                                <Button
+                                    Grid.Column="1"
+                                    Margin="10,5,0,0"
+                                    Command="{Binding CheckForUpdatesCommand}"
+                                    Content="Check for updates"
+                                    Style="{StaticResource SettingsButton}" />
+                            </Grid>
                         </StackPanel>
                         <TextBlock
                             Margin="{StaticResource SmallTopMargin}"

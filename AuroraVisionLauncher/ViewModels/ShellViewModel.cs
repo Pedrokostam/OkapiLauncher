@@ -48,11 +48,11 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
     private void OnLoaded()
     {
         _navigationService.Navigated += OnNavigated;
-        _ = _updateCheckService.AutoCheckForUpdates().ContinueWith(t => Trace.WriteLine(t.Exception), TaskContinuationOptions.OnlyOnFaulted);
+        _ = _updateCheckService.AutoPromptUpdate().ContinueWith(t => Trace.WriteLine(t.Exception), TaskContinuationOptions.OnlyOnFaulted);
 
     }
     [RelayCommand()]
-    private async Task CheckForUpdates() => await _updateCheckService.CheckForUpdates();
+    private async Task CheckForUpdates() => await _updateCheckService.ManualPrompUpdate();
 
     [RelayCommand()]
     private void OnUnloaded()

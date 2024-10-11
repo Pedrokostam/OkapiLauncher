@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -10,6 +11,7 @@ using AuroraVisionLauncher.Contracts.ViewModels;
 using AuroraVisionLauncher.Core.Models;
 using AuroraVisionLauncher.Helpers;
 using AuroraVisionLauncher.Models;
+using AuroraVisionLauncher.Services;
 using AuroraVisionLauncher.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -128,6 +130,11 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
             FileAssociationStatus.Add(fs);
         }
 
+    }
+    [RelayCommand]
+    private async Task CheckForUpdates()
+    {
+    await _updateCheckService.ManualPrompUpdate();
     }
     partial void OnAutoCheckForUpdatesChanged(bool value)
     {

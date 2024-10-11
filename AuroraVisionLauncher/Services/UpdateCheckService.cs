@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -10,12 +11,15 @@ using System.Threading.Tasks;
 using System.Windows;
 using AuroraVisionLauncher.Contracts.Services;
 using AuroraVisionLauncher.Models;
+using AuroraVisionLauncher.Models.Updates;
 using Microsoft.Extensions.Options;
 //using Newtonsoft.Json.Linq;
 
 namespace AuroraVisionLauncher.Services;
 public class UpdateCheckService : IUpdateCheckService
 {
+
+
     private const string AutoCheckKey = "AutoCheckForUpdatesEnabled";
     private const string LastCheckDateKey = "LastUpdateCheckDate";
     private const string IgnoredReleaseKey = "IgnoredRelease";
@@ -38,71 +42,63 @@ public class UpdateCheckService : IUpdateCheckService
         get => App.Current.Properties[IgnoredReleaseKey] as string;
         set => App.Current.Properties[IgnoredReleaseKey] = value;
     }
-    public async Task AutoCheckForUpdates()
+    public async Task AutoPromptUpdate()
     {
-        //if (AutoCheckForUpdatesEnabled && LastCheckDate.Date != DateTime.UtcNow.Date)
+        if (AutoCheckForUpdatesEnabled && LastCheckDate.Date != DateTime.UtcNow.Date)
         {
             await CheckForUpdates_impl(isAuto: true);
         }
     }
-    public async Task CheckForUpdates() => await CheckForUpdates_impl(isAuto: false);
+    public async Task ManualPrompUpdate() => await CheckForUpdates_impl(isAuto: false);
+
     private async Task CheckForUpdates_impl(bool isAuto)
     {
         using HttpClient client = new HttpClient();
         client.DefaultRequestHeaders.Add("User-Agent", "AuroraVisionLauncher"); // GitHub requires a user-agent header
-
         try
         {
-
             HttpResponseMessage response = await client.GetAsync("https://api.github.com/repos/PedroKostam/AuroraVisionLauncher/releases/latest");
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();
-            Console.WriteLine($"Latest release info: {responseBody}");
             JsonDocument responseDocument = JsonDocument.Parse(responseBody);
+            var versionResponse = HtmlVersionResponse.FromJsonDocument(responseDocument, isAuto);
             JsonElement releaseInfo = responseDocument.RootElement;
-
-            // Extract specific information
-            string? tagName = releaseInfo.GetProperty("tag_name").GetString();
-            string? releaseName = releaseInfo.GetProperty("name").GetString();
-            bool dateGood = releaseInfo.GetProperty("published_at").TryGetDateTime(out DateTime publishedAt);
-            if (tagName is null || releaseName is null || !dateGood)
+            var shouldPrompt = versionResponse.ShouldPromptUser(IgnoredVersion);
+            if (shouldPrompt == HtmlVersionResponse.PromptAction.DontShowDialog)
             {
                 return;
             }
-            if (tagName.Equals(App.Current.Properties[IgnoredReleaseKey] as string, StringComparison.OrdinalIgnoreCase))
+            if (shouldPrompt == HtmlVersionResponse.PromptAction.ShowNoUpdatesMessageDialog)
             {
+                await _contentDialogService.ShowMessage("🎉🎉 You have the newest version! 🎉🎉", "No updates found");
                 return;
             }
-            if (!CheckLastReleaseIsNewer(publishedAt, tagName))
-            {
-                return;
-            }
-            var newinfo = new NewVersionInformation(publishedAt, tagName, releaseName, isAuto);
-            await _contentDialogService.ShowVersionDecisionDialog(newinfo);
-            if (newinfo.DisableAutomaticUpdates)
+            var promptResult = await _contentDialogService.ShowVersionDecisionDialog(versionResponse);
+            if (promptResult.DisableAutomaticUpdates)
             {
                 AutoCheckForUpdatesEnabled = false;
             }
-            switch (newinfo.UserDecision)
+            switch (promptResult.Decision)
             {
-                case NewVersionInformation.Decision.Cancel:
+                case UpdateDecision.Cancel:
                     break;
-                case NewVersionInformation.Decision.SkipVersion:
-                    IgnoredVersion = tagName;
+                case UpdateDecision.SkipVersion:
+                    IgnoredVersion = versionResponse.VersionTag;
                     break;
-                case NewVersionInformation.Decision.OpenPage:
+                case UpdateDecision.OpenPage:
                     _systemService.OpenInWebBrowser(_appConfig.GithubLink + "/releases/latest");
                     break;
-                case NewVersionInformation.Decision.LaunchUpdater:
+                case UpdateDecision.LaunchUpdater:
                     break;
             }
         }
-        catch (HttpRequestException e)
+        catch (HttpRequestException)
         {
-            Console.WriteLine($"Request error: {e.Message}");
         }
         LastCheckDate = DateTime.UtcNow;
     }
+
+
     public UpdateCheckService(IOptions<AppConfig> appConfig, ISystemService systemService, IContentDialogService contentDialogService)
     {
         _appConfig = appConfig.Value;
@@ -135,28 +131,5 @@ public class UpdateCheckService : IUpdateCheckService
         {
             App.Current.Properties[IgnoredReleaseKey] = null;
         }
-    }
-    private static readonly TimeSpan UploadTolerance = TimeSpan.FromHours(6);
-    private bool CheckLastReleaseIsNewer(DateTime releaseDate, string tag)
-    {
-        var buildDate = GetBuildDate();
-        var difference = releaseDate - buildDate;
-        if (difference < TimeSpan.Zero)
-        {
-            return false;
-        }
-        if (difference < UploadTolerance)
-        {
-            var currentVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString();
-            bool tagsMatch = string.Equals(currentVersion, tag, StringComparison.OrdinalIgnoreCase);
-            return !tagsMatch;
-        }
-        return true;
-    }
-    private static DateTime GetBuildDate()
-    {
-        var assembly = Assembly.GetExecutingAssembly();
-        var buildAttrib = assembly.GetCustomAttribute<BuildDateAttribute>();
-        return buildAttrib?.DateTime ?? File.GetLastWriteTime(assembly.Location);
     }
 }
