@@ -13,7 +13,6 @@ using AuroraVisionLauncher.Contracts.Services;
 using AuroraVisionLauncher.Models;
 using AuroraVisionLauncher.Models.Updates;
 using Microsoft.Extensions.Options;
-//using Newtonsoft.Json.Linq;
 
 namespace AuroraVisionLauncher.Services;
 public class UpdateCheckService : IUpdateCheckService
@@ -116,11 +115,11 @@ public class UpdateCheckService : IUpdateCheckService
         if (App.Current.Properties.Contains(LastCheckDateKey))
         {
             var acfu = App.Current.Properties[LastCheckDateKey];
-            App.Current.Properties[LastCheckDateKey] = acfu is DateTime d ? d : true;
+            App.Current.Properties[LastCheckDateKey] = acfu is DateTime d ? d : DateTime.UnixEpoch;
         }
         else
         {
-            App.Current.Properties[LastCheckDateKey] = DateTime.MinValue;
+            App.Current.Properties[LastCheckDateKey] = DateTime.UnixEpoch;
         }
         if (App.Current.Properties.Contains(IgnoredReleaseKey))
         {

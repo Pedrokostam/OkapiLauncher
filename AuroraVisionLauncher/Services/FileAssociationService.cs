@@ -9,15 +9,12 @@ using System.Security.Principal;
 using System.Text;
 using System.Windows;
 using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.Core.Contracts.Services;
 using AuroraVisionLauncher.Helpers;
 using AuroraVisionLauncher.Models;
-using MahApps.Metro.Converters;
 using Microsoft.Extensions.Options;
 using Microsoft.Win32;
 using Windows.Networking.NetworkOperators;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 
 namespace AuroraVisionLauncher.Services;
