@@ -112,7 +112,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
         }
     }
 
-    private async Task<bool> OpenProject(string filepath)
+    public async Task<bool> OpenProject(string filepath)
     {
         
         try

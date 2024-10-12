@@ -9,20 +9,26 @@ using AuroraVisionLauncher.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 
-namespace AuroraVisionLauncher.Services
-{
-    public class FileOpenerBroker :ObservableRecipient, IRecipient<FileRequestedMessage>
-    {
-        private readonly INavigationService _navigationService;
-        public FileOpenerBroker(IMessenger messenger, INavigationService navigationService):base(messenger) 
-        {
-            _navigationService = navigationService;
-            IsActive = true;
-        }
+namespace AuroraVisionLauncher.Services;
 
-        public void Receive(FileRequestedMessage message)
+public class FileOpenerBroker : ObservableRecipient, IRecipient<FileRequestedMessage>
+{
+    private readonly INavigationService _navigationService;
+    public FileOpenerBroker(IMessenger messenger, INavigationService navigationService) : base(messenger)
+    {
+        _navigationService = navigationService;
+        IsActive = true;
+    }
+
+    public async void Receive(FileRequestedMessage message)
+    {
+        if (_navigationService.NavigateTo<LauncherViewModel>(message.Value))
         {
-            _navigationService.NavigateTo(typeof(LauncherViewModel).FullName!, message.Value);
+            return;
+        }
+        if (_navigationService.CurrentDataContext is LauncherViewModel viewModel)
+        {
+           await viewModel.OpenProject(message.Value);
         }
     }
 }
