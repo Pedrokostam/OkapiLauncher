@@ -64,13 +64,13 @@ public class ThemeSelectorService : IThemeSelectorService
 {
     //private const string _hcDarkTheme = "pack://application:,,,/Styles/Themes/HC.Dark.Blue.xaml";
     //private const string _hcLightTheme = "pack://application:,,,/Styles/Themes/HC.Light.Blue.xaml";
-    private const string _darkTheme = "pack://application:,,,/Styles/Themes/Dark.xaml";
-    private const string _lightTheme = "pack://application:,,,/Styles/Themes/Light.xaml";
-    private const string _customThemeColorKey = "CustomThemeColor";
-    private const string _themeKey = "Theme";
+    private const string DarkTheme = "pack://application:,,,/Styles/Themes/Dark.xaml";
+    private const string LightTheme = "pack://application:,,,/Styles/Themes/Light.xaml";
+    private const string CustomThemeColorKey = "CustomThemeColor";
+    private const string ThemeKey = "Theme";
 
-    private static readonly ResourceDictionary _otherDark = new ResourceDictionary() { Source = new Uri("pack://application:,,,/Styles/Themes/Dark.Other.xaml") };
-    private static readonly ResourceDictionary _otherLight = new ResourceDictionary() { Source = new Uri("pack://application:,,,/Styles/Themes/Light.Other.xaml") };
+    private static readonly ResourceDictionary OtherDark = new ResourceDictionary() { Source = new Uri("pack://application:,,,/Styles/Themes/Dark.Other.xaml") };
+    private static readonly ResourceDictionary OtherLight = new ResourceDictionary() { Source = new Uri("pack://application:,,,/Styles/Themes/Light.Other.xaml") };
 
 
     public ThemeSelectorService()
@@ -88,13 +88,11 @@ public class ThemeSelectorService : IThemeSelectorService
         // TODO: Mahapps.Metro supports syncronization with high contrast but you have to provide custom high contrast themes
         // We've added basic high contrast dictionaries for Dark and Light themes
         // Please complete these themes following the docs on https://mahapps.com/docs/themes/thememanager#creating-custom-themes
-        ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(_darkTheme), libraryThemeProvider: null));
-        ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(_lightTheme), libraryThemeProvider: null));
+        ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(DarkTheme), libraryThemeProvider: null));
+        ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(LightTheme), libraryThemeProvider: null));
         //ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(_hcDarkTheme), MahAppsLibraryThemeProvider.DefaultInstance));
         //ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(_hcLightTheme), MahAppsLibraryThemeProvider.DefaultInstance));
-        var theme = GetCurrentTheme();
-        var color = GetCurrentAccent();
-        SetTheme(theme, color);
+        SetTheme(SelectedTheme, SelectedCustomColorAccent);
     }
 
     public void SetTheme(AppTheme themeEnum, Color? customColor)
@@ -122,14 +120,14 @@ public class ThemeSelectorService : IThemeSelectorService
             AppTheme.System => Enum.Parse<AppTheme>(WindowsThemeHelper.GetWindowsBaseColor()),
             _ => themeEnum,
         };
-        var other = baseColor == AppTheme.Light ? _otherLight : _otherDark;
+        var other = baseColor == AppTheme.Light ? OtherLight : OtherDark;
         foreach (var key in other.Keys)
         {
             activeTheme.Resources[key] = other[key];
         }
         ThemeManager.Current.ChangeTheme(Application.Current, activeTheme);
-        App.Current.Properties[_themeKey] = themeEnum.ToString();
-        App.Current.Properties[_customThemeColorKey] = customColor;
+        App.Current.Properties[ThemeKey] = themeEnum.ToString();
+        App.Current.Properties[CustomThemeColorKey] = customColor;
     }
     /// <summary>
     /// Sync with general theme (dark/light) and accent color.
@@ -145,36 +143,44 @@ public class ThemeSelectorService : IThemeSelectorService
         ThemeManager.Current.SyncTheme();
     }
 
-    public AppTheme GetCurrentTheme()
+    AppTheme IThemeSelectorService.GetCurrentTheme() => SelectedTheme;
+
+    Color? IThemeSelectorService.GetCurrentAccent() => SelectedCustomColorAccent;
+    public AppTheme SelectedTheme
     {
-        if (App.Current.Properties.Contains(_themeKey))
+        get
         {
-            var themeName = App.Current.Properties[_themeKey]!.ToString();
-            if (Enum.TryParse(themeName, out AppTheme theme))
+            if (App.Current.Properties.Contains(ThemeKey))
             {
-                return theme;
+                var themeName = App.Current.Properties[ThemeKey];
+                return themeName switch
+                {
+                    string stringTheme => Enum.TryParse(stringTheme, out AppTheme theme) ? theme : AppTheme.System,
+                    AppTheme theme => theme,
+                    _ => AppTheme.System,
+                };
             }
             return AppTheme.System;
         }
-
-        return AppTheme.System;
+        set=> App.Current.Properties[ThemeKey] = value;
     }
-
-    public Color? GetCurrentAccent()
+   
+    public Color? SelectedCustomColorAccent
     {
-        if (App.Current.Properties.Contains(_customThemeColorKey))
+        get
         {
-            var currcol = App.Current.Properties[_customThemeColorKey];
-            if (currcol is string s)
+            if (App.Current.Properties.Contains(CustomThemeColorKey))
             {
-                return (Color?)ColorConverter.ConvertFromString(s);
-            }
-            else if (currcol is Color c)
-            {
-                return c;
+                var currcol = App.Current.Properties[CustomThemeColorKey];
+                return currcol switch
+                {
+                    string stringColor => ColorConverter.ConvertFromString(stringColor) as Color?,
+                    Color color => color,
+                    _ => null,
+                };
             }
             return null;
         }
-        return null;
+        set=>App.Current.Properties[CustomThemeColorKey] = value;
     }
 }
