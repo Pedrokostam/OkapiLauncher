@@ -28,8 +28,6 @@
                         x:Key="CustomToUnderlineConverter"
                         FalseValue="None"
                         TrueValue="Underline" />
-                    <theming:SuperLibraryThemeProvider x:Key="{x:Static theming:SuperLibraryThemeProvider.DefaultInstance}" />
-
                 </ResourceDictionary>
                 <!--
                     MahApps.Metro resource dictionaries.
