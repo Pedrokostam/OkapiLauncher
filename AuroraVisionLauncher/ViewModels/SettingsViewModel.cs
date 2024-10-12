@@ -113,7 +113,7 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(AssociateAppWithExtensionsCommand))]
     private bool _associationInProgress;
-    public bool CanExecuteAssociateAppWithExtensions() => !AssociationInProgress && FileAssociationStatus.Any(x=>!x.Associated);
+    public bool CanExecuteAssociateAppWithExtensions() => !AssociationInProgress && FileAssociationStatus.Any(x => !x.Associated);
     [RelayCommand(CanExecute = nameof(CanExecuteAssociateAppWithExtensions))]
     private async Task AssociateAppWithExtensions()
     {
@@ -134,7 +134,7 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     [RelayCommand]
     private async Task CheckForUpdates()
     {
-    await _updateCheckService.ManualPrompUpdate();
+        await _updateCheckService.ManualPrompUpdate();
     }
     partial void OnAutoCheckForUpdatesChanged(bool value)
     {
