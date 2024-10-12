@@ -48,6 +48,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
 
 
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(CopyArgumentStringCommand))]
     private LaunchOptions? _launchOptions;
     public ObservableCollection<AvAppFacade> Apps { get; } = [];
     protected override IList<AvAppFacade> RawApps => Apps;
