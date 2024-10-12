@@ -84,10 +84,11 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-		<PackageReference Include="ObservableCollections" Version="3.1.0" />
-		<PackageReference Include="System.Drawing.Common" Version="8.0.6" />
-		<PackageReference Include="System.Text.Json" Version="8.0.4" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
+		<PackageReference Include="ObservableCollections" Version="3.1.1" />
+		<PackageReference Include="System.Drawing.Common" Version="8.0.10" />
+		<PackageReference Include="System.Text.Json" Version="8.0.5" />
+		<PackageReference Include="WindowsAPICodePack-Core" Version="1.1.2" />
 		<PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
 	</ItemGroup>
 

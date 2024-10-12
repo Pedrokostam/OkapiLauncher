@@ -8,6 +8,7 @@ using AuroraVisionLauncher.Contracts.Services;
 using AuroraVisionLauncher.Contracts.ViewModels;
 using AuroraVisionLauncher.Contracts.Views;
 using AuroraVisionLauncher.Models;
+using AuroraVisionLauncher.Models.Updates;
 using AuroraVisionLauncher.Properties;
 using AuroraVisionLauncher.ViewModels;
 using AuroraVisionLauncher.Views;
@@ -25,17 +26,21 @@ public class ContentDialogService : IContentDialogService
     {
         return _dialogCoordinator.ShowMessageAsync(_context.Value, title ?? Resources.ErrorDialogHeader, message);
     }
+    public Task ShowMessage(string message, string? title = null)
+    {
+        return _dialogCoordinator.ShowMessageAsync(_context.Value, title ?? "", message);
+    }
     public async Task ShowSourceEditor(CustomAppSource source)
     {
         var dialog = new CustomSourceEditorDialog();
         var vm = new CustomSourceDialogEditorViewModel(source, async () => await Task.FromResult(true));
         await ShowMetroDialog(vm, dialog);
     }
-    public async Task ShowVersionDecisionDialog(NewVersionInformation newVersionInformation)
+    public async Task<UpdatePromptResult> ShowVersionDecisionDialog(HtmlVersionResponse newVersionInformation)
     {
         var dialog = new VersionDecisionDialog();
         var vm = new VersionDecisionDialogViewModel(async () => await Task.FromResult(true),newVersionInformation);
-        await ShowMetroDialog(vm, dialog);
+        return await ShowMetroDialog(vm, dialog);
     }
 
     private async Task ShowMetroDialog(IDialogViewModel viewModel, BaseMetroDialog dialog)
@@ -48,6 +53,19 @@ public class ContentDialogService : IContentDialogService
         }
         await viewModel.WaitForExit();
         await _dialogCoordinator.HideMetroDialogAsync(_context.Value, dialog);
+    }
+
+    private async Task<T> ShowMetroDialog<T>(IDialogViewModel<T> viewModel, BaseMetroDialog dialog)
+    {
+        dialog.DataContext = viewModel;
+        await _dialogCoordinator.ShowMetroDialogAsync(_context.Value, dialog);
+        if (viewModel is INavigationAware nav)
+        {
+            nav.OnNavigatedTo(null!);
+        }
+        var res = await viewModel.WaitForExit();
+        await _dialogCoordinator.HideMetroDialogAsync(_context.Value, dialog);
+        return res;
     }
 
     public ContentDialogService(IDialogCoordinator dialogCoordinator)

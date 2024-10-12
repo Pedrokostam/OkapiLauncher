@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using AuroraVisionLauncher.Contracts.Services;
@@ -32,13 +33,13 @@ public class RecentlyOpenedFilesService :ObservableRecipient, IRecentlyOpenedFil
         }
         else
         {
-            Newtonsoft.Json.Linq.JArray prop = (Newtonsoft.Json.Linq.JArray)App.Current.Properties[Key]!;
+            var prop = (System.Text.Json.JsonElement)App.Current.Properties[Key]!;
             var list = new List<RecentlyOpenedFile>();
-            foreach (var item in prop)
+            foreach (var item in prop.EnumerateArray())
             {
                 try
                 {
-                    var rof = item.ToObject<RecentlyOpenedFile>();
+                    var rof = item.Deserialize<RecentlyOpenedFile>();
                     list.Add(rof);
                 }
                 catch (ArgumentException)

@@ -3,21 +3,25 @@ using System.Text;
 
 using AuroraVisionLauncher.Core.Contracts.Services;
 
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace AuroraVisionLauncher.Core.Services;
 
 public class FileService : IFileService
 {
+    private static readonly JsonSerializerOptions _jsonSerializerOptions=new JsonSerializerOptions()
+    {
+        WriteIndented = true,
+        AllowTrailingCommas = true,
+    };
     public T? Read<T>(string folderPath, string fileName)
     {
         var path = Path.Combine(folderPath, fileName);
         if (File.Exists(path))
         {
             var json = File.ReadAllText(path);
-            return JsonConvert.DeserializeObject<T>(json);
+            return JsonSerializer.Deserialize<T>(json, _jsonSerializerOptions);
         }
-
         return default;
     }
 
@@ -28,7 +32,7 @@ public class FileService : IFileService
             Directory.CreateDirectory(folderPath);
         }
 
-        var fileContent = JsonConvert.SerializeObject(content);
+        var fileContent = JsonSerializer.Serialize(content, _jsonSerializerOptions);
         File.WriteAllText(Path.Combine(folderPath, fileName), fileContent, Encoding.UTF8);
     }
 

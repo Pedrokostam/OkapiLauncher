@@ -9,7 +9,6 @@ using AuroraVisionLauncher.Models;
 using ControlzEx.Theming;
 
 using MahApps.Metro.Theming;
-using Newtonsoft.Json.Linq;
 
 namespace AuroraVisionLauncher.Services;
 /*

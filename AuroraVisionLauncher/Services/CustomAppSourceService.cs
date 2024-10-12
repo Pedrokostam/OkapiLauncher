@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AuroraVisionLauncher.Contracts.Services;
 using AuroraVisionLauncher.Models;
@@ -23,12 +24,12 @@ public class CustomAppSourceService : ICustomAppSourceService
         //App.Current.Properties[Key] = new List<RecentlyOpenedFile>();
         if (App.Current.Properties.Contains(_customSourcesKey))
         {
-            Newtonsoft.Json.Linq.JArray prop = (Newtonsoft.Json.Linq.JArray)App.Current.Properties[_customSourcesKey]!;
-            foreach (var item in prop)
+            System.Text.Json.JsonElement prop = (System.Text.Json.JsonElement)App.Current.Properties[_customSourcesKey]!;
+            foreach (var item in prop.EnumerateArray())
             {
                 try
                 {
-                    var customSource = item.ToObject<CustomAppSource>();
+                    var customSource = item.Deserialize<CustomAppSource>();
                     if (customSource is not null)
                     {
                         CustomSources.Add(customSource);

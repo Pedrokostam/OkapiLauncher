@@ -7,3 +7,11 @@ public interface IDialogViewModel
 
     Task WaitForExit();
 }
+
+public interface IDialogViewModel<T>:IDialogViewModel
+{
+    //Func<Task> CloseDialog { get; }
+
+    new Task<T> WaitForExit();
+}
+

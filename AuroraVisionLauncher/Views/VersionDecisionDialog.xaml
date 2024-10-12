@@ -5,8 +5,8 @@
     xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:AuroraVisionLauncher.Views"
-    xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
     xmlns:vms="clr-namespace:AuroraVisionLauncher.ViewModels"
     d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False,
                                      Type={x:Type vms:VersionDecisionDialogViewModel}}"
@@ -14,6 +14,7 @@
     mc:Ignorable="d">
     <Grid d:Background="AliceBlue" TextBlock.TextAlignment="Center">
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
@@ -31,6 +32,10 @@
         <TextBlock
             Grid.Row="2"
             Style="{StaticResource BodyTextStyle}"
+            Text="{Binding VersionInformation.VersionTitle, StringFormat={x:Static properties:Resources.VersionCheckDialogMessageSecondFormat}}" />
+        <TextBlock
+            Grid.Row="3"
+            Style="{StaticResource BodyTextStyle}"
             Text="{x:Static properties:Resources.VersionCheckDialogQuestion}" />
         <Grid Grid.Row="4">
             <Grid>
@@ -45,7 +50,7 @@
                     Command="{Binding DisableAutomaticChecksCommand}"
                     Content="{x:Static properties:Resources.VersionCheckDialogDisableAutoChecksButtonContent}"
                     Style="{StaticResource SettingsButton}"
-                    Visibility="{Binding Information.IsAutomaticCheck, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    Visibility="{Binding VersionInformation.IsAutomaticCheck, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 <Grid Grid.Column="1">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*" />
