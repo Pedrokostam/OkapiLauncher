@@ -126,4 +126,6 @@ public class ProductType : IComparable<ProductType>, IComparable
     public static ProductType FromFilepath(string filepath) => FromAvType(GetAvTypeFromFilename(filepath));
     public bool IsExecutable => Type != AvType.Library;
     public int CompareTo(object? obj) => CompareTo(obj as ProductType);
+
+ 
 }
