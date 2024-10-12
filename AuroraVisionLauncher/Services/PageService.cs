@@ -10,7 +10,7 @@ namespace AuroraVisionLauncher.Services;
 
 public class PageService : IPageService
 {
-    private readonly Dictionary<string, Type> _pages = new Dictionary<string, Type>();
+    private readonly Dictionary<string, Type> _pages = new Dictionary<string, Type>(StringComparer.Ordinal);
     private readonly IServiceProvider _serviceProvider;
 
     public PageService(IServiceProvider serviceProvider)
@@ -24,7 +24,7 @@ public class PageService : IPageService
 
     public Type GetPageType(string key)
     {
-        Type pageType;
+        Type? pageType;
         lock (_pages)
         {
             if (!_pages.TryGetValue(key, out pageType))
@@ -36,7 +36,7 @@ public class PageService : IPageService
         return pageType;
     }
 
-    public Page GetPage(string key)
+    public Page? GetPage(string key)
     {
         var pageType = GetPageType(key);
         return _serviceProvider.GetService(pageType) as Page;
@@ -48,7 +48,7 @@ public class PageService : IPageService
     {
         lock (_pages)
         {
-            var key = typeof(VM).FullName;
+            var key = typeof(VM).FullName!;
             if (_pages.ContainsKey(key))
             {
                 throw new ArgumentException($"The key {key} is already configured in PageService");

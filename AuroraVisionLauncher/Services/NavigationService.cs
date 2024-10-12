@@ -18,6 +18,8 @@ public class NavigationService : INavigationService
 
     public bool CanGoBack => _frame.CanGoBack;
 
+    public object? CurrentDataContext => _frame.GetDataContext();
+
     public NavigationService(IPageService pageService)
     {
         _pageService = pageService;
@@ -51,6 +53,7 @@ public class NavigationService : INavigationService
         }
     }
 
+    public bool NavigateTo<ViewModelType>(object? parameter = null)=>NavigateTo(typeof(ViewModelType).FullName!, parameter);
     public bool NavigateTo(string pageKey, object? parameter = null)
     {
         var pageType = _pageService.GetPageType(pageKey);
@@ -98,4 +101,6 @@ public class NavigationService : INavigationService
             Navigated?.Invoke(sender, dataContext!.GetType().FullName!);
         }
     }
+
+   
 }
