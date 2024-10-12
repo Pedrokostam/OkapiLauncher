@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using AuroraVisionLauncher.Core.Helpers;
 using AuroraVisionLauncher.Core.Exceptions;
 using System.Data;
+using Microsoft.Win32;
 
 namespace AuroraVisionLauncher.Core.Models.Apps;
 public static partial class AppReader
@@ -70,7 +71,7 @@ public static partial class AppReader
         var brand = ProductBrand.FromFilepath(filepath, type);
         //var primaryVersion = AvVersion.FromFile(filepath) ?? throw new ArgumentException($"Specified file does not contain primary version information: {filepath}");
         var fileVersion = FileVersionInfo.GetVersionInfo(filepath);
-        var secondaryVersion = GetSecondaryVersion(root, type.Type);
+        var secondaryVersion = GetSecondaryVersion(root, type,brand);
         AvApp app = new(
                 fileVersion,
                 secondaryVersion,
@@ -81,12 +82,29 @@ public static partial class AppReader
         return app;
     }
 
-    private static AvVersion? GetSecondaryVersion(string rootFolder, AvType type)
+    private static AvVersion? GetSecondaryVersionFromRegistry(string rootFolder, ProductType type, ProductBrand brand)
     {
-        if (type != AvType.DeepLearning)
+        string regPath = string.Join('\\', ["SOFTWARE", brand.Name]);
+        using var brandKey = Registry.LocalMachine.OpenSubKey(regPath);
+        if (brandKey is null)
         {
             return null;
         }
+        var dlKeys = brandKey.GetSubKeyNames().Where(x => x.Contains("Learning", StringComparison.OrdinalIgnoreCase));
+        foreach (var dlkey in dlKeys)
+        {
+            using var subkey = brandKey.OpenSubKey(dlkey);
+            var path = subkey?.GetValue("Path") as string;
+            var versionString = subkey?.GetValue("Version") as string;
+            if (Version.TryParse(versionString, out var version) && string.Equals(path, rootFolder, StringComparison.OrdinalIgnoreCase))
+            {
+                return new AvVersion(version);
+            }
+        }
+        return null;
+    }
+    private static AvVersion? GetSecondaryVersionFromUninstaller(string rootFolder, ProductType type, ProductBrand brand)
+    {
         var uninstallers = new DirectoryInfo(rootFolder).GetFiles("unins*.exe");
         if (uninstallers.Any())
         {
@@ -98,6 +116,14 @@ public static partial class AppReader
             }
         }
         return null;
+    }
+    private static AvVersion? GetSecondaryVersion(string rootFolder, ProductType type, ProductBrand brand)
+    {
+        if (type.Type != AvType.DeepLearning)
+        {
+            return null;
+        }
+        return GetSecondaryVersionFromRegistry(rootFolder, type, brand) ?? GetSecondaryVersionFromUninstaller(rootFolder, type, brand);
     }
     /// <summary>
     /// Gets all relevant paths (environmental and custom) and returns them as <see cref="AppSource">AppSources</see>.
