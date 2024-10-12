@@ -71,7 +71,7 @@ public static partial class AppReader
         var brand = ProductBrand.FromFilepath(filepath, type);
         //var primaryVersion = AvVersion.FromFile(filepath) ?? throw new ArgumentException($"Specified file does not contain primary version information: {filepath}");
         var fileVersion = FileVersionInfo.GetVersionInfo(filepath);
-        var secondaryVersion = GetSecondaryVersion(root, type,brand);
+        var secondaryVersion = GetSecondaryVersion(root, type, brand);
         AvApp app = new(
                 fileVersion,
                 secondaryVersion,
@@ -84,22 +84,28 @@ public static partial class AppReader
 
     private static AvVersion? GetSecondaryVersionFromRegistry(string rootFolder, ProductType type, ProductBrand brand)
     {
-        string regPath = string.Join('\\', ["SOFTWARE", brand.Name]);
-        using var brandKey = Registry.LocalMachine.OpenSubKey(regPath);
-        if (brandKey is null)
+        try
         {
-            return null;
-        }
-        var dlKeys = brandKey.GetSubKeyNames().Where(x => x.Contains("Learning", StringComparison.OrdinalIgnoreCase));
-        foreach (var dlkey in dlKeys)
-        {
-            using var subkey = brandKey.OpenSubKey(dlkey);
-            var path = subkey?.GetValue("Path") as string;
-            var versionString = subkey?.GetValue("Version") as string;
-            if (Version.TryParse(versionString, out var version) && string.Equals(path, rootFolder, StringComparison.OrdinalIgnoreCase))
+            string regPath = string.Join('\\', ["SOFTWARE", brand.Name]);
+            using var brandKey = Registry.LocalMachine.OpenSubKey(regPath);
+            if (brandKey is null)
             {
-                return new AvVersion(version);
+                return null;
             }
+            var dlKeys = brandKey.GetSubKeyNames().Where(x => x.Contains("Learning", StringComparison.OrdinalIgnoreCase));
+            foreach (var dlkey in dlKeys)
+            {
+                using var subkey = brandKey.OpenSubKey(dlkey);
+                var path = subkey?.GetValue("Path") as string;
+                var versionString = subkey?.GetValue("Version") as string;
+                if (Version.TryParse(versionString, out var version) && string.Equals(path, rootFolder, StringComparison.OrdinalIgnoreCase))
+                {
+                    return new AvVersion(version);
+                }
+            }
+        }
+        catch
+        {
         }
         return null;
     }
