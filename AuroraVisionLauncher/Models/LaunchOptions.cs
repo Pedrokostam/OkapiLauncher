@@ -38,6 +38,7 @@ public abstract partial class LaunchOptions : ObservableObject
     private string? _programPath;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ArgumentString))]
     private string? _applicationPath;
     public string ArgumentString
     {
