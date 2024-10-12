@@ -60,53 +60,6 @@ Pink - #FFF472D0
 Mauve - #FF76608A
  */
 
-public class SuperLibraryThemeProvider : LibraryThemeProvider
-{
-    /// <inheritdoc/>
-    public static new readonly SuperLibraryThemeProvider DefaultInstance = new SuperLibraryThemeProvider();
-
-    public SuperLibraryThemeProvider() : base(true)
-    {
-
-    }
-
-    public override LibraryTheme? GetLibraryTheme(DictionaryEntry dictionaryEntry)
-    {
-        return base.GetLibraryTheme(dictionaryEntry);
-    }
-
-    public override IEnumerable<LibraryTheme> GetLibraryThemes()
-    {
-        return base.GetLibraryThemes();
-    }
-
-    protected override bool IsPotentialThemeResourceDictionary(DictionaryEntry dictionaryEntry)
-    {
-        return base.IsPotentialThemeResourceDictionary(dictionaryEntry);
-    }
-
-    public override void FillColorSchemeValues(Dictionary<string, string> values, RuntimeThemeColorValues colorValues)
-    {
-        throw new ArgumentException();
-        // Check if all needed parameters are not null
-        if (values is null)
-            throw new ArgumentNullException(nameof(values));
-        if (colorValues is null)
-            throw new ArgumentNullException(nameof(colorValues));
-
-        // Add the values you like to override
-        values.Add("MahApps.Colors.AccentBase", "[AccentBaseColor]");
-        values.Add("MahApps.Colors.Accent", "[AccentColor]");
-        values.Add("MahApps.Colors.Accent2", "[AccentColor2]");
-        values.Add("MahApps.Colors.Accent3", "[AccentColor3]");
-        values.Add("MahApps.Colors.Accent4", "[AccentColor4]");
-
-        values.Add("MahApps.Colors.Highlight", "[HighlightColor]");
-        values.Add("MahApps.Colors.IdealForeground", colorValues.IdealForegroundColor.ToString(CultureInfo.InvariantCulture));
-    }
-
-}
-
 public class ThemeSelectorService : IThemeSelectorService
 {
     //private const string _hcDarkTheme = "pack://application:,,,/Styles/Themes/HC.Dark.Blue.xaml";
@@ -135,9 +88,8 @@ public class ThemeSelectorService : IThemeSelectorService
         // TODO: Mahapps.Metro supports syncronization with high contrast but you have to provide custom high contrast themes
         // We've added basic high contrast dictionaries for Dark and Light themes
         // Please complete these themes following the docs on https://mahapps.com/docs/themes/thememanager#creating-custom-themes
-        ThemeManager.Current.RegisterLibraryThemeProvider(SuperLibraryThemeProvider.DefaultInstance);
-        ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(_darkTheme), SuperLibraryThemeProvider.DefaultInstance));
-        ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(_lightTheme), SuperLibraryThemeProvider.DefaultInstance));
+        ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(_darkTheme), libraryThemeProvider: null));
+        ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(_lightTheme), libraryThemeProvider: null));
         //ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(_hcDarkTheme), MahAppsLibraryThemeProvider.DefaultInstance));
         //ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(_hcLightTheme), MahAppsLibraryThemeProvider.DefaultInstance));
         var theme = GetCurrentTheme();
