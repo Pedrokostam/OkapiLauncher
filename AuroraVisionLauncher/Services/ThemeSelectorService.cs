@@ -65,9 +65,9 @@ public class SuperLibraryThemeProvider : LibraryThemeProvider
     /// <inheritdoc/>
     public static new readonly SuperLibraryThemeProvider DefaultInstance = new SuperLibraryThemeProvider();
 
-    public SuperLibraryThemeProvider():base(true)
+    public SuperLibraryThemeProvider() : base(true)
     {
-            
+
     }
 
     public override LibraryTheme? GetLibraryTheme(DictionaryEntry dictionaryEntry)
@@ -122,7 +122,7 @@ public class ThemeSelectorService : IThemeSelectorService
 
     public ThemeSelectorService()
     {
-     
+
     }
 
 
@@ -179,19 +179,18 @@ public class ThemeSelectorService : IThemeSelectorService
         App.Current.Properties[_themeKey] = themeEnum.ToString();
         App.Current.Properties[_customThemeColorKey] = customColor;
     }
-
+    /// <summary>
+    /// Sync with general theme (dark/light) and accent color.
+    /// </summary>
+    private const ThemeSyncMode SystemThemeSyncMode = ThemeSyncMode.SyncWithAppMode | ThemeSyncMode.SyncWithAccent;
+    /// <summary>
+    /// Do not sync at all.
+    /// </summary>
+    private const ThemeSyncMode ManualThemeSyncMode = ThemeSyncMode.DoNotSync;
     private static void SyncTheme(AppTheme themeEnum)
     {
-            ThemeManager.Current.ThemeSyncMode = ThemeSyncMode.SyncAll;
-        if (themeEnum == AppTheme.System)
-        {
-        }
-            ThemeManager.Current.SyncTheme();
-        //else
-        //{
-        //    ThemeManager.Current.ThemeSyncMode = ThemeSyncMode.SyncWithHighContrast;
-        //    ThemeManager.Current.SyncTheme();
-        //}
+        ThemeManager.Current.ThemeSyncMode = themeEnum == AppTheme.System ? SystemThemeSyncMode : ManualThemeSyncMode;
+        ThemeManager.Current.SyncTheme();
     }
 
     public AppTheme GetCurrentTheme()
