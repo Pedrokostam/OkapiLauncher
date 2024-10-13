@@ -45,6 +45,14 @@ namespace AuroraVisionLauncher.Controls
                 userControl.LaunchButton.SetIconKind(kind);
                 var tooltip = userControl.LaunchCommand is null ? Properties.Resources.AvAppLaunchWithNoProgram : Properties.Resources.AvAppLaunchWithProgram;
                 userControl.LaunchButton.ToolTip = tooltip;
+                foreach (MenuItem menuItem in userControl.RootGrid.ContextMenu.Items)
+                {
+                    if(menuItem.Tag is bool tagged && tagged)
+                    {
+                        menuItem.Header = tooltip;
+                        return;
+                    }
+                }
                 // When the UserControlDataContext changes, update the DataContext of the root element
             }
 
