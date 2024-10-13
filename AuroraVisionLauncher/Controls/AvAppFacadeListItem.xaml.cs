@@ -43,7 +43,16 @@ namespace AuroraVisionLauncher.Controls
             {
                 var kind = userControl.LaunchCommand is null ? MaterialIconKind.Launch : MaterialIconKind.Powershell;
                 userControl.LaunchButton.SetIconKind(kind);
-
+                var tooltip = userControl.LaunchCommand is null ? Properties.Resources.AvAppLaunchWithNoProgram : Properties.Resources.AvAppLaunchWithProgram;
+                userControl.LaunchButton.ToolTip = tooltip;
+                foreach (MenuItem menuItem in userControl.RootGrid.ContextMenu.Items)
+                {
+                    if(menuItem.Tag is bool tagged && tagged)
+                    {
+                        menuItem.Header = tooltip;
+                        return;
+                    }
+                }
                 // When the UserControlDataContext changes, update the DataContext of the root element
             }
 
@@ -77,6 +86,11 @@ namespace AuroraVisionLauncher.Controls
 
         private void LaunchButton_Click(object sender, RoutedEventArgs e)
         {
+            Launch();
+        }
+
+        private void Launch()
+        {
             if (LaunchCommand is null)
             {
                 AppFacade?.LaunchWithoutProgram();
@@ -85,6 +99,11 @@ namespace AuroraVisionLauncher.Controls
             {
                 LaunchCommand.Execute(AppFacade);
             }
+        }
+
+        private void UserControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Launch();
         }
     }
 }

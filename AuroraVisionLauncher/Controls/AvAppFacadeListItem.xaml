@@ -9,10 +9,11 @@
     xmlns:mdicons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
     xmlns:models="clr-namespace:AuroraVisionLauncher.Models"
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
+    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
     Name="UC_Root"
     d:DataContext="{d:DesignInstance Type=models:AvAppFacade}"
-    d:DesignHeight="100"
     d:DesignWidth="800"
+    MouseDoubleClick="UserControl_MouseDoubleClick"
     mc:Ignorable="d">
     <Grid
         x:Name="RootGrid"
@@ -28,9 +29,13 @@
                 <MenuItem Command="{Binding OpenContainingFolderCommand}" Header="{x:Static properties:Resources.AvAppOpenInstallationFolder}" />
                 <MenuItem Command="{Binding CopyExecutablePathCommand}" Header="{x:Static properties:Resources.AvAppCopyPath}" />
                 <MenuItem
-                    Command="{Binding LaunchWithoutProgramCommand}"
+                    Click="LaunchButton_Click"
                     Header="{x:Static properties:Resources.AvAppLaunchWithNoProgram}"
-                    Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Tag>
+                        <sys:Boolean>true</sys:Boolean>
+                    </MenuItem.Tag>
+                </MenuItem>
                 <MenuItem
                     Command="{Binding ShowProcessOverviewCommand}"
                     Header="Open process overview window"
@@ -58,7 +63,7 @@
                 DataContext="{Binding ElementName=RootGrid, Path=DataContext}"
                 Orientation="Horizontal"
                 Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <mdicons:MaterialIcon VerticalAlignment="Center">
+                <mdicons:MaterialIcon VerticalAlignment="Center" Width="22">
                     <mdicons:MaterialIcon.Style>
                         <Style TargetType="{x:Type mdicons:MaterialIcon}">
                             <Style.Triggers>
@@ -91,10 +96,10 @@
                 x:Name="LaunchButton"
                 Grid.Column="2"
                 Width="40"
+                Click="LaunchButton_Click"
                 DisplayWarning="{Binding WarnAboutNewProcess}"
                 Style="{StaticResource SymbolButton}"
-                ToolTip="{x:Static properties:Resources.AvAppLaunchWithNoProgram}"
-                Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}" Click="LaunchButton_Click">
+                Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <mdicons:MaterialIcon Kind="{StaticResource IconLaunch}" />
             </controls:WarningLaunchButton>
             <Button

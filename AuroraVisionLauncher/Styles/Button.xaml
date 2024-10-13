@@ -44,6 +44,6 @@
     <x:Static x:Key="IconKillAll" Member="icons:MaterialIconKind.Bomb" />
     <x:Static x:Key="IconOpenFolderPicker" Member="icons:MaterialIconKind.FolderSearch" />
     <x:Static x:Key="IconIsLaunched" Member="icons:MaterialIconKind.PowerPlug" />
-    <x:Static x:Key="IconIsNotLaunched" Member="icons:MaterialIconKind.PowerPlugOff" />
+    <x:Static x:Key="IconIsNotLaunched" Member="icons:MaterialIconKind.PowerPlugOffOutline" />
 
 </ResourceDictionary>
