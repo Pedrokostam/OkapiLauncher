@@ -466,4 +466,22 @@
   <data name="AvAppLaunchWithProgram" xml:space="preserve">
     <value>Launch the application and load the program</value>
   </data>
+  <data name="KillProcessDialogHeader" xml:space="preserve">
+    <value>Confirm termination of process</value>
+  </data>
+  <data name="KillProcessDialogMessage" xml:space="preserve">
+    <value>Are you sure you want to kill this process:</value>
+  </data>
+  <data name="KillProcessButtonYes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="KillProcessButtonNo" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="KillAllProcessesDialogMessage" xml:space="preserve">
+    <value>Are you sure you want to kill all process of app:</value>
+  </data>
+  <data name="KillAllProcessesDialogHeader" xml:space="preserve">
+    <value>Confirm termination of all process of app</value>
+  </data>
 </root>

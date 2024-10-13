@@ -95,11 +95,11 @@ namespace AuroraVisionLauncher.Models
             return Equals(obj as SimpleProcess);
         }
 
-        [RelayCommand]
-        private void Kill()
-        {
-            _messenger.Send(new KillProcessRequest(this));
-        }
+        //[RelayCommand]
+        //private void Kill()
+        //{
+        //    _messenger.Send(new KillProcessRequest(this));
+        //}
 
         [DllImport("user32.dll")]
         static extern bool SetForegroundWindow(IntPtr hWnd);

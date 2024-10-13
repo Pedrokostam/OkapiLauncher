@@ -7,6 +7,7 @@ using System.Windows.Media.Effects;
 using AuroraVisionLauncher.Contracts.Services;
 using AuroraVisionLauncher.Contracts.ViewModels;
 using AuroraVisionLauncher.Contracts.Views;
+using AuroraVisionLauncher.Core.Models.Apps;
 using AuroraVisionLauncher.Models;
 using AuroraVisionLauncher.Models.Updates;
 using AuroraVisionLauncher.Properties;
@@ -26,6 +27,10 @@ public class ContentDialogService : IContentDialogService
     {
         return _dialogCoordinator.ShowMessageAsync(_context.Value, title ?? Resources.ErrorDialogHeader, message);
     }
+    public Task ShowMessage(object context, string message, string? title = null)
+    {
+        return _dialogCoordinator.ShowMessageAsync(context, title ?? "", message);
+    }
     public Task ShowMessage(string message, string? title = null)
     {
         return _dialogCoordinator.ShowMessageAsync(_context.Value, title ?? "", message);
@@ -36,6 +41,18 @@ public class ContentDialogService : IContentDialogService
         var vm = new CustomSourceDialogEditorViewModel(source, async () => await Task.FromResult(true));
         await ShowMetroDialog(vm, dialog);
     }
+    public async Task<bool> ShowProcessKillDialog(object context,SimpleProcess process)
+    {
+        var dialog = new KillProcessDialog();
+        var vm = new KillProcessDialogViewModel(process);
+       return await ShowMetroDialog(vm, dialog,context);
+    }
+    public async Task<bool> ShowAllProcessesKillDialog(object context, IAvApp app)
+    {
+        var dialog = new KillAllProcessDialog();
+        var vm = new KillAllProcesessDialogViewModel(app);
+        return await ShowMetroDialog(vm, dialog,context);
+    }
     public async Task<UpdatePromptResult> ShowVersionDecisionDialog(HtmlVersionResponse newVersionInformation)
     {
         var dialog = new VersionDecisionDialog();
@@ -43,28 +60,30 @@ public class ContentDialogService : IContentDialogService
         return await ShowMetroDialog(vm, dialog);
     }
 
-    private async Task ShowMetroDialog(IDialogViewModel viewModel, BaseMetroDialog dialog)
+    private async Task ShowMetroDialog(IDialogViewModel viewModel, BaseMetroDialog dialog, object? context = null)
     {
         dialog.DataContext = viewModel;
-        await _dialogCoordinator.ShowMetroDialogAsync(_context.Value, dialog);
+        var ctx = context ?? _context.Value;
+        await _dialogCoordinator.ShowMetroDialogAsync(ctx, dialog);
         if (viewModel is INavigationAware nav)
         {
             nav.OnNavigatedTo(null!);
         }
         await viewModel.WaitForExit();
-        await _dialogCoordinator.HideMetroDialogAsync(_context.Value, dialog);
+        await _dialogCoordinator.HideMetroDialogAsync(ctx, dialog);
     }
 
-    private async Task<T> ShowMetroDialog<T>(IDialogViewModel<T> viewModel, BaseMetroDialog dialog)
+    private async Task<T> ShowMetroDialog<T>(IDialogViewModel<T> viewModel, BaseMetroDialog dialog, object? context=null)
     {
         dialog.DataContext = viewModel;
-        await _dialogCoordinator.ShowMetroDialogAsync(_context.Value, dialog);
+        var ctx = context ?? _context.Value;
+        await _dialogCoordinator.ShowMetroDialogAsync(ctx, dialog);
         if (viewModel is INavigationAware nav)
         {
             nav.OnNavigatedTo(null!);
         }
         var res = await viewModel.WaitForExit();
-        await _dialogCoordinator.HideMetroDialogAsync(_context.Value, dialog);
+        await _dialogCoordinator.HideMetroDialogAsync(ctx, dialog);
         return res;
     }
 

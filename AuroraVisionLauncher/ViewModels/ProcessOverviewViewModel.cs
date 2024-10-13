@@ -10,12 +10,14 @@ using System.Windows;
 using System.Windows.Threading;
 using Accessibility;
 using AuroraVisionLauncher.Contracts;
+using AuroraVisionLauncher.Contracts.Services;
 using AuroraVisionLauncher.Contracts.ViewModels;
 using AuroraVisionLauncher.Helpers;
 using AuroraVisionLauncher.Models;
 using AuroraVisionLauncher.Models.Messages;
 using AuroraVisionLauncher.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 
 namespace AuroraVisionLauncher.ViewModels;
@@ -32,7 +34,6 @@ public partial class ProcessOverviewViewModel : ObservableRecipient, INavigation
     public ProcessOverviewViewModel(IProcessManagerService processManagerService, IMessenger messenger) : base(messenger)
     {
         _processManagerService = processManagerService;
-
     }
 
     private void Update()
@@ -59,5 +60,19 @@ public partial class ProcessOverviewViewModel : ObservableRecipient, INavigation
     public void Receive(FreshAppProcesses message)
     {
         Application.Current?.Dispatcher.Invoke(() => message.UpdateState(AvApp));
+    }
+    [RelayCommand]
+    private void KillAllProcesses()
+    {
+
+        Messenger.Send<KillAllProcessesRequest>(new(AvApp, this));
+    }
+    [RelayCommand]
+    private void KillProcess(object parameter)
+    {
+        if (parameter is SimpleProcess proc)
+        {
+            Messenger.Send<KillProcessRequest>(new(proc, this));
+        }
     }
 }

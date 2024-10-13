@@ -394,6 +394,60 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Confirm termination of all process of app.
+        /// </summary>
+        public static string KillAllProcessesDialogHeader {
+            get {
+                return ResourceManager.GetString("KillAllProcessesDialogHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to kill all process of app:.
+        /// </summary>
+        public static string KillAllProcessesDialogMessage {
+            get {
+                return ResourceManager.GetString("KillAllProcessesDialogMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string KillProcessButtonNo {
+            get {
+                return ResourceManager.GetString("KillProcessButtonNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string KillProcessButtonYes {
+            get {
+                return ResourceManager.GetString("KillProcessButtonYes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm termination of process.
+        /// </summary>
+        public static string KillProcessDialogHeader {
+            get {
+                return ResourceManager.GetString("KillProcessDialogHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to kill this process:.
+        /// </summary>
+        public static string KillProcessDialogMessage {
+            get {
+                return ResourceManager.GetString("KillProcessDialogMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Command-line parameters.
         /// </summary>
         public static string LauncherCommandLineArgumentsSectionHeader {

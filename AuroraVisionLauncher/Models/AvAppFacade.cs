@@ -92,11 +92,11 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     {
         Clipboard.SetText(Path);
     }
-    [RelayCommand]
-    private void KillAllProcesses()
-    {
-        _messenger.Send(new KillAllProcessesRequest(this));
-    }
+    //[RelayCommand]
+    //private void KillAllProcesses()
+    //{
+    //    _messenger.Send(new KillAllProcessesRequest(this,));
+    //}
 
     [RelayCommand]
     private void ShowProcessOverview()
