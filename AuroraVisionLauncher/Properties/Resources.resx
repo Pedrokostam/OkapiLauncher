@@ -460,4 +460,7 @@
   <data name="SettingsPageCheckUpdatesButtonContent" xml:space="preserve">
     <value>Check for updates</value>
   </data>
+  <data name="WarningLanchButtonWarningTooltip" xml:space="preserve">
+    <value>This app is already running, you may not be able to start another process</value>
+  </data>
 </root>

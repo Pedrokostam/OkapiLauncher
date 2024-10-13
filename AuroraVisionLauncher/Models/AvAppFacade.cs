@@ -39,6 +39,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     public string? Description => _avApp.Description ?? Name;
     public bool IsCustom =>_avApp.IsCustom;
 
+    public bool WarnAboutNewProcess => Type == ProductType.Professional && IsLaunched;
     public AvVersionFacade? SecondaryVersion { get; }
 
     public CommandLineInterface Interface => _avApp.Interface;
@@ -68,6 +69,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     private void ActiveProcesses_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
         OnPropertyChanged(nameof(IsLaunched));
+        OnPropertyChanged(nameof(WarnAboutNewProcess));
     }
 
     public ProductBrand Brand => _avApp.Brand;
