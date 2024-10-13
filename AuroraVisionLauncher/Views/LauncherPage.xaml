@@ -92,11 +92,16 @@
                     IsChecked="{Binding ShouldCloseAfterLaunching}" />
             </Grid>
             <ListView
+                x:Name="sd"
                 Grid.Row="1"
                 d:ItemsSource="{d:SampleData ItemCount=5}"
-                ItemTemplate="{StaticResource AvAppFacadeDataTemplate}"
                 ItemsSource="{Binding Source={StaticResource CustomViewSource}}"
                 SelectedItem="{Binding SelectedApp, Mode=TwoWay}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <controls:AvAppFacadeListItem AppFacade="{Binding}" LaunchCommand="{Binding ElementName=ThisLauncherPage, Path=DataContext.LaunchCommand}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
                 <ListView.GroupStyle>
                     <GroupStyle>
                         <GroupStyle.HeaderTemplate>

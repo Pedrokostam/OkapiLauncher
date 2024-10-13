@@ -12,6 +12,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Material.Icons.WPF;
+using Material.Icons;
+using AuroraVisionLauncher.Models;
+
 
 namespace AuroraVisionLauncher.Controls
 {
@@ -20,16 +24,41 @@ namespace AuroraVisionLauncher.Controls
     /// </summary>
     public partial class AvAppFacadeListItem : UserControl
     {
+
+
+        public ICommand LaunchCommand
+        {
+            get { return (ICommand)GetValue(LaunchCommandProperty); }
+            set { SetValue(LaunchCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for LaunchCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty LaunchCommandProperty =
+            DependencyProperty.Register(nameof(LaunchCommand), typeof(ICommand), typeof(AvAppFacadeListItem), new PropertyMetadata(null, OnLaunchCommandChanged));
+
+
+        private static void OnLaunchCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is AvAppFacadeListItem userControl)
+            {
+                var kind = userControl.LaunchCommand is null ? MaterialIconKind.Launch : MaterialIconKind.Powershell;
+                userControl.LaunchButton.SetIconKind(kind);
+
+                // When the UserControlDataContext changes, update the DataContext of the root element
+            }
+
+        }
+
         public static readonly DependencyProperty AppFacadeProperty =
             DependencyProperty.Register(
                 nameof(AppFacade),
-                typeof(object),
+                typeof(AvAppFacade),
                 typeof(AvAppFacadeListItem),
                 new PropertyMetadata(null, OnUserControlDataContextChanged));
 
-        public object AppFacade
+        public AvAppFacade? AppFacade
         {
-            get => GetValue(AppFacadeProperty);
+            get => GetValue(AppFacadeProperty) as AvAppFacade;
             set => SetValue(AppFacadeProperty, value);
         }
         private static void OnUserControlDataContextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -40,9 +69,22 @@ namespace AuroraVisionLauncher.Controls
                 userControl.DataContext = e.NewValue;
             }
         }
+
         public AvAppFacadeListItem()
         {
             InitializeComponent();
+        }
+
+        private void LaunchButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (LaunchCommand is null)
+            {
+                AppFacade?.LaunchWithoutProgram();
+            }
+            else
+            {
+                LaunchCommand.Execute(AppFacade);
+            }
         }
     }
 }

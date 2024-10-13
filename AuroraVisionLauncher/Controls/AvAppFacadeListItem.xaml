@@ -11,7 +11,7 @@
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
     Name="UC_Root"
     d:DataContext="{d:DesignInstance Type=models:AvAppFacade}"
-    d:DesignHeight="450"
+    d:DesignHeight="100"
     d:DesignWidth="800"
     mc:Ignorable="d">
     <Grid
@@ -88,13 +88,13 @@
                 </TextBlock>
             </StackPanel>
             <controls:WarningLaunchButton
+                x:Name="LaunchButton"
                 Grid.Column="2"
                 Width="40"
-                Command="{Binding LaunchWithoutProgramCommand}"
                 DisplayWarning="{Binding WarnAboutNewProcess}"
                 Style="{StaticResource SymbolButton}"
                 ToolTip="{x:Static properties:Resources.AvAppLaunchWithNoProgram}"
-                Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}" Click="LaunchButton_Click">
                 <mdicons:MaterialIcon Kind="{StaticResource IconLaunch}" />
             </controls:WarningLaunchButton>
             <Button

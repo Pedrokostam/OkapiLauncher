@@ -59,15 +59,21 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
     }
     //[RelayCommand(CanExecute = nameof(CanLaunch))]
     [RelayCommand(CanExecute = nameof(CanLaunch))]
-    private void Launch()
+    private void Launch(object? app)
     {
-        if (SelectedApp is null || !(VisionProject?.Exists ?? false))
+        IAvApp? appToLaunch = app as IAvApp;
+        appToLaunch ??= SelectedApp;
+        if (appToLaunch is null || !(VisionProject?.Exists ?? false))
         {
             return;
         }
 
-        var args = LaunchOptions!.GetCommandLineArgs();
-        Messenger.Send(new OpenAppRequest(SelectedApp, args));
+        var args = LaunchOptions.Get(appToLaunch.Type)?.GetCommandLineArgs();
+        if(args is null)
+        {
+            return;
+        }
+        Messenger.Send(new OpenAppRequest(appToLaunch, args));
         if (ShouldCloseAfterLaunching)
         {
             Application.Current.Shutdown();
@@ -101,7 +107,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
 
     public async Task<bool> OpenProject(string filepath)
     {
-        
+
         try
         {
             var project = ProjectReader.OpenProject(filepath);
