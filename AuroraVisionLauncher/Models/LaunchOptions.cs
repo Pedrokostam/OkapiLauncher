@@ -14,7 +14,7 @@ public abstract partial class LaunchOptions : ObservableObject
     private static readonly ExecutorLaunchOptions _executorOptions = new();
 
     public abstract IEnumerable<string> GetCommandLineArgs();
-
+    public abstract bool HasAnyOptions { get; }
     /// <summary>
     /// Selects one of the static instances of launch options based on the commandline interface of the given app.
     /// Static instances allow us the setting sto persist even after changing the select app.

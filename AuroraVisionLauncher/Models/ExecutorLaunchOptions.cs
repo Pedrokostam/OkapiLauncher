@@ -6,7 +6,7 @@ namespace AuroraVisionLauncher.Models;
 
 public partial class ExecutorLaunchOptions : LaunchOptions
 {
-    private static readonly Regex InvalidArgumentChecker = new Regex(@"[\s'`""]");
+    private static readonly Regex InvalidArgumentChecker = new Regex(@"[\s'`""]",RegexOptions.ExplicitCapture,TimeSpan.FromMilliseconds(200));
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ArgumentString))]
     private bool _autoClose;
@@ -19,6 +19,9 @@ public partial class ExecutorLaunchOptions : LaunchOptions
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ArgumentString))]
     private bool _console;
+
+    public override bool HasAnyOptions => true;
+
     public override IEnumerable<string> GetCommandLineArgs()
     {
         var args = new List<string>()
