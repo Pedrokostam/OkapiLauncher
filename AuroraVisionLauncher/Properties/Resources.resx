@@ -463,4 +463,22 @@
   <data name="WarningLanchButtonWarningTooltip" xml:space="preserve">
     <value>This app is already running, you may not be able to start another process</value>
   </data>
+  <data name="KillProcessDialogHeader" xml:space="preserve">
+    <value>Confirm termination of process</value>
+  </data>
+  <data name="KillProcessDialogMessage" xml:space="preserve">
+    <value>Are you sure you want to kill this process:</value>
+  </data>
+  <data name="KillProcessButtonYes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="KillProcessButtonNo" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="KillAllProcessesDialogMessage" xml:space="preserve">
+    <value>Are you sure you want to kill all process of app:</value>
+  </data>
+  <data name="KillAllProcessesDialogHeader" xml:space="preserve">
+    <value>Confirm termination of all process of app</value>
+  </data>
 </root>

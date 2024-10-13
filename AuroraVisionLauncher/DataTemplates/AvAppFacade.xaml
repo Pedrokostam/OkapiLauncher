@@ -91,11 +91,10 @@
                 Grid.RowSpan="3"
                 Grid.Column="0"
                 Padding="0,0,10,0">
-                <Image HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Image.Source>
-                        <BitmapImage DecodePixelWidth="100" UriSource="{Binding Converter={StaticResource AppToImageConverter}}" />
-                    </Image.Source>
-                </Image>
+                <Image
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Source="{Binding Converter={StaticResource AppToImageConverter}}" />
             </Border>
             <TextBlock
                 Grid.Row="1"

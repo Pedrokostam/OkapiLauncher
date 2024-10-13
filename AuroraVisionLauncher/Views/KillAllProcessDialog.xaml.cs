@@ -12,19 +12,18 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using AuroraVisionLauncher.ViewModels;
+using MahApps.Metro.Controls.Dialogs;
 
-namespace AuroraVisionLauncher.Views;
-/// <summary>
-/// Interaction logic for ProcessOverviewPage.xaml
-/// </summary>
-public partial class ProcessOverviewPage : Page
+namespace AuroraVisionLauncher.Views
 {
-    public ProcessOverviewPage(ProcessOverviewViewModel viewModel)
+    /// <summary>
+    /// Interaction logic for KillAllProcessDialog.xaml
+    /// </summary>
+    public partial class KillAllProcessDialog : CustomDialog
     {
-        InitializeComponent();
-        DataContext = viewModel;
+        public KillAllProcessDialog()
+        {
+            InitializeComponent();
+        }
     }
-
-  
 }

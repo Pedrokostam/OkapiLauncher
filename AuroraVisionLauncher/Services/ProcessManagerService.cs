@@ -26,6 +26,7 @@ namespace AuroraVisionLauncher.Services
         private readonly Dictionary<string, HashSet<SimpleProcess>> _dictionary = new(StringComparer.OrdinalIgnoreCase);
         private readonly IMessenger _messenger;
         private readonly IAvAppFacadeFactory _avAppFacadeFactory;
+        private readonly IContentDialogService _contentDialogService;
         private readonly System.Timers.Timer _timer;
         private DateTime _lastUpdate;
         /// <summary>
@@ -39,10 +40,11 @@ namespace AuroraVisionLauncher.Services
         private static readonly TimeSpan _recheckThreshold = _timerPeriod - _gracePeriod;
         public FreshAppProcesses GetCurrentState => new FreshAppProcesses(_dictionary);
 
-        public ProcessManagerService(IMessenger messenger, IAvAppFacadeFactory avAppFacadeFactory)
+        public ProcessManagerService(IMessenger messenger, IAvAppFacadeFactory avAppFacadeFactory,IContentDialogService contentDialogService)
         {
             _messenger = messenger;
             _avAppFacadeFactory = avAppFacadeFactory;
+            _contentDialogService = contentDialogService;
             _timer = new(_timerPeriod.TotalMilliseconds);
             _timer.Elapsed += _timer_Elapsed;
             _timer.AutoReset = true;
@@ -214,14 +216,11 @@ namespace AuroraVisionLauncher.Services
             set.IntersectWith(freshSimples);
         }
 
-        public void Receive(KillProcessRequest message) => Kill(message.Process);
-        private void Kill(SimpleProcess process)
+        public void Receive(KillProcessRequest message) => Kill(message.Process,message.ViewModel);
+        private async void Kill(SimpleProcess process, object context)
         {
-            var res = MessageBox.Show($"Are you sure you want to kill this process:\n{process.ProcessName} - {process.MainWindowTitle}?",
-                                                 "Confirm process ending",
-                                                 MessageBoxButton.YesNo,
-                                                 MessageBoxImage.Warning);
-            if (res == MessageBoxResult.No)
+            var res = await _contentDialogService.ShowProcessKillDialog(context,process);
+            if (!res)
             {
                 return;
             }
@@ -263,21 +262,22 @@ namespace AuroraVisionLauncher.Services
             }
             UpdateSingle(App);
         }
-        public void Receive(KillAllProcessesRequest message) => KillAll(message.AvApp);
-        private void KillAll(AvAppFacade avApp)
+        public void Receive(KillAllProcessesRequest message) => KillAll(message.AvApp,message.ViewModel);
+        private async void KillAll(AvAppFacade avApp,object viewModel)
         {
-            if (avApp.ActiveProcesses.Count == 0)
+            var res = await _contentDialogService.ShowAllProcessesKillDialog(viewModel, avApp);
+            if (!res)
             {
                 return;
             }
-            var res = MessageBox.Show($"Are you sure you want to kill all processes of {avApp.ProcessName} ({avApp.ActiveProcesses.Count} processes)?",
-                                    "Confirm process ending",
-                                    MessageBoxButton.YesNo,
-                                    MessageBoxImage.Warning);
-            if (res == MessageBoxResult.No)
-            {
-                return;
-            }
+            //var res = MessageBox.Show($"Are you sure you want to kill all processes of {avApp.ProcessName} ({avApp.ActiveProcesses.Count} processes)?",
+            //                        "Confirm process ending",
+            //                        MessageBoxButton.YesNo,
+            //                        MessageBoxImage.Warning);
+            //if (res == MessageBoxResult.No)
+            //{
+            //    return;
+            //}
             List<Process> procs = [];
             foreach (var active in avApp.ActiveProcesses)
             {
