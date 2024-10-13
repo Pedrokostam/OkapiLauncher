@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -88,10 +89,11 @@ public class WarningLaunchButton : Button
             if (adornerLayer.GetAdorners(this)?.FirstOrDefault() is null)
             {
                 //var warningAdorner = new AdornerContentPresenter(this, new MaterialIcon() { Kind = Material.Icons.MaterialIconKind.Warning, ToolTip = "This app is already launched, you may not be able to launch another process", Foreground=Brushes.Yellow});
-                var warningAdorner = new IconAdorner(this, Material.Icons.MaterialIconKind.Warning)
+                var warningAdorner = new IconAdorner(this, Material.Icons.MaterialIconKind.Warning,Brushes.Yellow)
                 {
-                    ToolTip = "ksjdfnjksd",
-                    Placement=new RelativePlacement(0,1,0.5,-0.5,DimensionType.Relative)
+                    ToolTip = Properties.Resources.WarningLanchButtonWarningTooltip,
+                    //Placement = new RelativePlacement(0, 0, 1, 1, DimensionType.Relative,new Thickness(10)),
+                    Placement = new RelativePlacement(0, 1, 0.5, -0.4, DimensionType.Relative, new Thickness(3,0,0,1)),
                 };
                 adornerLayer.Add(warningAdorner);
             }

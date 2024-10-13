@@ -7,9 +7,8 @@ namespace AuroraVisionLauncher.Controls;
 public class AdornerContentPresenter : Adorner
 {
     public RelativePlacement Placement { get; set; } = new();
-    private VisualCollection _Visuals;
-    private ContentPresenter _ContentPresenter;
-    //public double ContentWidth
+    private readonly VisualCollection _Visuals;
+    protected ContentPresenter ContentPresenter { get; private set; }    //public double ContentWidth
     //{
     //    get => _ContentPresenter.Width;
     //    set => _ContentPresenter.Width = value;
@@ -24,14 +23,14 @@ public class AdornerContentPresenter : Adorner
       : base(adornedElement)
     {
         _Visuals = new VisualCollection(this);
-        _ContentPresenter = new ContentPresenter()
+        ContentPresenter = new ContentPresenter()
         {
             Content = new Border()
             {
                 Background = Brushes.Transparent
             }
         };
-        _Visuals.Add(_ContentPresenter);
+        _Visuals.Add(ContentPresenter);
 
     }
     public Guid Guid { get; }
@@ -44,8 +43,8 @@ public class AdornerContentPresenter : Adorner
     protected override Size MeasureOverride(Size constraint)
     {
         var q = this.AdornedElement.DesiredSize;
-        _ContentPresenter.Measure(constraint);
-        return _ContentPresenter.DesiredSize;
+        ContentPresenter.Measure(constraint);
+        return ContentPresenter.DesiredSize;
     }
 
     protected override Size ArrangeOverride(Size finalSize)
@@ -53,8 +52,8 @@ public class AdornerContentPresenter : Adorner
         var rect = Placement.GetRect(AdornedElement.RenderSize);
         Width = rect.Width;
         Height = rect.Height;
-        _ContentPresenter.Arrange(rect);
-        return _ContentPresenter.RenderSize;
+        ContentPresenter.Arrange(rect);
+        return ContentPresenter.RenderSize;
     }
 
     protected override Visual GetVisualChild(int index) => _Visuals[index];
@@ -63,13 +62,13 @@ public class AdornerContentPresenter : Adorner
 
     public UIElement Content
     {
-        get => ((Border)_ContentPresenter.Content).Child;
-        set => ((Border)_ContentPresenter.Content).Child = value;
+        get => ((Border)ContentPresenter.Content).Child;
+        set => ((Border)ContentPresenter.Content).Child = value;
     }
     new public object ToolTip
     {
-        get => ((Border)_ContentPresenter.Content).ToolTip;
-        set => ((Border)_ContentPresenter.Content).ToolTip = value;
+        get => ((Border)ContentPresenter.Content).ToolTip;
+        set => ((Border)ContentPresenter.Content).ToolTip = value;
     }
 
 }
