@@ -64,7 +64,7 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="300" />
+                    <ColumnDefinition Width="350" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*" />
@@ -74,13 +74,11 @@
                 <Button
                     Grid.Column="1"
                     Padding="10"
-                    Background="LightGreen"
+                    BorderThickness="4"
                     Command="{Binding LaunchCommand}"
                     TextBlock.FontSize="20">
-                    <Button.CommandParameter>
-                        <sys:Boolean>false</sys:Boolean>
-                    </Button.CommandParameter>
                     <TextBlock
+                        Foreground="{DynamicResource Custom.Brushes.Compatibility.Compatible}"
                         Text="{Binding SelectedApp.NameWithVersion, TargetNullValue=..., StringFormat={x:Static properties:Resources.LauncherLaunchWith}}"
                         TextAlignment="Center"
                         TextWrapping="Wrap" />
@@ -90,6 +88,7 @@
                     Grid.Column="1"
                     Margin="10"
                     Content="Close this launcher"
+                    FontSize="16"
                     IsChecked="{Binding ShouldCloseAfterLaunching}" />
             </Grid>
             <ListView
@@ -163,46 +162,11 @@
                         </Button>
                     </Grid>
                 </GroupBox>
-                <ContentControl Grid.Row="1"
+                <ContentControl
+                    Grid.Row="1"
                     Content="{Binding LaunchOptions}"
                     ContentTemplateSelector="{StaticResource commandLineOptionsTemplateSelector}"
                     Visibility="{Binding LaunchOptions.HasAnyOptions, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                <!--<Grid Grid.Row="1" Grid.Column="1">
-                -->
-                <!--<mah:SplitButton
-                        Grid.Row="2"
-                        Command="{Binding LaunchCommand}"
-                        CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource Self}}"
-                        SelectedItem="{Binding ShouldExitByDefault, Mode=TwoWay}"
-                        Tag="{Binding SelectedApp.NameWithVersion, TargetNullValue=..., StringFormat={x:Static properties:Resources.LauncherLaunchWithAndClose}}">
-                        <mah:SplitButton.Items>
-                            <sys:Boolean>false</sys:Boolean>
-                            <sys:Boolean>true</sys:Boolean>
-                        </mah:SplitButton.Items>
-                        <mah:SplitButton.ItemTemplate>
-                            <DataTemplate DataType="sys:Boolean">
-                                <TextBlock FontSize="50" TextWrapping="Wrap">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding}" Value="true">
-                                                    <Setter Property="Text" Value="{Binding DataContext.SelectedApp.NameWithVersion, ElementName=ThisLauncherPage, TargetNullValue=..., StringFormat={x:Static properties:Resources.LauncherLaunchWithAndClose}}" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding}" Value="false">
-                                                    <Setter Property="Text" Value="{Binding DataContext.SelectedApp.NameWithVersion, ElementName=ThisLauncherPage, TargetNullValue=..., StringFormat={x:Static properties:Resources.LauncherLaunchWith}}" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-                            </DataTemplate>
-                        </mah:SplitButton.ItemTemplate>
-                    </mah:SplitButton>-->
-                <!--
-                </Grid>-->
-                <!--<GroupBox Grid.Row="1" Header="{x:Static properties:Resources.LauncherCommandLineArgumentsSectionHeader}">
-                    <ContentControl Content="{Binding LaunchOptions}" ContentTemplateSelector="{StaticResource commandLineOptionsTemplateSelector}" />
-                </GroupBox>-->
             </Grid>
         </Grid>
     </Grid>
