@@ -12,4 +12,5 @@ public partial class InstalledAppsPage : Page
         DataContext = viewModel;
         
     }
+
 }

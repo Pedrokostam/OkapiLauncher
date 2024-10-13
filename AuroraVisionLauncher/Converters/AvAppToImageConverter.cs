@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.DirectoryServices.ActiveDirectory;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 using System.Windows.Data;
-using System.Windows.Shapes;
-using AuroraVisionLauncher.Core.Models;
+using System.Windows.Media.Imaging;
 using AuroraVisionLauncher.Core.Models.Apps;
-using AuroraVisionLauncher.Helpers;
 
 namespace AuroraVisionLauncher.Converters;
-public class AvAppToImageSourceConverter : IValueConverter
+
+public class AvAppToImageConverter : IValueConverter
 {
 
     public object? Convert(object? value, Type targetType, object parameter, CultureInfo culture)
@@ -25,8 +17,15 @@ public class AvAppToImageSourceConverter : IValueConverter
         var brand = app.Brand.Name.Replace(" ", "");
         var type = app.Type.Name;
         var iconName = $"{brand}{type}.png";
-        return "pack://application:,,,/Resources/Symbols/" + iconName;
-        
+        var path =  "pack://application:,,,/Resources/Symbols/" + iconName;
+        var bmp = new BitmapImage();
+        bmp.BeginInit();
+        bmp.DecodePixelWidth = 100;
+        bmp.CacheOption = BitmapCacheOption.OnLoad;
+        bmp.UriSource = new Uri(path, UriKind.RelativeOrAbsolute);
+        bmp.EndInit();
+        return bmp;
+
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

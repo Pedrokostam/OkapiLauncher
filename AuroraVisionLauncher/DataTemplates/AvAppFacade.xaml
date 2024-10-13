@@ -64,11 +64,10 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Border Grid.Column="0" Padding="0,0,10,0">
-                <Image HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Image.Source>
-                        <BitmapImage DecodePixelWidth="100" UriSource="{Binding Converter={StaticResource AppToImageConverter}}" />
-                    </Image.Source>
-                </Image>
+                <Image
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Source="{Binding Converter={StaticResource AppToImageConverter}}" />
             </Border>
             <StackPanel Grid.Column="1">
                 <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource Header_NameRow}" />

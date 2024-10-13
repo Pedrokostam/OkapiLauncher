@@ -59,7 +59,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
     }
     //[RelayCommand(CanExecute = nameof(CanLaunch))]
     [RelayCommand(CanExecute = nameof(CanLaunch))]
-    private void Launch()
+    private void Launch(object? app)
     {
         if (SelectedApp is null || !(VisionProject?.Exists ?? false))
         {

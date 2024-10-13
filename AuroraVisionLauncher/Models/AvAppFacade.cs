@@ -83,7 +83,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     private void OpenContainingFolder() => ExplorerHelper.OpenExplorer(RootPath);
     private bool CanLaunchExecutable() => IsExecutable;
     [RelayCommand(CanExecute = nameof(CanLaunchExecutable))]
-    private void LaunchWithoutProgram()
+    public void LaunchWithoutProgram()
     {
         _messenger.Send(new OpenAppRequest(this));
     }
