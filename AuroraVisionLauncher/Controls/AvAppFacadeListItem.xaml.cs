@@ -78,6 +78,11 @@ namespace AuroraVisionLauncher.Controls
 
         private void LaunchButton_Click(object sender, RoutedEventArgs e)
         {
+            Launch();
+        }
+
+        private void Launch()
+        {
             if (LaunchCommand is null)
             {
                 AppFacade?.LaunchWithoutProgram();
@@ -86,6 +91,11 @@ namespace AuroraVisionLauncher.Controls
             {
                 LaunchCommand.Execute(AppFacade);
             }
+        }
+
+        private void UserControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Launch();
         }
     }
 }

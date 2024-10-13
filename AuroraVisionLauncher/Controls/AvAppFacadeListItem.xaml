@@ -9,7 +9,7 @@
     xmlns:mdicons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
     xmlns:models="clr-namespace:AuroraVisionLauncher.Models"
     xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
-    Name="UC_Root"
+    Name="UC_Root" MouseDoubleClick="UserControl_MouseDoubleClick"
     d:DataContext="{d:DesignInstance Type=models:AvAppFacade}"
     d:DesignHeight="100"
     d:DesignWidth="800"
