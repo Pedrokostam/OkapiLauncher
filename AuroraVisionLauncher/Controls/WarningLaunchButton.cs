@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -84,12 +86,16 @@ public class WarningLaunchButton : Button
         {
             return;
         }
-        if (DisplayWarning &&  Visibility==Visibility.Visible)
+        if (DisplayWarning && Visibility == Visibility.Visible)
         {
             if (adornerLayer.GetAdorners(this)?.FirstOrDefault() is null)
             {
-                var warningAdorner = new AdornerContentPresenter(this, new MaterialIcon() { Kind = Material.Icons.MaterialIconKind.Warning, ToolTip = "This app is already launched, you may not be able to launch another process", Foreground=Brushes.Yellow});
-                //var warningAdorner = new WarningAdorner(this);
+                //var warningAdorner = new AdornerContentPresenter(this, new MaterialIcon() { Kind = Material.Icons.MaterialIconKind.Warning, ToolTip = "This app is already launched, you may not be able to launch another process", Foreground=Brushes.Yellow});
+                var warningAdorner = new IconAdorner(this, Material.Icons.MaterialIconKind.Warning)
+                {
+                    ToolTip = "ksjdfnjksd",
+                    Placement=new RelativePlacement(0,1,0.5,-0.5,DimensionType.Relative)
+                };
                 adornerLayer.Add(warningAdorner);
             }
         }
@@ -107,170 +113,165 @@ public class WarningLaunchButton : Button
         }
     }
 }
+public enum DimensionType
+{
+    Relative,
+    Absolute,
+}
+
+[StructLayout(LayoutKind.Auto)]
+public readonly record struct TypedDimension
+{
+    public static readonly TypedDimension Zero = new TypedDimension(0, DimensionType.Relative);
+    public static readonly TypedDimension Full = new TypedDimension(1, DimensionType.Relative);
+    public double Value { get; }
+    public DimensionType SizeType { get; }
+    public TypedDimension()
+    {
+        Value = 1;
+        SizeType = DimensionType.Relative;
+    }
+    public TypedDimension(double value, DimensionType sizeType)
+    {
+        Value = value;
+        SizeType = sizeType;
+    }
+    public double GetDimension(double containerDimension)
+    {
+        return SizeType switch
+        {
+            DimensionType.Absolute => Value,
+            DimensionType.Relative => Value * containerDimension,
+            _ => throw new NotSupportedException(),
+        };
+    }
+}
+
+[StructLayout(LayoutKind.Auto)]
+public readonly record struct RelativePlacement
+{
+    public TypedDimension X { get; }
+    public TypedDimension Y { get; }
+    public TypedDimension Width { get; }
+    public TypedDimension Height { get; }
+    public RelativePlacement() : this(
+        TypedDimension.Zero,
+        TypedDimension.Zero,
+        TypedDimension.Full,
+        TypedDimension.Full)
+    { }
+
+    public RelativePlacement(TypedDimension x, TypedDimension y, TypedDimension width, TypedDimension height)
+    {
+        X = x;
+        Y = y;
+        Width = width;
+        Height = height;
+    }
+    public RelativePlacement(double x, double y, double width, double height, DimensionType commonDimension) : this(
+        new TypedDimension(x, commonDimension),
+        new TypedDimension(y, commonDimension),
+        new TypedDimension(width, commonDimension),
+        new TypedDimension(height, commonDimension))
+    { }
+
+    public Rect GetRect(double containingWidth, double containingHeight)
+    {
+        var originX = X.GetDimension(containingWidth);
+        var originY = Y.GetDimension(containingHeight);
+        var width = Width.GetDimension(containingWidth);
+        var height = Height.GetDimension(containingHeight);
+
+        if (width < 0)
+        {
+            width = -width;
+            originX -= width;
+        }
+        if (height < 0)
+        {
+            height = -height;
+            originY -= height;
+        }
+        return new Rect(originX, originY, width, height);
+
+    }
+    public Rect GetRect(Size containingSize)=>GetRect(containingSize.Width,containingSize.Height);
+}
 public class AdornerContentPresenter : Adorner
 {
+    public RelativePlacement Placement { get; set; } = new();
     private VisualCollection _Visuals;
     private ContentPresenter _ContentPresenter;
+    //public double ContentWidth
+    //{
+    //    get => _ContentPresenter.Width;
+    //    set => _ContentPresenter.Width = value;
+    //}
+    //public double Height
+    //{
+    //    get => _ContentPresenter.Height;
+    //    set => _ContentPresenter.Height = value;
+    //}
 
     public AdornerContentPresenter(UIElement adornedElement)
       : base(adornedElement)
     {
         _Visuals = new VisualCollection(this);
-        _ContentPresenter = new ContentPresenter() { Width=18, Height=18};
+        _ContentPresenter = new ContentPresenter()
+        {
+            Content = new Border()
+            {
+                Background = Brushes.Transparent
+            }
+        };
         _Visuals.Add(_ContentPresenter);
-    }
 
-    public AdornerContentPresenter(UIElement adornedElement, Visual content)
+    }
+    public Guid Guid { get; }
+
+
+    public AdornerContentPresenter(UIElement adornedElement, UIElement content)
       : this(adornedElement)
     { Content = content; }
 
     protected override Size MeasureOverride(Size constraint)
     {
+        var q = this.AdornedElement.DesiredSize;
         _ContentPresenter.Measure(constraint);
         return _ContentPresenter.DesiredSize;
     }
 
     protected override Size ArrangeOverride(Size finalSize)
     {
-        _ContentPresenter.Arrange(new Rect(0, 0,
-             finalSize.Width, finalSize.Height));
+        var rect = Placement.GetRect(AdornedElement.RenderSize);
+        Width = rect.Width;
+        Height = rect.Height;
+        _ContentPresenter.Arrange(rect);
         return _ContentPresenter.RenderSize;
     }
 
-    protected override Visual GetVisualChild(int index)
-    { return _Visuals[index]; }
+    protected override Visual GetVisualChild(int index) => _Visuals[index];
 
-    protected override int VisualChildrenCount
-    { get { return _Visuals.Count; } }
+    protected override int VisualChildrenCount => _Visuals.Count;
 
-    public object Content
+    public UIElement Content
     {
-        get { return _ContentPresenter.Content; }
-        set { _ContentPresenter.Content = value; }
+        get => ((Border)_ContentPresenter.Content).Child;
+        set => ((Border)_ContentPresenter.Content).Child = value;
     }
+    new public object ToolTip
+    {
+        get => ((Border)_ContentPresenter.Content).ToolTip;
+        set => ((Border)_ContentPresenter.Content).ToolTip = value;
+    }
+
 }
 
 
-
-public class WarningAdorner : Adorner
+public class IconAdorner : AdornerContentPresenter
 {
-    private readonly UIElement _child;
-
-    public WarningAdorner(UIElement adornedElement) : base(adornedElement)
+    public IconAdorner(UIElement adornedElement, Material.Icons.MaterialIconKind iconKind) : base(adornedElement, new MaterialIcon() { Kind = iconKind })
     {
-        var icon = new MaterialIcon()
-        {
-            Kind = Material.Icons.MaterialIconKind.WarningBoxOutline,
-            Foreground=Brushes.Red,
-        };
-
-        //var box = new Viewbox()
-        //{
-
-        //    Child = icon,
-        //};
-        //var border = new Border()
-        //{
-        //    HorizontalAlignment = HorizontalAlignment.Stretch,
-        //    VerticalAlignment = VerticalAlignment.Stretch,
-        //    Background = Brushes.Gray,
-        //    BorderThickness=new Thickness(2),
-        //    BorderBrush=Brushes.Green,
-        //    Child = icon,
-        //    ToolTip="skdjfnjksdnfsdj",
-        //};
-        _child = new Border()
-        {
-            
-            Child = icon,
-            ToolTip="fsdf",
-            Background=Brushes.Transparent,
-            Width = 20,
-            Height = 20
-        };
-        //_child = new Viewbox
-        //{
-        //    Stretch = Stretch.UniformToFill,
-        //    HorizontalAlignment = HorizontalAlignment.Right,
-        //    VerticalAlignment = VerticalAlignment.Bottom,
-        //    Child = new MaterialIcon
-        //    {
-        //        Kind = Material.Icons.MaterialIconKind.Star,
-        //        Foreground = Brushes.Red,
-        //        FontSize = 20,
-        //    }
-        //};
-        //_child = new MaterialIcon
-        //{
-        //    Kind = Material.Icons.MaterialIconKind.Star,
-        //    Foreground = Brushes.Red,
-        //    Width = 15,
-        //    Height = 15,
-        //};
-        //    _child = new Border
-        //    {
-        //        //Width = adornedElement.RenderSize.Width / 2,  // Occupy half the width
-        //        //Height = adornedElement.RenderSize.Height / 2,  // Occupy half the height
-        //        Background = Brushes.Cyan,  // Transparent but clickable
-        //        ToolTip = new ToolTip
-        //        {
-        //            Content = "Bazingo",
-        //            Placement = System.Windows.Controls.Primitives.PlacementMode.Mouse,
-        //        },
-        //        //Child= new TextBlock
-        //        //{
-        //        //               Text = "⚠️",
-        //        //               Foreground = Brushes.Yellow,
-        //        //               FontSize = 20,
-        //        //               ToolTip = "This app is already launched, you may not be able to launch another process"
-        //        //           },
-        //
-        //        Child = new MaterialIcon
-        //        {
-        //            HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
-        //            VerticalAlignment = System.Windows.VerticalAlignment.Stretch,
-        //            VerticalContentAlignment = System.Windows.VerticalAlignment.Stretch,
-        //            HorizontalContentAlignment = System.Windows.HorizontalAlignment.Stretch,
-        //            Kind = Material.Icons.MaterialIconKind.Star,
-        //            Foreground = Brushes.Red,
-        //            //Width=15,
-        //            //Height=15,
-        //        }
-        //    };
-        //Create the warning icon(e.g., ⚠️) and tooltip
-        //_child = new Rectangle() { Fill = Brushes.Green };
-        //_child = new TextBlock
-        //              {
-        //                  Text = "⚠️",
-        //                  Foreground = Brushes.Yellow,
-        //                  FontSize = 20,
-        //                  ToolTip = "This app is already launched, you may not be able to launch another process"
-        //              };
-    }
-
-    protected override Visual GetVisualChild(int index) => _child;
-
-    protected override int VisualChildrenCount => 1;
-
-    protected override Size MeasureOverride(Size constraint)
-    {
-        _child.Measure(constraint);
-        return _child.DesiredSize;
-    }
-
-    protected override Size ArrangeOverride(Size finalSize)
-    {
-        //_child.RenderSize = new Size(finalSize.Width / 2, finalSize.Height / 2);
-        _child.Arrange(
-            new Rect(
-                x: 0,
-                y: 0,
-                width: finalSize.Width,
-                height: finalSize.Height
-                ));
-        //_child.Arrange(new Rect(finalSize.Width / 2, finalSize.Height / 2, finalSize.Width / 2, finalSize.Height / 2));
-        //_child.Arrange(new Rect(new Point(0, finalSize.Height), _child.DesiredSize));  // Position the adorner
-        return _child.RenderSize;
     }
 }
 
