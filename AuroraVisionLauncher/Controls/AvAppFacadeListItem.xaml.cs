@@ -43,7 +43,8 @@ namespace AuroraVisionLauncher.Controls
             {
                 var kind = userControl.LaunchCommand is null ? MaterialIconKind.Launch : MaterialIconKind.Powershell;
                 userControl.LaunchButton.SetIconKind(kind);
-
+                var tooltip = userControl.LaunchCommand is null ? Properties.Resources.AvAppLaunchWithNoProgram : Properties.Resources.AvAppLaunchWithProgram;
+                userControl.LaunchButton.ToolTip = tooltip;
                 // When the UserControlDataContext changes, update the DataContext of the root element
             }
 

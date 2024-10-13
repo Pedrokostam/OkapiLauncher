@@ -151,6 +151,15 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Launch the application and load the program.
+        /// </summary>
+        public static string AvAppLaunchWithProgram {
+            get {
+                return ResourceManager.GetString("AvAppLaunchWithProgram", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open installation folder.
         /// </summary>
         public static string AvAppOpenInstallationFolder {

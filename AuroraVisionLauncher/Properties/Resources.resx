@@ -463,4 +463,7 @@
   <data name="WarningLanchButtonWarningTooltip" xml:space="preserve">
     <value>This app is already running, you may not be able to start another process</value>
   </data>
+  <data name="AvAppLaunchWithProgram" xml:space="preserve">
+    <value>Launch the application and load the program</value>
+  </data>
 </root>

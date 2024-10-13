@@ -93,7 +93,6 @@
                 Width="40"
                 DisplayWarning="{Binding WarnAboutNewProcess}"
                 Style="{StaticResource SymbolButton}"
-                ToolTip="{x:Static properties:Resources.AvAppLaunchWithNoProgram}"
                 Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}" Click="LaunchButton_Click">
                 <mdicons:MaterialIcon Kind="{StaticResource IconLaunch}" />
             </controls:WarningLaunchButton>
