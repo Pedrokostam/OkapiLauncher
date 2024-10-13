@@ -133,6 +133,10 @@ namespace AuroraVisionLauncher.Services
 
             foreach (var proc in rawProcesses)
             {
+                if (!string.Equals(proc.MainModule?.FileName, app.Path,StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
                 try
                 {
                     var simple = new SimpleProcess(proc, _messenger, app.Path);
