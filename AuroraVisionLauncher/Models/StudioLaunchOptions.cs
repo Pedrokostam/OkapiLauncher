@@ -5,7 +5,8 @@ namespace AuroraVisionLauncher.Models;
 
 public partial class StudioLaunchOptions : LaunchOptions
 {
-   
+
+    public override bool HasAnyOptions => false;
 
     public override IEnumerable<string> GetCommandLineArgs()
     {

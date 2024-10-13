@@ -38,7 +38,7 @@ public partial class App : Application
     public App()
     {
     }
-    public bool IsStartedWithArgument { get;  set; } = false;
+    public bool ShouldCloseAfterLaunching { get;  set; } = false;
 
     private async void OnStartup(object sender, StartupEventArgs e)
     {
@@ -62,7 +62,7 @@ public partial class App : Application
         GetService<FileOpenerBroker>();
         if (e.Args.Length == 1)
         {
-            IsStartedWithArgument = true;
+            ShouldCloseAfterLaunching = true;
             GetService<IMessenger>().Send(new FileRequestedMessage(e.Args[0]));
         }
     }

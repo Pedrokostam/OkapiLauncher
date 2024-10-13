@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -46,11 +48,45 @@ namespace AuroraVisionLauncher.Controls;
 /// </summary>
 public class BindableRichTextBox : RichTextBox
 {
+    private class DefaultConverter : IValueConverter
+    {
+        public static readonly DefaultConverter Instance = new DefaultConverter();
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is not string input)
+            {
+                return DependencyProperty.UnsetValue;
+            }
+            var para = new Paragraph();
+            para.Inlines.Add(new Run(input));
+            return new FlowDocument(para);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotSupportedException();
+        }
+    }
     public static readonly DependencyProperty DocumentProperty =
         DependencyProperty.Register("Document", typeof(FlowDocument),
         typeof(BindableRichTextBox), new FrameworkPropertyMetadata
         (defaultValue: null, new PropertyChangedCallback(OnDocumentChanged)));
 
+
+    public static readonly DependencyProperty TextProperty =
+        DependencyProperty.Register("Text", typeof(string),
+        typeof(BindableRichTextBox), new FrameworkPropertyMetadata
+        (defaultValue: null, new PropertyChangedCallback(OnTextChanged)));
+
+    public static readonly DependencyProperty FormatterProperty =
+        DependencyProperty.Register("Formatter", typeof(IValueConverter),
+        typeof(BindableRichTextBox), new FrameworkPropertyMetadata
+        (defaultValue: null, new PropertyChangedCallback(OnFormatterChanged)));
+
+    public BindableRichTextBox() : base()
+    {
+        ContextMenu = null;
+    }
     public new FlowDocument Document
     {
         get
@@ -60,14 +96,86 @@ public class BindableRichTextBox : RichTextBox
 
         set
         {
+            if (value is not null && (Text is not null || Formatter is not null))
+            {
+                throw new InvalidOperationException("Cannot set both Document and Text/Formatter properties");
+            }
             this.SetValue(DocumentProperty, value);
         }
+    }
+    public string Text
+    {
+        get
+        {
+            return (string)this.GetValue(TextProperty);
+        }
+
+        set
+        {
+            if (value is not null && Document is not null)
+            {
+                throw new InvalidOperationException("Cannot set both Document and Text/Formatter properties");
+            }
+            this.SetValue(DocumentProperty, value);
+        }
+    }
+    public IValueConverter Formatter
+    {
+        get
+        {
+            return (IValueConverter)this.GetValue(FormatterProperty);
+        }
+
+        set
+        {
+            if (value is not null && Document is not null)
+            {
+                throw new InvalidOperationException("Cannot set both Document and Text/Formatter properties");
+            }
+            this.SetValue(DocumentProperty, value);
+        }
+    }
+    private static FlowDocument? FormatText(string? text, IValueConverter? converter)
+    {
+        text ??= "";
+        converter ??= DefaultConverter.Instance;
+        return converter.Convert(text, typeof(FlowDocument), null, CultureInfo.CurrentCulture) as FlowDocument;
     }
 
     public static void OnDocumentChanged(DependencyObject obj,
         DependencyPropertyChangedEventArgs args)
     {
-        RichTextBox rtb = (RichTextBox)obj;
-        rtb.Document = (FlowDocument)args.NewValue;
+        BindableRichTextBox rtb = (BindableRichTextBox)obj;
+        ((RichTextBox)rtb).Document = (FlowDocument)args.NewValue;
+    }
+    public static void OnTextChanged(DependencyObject obj,
+    DependencyPropertyChangedEventArgs args)
+    {
+        BindableRichTextBox rtb = (BindableRichTextBox)obj;
+        ((RichTextBox)rtb).Document = FormatText(args.NewValue as string, rtb.Formatter) ?? new();
+    }
+    public static void OnFormatterChanged(DependencyObject obj,
+    DependencyPropertyChangedEventArgs args)
+    {
+        BindableRichTextBox rtb = (BindableRichTextBox)obj;
+        ((RichTextBox)rtb).Document = FormatText(rtb.Text, args.NewValue as IValueConverter) ?? new();
+    }
+    protected override void OnPreviewKeyDown(KeyEventArgs e)
+    {
+        if (!(e.Key == Key.C && Keyboard.Modifiers.HasFlag(ModifierKeys.Control)))
+        {
+            base.OnPreviewKeyDown(e);
+        }
+        else
+        {
+            if (Text is not null)
+            {
+                Clipboard.SetText(Text);
+                e.Handled = true;
+                return;
+            }
+            base.OnPreviewKeyDown(e);
+        }
+
     }
 }

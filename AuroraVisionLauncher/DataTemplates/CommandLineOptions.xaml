@@ -28,27 +28,19 @@
         <TextBlock Style="{StaticResource NoOptionsDisclaimer}" Text="{x:Static properties:Resources.LaunchOptionsStudioOptions}" />
     </DataTemplate>
     <DataTemplate x:Key="ExecutorCommandLineOptionsTemplate" DataType="{x:Type mod:ExecutorLaunchOptions}">
-        <Grid TextBlock.FontSize="16">
+        <Grid Height="auto" TextBlock.FontSize="16">
             <Grid.Resources>
                 <Style BasedOn="{StaticResource {x:Type CheckBox}}" TargetType="CheckBox">
                     <Setter Property="FontSize" Value="16" />
                 </Style>
+                <Style BasedOn="{StaticResource {x:Type ComboBox}}" TargetType="ComboBox">
+                    <Setter Property="FontSize" Value="16" />
+                </Style>
+                <Style BasedOn="{StaticResource {x:Type Separator}}" TargetType="Separator">
+                    <Setter Property="Margin" Value="3,0,3,0" />
+                </Style>
             </Grid.Resources>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-            </Grid.RowDefinitions>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" Margin="5,0,5,0">
                 <TextBlock
                     VerticalAlignment="Center"
                     Text="{x:Static properties:Resources.LaunchOptionsExecutorLogLevelTitle}"
@@ -56,9 +48,11 @@
                     ToolTip="{x:Static properties:Resources.LaunchOptionsExecutorLogLevelTooltip}" />
                 <ComboBox
                     Grid.Column="1"
+                    Width="100"
                     ItemsSource="{conv:EnumBindingSource {x:Type coremod:LogLevel}}"
                     SelectedItem="{Binding LogLevel, Mode=TwoWay}"
                     ToolTip="{x:Static properties:Resources.LaunchOptionsExecutorLogLevelTooltip}" />
+                <Separator />
                 <TextBlock
                     Grid.Row="1"
                     VerticalAlignment="Center"
@@ -67,6 +61,9 @@
                 <TextBox
                     Grid.Row="1"
                     Grid.Column="1"
+                    Width="160"
+                    VerticalContentAlignment="Center"
+                    FontSize="16"
                     ToolTip="{x:Static properties:Resources.LaunchOptionsExecutorLogPipeTooltip}">
                     <TextBox.Text>
                         <Binding
@@ -79,30 +76,35 @@
                         </Binding>
                     </TextBox.Text>
                 </TextBox>
-            </Grid>
-            <CheckBox
-                x:Name="ConsoleCheckBox"
-                Grid.Row="1"
-                Content="{x:Static properties:Resources.LaunchOptionsExecutorConsoleModeTitle}"
-                IsChecked="{Binding Console, Mode=TwoWay}"
-                ToolTip="{x:Static properties:Resources.LaunchOptionsExecutorConsoleModeTooltip}" />
-            <CheckBox
-                Grid.Row="2"
-                Content="{x:Static properties:Resources.LaunchOptionsExecutorAutoCloseTitle}"
-                IsChecked="{Binding AutoClose, Mode=TwoWay}"
-                IsEnabled="{Binding ElementName=ConsoleCheckBox, Path=IsChecked}"
-                ToolTip="{x:Static properties:Resources.LaunchOptionsExecutorAutoCloseTooltip}" />
-            <Button
-                Grid.Row="3"
-                Margin="15"
-                HorizontalAlignment="Right"
-                Command="{Binding ResetCommand}"
-                FontFamily="Segoe UI"
-                FontSize="14"
-                FontWeight="Normal"
-                ToolTip="{x:Static properties:Resources.LaunchOptionsResetButtonTooltip}">
-                <TextBlock Padding="5" Text="{x:Static properties:Resources.LaunchOptionsResetButton}" />
-            </Button>
+                <Separator />
+                <CheckBox
+                    x:Name="ConsoleCheckBox"
+                    Grid.Row="1"
+                    Content="{x:Static properties:Resources.LaunchOptionsExecutorConsoleModeTitle}"
+                    IsChecked="{Binding Console, Mode=TwoWay}"
+                    ToolTip="{x:Static properties:Resources.LaunchOptionsExecutorConsoleModeTooltip}" />
+                <Separator />
+                <CheckBox
+                    Grid.Row="2"
+                    Content="{x:Static properties:Resources.LaunchOptionsExecutorAutoCloseTitle}"
+                    IsChecked="{Binding AutoClose, Mode=TwoWay}"
+                    IsEnabled="{Binding ElementName=ConsoleCheckBox, Path=IsChecked}"
+                    ToolTip="{x:Static properties:Resources.LaunchOptionsExecutorAutoCloseTooltip}" />
+                <Separator />
+                <Separator />
+                <Separator />
+                <Separator />
+                <Button
+                    Grid.Row="3"
+                    HorizontalAlignment="Right"
+                    Command="{Binding ResetCommand}"
+                    FontFamily="Segoe UI"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    ToolTip="{x:Static properties:Resources.LaunchOptionsResetButtonTooltip}">
+                    <TextBlock Padding="5,1,5,1" Text="{x:Static properties:Resources.LaunchOptionsResetButton}" />
+                </Button>
+            </StackPanel>
         </Grid>
     </DataTemplate>
 </ResourceDictionary>

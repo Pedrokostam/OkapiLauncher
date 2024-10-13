@@ -2,7 +2,8 @@
 
 public class NoLaunchOptions : LaunchOptions
 {
-    public override  IEnumerable<string> GetCommandLineArgs()
+    public override bool HasAnyOptions => false;
+    public override IEnumerable<string> GetCommandLineArgs()
     {
         return [];
     }
