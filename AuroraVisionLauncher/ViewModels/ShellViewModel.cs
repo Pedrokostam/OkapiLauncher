@@ -77,8 +77,9 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
     private void OnMenuFileExit()
         => Application.Current.Shutdown();
 
+    private bool CanOpenLauncherPage() => _lastOpenedFilesService.LastOpenedFile is not null;
 
-    [RelayCommand()]
+    [RelayCommand(CanExecute = nameof(CanOpenLauncherPage))]
     private void OnMenuViewsLauncher()
         => _navigationService.NavigateTo(typeof(LauncherViewModel).FullName!, parameter: null);
     //=> _navigationService.NavigateTo(typeof(LauncherViewModel).FullName!, parameter: null, clearNavigation: true);
@@ -117,7 +118,7 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
     {
         int intIndex = index switch
         {
-            string strindex => int.Parse(strindex),
+            string strindex => int.Parse(strindex,null),
             int i => i,
             _ => -1
         };
@@ -130,6 +131,7 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
     private void OpenProject(string path)
     {
         Messenger.Send(new FileRequestedMessage(path));
+        MenuViewsLauncherCommand.NotifyCanExecuteChanged();
     }
 
     void IRecipient<RecentFilesChangedMessage>.Receive(RecentFilesChangedMessage message)

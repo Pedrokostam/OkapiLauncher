@@ -60,6 +60,7 @@ public partial class ShellWindow : MetroWindow, IShellWindow
             var files = (string[])e.Data.GetData(DataFormats.FileDrop);
             if (files.Length == 1)
             {
+                ((ShellViewModel)DataContext).MenuViewsLauncherCommand.NotifyCanExecuteChanged();
                 ((App)App.Current).GetService<IMessenger>().Send(new FileRequestedMessage(files[0]));
             }
         }
