@@ -1085,5 +1085,14 @@ namespace AuroraVisionLauncher.Properties {
                 return ResourceManager.GetString("VersionCheckDialogUpdateButtonContent", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This app is already running, you may not be able to start another process.
+        /// </summary>
+        public static string WarningLanchButtonWarningTooltip {
+            get {
+                return ResourceManager.GetString("WarningLanchButtonWarningTooltip", resourceCulture);
+            }
+        }
     }
 }
