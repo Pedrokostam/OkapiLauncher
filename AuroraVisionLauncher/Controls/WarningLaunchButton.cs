@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -10,12 +9,10 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ABI.System.Collections.Generic;
-using Material.Icons.WPF;
 namespace AuroraVisionLauncher.Controls;
 /// <summary>
 /// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
@@ -111,167 +108,6 @@ public class WarningLaunchButton : Button
                 adornerLayer.Remove(adorner);
             }
         }
-    }
-}
-public enum DimensionType
-{
-    Relative,
-    Absolute,
-}
-
-[StructLayout(LayoutKind.Auto)]
-public readonly record struct TypedDimension
-{
-    public static readonly TypedDimension Zero = new TypedDimension(0, DimensionType.Relative);
-    public static readonly TypedDimension Full = new TypedDimension(1, DimensionType.Relative);
-    public double Value { get; }
-    public DimensionType SizeType { get; }
-    public TypedDimension()
-    {
-        Value = 1;
-        SizeType = DimensionType.Relative;
-    }
-    public TypedDimension(double value, DimensionType sizeType)
-    {
-        Value = value;
-        SizeType = sizeType;
-    }
-    public double GetDimension(double containerDimension)
-    {
-        return SizeType switch
-        {
-            DimensionType.Absolute => Value,
-            DimensionType.Relative => Value * containerDimension,
-            _ => throw new NotSupportedException(),
-        };
-    }
-}
-
-[StructLayout(LayoutKind.Auto)]
-public readonly record struct RelativePlacement
-{
-    public TypedDimension X { get; }
-    public TypedDimension Y { get; }
-    public TypedDimension Width { get; }
-    public TypedDimension Height { get; }
-    public RelativePlacement() : this(
-        TypedDimension.Zero,
-        TypedDimension.Zero,
-        TypedDimension.Full,
-        TypedDimension.Full)
-    { }
-
-    public RelativePlacement(TypedDimension x, TypedDimension y, TypedDimension width, TypedDimension height)
-    {
-        X = x;
-        Y = y;
-        Width = width;
-        Height = height;
-    }
-    public RelativePlacement(double x, double y, double width, double height, DimensionType commonDimension) : this(
-        new TypedDimension(x, commonDimension),
-        new TypedDimension(y, commonDimension),
-        new TypedDimension(width, commonDimension),
-        new TypedDimension(height, commonDimension))
-    { }
-
-    public Rect GetRect(double containingWidth, double containingHeight)
-    {
-        var originX = X.GetDimension(containingWidth);
-        var originY = Y.GetDimension(containingHeight);
-        var width = Width.GetDimension(containingWidth);
-        var height = Height.GetDimension(containingHeight);
-
-        if (width < 0)
-        {
-            width = -width;
-            originX -= width;
-        }
-        if (height < 0)
-        {
-            height = -height;
-            originY -= height;
-        }
-        return new Rect(originX, originY, width, height);
-
-    }
-    public Rect GetRect(Size containingSize)=>GetRect(containingSize.Width,containingSize.Height);
-}
-public class AdornerContentPresenter : Adorner
-{
-    public RelativePlacement Placement { get; set; } = new();
-    private VisualCollection _Visuals;
-    private ContentPresenter _ContentPresenter;
-    //public double ContentWidth
-    //{
-    //    get => _ContentPresenter.Width;
-    //    set => _ContentPresenter.Width = value;
-    //}
-    //public double Height
-    //{
-    //    get => _ContentPresenter.Height;
-    //    set => _ContentPresenter.Height = value;
-    //}
-
-    public AdornerContentPresenter(UIElement adornedElement)
-      : base(adornedElement)
-    {
-        _Visuals = new VisualCollection(this);
-        _ContentPresenter = new ContentPresenter()
-        {
-            Content = new Border()
-            {
-                Background = Brushes.Transparent
-            }
-        };
-        _Visuals.Add(_ContentPresenter);
-
-    }
-    public Guid Guid { get; }
-
-
-    public AdornerContentPresenter(UIElement adornedElement, UIElement content)
-      : this(adornedElement)
-    { Content = content; }
-
-    protected override Size MeasureOverride(Size constraint)
-    {
-        var q = this.AdornedElement.DesiredSize;
-        _ContentPresenter.Measure(constraint);
-        return _ContentPresenter.DesiredSize;
-    }
-
-    protected override Size ArrangeOverride(Size finalSize)
-    {
-        var rect = Placement.GetRect(AdornedElement.RenderSize);
-        Width = rect.Width;
-        Height = rect.Height;
-        _ContentPresenter.Arrange(rect);
-        return _ContentPresenter.RenderSize;
-    }
-
-    protected override Visual GetVisualChild(int index) => _Visuals[index];
-
-    protected override int VisualChildrenCount => _Visuals.Count;
-
-    public UIElement Content
-    {
-        get => ((Border)_ContentPresenter.Content).Child;
-        set => ((Border)_ContentPresenter.Content).Child = value;
-    }
-    new public object ToolTip
-    {
-        get => ((Border)_ContentPresenter.Content).ToolTip;
-        set => ((Border)_ContentPresenter.Content).ToolTip = value;
-    }
-
-}
-
-
-public class IconAdorner : AdornerContentPresenter
-{
-    public IconAdorner(UIElement adornedElement, Material.Icons.MaterialIconKind iconKind) : base(adornedElement, new MaterialIcon() { Kind = iconKind })
-    {
     }
 }
 
