@@ -40,10 +40,10 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
         _contentDialogService = contentDialogService;
         _navigationService = navigationService;
     }
-    public bool ShouldExitByDefault
+    public bool ShouldCloseAfterLaunching
     {
-        get => ((App)App.Current).IsStartedWithArgument;
-        set => ((App)App.Current).IsStartedWithArgument = value;
+        get => ((App)App.Current).ShouldCloseAfterLaunching;
+        set => ((App)App.Current).ShouldCloseAfterLaunching = value;
     }
 
 
@@ -57,20 +57,8 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
     {
         return SelectedApp is not null && (VisionProject?.Exists ?? false);
     }
-    [RelayCommand(CanExecute = nameof(CanLaunch))]
-    private void Launch(object obj)
-    {
-        if (obj is not bool booly)
-        {
-            return;
-        }
-        if (booly)
-            LaunchAndClose();
-        else
-            Launch();
-    }
-
     //[RelayCommand(CanExecute = nameof(CanLaunch))]
+    [RelayCommand(CanExecute = nameof(CanLaunch))]
     private void Launch()
     {
         if (SelectedApp is null || !(VisionProject?.Exists ?? false))
@@ -80,13 +68,11 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
 
         var args = LaunchOptions!.GetCommandLineArgs();
         Messenger.Send(new OpenAppRequest(SelectedApp, args));
+        if (ShouldCloseAfterLaunching)
+        {
+            Application.Current.Shutdown();
+        }
 
-    }
-    //[RelayCommand(CanExecute = nameof(CanLaunch))]
-    private void LaunchAndClose()
-    {
-        Launch();
-        Application.Current.Shutdown();
     }
 
     [ObservableProperty]

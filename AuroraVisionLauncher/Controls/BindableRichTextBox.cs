@@ -51,6 +51,10 @@ public class BindableRichTextBox : RichTextBox
         typeof(BindableRichTextBox), new FrameworkPropertyMetadata
         (defaultValue: null, new PropertyChangedCallback(OnDocumentChanged)));
 
+    public BindableRichTextBox():base()
+    {
+        ContextMenu = null;
+    }
     public new FlowDocument Document
     {
         get
@@ -69,5 +73,15 @@ public class BindableRichTextBox : RichTextBox
     {
         RichTextBox rtb = (RichTextBox)obj;
         rtb.Document = (FlowDocument)args.NewValue;
+    }
+    protected override void OnPreviewKeyDown(KeyEventArgs e)
+    {
+        if (e.Key == Key.C && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+        { 
+            e.Handled = true;
+            return;
+        }
+        base.OnPreviewKeyDown(e);
+
     }
 }
