@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace AuroraVisionLauncher.Models;
@@ -15,7 +16,6 @@ public partial class CustomAppSource : ObservableObject, IAppSource
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SourcePath))]
     private string _path = "";
-
     public string SourcePath => ExpandPath(Path);
 
     public CustomAppSource()
