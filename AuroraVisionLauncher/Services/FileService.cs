@@ -4,23 +4,23 @@ using System.Text;
 using AuroraVisionLauncher.Core.Contracts.Services;
 
 using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Windows.Media;
+using AuroraVisionLauncher.Helpers;
 
 namespace AuroraVisionLauncher.Core.Services;
 
 public class FileService : IFileService
 {
-    private static readonly JsonSerializerOptions _jsonSerializerOptions=new JsonSerializerOptions()
-    {
-        WriteIndented = true,
-        AllowTrailingCommas = true,
-    };
+    
     public T? Read<T>(string folderPath, string fileName)
     {
+        var t = JsonSerializerOptions.Default.IsReadOnly;
         var path = Path.Combine(folderPath, fileName);
         if (File.Exists(path))
         {
             var json = File.ReadAllText(path);
-            return JsonSerializer.Deserialize<T>(json, _jsonSerializerOptions);
+            return JsonSerializer.Deserialize<T>(json, JsonHelper.Options);
         }
         return default;
     }
@@ -32,7 +32,7 @@ public class FileService : IFileService
             Directory.CreateDirectory(folderPath);
         }
 
-        var fileContent = JsonSerializer.Serialize(content, _jsonSerializerOptions);
+        var fileContent = JsonSerializer.Serialize(content, JsonHelper.Options);
         File.WriteAllText(Path.Combine(folderPath, fileName), fileContent, Encoding.UTF8);
     }
 
