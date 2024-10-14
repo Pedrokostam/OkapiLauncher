@@ -16,42 +16,46 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 
 namespace AuroraVisionLauncher.Services;
-public class RecentlyOpenedFilesService :ObservableRecipient, IRecentlyOpenedFilesService
+public class RecentlyOpenedFilesService : ObservableRecipient, IRecentlyOpenedFilesService
 {
     private readonly string Key = "LastOpenedFiles";
     const int FileCountLimit = 30;
     private List<RecentlyOpenedFile> LastOpenedPaths => (List<RecentlyOpenedFile>)App.Current.Properties[Key]!;
-
+    /// <summary>
+    /// Is a dependency to ensure its instantiated before.
+    /// </summary>
+    private readonly IPersistAndRestoreService _persistAndRestoreService;
     public string? LastOpenedFile { get; private set; }
 
-    public RecentlyOpenedFilesService(IMessenger messenger):base(messenger)
+    public RecentlyOpenedFilesService(IMessenger messenger, IPersistAndRestoreService persistAndRestoreService) : base(messenger)
     {
-        //App.Current.Properties[Key] = new List<RecentlyOpenedFile>();
-        if (!App.Current.Properties.Contains(Key))
+        _persistAndRestoreService = persistAndRestoreService;
+        if (_persistAndRestoreService.IsDataRestored)
         {
-            App.Current.Properties[Key]=new List<RecentlyOpenedFile>();
+            // if already restored, get
+            InitializeData();
         }
         else
         {
-            var prop = (System.Text.Json.JsonElement)App.Current.Properties[Key]!;
-            var list = new List<RecentlyOpenedFile>();
-            foreach (var item in prop.EnumerateArray())
-            {
-                try
-                {
-                    var rof = item.Deserialize<RecentlyOpenedFile>();
-                    list.Add(rof);
-                }
-                catch (ArgumentException)
-                {
-                    // dont care about invalid data - its beta after all.
-                }
-            }
-            App.Current.Properties[Key] = list;
+            // otherwise wait for restore
+            _persistAndRestoreService.DataRestored += _persistAndRestoreService_DataRestored;
         }
+
 
         IsActive = true;
     }
+
+    private void _persistAndRestoreService_DataRestored(object? sender, EventArgs e)
+    {
+        InitializeData();
+    }
+
+    private void InitializeData()
+    {
+        var rofs = App.Current.Properties.ReadElementList<RecentlyOpenedFile>(Key);
+        App.Current.Properties[Key] = rofs.ToList();
+    }
+
     public IEnumerable<RecentlyOpenedFileFacade> GetLastOpenedFiles() => GetFacades();
     public void AddLastFile(string file)
     {

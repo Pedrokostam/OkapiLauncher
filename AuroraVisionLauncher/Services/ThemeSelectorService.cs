@@ -78,15 +78,24 @@ public class ThemeSelectorService : IThemeSelectorService
     private readonly IPersistAndRestoreService _persistAndRestoreService;
     private bool _initialized;
 
-    public ThemeSelectorService()
+    public ThemeSelectorService(IPersistAndRestoreService persistAndRestoreService)
     {
-        //App.Current.Properties.InitializeDictKey(CustomThemeColorKey, je => ColorConverter.ConvertFromString(je.GetString()) as Color?);
-        //App.Current.Properties.InitializeDictKey<AppTheme>(ThemeKey);
-        //_persistAndRestoreService = persistAndRestoreService;
+        _persistAndRestoreService = persistAndRestoreService;
+        if (_persistAndRestoreService.IsDataRestored)
+        {
+            InitializeData();
+        }
+        _persistAndRestoreService.DataRestored += _persistAndRestoreService_DataRestored;
     }
+
+    private void _persistAndRestoreService_DataRestored(object? sender, EventArgs e)
+    {
+        InitializeData();
+    }
+
     private void InitializeData()
     {
-        if (!_initialized)
+        if (!_initialized && _persistAndRestoreService.IsDataRestored)
         {
             App.Current.Properties.InitializeDictKey<Color?>(CustomThemeColorKey);
             App.Current.Properties.InitializeDictKey<AppTheme>(ThemeKey);
@@ -165,7 +174,6 @@ public class ThemeSelectorService : IThemeSelectorService
     {
         get
         {
-            InitializeData();
             return (AppTheme)App.Current.Properties[ThemeKey]!;
         }
         set => App.Current.Properties[ThemeKey] = value;
@@ -175,7 +183,6 @@ public class ThemeSelectorService : IThemeSelectorService
     {
         get
         {
-            InitializeData();
             return App.Current.Properties[CustomThemeColorKey] as Color?;
         }
         set => App.Current.Properties[CustomThemeColorKey] = value;

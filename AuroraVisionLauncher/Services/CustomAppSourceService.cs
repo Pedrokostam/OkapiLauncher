@@ -19,42 +19,37 @@ public class CustomAppSourceService : ICustomAppSourceService
     private readonly IPersistAndRestoreService _persistAndRestoreService;
     public CustomAppSourceService(IPersistAndRestoreService persistAndRestoreService)
     {
-        GetCustomSources();
         _persistAndRestoreService = persistAndRestoreService;
+        if (_persistAndRestoreService.IsDataRestored)
+        {
+            // if already restored, get
+            InitializeData();
+        }
+        else
+        {
+            // otherwise wait for restore
+            _persistAndRestoreService.DataRestored += _persistAndRestoreService_DataRestored;
+        }
+
+    }
+
+    private void _persistAndRestoreService_DataRestored(object? sender, EventArgs e)
+    {
+        InitializeData();
     }
 
     public ObservableCollection<CustomAppSource> CustomSources { get; } = new();
-    private void GetCustomSources()
+    private void InitializeData()
     {
         var elems = App.Current.Properties.ReadElementList<CustomAppSource>(_customSourcesKey);
         foreach (var elem in elems)
         {
-            if(elem is null)
+            if (elem is null)
             {
                 continue;
             }
             CustomSources.Add(elem);
         }
-        //App.Current.Properties[Key] = new List<RecentlyOpenedFile>();
-        //if (App.Current.Properties.Contains(_customSourcesKey))
-        //{
-        //    System.Text.Json.JsonElement prop = (System.Text.Json.JsonElement)App.Current.Properties[_customSourcesKey]!;
-        //    foreach (var item in prop.EnumerateArray())
-        //    {
-        //        try
-        //        {
-        //            var customSource = item.Deserialize<CustomAppSource>();
-        //            if (customSource is not null)
-        //            {
-        //                CustomSources.Add(customSource);
-        //            }
-        //        }
-        //        catch (ArgumentException)
-        //        {
-        //            // dont care about invalid data - its beta after all.
-        //        }
-        //    }
-        //}
         App.Current.Properties[_customSourcesKey] = CustomSources;
     }
 }

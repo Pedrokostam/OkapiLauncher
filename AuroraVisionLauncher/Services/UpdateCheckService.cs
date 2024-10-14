@@ -112,35 +112,27 @@ public class UpdateCheckService : IUpdateCheckService
         _systemService = systemService;
         _contentDialogService = contentDialogService;
         _persistAndRestoreService = persistAndRestoreService;
+        if (_persistAndRestoreService.IsDataRestored)
+        {
+            // if already restored, get
+            InitializeData();
+        }
+        else
+        {
+            // otherwise wait for restore
+            _persistAndRestoreService.DataRestored += _persistAndRestoreService_DataRestored;
+        }
+    }
+
+    private void _persistAndRestoreService_DataRestored(object? sender, EventArgs e)
+    {
+        InitializeData();
+    }
+
+    private static void InitializeData()
+    {
         App.Current.Properties.InitializeDictKey<bool>(AutoCheckKey, defaultValue: false);
         App.Current.Properties.InitializeDictKey<DateTime>(LastCheckDateKey, defaultValue: DateTime.UnixEpoch);
         App.Current.Properties.InitializeDictKey<string>(IgnoredReleaseKey);
-        //if (App.Current.Properties.Contains(AutoCheckKey))
-        //{
-        //    var acfu = App.Current.Properties[AutoCheckKey];
-        //    App.Current.Properties[AutoCheckKey] = acfu is bool b ? b : true;
-        //}
-        //else
-        //{
-        //    App.Current.Properties[AutoCheckKey] = true;
-        //}
-        //if (App.Current.Properties.Contains(LastCheckDateKey))
-        //{
-        //    var acfu = App.Current.Properties[LastCheckDateKey];
-        //    App.Current.Properties[LastCheckDateKey] = acfu is DateTime d ? d : DateTime.UnixEpoch;
-        //}
-        //else
-        //{
-        //    App.Current.Properties[LastCheckDateKey] = DateTime.UnixEpoch;
-        //}
-        //if (App.Current.Properties.Contains(IgnoredReleaseKey))
-        //{
-        //    var tag = App.Current.Properties[IgnoredReleaseKey] as string;
-        //    App.Current.Properties[IgnoredReleaseKey] = tag;
-        //}
-        //else
-        //{
-        //    App.Current.Properties[IgnoredReleaseKey] = null;
-        //}
     }
 }

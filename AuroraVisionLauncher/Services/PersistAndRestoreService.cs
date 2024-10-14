@@ -21,6 +21,10 @@ public class PersistAndRestoreService : IPersistAndRestoreService
         _appConfig = appConfig.Value;
     }
 
+    public bool IsDataRestored { get; private set; }
+
+    public event EventHandler? DataRestored;
+
     public void PersistData()
     {
         if (App.Current.Properties != null)
@@ -43,5 +47,7 @@ public class PersistAndRestoreService : IPersistAndRestoreService
                 App.Current.Properties.Add(property.Key, property.Value);
             }
         }
+        IsDataRestored = true;
+        DataRestored?.Invoke(this, EventArgs.Empty);
     }
 }
