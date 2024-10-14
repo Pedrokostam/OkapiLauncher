@@ -99,11 +99,14 @@ public class UpdateCheckService : IUpdateCheckService
         catch (HttpRequestException)
         {
         }
-        LastCheckDate = DateTime.UtcNow;
+        finally
+        {
+            LastCheckDate = DateTime.UtcNow;
+        }
     }
 
 
-    public UpdateCheckService(IOptions<AppConfig> appConfig, ISystemService systemService, IContentDialogService contentDialogService,IPersistAndRestoreService persistAndRestoreService)
+    public UpdateCheckService(IOptions<AppConfig> appConfig, ISystemService systemService, IContentDialogService contentDialogService, IPersistAndRestoreService persistAndRestoreService)
     {
         _appConfig = appConfig.Value;
         _systemService = systemService;
