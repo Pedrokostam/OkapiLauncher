@@ -1,5 +1,5 @@
 ﻿namespace AuroraVisionLauncher.Models.Messages;
 
-public sealed record KillAllProcessesRequest(AvAppFacade AvApp)
+public sealed record KillAllProcessesRequest(AvAppFacade AvApp,object ViewModel)
 {
 }

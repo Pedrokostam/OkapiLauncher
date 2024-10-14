@@ -5,6 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace AuroraVisionLauncher.Models.Messages;
-public sealed record KillProcessRequest(SimpleProcess Process)
+public sealed record KillProcessRequest(SimpleProcess Process,object ViewModel)
 {
 }

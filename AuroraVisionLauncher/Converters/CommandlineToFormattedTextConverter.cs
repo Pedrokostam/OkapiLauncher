@@ -14,7 +14,8 @@ using AuroraVisionLauncher.Properties;
 namespace AuroraVisionLauncher.Converters;
 public class CommandlineToFormattedTextConverter : IValueConverter
 {
-    private static readonly Regex Tokenizer = new("(\"[^\"]+\"|\\S+)");
+    private static readonly Regex Tokenizer = new(@"(""[^""]+""|\S+)", RegexOptions.ExplicitCapture, TimeSpan.FromMilliseconds(200));
+    private static readonly Regex ArgumentFinder = new(@"(?<=^)-*-(?=\w)", RegexOptions.ExplicitCapture, TimeSpan.FromMilliseconds(200));
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         if (value is not string input)
@@ -41,8 +42,9 @@ public class CommandlineToFormattedTextConverter : IValueConverter
         foreach (var part in parts.Skip(1))
         {
             para.Inlines.Add(new Run(" "));
-            var run = new Run(part);
-            if (part.StartsWith('-'))
+            var text = ArgumentFinder.Replace(part, "$0\u2060"); // add word joiner after hyphens
+            var run = new Run(text);
+            if (text.StartsWith('-'))
             {
                 run.Style = Application.Current.Resources["CommandlineParameterStyle"] as Style;
             }
@@ -58,9 +60,9 @@ public class CommandlineToFormattedTextConverter : IValueConverter
             TextAlignment = TextAlignment.Left,
             LineHeight = double.NaN,
             IsOptimalParagraphEnabled = false,
-            IsColumnWidthFlexible = false,
+            IsColumnWidthFlexible = true,
             IsHyphenationEnabled = false,
-            
+
         };
         return doc;
     }

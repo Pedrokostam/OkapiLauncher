@@ -40,14 +40,15 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
         _contentDialogService = contentDialogService;
         _navigationService = navigationService;
     }
-    public bool ShouldExitByDefault
+    public bool ShouldCloseAfterLaunching
     {
-        get => ((App)App.Current).IsStartedWithArgument;
-        set => ((App)App.Current).IsStartedWithArgument = value;
+        get => ((App)App.Current).ShouldCloseAfterLaunching;
+        set => ((App)App.Current).ShouldCloseAfterLaunching = value;
     }
 
 
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(CopyArgumentStringCommand))]
     private LaunchOptions? _launchOptions;
     public ObservableCollection<AvAppFacade> Apps { get; } = [];
     protected override IList<AvAppFacade> RawApps => Apps;
@@ -56,36 +57,28 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
     {
         return SelectedApp is not null && (VisionProject?.Exists ?? false);
     }
+    //[RelayCommand(CanExecute = nameof(CanLaunch))]
     [RelayCommand(CanExecute = nameof(CanLaunch))]
-    private void Launch(object obj)
+    private void Launch(object? app)
     {
-        if (obj is not bool booly)
-        {
-            return;
-        }
-        if (booly)
-            LaunchAndClose();
-        else
-            Launch();
-    }
-
-    //[RelayCommand(CanExecute = nameof(CanLaunch))]
-    private void Launch()
-    {
-        if (SelectedApp is null || !(VisionProject?.Exists ?? false))
+        IAvApp? appToLaunch = app as IAvApp;
+        appToLaunch ??= SelectedApp;
+        if (appToLaunch is null || !(VisionProject?.Exists ?? false))
         {
             return;
         }
 
-        var args = LaunchOptions!.GetCommandLineArgs();
-        Messenger.Send(new OpenAppRequest(SelectedApp, args));
+        var args = LaunchOptions.Get(appToLaunch.Type)?.GetCommandLineArgs();
+        if(args is null)
+        {
+            return;
+        }
+        Messenger.Send(new OpenAppRequest(appToLaunch, args));
+        if (ShouldCloseAfterLaunching)
+        {
+            Application.Current.Shutdown();
+        }
 
-    }
-    //[RelayCommand(CanExecute = nameof(CanLaunch))]
-    private void LaunchAndClose()
-    {
-        Launch();
-        Application.Current.Shutdown();
     }
 
     [ObservableProperty]
@@ -112,9 +105,9 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
         }
     }
 
-    private async Task<bool> OpenProject(string filepath)
+    public async Task<bool> OpenProject(string filepath)
     {
-        
+
         try
         {
             var project = ProjectReader.OpenProject(filepath);

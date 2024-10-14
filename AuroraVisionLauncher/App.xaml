@@ -15,7 +15,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
                     <conv:FileToIconConverter x:Key="FileIconConverter" />
-                    <conv:AvAppToImageSourceConverter x:Key="AppToImageConverter" />
+                    <conv:AvAppToImageSourceConverter x:Key="AppToImageSourceConverter" />
+                    <conv:AvAppToImageConverter x:Key="AppToImageConverter" />
                     <conv:BoolToVisibilityConverter x:Key="BoolVisibilityConverter" />
                     <conv:NullToVisibilityConverter x:Key="NullVisibilityConverter" />
                     <conv:UtcDatetimeToLocalConverter x:Key="UtcToLocalConverter" />
@@ -28,8 +29,6 @@
                         x:Key="CustomToUnderlineConverter"
                         FalseValue="None"
                         TrueValue="Underline" />
-                    <theming:SuperLibraryThemeProvider x:Key="{x:Static theming:SuperLibraryThemeProvider.DefaultInstance}" />
-
                 </ResourceDictionary>
                 <!--
                     MahApps.Metro resource dictionaries.

@@ -39,6 +39,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     public string? Description => _avApp.Description ?? Name;
     public bool IsCustom =>_avApp.IsCustom;
 
+    public bool WarnAboutNewProcess => Type == ProductType.Professional && IsLaunched;
     public AvVersionFacade? SecondaryVersion { get; }
 
     public CommandLineInterface Interface => _avApp.Interface;
@@ -68,6 +69,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     private void ActiveProcesses_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
         OnPropertyChanged(nameof(IsLaunched));
+        OnPropertyChanged(nameof(WarnAboutNewProcess));
     }
 
     public ProductBrand Brand => _avApp.Brand;
@@ -81,7 +83,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     private void OpenContainingFolder() => ExplorerHelper.OpenExplorer(RootPath);
     private bool CanLaunchExecutable() => IsExecutable;
     [RelayCommand(CanExecute = nameof(CanLaunchExecutable))]
-    private void LaunchWithoutProgram()
+    public void LaunchWithoutProgram()
     {
         _messenger.Send(new OpenAppRequest(this));
     }
@@ -90,11 +92,11 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     {
         Clipboard.SetText(Path);
     }
-    [RelayCommand]
-    private void KillAllProcesses()
-    {
-        _messenger.Send(new KillAllProcessesRequest(this));
-    }
+    //[RelayCommand]
+    //private void KillAllProcesses()
+    //{
+    //    _messenger.Send(new KillAllProcessesRequest(this,));
+    //}
 
     [RelayCommand]
     private void ShowProcessOverview()

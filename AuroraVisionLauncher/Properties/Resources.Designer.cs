@@ -151,6 +151,15 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Launch the application and load the program.
+        /// </summary>
+        public static string AvAppLaunchWithProgram {
+            get {
+                return ResourceManager.GetString("AvAppLaunchWithProgram", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open installation folder.
         /// </summary>
         public static string AvAppOpenInstallationFolder {
@@ -381,6 +390,60 @@ namespace AuroraVisionLauncher.Properties {
         public static string InstalledAppsPageTitle {
             get {
                 return ResourceManager.GetString("InstalledAppsPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm termination of all process of app.
+        /// </summary>
+        public static string KillAllProcessesDialogHeader {
+            get {
+                return ResourceManager.GetString("KillAllProcessesDialogHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to kill all process of app:.
+        /// </summary>
+        public static string KillAllProcessesDialogMessage {
+            get {
+                return ResourceManager.GetString("KillAllProcessesDialogMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string KillProcessButtonNo {
+            get {
+                return ResourceManager.GetString("KillProcessButtonNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string KillProcessButtonYes {
+            get {
+                return ResourceManager.GetString("KillProcessButtonYes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm termination of process.
+        /// </summary>
+        public static string KillProcessDialogHeader {
+            get {
+                return ResourceManager.GetString("KillProcessDialogHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to kill this process:.
+        /// </summary>
+        public static string KillProcessDialogMessage {
+            get {
+                return ResourceManager.GetString("KillProcessDialogMessage", resourceCulture);
             }
         }
         
@@ -727,6 +790,15 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check for updates.
+        /// </summary>
+        public static string SettingsPageCheckUpdatesButtonContent {
+            get {
+                return ResourceManager.GetString("SettingsPageCheckUpdatesButtonContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose Theme.
         /// </summary>
         public static string SettingsPageChooseThemeText {
@@ -1024,6 +1096,33 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The release title is: {0}.
+        /// </summary>
+        public static string VersionCheckDialogMessageSecondFormat {
+            get {
+                return ResourceManager.GetString("VersionCheckDialogMessageSecondFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No updates found.
+        /// </summary>
+        public static string VersionCheckDialogNoUpdatesHeader {
+            get {
+                return ResourceManager.GetString("VersionCheckDialogNoUpdatesHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🎉🎉 You have the newest version! 🎉🎉.
+        /// </summary>
+        public static string VersionCheckDialogNoUpdatesMessage {
+            get {
+                return ResourceManager.GetString("VersionCheckDialogNoUpdatesMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What do you want to do?.
         /// </summary>
         public static string VersionCheckDialogQuestion {
@@ -1047,6 +1146,15 @@ namespace AuroraVisionLauncher.Properties {
         public static string VersionCheckDialogUpdateButtonContent {
             get {
                 return ResourceManager.GetString("VersionCheckDialogUpdateButtonContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This app is already running, you may not be able to start another process.
+        /// </summary>
+        public static string WarningLanchButtonWarningTooltip {
+            get {
+                return ResourceManager.GetString("WarningLanchButtonWarningTooltip", resourceCulture);
             }
         }
     }

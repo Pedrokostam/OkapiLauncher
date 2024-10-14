@@ -39,11 +39,11 @@
     <x:Static x:Key="IconLauncher" Member="icons:MaterialIconKind.CogPlay" />
     <x:Static x:Key="IconTurnOff" Member="icons:MaterialIconKind.CloseThick" />
     <x:Static x:Key="IconSettings" Member="icons:MaterialIconKind.Tools" />
-    <x:Static x:Key="IconKill" Member="icons:MaterialIconKind.Pistol" />
+    <x:Static x:Key="IconKill" Member="icons:MaterialIconKind.Power" />
     <x:Static x:Key="IconFocusOn" Member="icons:MaterialIconKind.TargetVariant" />
-    <x:Static x:Key="IconKillAll" Member="icons:MaterialIconKind.Nuke" />
+    <x:Static x:Key="IconKillAll" Member="icons:MaterialIconKind.Bomb" />
     <x:Static x:Key="IconOpenFolderPicker" Member="icons:MaterialIconKind.FolderSearch" />
     <x:Static x:Key="IconIsLaunched" Member="icons:MaterialIconKind.PowerPlug" />
-    <x:Static x:Key="IconIsNotLaunched" Member="icons:MaterialIconKind.PowerPlugOff" />
+    <x:Static x:Key="IconIsNotLaunched" Member="icons:MaterialIconKind.PowerPlugOffOutline" />
 
 </ResourceDictionary>
