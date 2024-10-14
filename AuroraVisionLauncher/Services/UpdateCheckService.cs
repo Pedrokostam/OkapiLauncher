@@ -26,6 +26,10 @@ public class UpdateCheckService : IUpdateCheckService
     private readonly AppConfig _appConfig;
     private readonly ISystemService _systemService;
     private readonly IContentDialogService _contentDialogService;
+    /// <summary>
+    /// Is a dependency to ensure its instantiated before.
+    /// </summary>
+    private readonly IPersistAndRestoreService _persistAndRestoreService;
 
     public bool AutoCheckForUpdatesEnabled
     {
@@ -99,18 +103,15 @@ public class UpdateCheckService : IUpdateCheckService
     }
 
 
-    public UpdateCheckService(IOptions<AppConfig> appConfig, ISystemService systemService, IContentDialogService contentDialogService)
+    public UpdateCheckService(IOptions<AppConfig> appConfig, ISystemService systemService, IContentDialogService contentDialogService,IPersistAndRestoreService persistAndRestoreService)
     {
         _appConfig = appConfig.Value;
         _systemService = systemService;
         _contentDialogService = contentDialogService;
-        App.Current.Properties.InitializeKey<bool>(AutoCheckKey, defaultValue: false);
-        App.Current.Properties.InitializeKey<DateTime>(LastCheckDateKey, defaultValue: DateTime.UnixEpoch);
-        App.Current.Properties.InitializeKey<string>(IgnoredReleaseKey);
-
-        App.Current.Properties.InitializeKey<bool>(AutoCheckKey, defaultValue: false);
-        App.Current.Properties.InitializeKey<DateTime>(LastCheckDateKey, defaultValue: DateTime.UnixEpoch);
-        App.Current.Properties.InitializeKey<string>(IgnoredReleaseKey);
+        _persistAndRestoreService = persistAndRestoreService;
+        App.Current.Properties.InitializeDictKey<bool>(AutoCheckKey, defaultValue: false);
+        App.Current.Properties.InitializeDictKey<DateTime>(LastCheckDateKey, defaultValue: DateTime.UnixEpoch);
+        App.Current.Properties.InitializeDictKey<string>(IgnoredReleaseKey);
         //if (App.Current.Properties.Contains(AutoCheckKey))
         //{
         //    var acfu = App.Current.Properties[AutoCheckKey];
