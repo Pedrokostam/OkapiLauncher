@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.IO;
-
+using System.Text.Json;
 using AuroraVisionLauncher.Contracts.Services;
 using AuroraVisionLauncher.Core.Contracts.Services;
 using AuroraVisionLauncher.Models;
@@ -35,12 +35,24 @@ public class PersistAndRestoreService : IPersistAndRestoreService
     {
         var folderPath = Path.Combine(_localAppData, _appConfig.ConfigurationsFolder);
         var fileName = _appConfig.AppPropertiesFileName;
-        var properties = _fileService.Read<IDictionary>(folderPath, fileName);
+        var properties = _fileService.Read<IDictionary<string, JsonElement>>(folderPath, fileName);
         if (properties != null)
         {
-            foreach (DictionaryEntry property in properties)
+            foreach (KeyValuePair<string, JsonElement> property in properties)
             {
-                App.Current.Properties.Add(property.Key, property.Value);
+                object? value = property.Value.ValueKind switch
+                {
+                    JsonValueKind.String => property.Value.GetString(),
+                    JsonValueKind.Number => property.Value.GetDouble(),
+                    JsonValueKind.True => true,
+                    JsonValueKind.False => false,
+                    JsonValueKind.Null => null,
+                    _ => property,
+                    //JsonValueKind.Undefined => throw new NotImplementedException(),
+                    //JsonValueKind.Object => throw new NotImplementedException(),
+                    //JsonValueKind.Array => throw new NotImplementedException(),
+                };
+                App.Current.Properties.Add(property.Key, value);
             }
         }
     }
