@@ -40,19 +40,7 @@ public class PersistAndRestoreService : IPersistAndRestoreService
         {
             foreach (KeyValuePair<string, JsonElement> property in properties)
             {
-                object? value = property.Value.ValueKind switch
-                {
-                    JsonValueKind.String => property.Value.GetString(),
-                    JsonValueKind.Number => property.Value.GetDouble(),
-                    JsonValueKind.True => true,
-                    JsonValueKind.False => false,
-                    JsonValueKind.Null => null,
-                    _ => property,
-                    //JsonValueKind.Undefined => throw new NotImplementedException(),
-                    //JsonValueKind.Object => throw new NotImplementedException(),
-                    //JsonValueKind.Array => throw new NotImplementedException(),
-                };
-                App.Current.Properties.Add(property.Key, value);
+                App.Current.Properties.Add(property.Key, property.Value);
             }
         }
     }

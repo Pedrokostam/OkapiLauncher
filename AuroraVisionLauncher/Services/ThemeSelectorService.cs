@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
 using AuroraVisionLauncher.Contracts.Services;
+using AuroraVisionLauncher.Helpers;
 using AuroraVisionLauncher.Models;
 
 using ControlzEx.Theming;
@@ -75,7 +76,8 @@ public class ThemeSelectorService : IThemeSelectorService
 
     public ThemeSelectorService()
     {
-
+        App.Current.Properties.InitializeKey(CustomThemeColorKey, je => ColorConverter.ConvertFromString(je.GetString()) as Color?);
+        App.Current.Properties.InitializeKey<AppTheme>(ThemeKey);
     }
 
 

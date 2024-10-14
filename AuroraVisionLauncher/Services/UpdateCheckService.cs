@@ -10,6 +10,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using AuroraVisionLauncher.Contracts.Services;
+using AuroraVisionLauncher.Helpers;
 using AuroraVisionLauncher.Models;
 using AuroraVisionLauncher.Models.Updates;
 using Microsoft.Extensions.Options;
@@ -103,32 +104,39 @@ public class UpdateCheckService : IUpdateCheckService
         _appConfig = appConfig.Value;
         _systemService = systemService;
         _contentDialogService = contentDialogService;
-        if (App.Current.Properties.Contains(AutoCheckKey))
-        {
-            var acfu = App.Current.Properties[AutoCheckKey];
-            App.Current.Properties[AutoCheckKey] = acfu is bool b ? b : true;
-        }
-        else
-        {
-            App.Current.Properties[AutoCheckKey] = true;
-        }
-        if (App.Current.Properties.Contains(LastCheckDateKey))
-        {
-            var acfu = App.Current.Properties[LastCheckDateKey];
-            App.Current.Properties[LastCheckDateKey] = acfu is DateTime d ? d : DateTime.UnixEpoch;
-        }
-        else
-        {
-            App.Current.Properties[LastCheckDateKey] = DateTime.UnixEpoch;
-        }
-        if (App.Current.Properties.Contains(IgnoredReleaseKey))
-        {
-            var tag = App.Current.Properties[IgnoredReleaseKey] as string;
-            App.Current.Properties[IgnoredReleaseKey] = tag;
-        }
-        else
-        {
-            App.Current.Properties[IgnoredReleaseKey] = null;
-        }
+        App.Current.Properties.InitializeKey<bool>(AutoCheckKey, defaultValue: false);
+        App.Current.Properties.InitializeKey<DateTime>(LastCheckDateKey, defaultValue: DateTime.UnixEpoch);
+        App.Current.Properties.InitializeKey<string>(IgnoredReleaseKey);
+
+        App.Current.Properties.InitializeKey<bool>(AutoCheckKey, defaultValue: false);
+        App.Current.Properties.InitializeKey<DateTime>(LastCheckDateKey, defaultValue: DateTime.UnixEpoch);
+        App.Current.Properties.InitializeKey<string>(IgnoredReleaseKey);
+        //if (App.Current.Properties.Contains(AutoCheckKey))
+        //{
+        //    var acfu = App.Current.Properties[AutoCheckKey];
+        //    App.Current.Properties[AutoCheckKey] = acfu is bool b ? b : true;
+        //}
+        //else
+        //{
+        //    App.Current.Properties[AutoCheckKey] = true;
+        //}
+        //if (App.Current.Properties.Contains(LastCheckDateKey))
+        //{
+        //    var acfu = App.Current.Properties[LastCheckDateKey];
+        //    App.Current.Properties[LastCheckDateKey] = acfu is DateTime d ? d : DateTime.UnixEpoch;
+        //}
+        //else
+        //{
+        //    App.Current.Properties[LastCheckDateKey] = DateTime.UnixEpoch;
+        //}
+        //if (App.Current.Properties.Contains(IgnoredReleaseKey))
+        //{
+        //    var tag = App.Current.Properties[IgnoredReleaseKey] as string;
+        //    App.Current.Properties[IgnoredReleaseKey] = tag;
+        //}
+        //else
+        //{
+        //    App.Current.Properties[IgnoredReleaseKey] = null;
+        //}
     }
 }
