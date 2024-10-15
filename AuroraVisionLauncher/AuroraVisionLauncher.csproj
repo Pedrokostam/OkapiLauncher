@@ -10,8 +10,8 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<ApplicationIcon>Resources\Icons\AppIcon.ico</ApplicationIcon>
+		<Version>1.1.1.0</Version>
 		<PublishReadyToRun>true</PublishReadyToRun>
-		<Version>1.1.0.0</Version>
 		<InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);Microsoft.Extensions.Configuration.Binder.SourceGeneration</InterceptorsPreviewNamespaces>
 	</PropertyGroup>
 

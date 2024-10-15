@@ -10,6 +10,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using AuroraVisionLauncher.Contracts.Services;
+using AuroraVisionLauncher.Helpers;
 using AuroraVisionLauncher.Models;
 using AuroraVisionLauncher.Models.Updates;
 using Microsoft.Extensions.Options;
@@ -25,6 +26,10 @@ public class UpdateCheckService : IUpdateCheckService
     private readonly AppConfig _appConfig;
     private readonly ISystemService _systemService;
     private readonly IContentDialogService _contentDialogService;
+    /// <summary>
+    /// Is a dependency to ensure its instantiated before.
+    /// </summary>
+    private readonly IPersistAndRestoreService _persistAndRestoreService;
 
     public bool AutoCheckForUpdatesEnabled
     {
@@ -94,41 +99,40 @@ public class UpdateCheckService : IUpdateCheckService
         catch (HttpRequestException)
         {
         }
-        LastCheckDate = DateTime.UtcNow;
+        finally
+        {
+            LastCheckDate = DateTime.UtcNow;
+        }
     }
 
 
-    public UpdateCheckService(IOptions<AppConfig> appConfig, ISystemService systemService, IContentDialogService contentDialogService)
+    public UpdateCheckService(IOptions<AppConfig> appConfig, ISystemService systemService, IContentDialogService contentDialogService, IPersistAndRestoreService persistAndRestoreService)
     {
         _appConfig = appConfig.Value;
         _systemService = systemService;
         _contentDialogService = contentDialogService;
-        if (App.Current.Properties.Contains(AutoCheckKey))
+        _persistAndRestoreService = persistAndRestoreService;
+        if (_persistAndRestoreService.IsDataRestored)
         {
-            var acfu = App.Current.Properties[AutoCheckKey];
-            App.Current.Properties[AutoCheckKey] = acfu is bool b ? b : true;
+            // if already restored, get
+            InitializeData();
         }
         else
         {
-            App.Current.Properties[AutoCheckKey] = true;
+            // otherwise wait for restore
+            _persistAndRestoreService.DataRestored += _persistAndRestoreService_DataRestored;
         }
-        if (App.Current.Properties.Contains(LastCheckDateKey))
-        {
-            var acfu = App.Current.Properties[LastCheckDateKey];
-            App.Current.Properties[LastCheckDateKey] = acfu is DateTime d ? d : DateTime.UnixEpoch;
-        }
-        else
-        {
-            App.Current.Properties[LastCheckDateKey] = DateTime.UnixEpoch;
-        }
-        if (App.Current.Properties.Contains(IgnoredReleaseKey))
-        {
-            var tag = App.Current.Properties[IgnoredReleaseKey] as string;
-            App.Current.Properties[IgnoredReleaseKey] = tag;
-        }
-        else
-        {
-            App.Current.Properties[IgnoredReleaseKey] = null;
-        }
+    }
+
+    private void _persistAndRestoreService_DataRestored(object? sender, EventArgs e)
+    {
+        InitializeData();
+    }
+
+    private static void InitializeData()
+    {
+        App.Current.Properties.InitializeDictKey<bool>(AutoCheckKey, defaultValue: false);
+        App.Current.Properties.InitializeDictKey<DateTime>(LastCheckDateKey, defaultValue: DateTime.UnixEpoch);
+        App.Current.Properties.InitializeDictKey<string>(IgnoredReleaseKey);
     }
 }

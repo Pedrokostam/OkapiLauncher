@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
 using AuroraVisionLauncher.Contracts.Services;
+using AuroraVisionLauncher.Helpers;
 using AuroraVisionLauncher.Models;
 
 using ControlzEx.Theming;
@@ -71,13 +72,36 @@ public class ThemeSelectorService : IThemeSelectorService
 
     private static readonly ResourceDictionary OtherDark = new ResourceDictionary() { Source = new Uri("pack://application:,,,/Styles/Themes/Dark.Other.xaml") };
     private static readonly ResourceDictionary OtherLight = new ResourceDictionary() { Source = new Uri("pack://application:,,,/Styles/Themes/Light.Other.xaml") };
+    /// <summary>
+    /// Is a dependency to ensure its instantiated before.
+    /// </summary>
+    private readonly IPersistAndRestoreService _persistAndRestoreService;
+    private bool _initialized;
 
-
-    public ThemeSelectorService()
+    public ThemeSelectorService(IPersistAndRestoreService persistAndRestoreService)
     {
-
+        _persistAndRestoreService = persistAndRestoreService;
+        if (_persistAndRestoreService.IsDataRestored)
+        {
+            InitializeData();
+        }
+        _persistAndRestoreService.DataRestored += _persistAndRestoreService_DataRestored;
     }
 
+    private void _persistAndRestoreService_DataRestored(object? sender, EventArgs e)
+    {
+        InitializeData();
+    }
+
+    private void InitializeData()
+    {
+        if (!_initialized && _persistAndRestoreService.IsDataRestored)
+        {
+            App.Current.Properties.InitializeDictKey<Color?>(CustomThemeColorKey);
+            App.Current.Properties.InitializeDictKey<AppTheme>(ThemeKey);
+            _initialized = true;
+        }
+    }
 
     public void InitializeTheme()
     {
@@ -126,8 +150,8 @@ public class ThemeSelectorService : IThemeSelectorService
             activeTheme.Resources[key] = other[key];
         }
         ThemeManager.Current.ChangeTheme(Application.Current, activeTheme);
-        App.Current.Properties[ThemeKey] = themeEnum.ToString();
-        App.Current.Properties[CustomThemeColorKey] = customColor;
+        SelectedTheme = themeEnum;
+        SelectedCustomColorAccent = customColor;
     }
     /// <summary>
     /// Sync with general theme (dark/light) and accent color.
@@ -150,37 +174,17 @@ public class ThemeSelectorService : IThemeSelectorService
     {
         get
         {
-            if (App.Current.Properties.Contains(ThemeKey))
-            {
-                var themeName = App.Current.Properties[ThemeKey];
-                return themeName switch
-                {
-                    string stringTheme => Enum.TryParse(stringTheme, out AppTheme theme) ? theme : AppTheme.System,
-                    AppTheme theme => theme,
-                    _ => AppTheme.System,
-                };
-            }
-            return AppTheme.System;
+            return (AppTheme)App.Current.Properties[ThemeKey]!;
         }
-        set=> App.Current.Properties[ThemeKey] = value;
+        set => App.Current.Properties[ThemeKey] = value;
     }
-   
+
     public Color? SelectedCustomColorAccent
     {
         get
         {
-            if (App.Current.Properties.Contains(CustomThemeColorKey))
-            {
-                var currcol = App.Current.Properties[CustomThemeColorKey];
-                return currcol switch
-                {
-                    string stringColor => ColorConverter.ConvertFromString(stringColor) as Color?,
-                    Color color => color,
-                    _ => null,
-                };
-            }
-            return null;
+            return App.Current.Properties[CustomThemeColorKey] as Color?;
         }
-        set=>App.Current.Properties[CustomThemeColorKey] = value;
+        set => App.Current.Properties[CustomThemeColorKey] = value;
     }
 }
