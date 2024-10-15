@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.IO;
-
+using System.Text.Json;
 using AuroraVisionLauncher.Contracts.Services;
 using AuroraVisionLauncher.Core.Contracts.Services;
 using AuroraVisionLauncher.Models;
@@ -21,6 +21,10 @@ public class PersistAndRestoreService : IPersistAndRestoreService
         _appConfig = appConfig.Value;
     }
 
+    public bool IsDataRestored { get; private set; }
+
+    public event EventHandler? DataRestored;
+
     public void PersistData()
     {
         if (App.Current.Properties != null)
@@ -35,13 +39,15 @@ public class PersistAndRestoreService : IPersistAndRestoreService
     {
         var folderPath = Path.Combine(_localAppData, _appConfig.ConfigurationsFolder);
         var fileName = _appConfig.AppPropertiesFileName;
-        var properties = _fileService.Read<IDictionary>(folderPath, fileName);
+        var properties = _fileService.Read<IDictionary<string, JsonElement>>(folderPath, fileName);
         if (properties != null)
         {
-            foreach (DictionaryEntry property in properties)
+            foreach (KeyValuePair<string, JsonElement> property in properties)
             {
                 App.Current.Properties.Add(property.Key, property.Value);
             }
         }
+        IsDataRestored = true;
+        DataRestored?.Invoke(this, EventArgs.Empty);
     }
 }
