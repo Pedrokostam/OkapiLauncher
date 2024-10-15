@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "AuroraVisionLauncher"
-#define MyAppVersion "1.1.1.0"
+;#define VERSION "0.0.0.0"
 #define MyAppPublisher "VanCorp"
 #define MyAppURL "https://github.com/Pedrokostam/AuroraVisionLauncher"
 #define MyAppExeName "AuroraVisionLauncher.exe"
@@ -12,8 +12,8 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{2C508297-5294-4681-BB5E-D2B20F6FC4AB}
 AppName={#MyAppName}
-AppVersion={#MyAppVersion}
-;AppVerName={#MyAppName} {#MyAppVersion}
+AppVersion={#VERSION}
+;AppVerName={#MyAppName} {#VERSION}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
@@ -41,6 +41,9 @@ Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
 
+CloseApplications=yes
+;CreateUninstallRegKey=yes
+;UpdateUninstallLogAppName=yes
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
