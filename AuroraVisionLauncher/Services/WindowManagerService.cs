@@ -57,13 +57,13 @@ public class WindowManagerService : IWindowManagerService
             {
                 Title = GetWindowTitle(key, parameter),
                 Style = Application.Current.FindResource("CustomMetroWindow") as Style,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
             };
             var frame = new Frame()
             {
                 Focusable = false,
                 NavigationUIVisibility = NavigationUIVisibility.Hidden,
             };
-
             window.Content = frame;
             var page = _pageService.GetPage(key);
             window.Closed += OnWindowClosed;
