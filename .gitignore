@@ -362,3 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /AuroraVisionLauncher.Installer/Output/Installer.exe
+/publish_tools/output_info.json
