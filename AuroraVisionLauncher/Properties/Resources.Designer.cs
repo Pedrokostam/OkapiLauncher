@@ -331,6 +331,33 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel download.
+        /// </summary>
+        public static string DownloadFileCancelButtonContent {
+            get {
+                return ResourceManager.GetString("DownloadFileCancelButtonContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloading file: {0}.
+        /// </summary>
+        public static string DownloadFileHeader {
+            get {
+                return ResourceManager.GetString("DownloadFileHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Currently used app was installed manually - installer will not detect it automatically..
+        /// </summary>
+        public static string DownloadFileNotFromInstallerWarning {
+            get {
+                return ResourceManager.GetString("DownloadFileNotFromInstallerWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string ErrorDialogHeader {

@@ -20,18 +20,20 @@ public record HtmlVersionResponse
     {
 
     }
-    public HtmlVersionResponse(string versionTag, string versionTitle, DateTime releaseDate, bool isAutomaticCheck)
+    public HtmlVersionResponse(string versionTag, string versionTitle, DateTime releaseDate, bool isAutomaticCheck, string? installerDownloadLink)
     {
         VersionTag = versionTag;
         VersionTitle = versionTitle;
         ReleaseDate = releaseDate;
         IsAutomaticCheck = isAutomaticCheck;
+        InstallerDownloadLink = installerDownloadLink;
     }
 
     public string VersionTag { get; } = string.Empty;
     public string VersionTitle { get; } = string.Empty;
     public DateTime ReleaseDate { get; } = DateTime.MinValue;
     public bool IsAutomaticCheck { get; } = false;
+    public string? InstallerDownloadLink { get; }
     public static HtmlVersionResponse FromJsonDocument(JsonDocument document, bool isAutomaticCheck)
     {
         JsonElement releaseInfo = document.RootElement;
@@ -43,7 +45,20 @@ public record HtmlVersionResponse
         {
             return new HtmlVersionResponse();
         }
-        return new HtmlVersionResponse(tagName, releaseName, publishedAt, isAutomaticCheck);
+        string? installerDownloadLink = null;
+        foreach (var asset in releaseInfo.GetProperty("assets").EnumerateArray())
+        {
+            var contentType = asset.GetProperty("content_type").GetString();
+            var downloadUrl = asset.GetProperty("browser_download_url").GetString();
+            var name = asset.GetProperty("name").GetString() ?? "";
+            if (string.Equals(contentType, "application/x-msdownload", StringComparison.OrdinalIgnoreCase)
+                && name.Contains("install", StringComparison.OrdinalIgnoreCase))
+            {
+                installerDownloadLink = downloadUrl;
+            }
+        }
+
+        return new HtmlVersionResponse(tagName, releaseName, publishedAt, isAutomaticCheck, installerDownloadLink);
     }
     public PromptAction ShouldPromptUser(string? ignoredVersion)
     {
