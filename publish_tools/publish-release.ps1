@@ -69,5 +69,7 @@ while ($true) {
     . $innoCompilerPath @innoParams /V10
     if ($LASTEXITCODE -eq 0) {
         break
+    }else{
+        start-sleep -Seconds 1
     }
 }

@@ -29,6 +29,9 @@ ArchitecturesInstallIn64BitMode=x64compatible
 
 AllowNoIcons=yes
 
+WizardImageFile=installer_images/panel.bmp
+WizardSmallImageFile=installer_images/icon.bmp
+
 LicenseFile=..\LICENSE.txt
 ;InfoBeforeFile=C:\Users\Pedro\source\repos\AuroraVisionLauncher\LICENSE.txt
 ;InfoAfterFile=C:\Users\Pedro\source\repos\AuroraVisionLauncher\LICENSE.txt
@@ -62,7 +65,6 @@ Name: "{autodesktop}\{#APPNAME}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desk
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(APPNAME, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 [Code]
-; Kill open instances before uninstalling
 function InitializeUninstall(): Boolean;
   var ErrorCode: Integer;
 begin
