@@ -22,16 +22,13 @@ AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#APPNAME}
-; "ArchitecturesAllowed=x64compatible" specifies that Setup cannot run
-; on anything but x64 and Windows 11 on Arm.
-ArchitecturesAllowed=x64compatible
-; "ArchitecturesInstallIn64BitMode=x64compatible" requests that the
-; install be done in "64-bit mode" on x64 or Windows 11 on Arm,
-; meaning it should use the native 64-bit Program Files directory and
-; the 64-bit view of the registry.
-ArchitecturesInstallIn64BitMode=x64compatible
 DefaultGroupName={#APPNAME}
+
+ArchitecturesAllowed=x64compatible
+ArchitecturesInstallIn64BitMode=x64compatible
+
 AllowNoIcons=yes
+
 LicenseFile=..\LICENSE.txt
 ;InfoBeforeFile=C:\Users\Pedro\source\repos\AuroraVisionLauncher\LICENSE.txt
 ;InfoAfterFile=C:\Users\Pedro\source\repos\AuroraVisionLauncher\LICENSE.txt
@@ -39,14 +36,12 @@ LicenseFile=..\LICENSE.txt
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
-OutputBaseFilename={#APPNAME} Installer
+OutputBaseFilename={#APPNAME} {#VERSION} installer
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
-
 CloseApplications=yes
-;CreateUninstallRegKey=yes
-;UpdateUninstallLogAppName=yes
+
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
@@ -58,20 +53,6 @@ Source: "{#BINDIR}\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#BINDIR}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
-;[Registry]
-;;Registry data from file fiexe.reg
-;Root: HKCU; Subkey: "Software\Classes\AuroraVisionLauncher.fiexe"; Flags: uninsdeletekey; Check: not IsAdminInstallMode
-;Root: HKCU; Subkey: "Software\Classes\AuroraVisionLauncher.fiproj"; Flags: uninsdeletekey; Check: not IsAdminInstallMode
-;Root: HKCU; Subkey: "Software\Classes\AuroraVisionLauncher.avproj"; Flags: uninsdeletekey; Check: not IsAdminInstallMode
-;Root: HKCU; Subkey: "Software\Classes\AuroraVisionLauncher.avexe"; Flags: uninsdeletekey; Check: not IsAdminInstallMode
-;Root: HKCU; Subkey: "Software\Classes\AuroraVisionLauncher.fiexe\DefaultIcon"; Flags: uninsdeletekey; Check: not IsAdminInstallMode
-;Root: HKCU; Subkey: "Software\Classes\AuroraVisionLauncher.fiexe\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "C:\Users\Pedro\AppData\Local\AuroraVisionLauncher\Icons\FabImageRuntime.ico,0"; Flags: uninsdeletevalue; Check: not IsAdminInstallMode
-;Root: HKCU; Subkey: "Software\Classes\AuroraVisionLauncher.fiexe\shell"; Flags: uninsdeletekey; Check: not IsAdminInstallMode
-;Root: HKCU; Subkey: "Software\Classes\AuroraVisionLauncher.fiexe\shell\open"; Flags: uninsdeletekey; Check: not IsAdminInstallMode
-;Root: HKCU; Subkey: "Software\Classes\AuroraVisionLauncher.fiexe\shell\open\command"; Flags: uninsdeletekey; Check: not IsAdminInstallMode
-;Root: HKCU; Subkey: "Software\Classes\AuroraVisionLauncher.fiexe\shell\open\command"; ValueType: string; ValueName: ""; ValueData: "\""C:\Users\Pedro\source\repos\AuroraVisionLauncher\AuroraVisionLauncher\bin\publish\AuroraVisionLauncher.exe\"" \""%1\"""; Flags: uninsdeletevalue; Check: not IsAdminInstallMode
-;;End of registry data from file fiexe.reg
-
 [Icons]
 Name: "{group}\{#APPNAME}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{group}\{cm:UninstallProgram,{#APPNAME}}"; Filename: "{uninstallexe}"
@@ -79,4 +60,14 @@ Name: "{autodesktop}\{#APPNAME}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desk
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(APPNAME, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+
+[Code]
+; Kill open instances before uninstalling
+function InitializeUninstall(): Boolean;
+  var ErrorCode: Integer;
+begin
+  ShellExec('open','taskkill.exe','/f /im "{#MyAppExeName}"','',SW_HIDE,ewNoWait,ErrorCode);
+  ShellExec('open','tskill.exe',' "{#APPNAME}"','',SW_HIDE,ewNoWait,ErrorCode);
+  result := True;
+end;
 
