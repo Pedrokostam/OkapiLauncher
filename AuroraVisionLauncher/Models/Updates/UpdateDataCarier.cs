@@ -10,22 +10,23 @@ using AuroraVisionLauncher.Contracts.Services;
 namespace AuroraVisionLauncher.Models.Updates;
 public class UpdateDataCarier
 {
-    private UpdateDataCarier(HtmlVersionResponse? htmlResponse, bool isAutomaticUpdateCheck, DateTime appBuildDate, bool isAppRegistered, string[] ignoredVersions)
+    private UpdateDataCarier(HtmlVersionResponse? htmlResponse, bool isAutomaticUpdateCheck, DateTime appBuildDate, IApplicationInfoService.InstallationScope isAppRegistered, string[] ignoredVersions)
     {
         HtmlResponse = htmlResponse;
         IsAutomaticUpdateCheck = isAutomaticUpdateCheck;
         AppBuildDate = appBuildDate;
-        IsAppRegistered = isAppRegistered;
+        InstallationScope = isAppRegistered;
         IgnoredVersions = ignoredVersions;
     }
 
     public HtmlVersionResponse? HtmlResponse { get; }
     public bool IsAutomaticUpdateCheck { get; }
     public DateTime AppBuildDate { get; }
-    public bool IsAppRegistered { get; }
+    public bool IsConflictedInstallation => InstallationScope == IApplicationInfoService.InstallationScope.Conflict;
+    public IApplicationInfoService.InstallationScope InstallationScope { get; }
     public string[] IgnoredVersions { get; }
-
-    public static UpdateDataCarier Create(IApplicationInfoService infoService,bool isAutomaticCheck, JsonDocument jsonReponse, params string?[] ignoredVersions)
+    public bool CanDownload => HtmlResponse?.InstallerDownloadLink is not null && InstallationScope != IApplicationInfoService.InstallationScope.Conflict;
+    public static UpdateDataCarier Create(IApplicationInfoService infoService, bool isAutomaticCheck, JsonDocument jsonReponse, params string?[] ignoredVersions)
     {
         bool autoCheck = isAutomaticCheck;
         var buildDate = infoService.GetBuildDatetime();
@@ -41,14 +42,14 @@ public class UpdateDataCarier
         {
             return IsAutomaticUpdateCheck ? PromptAction.DontShowDialog : PromptAction.ShowNoUpdatesMessageDialog;
         }
-        if (IgnoredVersions.Contains(HtmlResponse.VersionTag,StringComparer.OrdinalIgnoreCase))
-        {
-            // if version is ignored, dont show dialog if it is automatic check
-            // otherwise show an update prompt
-            return IsAutomaticUpdateCheck ? PromptAction.DontShowDialog : PromptAction.ShowPrompUpdateDialog; // if its auto check dont inform
-        }
         if (CheckLastReleaseIsNewer())
         {
+            if (IsAutomaticUpdateCheck && IgnoredVersions.Contains(HtmlResponse.VersionTag, StringComparer.OrdinalIgnoreCase))
+            {
+                // if version is ignored, dont show dialog if it is automatic check
+                // otherwise show an update prompt
+                return PromptAction.DontShowDialog; // if its auto check dont inform
+            }
             return PromptAction.ShowPrompUpdateDialog;
         }
         return IsAutomaticUpdateCheck ? PromptAction.DontShowDialog : PromptAction.ShowNoUpdatesMessageDialog;

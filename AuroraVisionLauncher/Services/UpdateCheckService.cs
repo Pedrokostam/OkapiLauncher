@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using AuroraVisionLauncher.Contracts.Services;
 using AuroraVisionLauncher.Helpers;
 using AuroraVisionLauncher.Models;
@@ -49,12 +50,22 @@ public class UpdateCheckService : IUpdateCheckService
     }
     public async Task AutoPromptUpdate()
     {
-        if (AutoCheckForUpdatesEnabled && LastCheckDate.Date != DateTime.UtcNow.Date)
+        if (DebugOverride() ||  AutoCheckForUpdatesEnabled && LastCheckDate.Date != DateTime.UtcNow.Date)
         {
             await CheckForUpdates_impl(isAuto: true);
         }
     }
     public async Task ManualPrompUpdate() => await CheckForUpdates_impl(isAuto: false);
+
+    private bool DebugOverride()
+    {
+#if DEBUG
+        var modifiers = Keyboard.Modifiers;
+        return modifiers.HasFlag(ModifierKeys.Control) && modifiers.HasFlag(ModifierKeys.Shift);
+#else
+        return false;
+#endif
+    }
 
     private async Task CheckForUpdates_impl(bool isAuto)
     {
@@ -68,9 +79,7 @@ public class UpdateCheckService : IUpdateCheckService
             JsonDocument responseDocument = JsonDocument.Parse(responseBody);
             var updateCarrier = UpdateDataCarier.Create(_applicationInfoService, isAuto, responseDocument, IgnoredVersion);
             var shouldPrompt = updateCarrier.ShouldPromptUser();
-#if DEBUG
-            shouldPrompt = PromptAction.ShowPrompUpdateDialog;
-#endif
+            shouldPrompt = DebugOverride() ? PromptAction.ShowPrompUpdateDialog : shouldPrompt;
             if (shouldPrompt == PromptAction.DontShowDialog)
             {
                 return;

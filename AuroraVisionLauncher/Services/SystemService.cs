@@ -16,26 +16,34 @@ public class SystemService : ISystemService
 
     public void LaunchInstaller(string? installerPath)
     {
+        installerPath = @"C:\Users\Pedro\source\repos\AuroraVisionLauncher\Release\AuroraVisionLauncher 1.1.1.0 installer.exe";
         if (!File.Exists(installerPath))
         {
             return;
         }
+        var scope = _applicationInfoService.IsRegisteredAsInstalledApp();
+        if (scope == IApplicationInfoService.InstallationScope.Conflict)
+        {
+            return;
+        }
+        var requiresElevationForAppFolder = PrivilegeHelper.CheckFolderRequiresElevation(_applicationInfoService.GetFolder());
         var options = new ProcessStartInfo(installerPath);
-        if (PrivilegeHelper.IsUserAdmin())
+        if (requiresElevationForAppFolder==PrivilegeHelper.RequiredElevation.Elevated)
         {
             options.ArgumentList.Add("/ALLUSERS");
+            // this will force the app to run as admin
         }
-        else
-        {
-            options.ArgumentList.Add("/CURRENTUSER");
-        }
-        if (!_applicationInfoService.IsRegisteredAsInstalledApp())
-        {
-            // if it is registered, installer will detect
-            // if not we have to provide out own path
-            var path = _applicationInfoService.GetFolder().Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
-            options.ArgumentList.Add($"/DIR={path}");
-        }
+        // if app is not in an elevated folder, let the user choose.
+        //else
+        //{
+        //    options.ArgumentList.Add("/CURRENTUSER");
+        //    // this will run the app without verb, as current user
+        //}
+        // if the app is already installed, installer will detect the installation folder and update
+        // if not we want to set the current folder as the install location
+        var path = _applicationInfoService.GetFolder().Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+        // specifying dir will have no effect if we are updating, so we can just set it
+        options.ArgumentList.Add($"/DIR={path}");
         Process.Start(options);
     }
 

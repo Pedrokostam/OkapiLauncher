@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using AuroraVisionLauncher.Contracts.Services;
 using Microsoft.Win32;
+using static AuroraVisionLauncher.Contracts.Services.IApplicationInfoService;
 
 namespace AuroraVisionLauncher.Services;
 
@@ -69,43 +70,44 @@ public class ApplicationInfoService : IApplicationInfoService
             _appBuildDate = buildAttribute switch
             {
                 not null => buildAttribute.DateTime,
-                _ => File.GetLastWriteTime(_appAssembly.Location),
+                _ => File.GetLastWriteTime(GetFolder()),
             };
         }
         return _appBuildDate.Value;
     }
 
-    /// <inheritdoc cref="IApplicationInfoService.GetBuildDatetime()"/>
+    /// <inheritdoc cref="IApplicationInfoService.IsRegisteredAsInstalledApp()"/>
     /// <remarks>Checks Microsoft\Windows\CurrentVersion\Uninstall in both LocalMachine and CurrentUser, looking for the key with the matching <see cref="GetGuid">GUID</see>.</remarks>
-    public bool IsRegisteredAsInstalledApp()
+    public InstallationScope IsRegisteredAsInstalledApp()
     {
-        return CheckUninstallKeys(Registry.CurrentUser) || CheckUninstallKeys(Registry.LocalMachine);
+        var scope = CheckUninstallKeys(Registry.CurrentUser);
+        // if it return CurrentUser or Conflict, we short-return
+        if (scope == InstallationScope.Portable)
+        {
+            // HKCU did not have this app, try local machine
+            scope = CheckUninstallKeys(Registry.LocalMachine);
+        }
+        // LocalMachine, CurrentUser or Portable.
+        return scope;
     }
 
-    private bool CheckUninstallKeys(RegistryKey rootKey)
+    private InstallationScope CheckUninstallKeys(RegistryKey rootKey)
     {
-        string assemblyLocation = _appAssembly.Location;
-        using var uninstall = rootKey.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall");
-        if (uninstall is null)
+        using var uninstall = rootKey.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall") ?? throw new InvalidOperationException("Cuold not access registry");
+        string guidString = GetGuid().ToString();
+        var matchingKeyName = uninstall.GetSubKeyNames().FirstOrDefault(x => x.Contains(guidString, StringComparison.OrdinalIgnoreCase));
+        if (matchingKeyName is null)
         {
-            return false;
+            return InstallationScope.Portable;
         }
-        foreach (var subkeyName in uninstall.GetSubKeyNames())
+        using var matchingKey = uninstall.OpenSubKey(matchingKeyName);
+        if (string.Equals(matchingKey?.GetValue("InstallLocation") as string, GetFolder(), StringComparison.OrdinalIgnoreCase))
         {
-            using var subkey = uninstall.OpenSubKey(subkeyName);
-            if (subkey is null)
-            {
-                continue;
-            }
-            var installLocation = subkey.GetValue("InstallLocation") as string;
-            if (assemblyLocation.Equals(installLocation, StringComparison.OrdinalIgnoreCase))
-            {
-                return true;
-            }
+            return rootKey == Registry.LocalMachine ? InstallationScope.LocalMachine : InstallationScope.CurrentUser;
+        }
+        return InstallationScope.Conflict;
 
-        }
-        return false;
     }
 
-    public string GetExeName() => Path.ChangeExtension(Path.GetFileName(_appAssembly.FullName),"exe") ?? string.Empty;
+    public string GetExeName() => Path.ChangeExtension(Path.GetFileName(_appAssembly.FullName), "exe") ?? string.Empty;
 }

@@ -16,28 +16,29 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 
 namespace AuroraVisionLauncher.ViewModels;
-public partial class VersionDecisionDialogViewModel : ObservableValidator, INavigationAware, IDialogViewModel<UpdatePromptResult>
+public partial class VersionDecisionDialogViewModel(UpdateDataCarier information) : ObservableValidator, INavigationAware, IDialogViewModel<UpdatePromptResult>
 {
-    //public Func<Task> CloseDialog { get; }
-    public UpdateDataCarier UpdateInfo { get; }
+    public UpdateDataCarier UpdateInfo { get; } = information;
+    public string? VersionTitle => UpdateInfo.HtmlResponse?.VersionTitle;
+    public string? VersionTag => UpdateInfo.HtmlResponse?.VersionTag;
+    public bool IsAutomaticUpdateCheck => UpdateInfo.IsAutomaticUpdateCheck;
+    public bool IsConflictedInstallation => UpdateInfo.IsConflictedInstallation;
+
     private readonly TaskCompletionSource<UpdatePromptResult> _done = new();
     public string Message => string.Format(
         System.Globalization.CultureInfo.InvariantCulture,
         Properties.Resources.VersionCheckDialogMessageFormat,
         UpdateInfo.HtmlResponse?.VersionTag,
         UpdateInfo.HtmlResponse?.ReleaseDate.ToLocalTime());
-    public VersionDecisionDialogViewModel(UpdateDataCarier information)
-    {
-        UpdateInfo = information;
-    }
-    public bool AutomaticButtonEnabled => UpdateInfo.IsAutomaticUpdateCheck && !ShouldDisableAutoUpdates;
-    public bool AutoUpdateEnabled => UpdateInfo.HtmlResponse?.InstallerDownloadLink is not null;
+
+    public bool AutoUpdateEnabled => UpdateInfo.CanDownload;
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(DisableAutomaticChecksCommand))]
     private bool _shouldDisableAutoUpdates;
+    public bool AutomaticButtonEnabled => UpdateInfo.IsAutomaticUpdateCheck && !ShouldDisableAutoUpdates;
     private void SetResult(UpdateDecision decision)
     {
-        _done.SetResult(new UpdatePromptResult(decision, AutomaticButtonEnabled,UpdaterFilePath));
+        _done.SetResult(new UpdatePromptResult(decision, AutomaticButtonEnabled, UpdaterFilePath));
     }
     public void OnNavigatedFrom()
     {

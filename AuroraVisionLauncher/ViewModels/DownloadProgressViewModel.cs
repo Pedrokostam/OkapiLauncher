@@ -5,6 +5,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using AuroraVisionLauncher.Contracts.Services;
+using AuroraVisionLauncher.Helpers;
 using AuroraVisionLauncher.Models.Updates;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -16,12 +18,13 @@ public partial class DownloadProgressViewModel : ObservableObject
     {
         DownloadLink = updateInfo.HtmlResponse?.InstallerDownloadLink ?? "";
         Filename = DownloadLink.Split("/")[^1];
-        IsNotRegisteredApp = !updateInfo.IsAppRegistered;
+        IsNotRegisteredApp = updateInfo.InstallationScope.IsRegisteredApp();
+        IsConflictedInstalltion = updateInfo.IsConflictedInstallation;
     }
     public string DownloadLink { get; }
     public string Filename { get; }
     public bool IsNotRegisteredApp { get; }
-
+    public bool IsConflictedInstalltion { get; }
     [ObservableProperty]
     private double _progress = -1;
     [ObservableProperty]
