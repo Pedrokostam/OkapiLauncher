@@ -26,6 +26,7 @@ public class UpdateCheckService : IUpdateCheckService
     private readonly AppConfig _appConfig;
     private readonly ISystemService _systemService;
     private readonly IContentDialogService _contentDialogService;
+    private readonly IApplicationInfoService _applicationInfoService;
     /// <summary>
     /// Is a dependency to ensure its instantiated before.
     /// </summary>
@@ -65,7 +66,7 @@ public class UpdateCheckService : IUpdateCheckService
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();
             JsonDocument responseDocument = JsonDocument.Parse(responseBody);
-            var versionResponse = HtmlVersionResponse.FromJsonDocument(responseDocument, isAuto);
+            var versionResponse = HtmlVersionResponse.FromJsonDocument(responseDocument, isAuto,_applicationInfoService.GetBuildDatetime());
             JsonElement releaseInfo = responseDocument.RootElement;
             var shouldPrompt = versionResponse.ShouldPromptUser(IgnoredVersion);
 #if DEBUG
@@ -109,7 +110,7 @@ public class UpdateCheckService : IUpdateCheckService
     }
 
 
-    public UpdateCheckService(IOptions<AppConfig> appConfig, ISystemService systemService, IContentDialogService contentDialogService, IPersistAndRestoreService persistAndRestoreService)
+    public UpdateCheckService(IOptions<AppConfig> appConfig, ISystemService systemService, IContentDialogService contentDialogService, IPersistAndRestoreService persistAndRestoreService, IApplicationInfoService applicationInfoService)
     {
         _appConfig = appConfig.Value;
         _systemService = systemService;
@@ -125,6 +126,8 @@ public class UpdateCheckService : IUpdateCheckService
             // otherwise wait for restore
             _persistAndRestoreService.DataRestored += _persistAndRestoreService_DataRestored;
         }
+
+        _applicationInfoService = applicationInfoService;
     }
 
     private void _persistAndRestoreService_DataRestored(object? sender, EventArgs e)
