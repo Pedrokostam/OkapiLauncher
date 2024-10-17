@@ -485,7 +485,7 @@
     <value>Confirm termination of all process of app</value>
   </data>
   <data name="DownloadFileHeader" xml:space="preserve">
-    <value>Downloading file: {0}</value>
+    <value>Downloading: {0}</value>
   </data>
   <data name="DownloadFileCancelButtonContent" xml:space="preserve">
     <value>Cancel download</value>

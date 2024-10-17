@@ -68,8 +68,10 @@ public class UpdateCheckService : IUpdateCheckService
             var versionResponse = HtmlVersionResponse.FromJsonDocument(responseDocument, isAuto);
             JsonElement releaseInfo = responseDocument.RootElement;
             var shouldPrompt = versionResponse.ShouldPromptUser(IgnoredVersion);
+#if DEBUG
             shouldPrompt = HtmlVersionResponse.PromptAction.ShowPrompUpdateDialog;
-            if (shouldPrompt == HtmlVersionResponse.PromptAction.DontShowDialog )
+#endif
+            if (shouldPrompt == HtmlVersionResponse.PromptAction.DontShowDialog)
             {
                 return;
             }
