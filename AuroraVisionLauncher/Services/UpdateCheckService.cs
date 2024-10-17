@@ -66,22 +66,21 @@ public class UpdateCheckService : IUpdateCheckService
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();
             JsonDocument responseDocument = JsonDocument.Parse(responseBody);
-            var versionResponse = HtmlVersionResponse.FromJsonDocument(responseDocument, isAuto,_applicationInfoService.GetBuildDatetime());
-            JsonElement releaseInfo = responseDocument.RootElement;
-            var shouldPrompt = versionResponse.ShouldPromptUser(IgnoredVersion);
+            var updateCarrier = UpdateDataCarier.Create(_applicationInfoService, isAuto, responseDocument, IgnoredVersion);
+            var shouldPrompt = updateCarrier.ShouldPromptUser();
 #if DEBUG
-            shouldPrompt = HtmlVersionResponse.PromptAction.ShowPrompUpdateDialog;
+            shouldPrompt = PromptAction.ShowPrompUpdateDialog;
 #endif
-            if (shouldPrompt == HtmlVersionResponse.PromptAction.DontShowDialog)
+            if (shouldPrompt == PromptAction.DontShowDialog)
             {
                 return;
             }
-            if (shouldPrompt == HtmlVersionResponse.PromptAction.ShowNoUpdatesMessageDialog)
+            if (shouldPrompt == PromptAction.ShowNoUpdatesMessageDialog)
             {
                 await _contentDialogService.ShowMessage(Properties.Resources.VersionCheckDialogNoUpdatesMessage, Properties.Resources.VersionCheckDialogNoUpdatesHeader);
                 return;
             }
-            var promptResult = await _contentDialogService.ShowVersionDecisionDialog(versionResponse);
+            var promptResult = await _contentDialogService.ShowVersionDecisionDialog(updateCarrier);
             if (promptResult.DisableAutomaticUpdates)
             {
                 AutoCheckForUpdatesEnabled = false;
@@ -91,12 +90,13 @@ public class UpdateCheckService : IUpdateCheckService
                 case UpdateDecision.Cancel:
                     break;
                 case UpdateDecision.SkipVersion:
-                    IgnoredVersion = versionResponse.VersionTag;
+                    IgnoredVersion = updateCarrier.HtmlResponse?.VersionTag;
                     break;
                 case UpdateDecision.OpenPage:
                     _systemService.OpenInWebBrowser(_appConfig.GithubLink + "/releases/latest");
                     break;
                 case UpdateDecision.LaunchUpdater:
+                    _systemService.LaunchInstaller(promptResult.UpdaterFilepath);
                     break;
             }
         }

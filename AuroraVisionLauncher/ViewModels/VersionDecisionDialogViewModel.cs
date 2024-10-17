@@ -9,6 +9,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using AuroraVisionLauncher.Contracts.ViewModels;
+using AuroraVisionLauncher.Helpers;
 using AuroraVisionLauncher.Models.Updates;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -18,24 +19,25 @@ namespace AuroraVisionLauncher.ViewModels;
 public partial class VersionDecisionDialogViewModel : ObservableValidator, INavigationAware, IDialogViewModel<UpdatePromptResult>
 {
     //public Func<Task> CloseDialog { get; }
-    public HtmlVersionResponse VersionInformation { get; }
-    public bool IsFromInstaller { get; }
+    public UpdateDataCarier UpdateInfo { get; }
     private readonly TaskCompletionSource<UpdatePromptResult> _done = new();
-    public string Message => string.Format(System.Globalization.CultureInfo.InvariantCulture, Properties.Resources.VersionCheckDialogMessageFormat, VersionInformation.VersionTag, VersionInformation.ReleaseDate.ToLocalTime());
-    public VersionDecisionDialogViewModel(Func<Task> closeDialog, HtmlVersionResponse information)
+    public string Message => string.Format(
+        System.Globalization.CultureInfo.InvariantCulture,
+        Properties.Resources.VersionCheckDialogMessageFormat,
+        UpdateInfo.HtmlResponse?.VersionTag,
+        UpdateInfo.HtmlResponse?.ReleaseDate.ToLocalTime());
+    public VersionDecisionDialogViewModel(UpdateDataCarier information)
     {
-        //CloseDialog = closeDialog;
-        VersionInformation = information;
-        IsFromInstaller = TestIsInstalled();
+        UpdateInfo = information;
     }
-    public bool AutomaticButtonEnabled => VersionInformation.IsAutomaticCheck && !ShouldDisableAutoUpdates;
-    public bool AutoUpdateEnabled => VersionInformation.InstallerDownloadLink is not null;
+    public bool AutomaticButtonEnabled => UpdateInfo.IsAutomaticUpdateCheck && !ShouldDisableAutoUpdates;
+    public bool AutoUpdateEnabled => UpdateInfo.HtmlResponse?.InstallerDownloadLink is not null;
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(DisableAutomaticChecksCommand))]
     private bool _shouldDisableAutoUpdates;
     private void SetResult(UpdateDecision decision)
     {
-        _done.SetResult(new UpdatePromptResult(decision, AutomaticButtonEnabled));
+        _done.SetResult(new UpdatePromptResult(decision, AutomaticButtonEnabled,UpdaterFilePath));
     }
     public void OnNavigatedFrom()
     {
@@ -74,9 +76,9 @@ public partial class VersionDecisionDialogViewModel : ObservableValidator, INavi
     private DownloadProgressViewModel? _progressViewModel = null;
 
     [RelayCommand(CanExecute = nameof(AutoUpdateEnabled))]
-    private async Task AutoUpdate()
+    private async Task DownloadUpdater()
     {
-        ProgressViewModel = new(VersionInformation, IsFromInstaller);
+        ProgressViewModel = new(UpdateInfo);
         string destinationFilePath = Path.GetTempFileName();
         var isDownloaded = await ProgressViewModel.DownloadFileAsync(destinationFilePath);
         //ProgressViewModel = null;
@@ -84,35 +86,9 @@ public partial class VersionDecisionDialogViewModel : ObservableValidator, INavi
         {
             return;
         }
-        Process.Start(destinationFilePath);
+        UpdaterFilePath = destinationFilePath;
+        SetResult(UpdateDecision.LaunchUpdater);
     }
-    private static bool TestIsInstalled()
-    {
-        return CheckUninstallKeys(Registry.CurrentUser) || CheckUninstallKeys(Registry.LocalMachine);
-    }
-    private static bool CheckUninstallKeys(RegistryKey rootKey)
-    {
-        string assemblyLocation = Assembly.GetExecutingAssembly().Location;
-        using var uninstall = rootKey.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall");
-        if (uninstall is null)
-        {
-            return false;
-        }
-        foreach (var subkeyName in uninstall.GetSubKeyNames())
-        {
-            using var subkey = uninstall.OpenSubKey(subkeyName);
-            if (subkey is null)
-            {
-                continue;
-            }
-            var installLocation = subkey.GetValue("InstallLocation") as string;
-            if (assemblyLocation.Equals(installLocation, StringComparison.OrdinalIgnoreCase))
-            {
-                return true;
-            }
-
-        }
-        return false;
-    }
+    public string? UpdaterFilePath { get; private set; } = null;
     Task<UpdatePromptResult> IDialogViewModel<UpdatePromptResult>.WaitForExit() => _done.Task;
 }

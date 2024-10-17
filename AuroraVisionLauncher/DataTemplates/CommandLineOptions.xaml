@@ -40,7 +40,7 @@
                     <Setter Property="Margin" Value="3,0,3,0" />
                 </Style>
             </Grid.Resources>
-            <StackPanel Orientation="Horizontal" Margin="5,0,5,0">
+            <StackPanel Margin="5,0,5,0" Orientation="Horizontal">
                 <TextBlock
                     VerticalAlignment="Center"
                     Text="{x:Static properties:Resources.LaunchOptionsExecutorLogLevelTitle}"

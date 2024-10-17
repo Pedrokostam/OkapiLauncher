@@ -340,7 +340,7 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Downloading file: {0}.
+        ///   Looks up a localized string similar to Downloading: {0}.
         /// </summary>
         public static string DownloadFileHeader {
             get {
@@ -349,7 +349,7 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Currently used app was installed manually - installer will not detect it automatically..
+        ///   Looks up a localized string similar to Currently used app was installed manually - make sure to enter correct installation folder.
         /// </summary>
         public static string DownloadFileNotFromInstallerWarning {
             get {

@@ -12,5 +12,5 @@ public interface IContentDialogService
     Task ShowMessage(object context, string message, string? title = null);
     Task<bool> ShowProcessKillDialog(object context, SimpleProcess process);
     Task ShowSourceEditor(CustomAppSource source);
-    Task<UpdatePromptResult> ShowVersionDecisionDialog(HtmlVersionResponse newVersionInformation);
+    Task<UpdatePromptResult> ShowVersionDecisionDialog(UpdateDataCarier newVersionInformation);
 }

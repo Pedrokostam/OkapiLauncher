@@ -12,15 +12,15 @@ using CommunityToolkit.Mvvm.Input;
 namespace AuroraVisionLauncher.ViewModels;
 public partial class DownloadProgressViewModel : ObservableObject
 {
-    public DownloadProgressViewModel(HtmlVersionResponse response, bool isFromInstaller)
+    public DownloadProgressViewModel(UpdateDataCarier updateInfo)
     {
-        DownloadLink = response.InstallerDownloadLink ?? "";
+        DownloadLink = updateInfo.HtmlResponse?.InstallerDownloadLink ?? "";
         Filename = DownloadLink.Split("/")[^1];
-        IsManualInstallation = !isFromInstaller;
+        IsNotRegisteredApp = !updateInfo.IsAppRegistered;
     }
     public string DownloadLink { get; }
     public string Filename { get; }
-    public bool IsManualInstallation { get; }
+    public bool IsNotRegisteredApp { get; }
 
     [ObservableProperty]
     private double _progress = -1;

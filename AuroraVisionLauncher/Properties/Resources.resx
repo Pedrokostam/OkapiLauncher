@@ -491,6 +491,6 @@
     <value>Cancel download</value>
   </data>
   <data name="DownloadFileNotFromInstallerWarning" xml:space="preserve">
-    <value>Currently used app was installed manually - installer will not detect it automatically.</value>
+    <value>Currently used app was installed manually - make sure to enter correct installation folder</value>
   </data>
 </root>

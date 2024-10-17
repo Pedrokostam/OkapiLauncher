@@ -53,10 +53,10 @@ public class ContentDialogService : IContentDialogService
         var vm = new KillAllProcesessDialogViewModel(app);
         return await ShowMetroDialog(vm, dialog,context);
     }
-    public async Task<UpdatePromptResult> ShowVersionDecisionDialog(HtmlVersionResponse newVersionInformation)
+    public async Task<UpdatePromptResult> ShowVersionDecisionDialog(UpdateDataCarier carrier)
     {
         var dialog = new VersionDecisionDialog();
-        var vm = new VersionDecisionDialogViewModel(async () => await Task.FromResult(true),newVersionInformation);
+        var vm = new VersionDecisionDialogViewModel(carrier);
         return await ShowMetroDialog(vm, dialog);
     }
 

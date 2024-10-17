@@ -15,10 +15,10 @@ public class ApplicationInfoService : IApplicationInfoService
     private Guid? _appGuid;
     public ApplicationInfoService()
     {
-        _appAssembly = Assembly.GetCallingAssembly();
+        _appAssembly = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
     }
 
-    public string GetFolder() => _appAssembly.Location;
+    public string GetFolder() => Path.GetDirectoryName(_appAssembly.Location)!;
 
     /// <inheritdoc cref="IApplicationInfoService.GetVersion()"/>
     /// <remarks>Uses the version defined in the project file before build. If it is not present, returns version 0.0.0.0</remarks>
@@ -29,6 +29,7 @@ public class ApplicationInfoService : IApplicationInfoService
             // Set the app version in AuroraVisionLauncher > Properties > Package > PackageVersion
             string assemblyLocation = _appAssembly.Location;
             var version = FileVersionInfo.GetVersionInfo(assemblyLocation).FileVersion;
+            // TODO test for version
             if (Version.TryParse(version, out var parsed))
             {
                 _appVersion = parsed;
@@ -106,5 +107,5 @@ public class ApplicationInfoService : IApplicationInfoService
         return false;
     }
 
-    public string GetExeName() => Path.GetFileName(_appAssembly.FullName) ?? string.Empty;
+    public string GetExeName() => Path.ChangeExtension(Path.GetFileName(_appAssembly.FullName),"exe") ?? string.Empty;
 }

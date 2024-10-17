@@ -11,33 +11,26 @@ using System.Threading.Tasks;
 namespace AuroraVisionLauncher.Models.Updates;
 public record HtmlVersionResponse
 {
-    public enum PromptAction
-    {
-        DontShowDialog,
-        ShowNoUpdatesMessageDialog,
-        ShowPrompUpdateDialog,
-    }
     public HtmlVersionResponse()
     {
 
     }
-    public HtmlVersionResponse(string versionTag, string versionTitle, DateTime releaseDate, bool isAutomaticCheck, string? installerDownloadLink, DateTime buildDate)
+    public HtmlVersionResponse(string versionTag,
+                               string versionTitle,
+                               DateTime releaseDate,
+                               string? installerDownloadLink)
     {
         VersionTag = versionTag;
         VersionTitle = versionTitle;
         ReleaseDate = releaseDate;
-        IsAutomaticCheck = isAutomaticCheck;
         InstallerDownloadLink = installerDownloadLink;
-        AssemblyBuildDate = buildDate;
     }
     private static readonly DateTime DatePlaceholder = DateTime.MinValue;
-    public DateTime AssemblyBuildDate { get; } = DatePlaceholder;
     public string VersionTag { get; } = string.Empty;
     public string VersionTitle { get; } = string.Empty;
     public DateTime ReleaseDate { get; } = DatePlaceholder;
-    public bool IsAutomaticCheck { get; } = false;
     public string? InstallerDownloadLink { get; }
-    public static HtmlVersionResponse FromJsonDocument(JsonDocument document, bool isAutomaticCheck, DateTime buildDate)
+    public static HtmlVersionResponse? FromJsonDocument(JsonDocument document)
     {
         JsonElement releaseInfo = document.RootElement;
         // Extract specific information
@@ -47,7 +40,7 @@ public record HtmlVersionResponse
 
         if (tagName is null || releaseName is null || !dateGood)
         {
-            return new HtmlVersionResponse();
+            return null;
         }
 
         var installerDownloadLink = GetDownloadLink(releaseInfo);
@@ -55,9 +48,7 @@ public record HtmlVersionResponse
         return new HtmlVersionResponse(tagName,
                                        releaseName,
                                        publishedAt,
-                                       isAutomaticCheck,
-                                       installerDownloadLink,
-                                       buildDate);
+                                       installerDownloadLink);
     }
 
     private static string? GetDownloadLink(JsonElement releaseInfo)
@@ -76,47 +67,5 @@ public record HtmlVersionResponse
             }
         }
         return null;
-    }
-
-    private bool IsUnitialized()
-    {
-        return VersionTag == ""
-            || VersionTitle == ""
-            || ReleaseDate == DatePlaceholder
-            || AssemblyBuildDate == DatePlaceholder;
-    }
-    public PromptAction ShouldPromptUser(string? ignoredVersion)
-    {
-        if (IsUnitialized())
-        {
-            return IsAutomaticCheck ? PromptAction.DontShowDialog : PromptAction.ShowNoUpdatesMessageDialog;
-        }
-        if (string.Equals(VersionTag, ignoredVersion, StringComparison.OrdinalIgnoreCase))
-        {
-            // if version is ignored, dont show dialog if it is automatic check
-            // otherwise show an update prompt
-            return IsAutomaticCheck ? PromptAction.DontShowDialog : PromptAction.ShowPrompUpdateDialog; // if its auto check dont infor
-        }
-        if (CheckLastReleaseIsNewer())
-        {
-            return PromptAction.ShowPrompUpdateDialog;
-        }
-        return IsAutomaticCheck ? PromptAction.DontShowDialog : PromptAction.ShowNoUpdatesMessageDialog;
-    }
-    private static readonly TimeSpan UploadTolerance = TimeSpan.FromHours(6);
-    private bool CheckLastReleaseIsNewer()
-    {
-        var difference = ReleaseDate - AssemblyBuildDate;
-        if (difference < TimeSpan.Zero)
-        {
-            return false;
-        }
-        if (difference < UploadTolerance)
-        {
-            var currentVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString();
-            bool tagsMatch = string.Equals(currentVersion, VersionTag, StringComparison.OrdinalIgnoreCase);
-            return !tagsMatch;
-        }
-        return true;
     }
 }
