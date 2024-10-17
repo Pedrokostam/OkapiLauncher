@@ -64,7 +64,7 @@ namespace AuroraVisionLauncher.Models
         {
             get
             {
-                var dash = MainWindowTitle.IndexOf('-', StringComparison.Ordinal);
+                var dash = MainWindowTitle.IndexOf(" - ", StringComparison.Ordinal);
                 if (dash >= 0)
                 {
                     return MainWindowTitle[(dash + 1)..].Trim();
