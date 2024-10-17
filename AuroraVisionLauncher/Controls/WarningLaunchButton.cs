@@ -90,7 +90,7 @@ public class WarningLaunchButton : Button
             if (adornerLayer.GetAdorners(this)?.FirstOrDefault() is null)
             {
                 //var warningAdorner = new AdornerContentPresenter(this, new MaterialIcon() { Kind = Material.Icons.MaterialIconKind.Warning, ToolTip = "This app is already launched, you may not be able to launch another process", Foreground=Brushes.Yellow});
-                var warningAdorner = new IconAdorner(this, Material.Icons.MaterialIconKind.Warning,Brushes.Yellow)
+                var warningAdorner = new IconAdorner(this, Material.Icons.MaterialIconKind.Warning,Brushes.DarkOrange)
                 {
                     ToolTip = Properties.Resources.WarningLanchButtonWarningTooltip,
                     //Placement = new RelativePlacement(0, 0, 1, 1, DimensionType.Relative,new Thickness(10)),
