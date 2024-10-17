@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using AuroraVisionLauncher.Contracts.Services;
+using Microsoft.Win32;
 
 namespace AuroraVisionLauncher.Services;
 
@@ -17,6 +18,10 @@ public class ApplicationInfoService : IApplicationInfoService
         _appAssembly = Assembly.GetCallingAssembly();
     }
 
+    public string GetFolder() => _appAssembly.Location;
+
+    /// <inheritdoc cref="IApplicationInfoService.GetVersion()"/>
+    /// <remarks>Uses the version defined in the project file before build. If it is not present, returns version 0.0.0.0</remarks>
     public Version GetVersion()
     {
         if (_appVersion is null)
@@ -36,6 +41,8 @@ public class ApplicationInfoService : IApplicationInfoService
         return _appVersion;
     }
 
+    /// <inheritdoc cref="IApplicationInfoService.GetGuid()"/>
+    /// <remarks>Uses assembly's <see cref="GuidAttribute"/>. If it is not present, generates new <see cref="GUID"/></remarks>
     public Guid GetGuid()
     {
         if (_appGuid is null)
@@ -51,6 +58,8 @@ public class ApplicationInfoService : IApplicationInfoService
         return _appGuid.Value;
     }
 
+    /// <inheritdoc cref="IApplicationInfoService.GetBuildDatetime()"/>
+    /// <remarks>Uses assembly's <see cref="BuildDateAttribute"/>. If it is not present, returns modification date of the app's executable.</remarks>
     public DateTime GetBuildDatetime()
     {
         if (_appBuildDate is null)
@@ -64,4 +73,38 @@ public class ApplicationInfoService : IApplicationInfoService
         }
         return _appBuildDate.Value;
     }
+
+    /// <inheritdoc cref="IApplicationInfoService.GetBuildDatetime()"/>
+    /// <remarks>Checks Microsoft\Windows\CurrentVersion\Uninstall in both LocalMachine and CurrentUser, looking for the key with the matching <see cref="GetGuid">GUID</see>.</remarks>
+    public bool IsRegisteredAsInstalledApp()
+    {
+        return CheckUninstallKeys(Registry.CurrentUser) || CheckUninstallKeys(Registry.LocalMachine);
+    }
+
+    private bool CheckUninstallKeys(RegistryKey rootKey)
+    {
+        string assemblyLocation = _appAssembly.Location;
+        using var uninstall = rootKey.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall");
+        if (uninstall is null)
+        {
+            return false;
+        }
+        foreach (var subkeyName in uninstall.GetSubKeyNames())
+        {
+            using var subkey = uninstall.OpenSubKey(subkeyName);
+            if (subkey is null)
+            {
+                continue;
+            }
+            var installLocation = subkey.GetValue("InstallLocation") as string;
+            if (assemblyLocation.Equals(installLocation, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+        }
+        return false;
+    }
+
+    public string GetExeName() => Path.GetFileName(_appAssembly.FullName) ?? string.Empty;
 }
