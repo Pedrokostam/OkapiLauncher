@@ -120,8 +120,12 @@
                         DockPanel.Dock="Bottom"
                         Style="{StaticResource SettingsButton}"
                         ToolTip="{x:Static properties:Resources.SettingsPageSetFileAssociationsButtonTooltip}" />
-                    <ListView d:ItemsSource="{d:SampleData ItemCount=5}" ItemsSource="{Binding FileAssociationStatus}">
-                        <ListView.Resources>
+                    <ItemsControl
+                        d:ItemsSource="{d:SampleData ItemCount=5}"
+                        DockPanel.Dock="Left"
+                        Focusable="False"
+                        ItemsSource="{Binding FileAssociationStatus}">
+                        <ItemsControl.Resources>
                             <converters:BoolSelectorConverter
                                 x:Key="BoolIconKind"
                                 FalseValue="EmojiSadOutline"
@@ -130,21 +134,24 @@
                                 x:Key="BoolColor"
                                 FalseValue="Red"
                                 TrueValue="Green" />
-                        </ListView.Resources>
-                        <ListView.ItemsPanel>
+                        </ItemsControl.Resources>
+                        <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel Orientation="Horizontal" />
                             </ItemsPanelTemplate>
-                        </ListView.ItemsPanel>
-                        <ListView.ItemTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="{x:Type models:FileAssociationStatus}">
                                 <StackPanel Margin="5,0,10,5" Orientation="Vertical">
                                     <TextBlock Style="{StaticResource SubtitleTextStyle}" Text="{Binding Extension}" />
                                     <mdicons:MaterialIcon Foreground="{Binding Associated, Converter={StaticResource BoolColor}}" Kind="{Binding Associated, Converter={StaticResource BoolIconKind}}" />
                                 </StackPanel>
                             </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Border Margin="5,0,0,0" HorizontalAlignment="Left">
+                        <mah:ProgressRing Width="45" IsActive="{Binding AssociationInProgress}" />
+                    </Border>
                 </DockPanel>
             </Grid>
             <ScrollViewer VerticalScrollBarVisibility="Auto">
