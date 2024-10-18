@@ -235,7 +235,7 @@
                                 </Grid.ColumnDefinitions>
                                 <CheckBox
                                     Content="{x:Static properties:Resources.SettingsPageCheckForUpdatesOnStartup}"
-                                    FontSize="16"
+                                    FontSize="16" 
                                     IsChecked="{Binding AutoCheckForUpdates}"
                                     ToolTip="{x:Static properties:Resources.SettingsPageCheckForUpdatesOnStartupTooltip}" />
                                 <Button
