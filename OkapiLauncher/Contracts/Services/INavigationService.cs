@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace AuroraVisionLauncher.Contracts.Services;
+namespace OkapiLauncher.Contracts.Services;
 
 public interface INavigationService
 {

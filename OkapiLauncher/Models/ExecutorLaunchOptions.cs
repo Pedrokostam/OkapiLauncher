@@ -1,8 +1,8 @@
 ﻿using System.Text.RegularExpressions;
-using AuroraVisionLauncher.Core.Models.Apps;
+using OkapiLauncher.Core.Models.Apps;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace AuroraVisionLauncher.Models;
+namespace OkapiLauncher.Models;
 
 public partial class ExecutorLaunchOptions : LaunchOptions
 {

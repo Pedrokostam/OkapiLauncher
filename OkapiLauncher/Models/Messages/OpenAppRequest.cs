@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AuroraVisionLauncher.Core.Models.Apps;
+using OkapiLauncher.Core.Models.Apps;
 
-namespace AuroraVisionLauncher.Models.Messages;
+namespace OkapiLauncher.Models.Messages;
 public sealed record OpenAppRequest
 {
     public OpenAppRequest(IAvApp app, IEnumerable<string> arguments)

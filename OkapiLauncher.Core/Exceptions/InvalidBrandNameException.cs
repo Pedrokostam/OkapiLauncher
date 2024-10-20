@@ -1,4 +1,4 @@
-﻿namespace AuroraVisionLauncher.Core.Exceptions;
+﻿namespace OkapiLauncher.Core.Exceptions;
 
 public class InvalidBrandNameException : Exception
 {

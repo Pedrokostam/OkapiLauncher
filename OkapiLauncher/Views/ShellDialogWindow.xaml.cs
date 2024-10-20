@@ -1,11 +1,11 @@
 ﻿using System.Windows.Controls;
 
-using AuroraVisionLauncher.Contracts.Views;
-using AuroraVisionLauncher.ViewModels;
+using OkapiLauncher.Contracts.Views;
+using OkapiLauncher.ViewModels;
 
 using MahApps.Metro.Controls;
 
-namespace AuroraVisionLauncher.Views;
+namespace OkapiLauncher.Views;
 
 public partial class ShellDialogWindow : MetroWindow, IShellDialogWindow
 {

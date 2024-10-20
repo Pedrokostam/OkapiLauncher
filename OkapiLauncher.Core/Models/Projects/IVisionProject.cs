@@ -1,6 +1,6 @@
 ﻿
 
-namespace AuroraVisionLauncher.Core.Models.Projects;
+namespace OkapiLauncher.Core.Models.Projects;
 
 public interface IVisionProject : IProduct
 {

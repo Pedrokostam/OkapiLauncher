@@ -1,27 +1,27 @@
 ﻿using System.IO;
 using System.Windows;
-using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.Models.Messages;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Models.Messages;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using AuroraVisionLauncher.Core.Models.Apps;
+using OkapiLauncher.Core.Models.Apps;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Diagnostics;
 using Windows.Storage;
-using AuroraVisionLauncher.Models;
-using AuroraVisionLauncher.Core.Models.Projects;
+using OkapiLauncher.Models;
+using OkapiLauncher.Core.Models.Projects;
 using System.Windows.Threading;
-using AuroraVisionLauncher.Services;
-using AuroraVisionLauncher.Contracts.ViewModels;
-using AuroraVisionLauncher.Helpers;
+using OkapiLauncher.Services;
+using OkapiLauncher.Contracts.ViewModels;
+using OkapiLauncher.Helpers;
 using Microsoft.VisualBasic;
-using AuroraVisionLauncher.Core.Models;
-using AuroraVisionLauncher.Properties;
-using AuroraVisionLauncher.Views;
+using OkapiLauncher.Core.Models;
+using OkapiLauncher.Properties;
+using OkapiLauncher.Views;
 
-namespace AuroraVisionLauncher.ViewModels;
+namespace OkapiLauncher.ViewModels;
 
 public sealed partial class LauncherViewModel : ProcessRefreshViewModel
 {

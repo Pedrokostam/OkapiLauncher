@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AuroraVisionLauncher.Core.Models;
+namespace OkapiLauncher.Core.Models;
 
 public interface IAvVersion : IComparable<IAvVersion>
 {

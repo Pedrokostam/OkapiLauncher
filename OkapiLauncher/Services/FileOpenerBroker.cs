@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.Models.Messages;
-using AuroraVisionLauncher.ViewModels;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Models.Messages;
+using OkapiLauncher.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 
-namespace AuroraVisionLauncher.Services;
+namespace OkapiLauncher.Services;
 
 public class FileOpenerBroker : ObservableRecipient, IRecipient<FileRequestedMessage>
 {

@@ -1,15 +1,15 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-using AuroraVisionLauncher.Contracts.Views;
-using AuroraVisionLauncher.Models.Messages;
-using AuroraVisionLauncher.ViewModels;
+using OkapiLauncher.Contracts.Views;
+using OkapiLauncher.Models.Messages;
+using OkapiLauncher.ViewModels;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 
-namespace AuroraVisionLauncher.Views;
+namespace OkapiLauncher.Views;
 
 public partial class ShellWindow : MetroWindow, IShellWindow
 {

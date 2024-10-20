@@ -4,9 +4,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AuroraVisionLauncher.Core.Models;
+using OkapiLauncher.Core.Models;
 
-namespace AuroraVisionLauncher.Core.Exceptions;
+namespace OkapiLauncher.Core.Exceptions;
 
 public class UndeterminableBrandException:Exception
 {

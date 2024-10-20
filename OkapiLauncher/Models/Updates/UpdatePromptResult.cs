@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace AuroraVisionLauncher.Models.Updates;
+namespace OkapiLauncher.Models.Updates;
 
 [StructLayout(LayoutKind.Auto)]
 public readonly record struct UpdatePromptResult(UpdateDecision Decision, bool DisableAutomaticUpdates)

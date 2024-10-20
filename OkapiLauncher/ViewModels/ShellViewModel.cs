@@ -3,17 +3,17 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 
-using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.Models;
-using AuroraVisionLauncher.Models.Messages;
-using AuroraVisionLauncher.Properties;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Models;
+using OkapiLauncher.Models.Messages;
+using OkapiLauncher.Properties;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using MahApps.Metro.Controls.Dialogs;
 
-namespace AuroraVisionLauncher.ViewModels;
+namespace OkapiLauncher.ViewModels;
 
 // You can show pages in different ways (update main view, navigate, right pane, new windows or dialog)
 // using the NavigationService, RightPaneService and WindowManagerService.

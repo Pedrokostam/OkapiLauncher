@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using AuroraVisionLauncher.Core.Models;
-using AuroraVisionLauncher.Properties;
+using OkapiLauncher.Core.Models;
+using OkapiLauncher.Properties;
 using Windows.ApplicationModel.Resources.Core;
 
-namespace AuroraVisionLauncher.Converters;
+namespace OkapiLauncher.Converters;
 public class AppTypeToStringConverter : IValueConverter
 {
     public static readonly AppTypeToStringConverter Instance = new AppTypeToStringConverter();

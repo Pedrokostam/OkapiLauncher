@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.Helpers;
-using AuroraVisionLauncher.Models;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Helpers;
+using OkapiLauncher.Models;
 
-namespace AuroraVisionLauncher.Services;
+namespace OkapiLauncher.Services;
 public class CustomAppSourceService : ICustomAppSourceService
 {
     private static string _customSourcesKey = "CustomSources";

@@ -7,11 +7,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AuroraVisionLauncher.Core.Models;
+using OkapiLauncher.Core.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Windows.Security.Cryptography.Core;
 
-namespace AuroraVisionLauncher.Models
+namespace OkapiLauncher.Models
 {
     public sealed partial class AvVersionFacade : ObservableObject, IAvVersion, IComparable<AvVersionFacade>, IComparable
     {

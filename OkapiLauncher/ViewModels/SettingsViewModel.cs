@@ -6,20 +6,20 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.Contracts.ViewModels;
-using AuroraVisionLauncher.Core.Models;
-using AuroraVisionLauncher.Helpers;
-using AuroraVisionLauncher.Models;
-using AuroraVisionLauncher.Services;
-using AuroraVisionLauncher.Views;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Contracts.ViewModels;
+using OkapiLauncher.Core.Models;
+using OkapiLauncher.Helpers;
+using OkapiLauncher.Models;
+using OkapiLauncher.Services;
+using OkapiLauncher.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ControlzEx.Theming;
 using MahApps.Metro.Controls;
 using Microsoft.Extensions.Options;
 
-namespace AuroraVisionLauncher.ViewModels;
+namespace OkapiLauncher.ViewModels;
 
 // TODO: Change the URL for your privacy policy in the appsettings.json file, currently set to https://YourPrivacyUrlGoesHere
 public partial class SettingsViewModel : ObservableObject, INavigationAware

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace AuroraVisionLauncher.Helpers;
+namespace OkapiLauncher.Helpers;
 public static class ResourceHelper
 {
     /// <summary>

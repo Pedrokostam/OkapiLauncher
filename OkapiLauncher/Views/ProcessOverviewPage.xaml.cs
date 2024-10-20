@@ -12,9 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using AuroraVisionLauncher.ViewModels;
+using OkapiLauncher.ViewModels;
 
-namespace AuroraVisionLauncher.Views;
+namespace OkapiLauncher.Views;
 /// <summary>
 /// Interaction logic for ProcessOverviewPage.xaml
 /// </summary>

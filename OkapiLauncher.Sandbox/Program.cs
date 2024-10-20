@@ -1,6 +1,6 @@
-﻿using AuroraVisionLauncher.Core.Services;
+﻿using OkapiLauncher.Core.Services;
 
-namespace AuroraVisionLauncher.Sandbox;
+namespace OkapiLauncher.Sandbox;
 
 internal class Program
 {

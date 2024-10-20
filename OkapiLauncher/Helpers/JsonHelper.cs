@@ -8,7 +8,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace AuroraVisionLauncher.Helpers;
+namespace OkapiLauncher.Helpers;
 public static class JsonHelper
 {
     public class ColorConverter : JsonConverter<Color>

@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Shapes;
-using AuroraVisionLauncher.Core.Models;
-using AuroraVisionLauncher.Core.Models.Apps;
-using AuroraVisionLauncher.Helpers;
+using OkapiLauncher.Core.Models;
+using OkapiLauncher.Core.Models.Apps;
+using OkapiLauncher.Helpers;
 
-namespace AuroraVisionLauncher.Converters;
+namespace OkapiLauncher.Converters;
 public class AvAppToImageSourceConverter : IValueConverter
 {
 

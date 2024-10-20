@@ -5,12 +5,12 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using AuroraVisionLauncher.Contracts.ViewModels;
-using AuroraVisionLauncher.Models;
+using OkapiLauncher.Contracts.ViewModels;
+using OkapiLauncher.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace AuroraVisionLauncher.ViewModels;
+namespace OkapiLauncher.ViewModels;
 
 public partial class KillProcessDialogViewModel : ObservableValidator, INavigationAware, IDialogViewModel<bool>
 {

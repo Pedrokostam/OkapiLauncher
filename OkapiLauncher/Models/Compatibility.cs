@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AuroraVisionLauncher.Core.Models;
-using AuroraVisionLauncher.Core.Models.Apps;
-using AuroraVisionLauncher.Core.Models.Projects;
+using OkapiLauncher.Core.Models;
+using OkapiLauncher.Core.Models.Apps;
+using OkapiLauncher.Core.Models.Projects;
 
-namespace AuroraVisionLauncher.Models;
+namespace OkapiLauncher.Models;
 public enum Compatibility
 {
     Unknown,

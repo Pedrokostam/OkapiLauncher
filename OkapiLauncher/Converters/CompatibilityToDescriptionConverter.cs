@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using AuroraVisionLauncher.Models;
-using AuroraVisionLauncher.Properties;
+using OkapiLauncher.Models;
+using OkapiLauncher.Properties;
 
-namespace AuroraVisionLauncher.Converters;
+namespace OkapiLauncher.Converters;
 public class CompatibilityToDescriptionConverter:IValueConverter
 {
     public static readonly CompatibilityToDescriptionConverter Instance = new CompatibilityToDescriptionConverter();

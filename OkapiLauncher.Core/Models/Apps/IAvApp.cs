@@ -1,6 +1,6 @@
-﻿using AuroraVisionLauncher.Core.Models.Projects;
+﻿using OkapiLauncher.Core.Models.Projects;
 
-namespace AuroraVisionLauncher.Core.Models.Apps;
+namespace OkapiLauncher.Core.Models.Apps;
 
 public interface IAvApp : IProduct, IComparable<IAvApp>
 {

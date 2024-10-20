@@ -1,15 +1,15 @@
-﻿using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.Core.Contracts.Services;
-using AuroraVisionLauncher.Core.Services;
-using AuroraVisionLauncher.Models;
-using AuroraVisionLauncher.ViewModels;
+﻿using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Core.Contracts.Services;
+using OkapiLauncher.Core.Services;
+using OkapiLauncher.Models;
+using OkapiLauncher.ViewModels;
 
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Moq;
 
-namespace AuroraVisionLauncher.Tests.MSTest;
+namespace OkapiLauncher.Tests.MSTest;
 
 [TestClass]
 public class SettingsViewModelTests

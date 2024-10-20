@@ -1,7 +1,7 @@
 ﻿using System.Windows.Media;
-using AuroraVisionLauncher.Models;
+using OkapiLauncher.Models;
 
-namespace AuroraVisionLauncher.Contracts.Services;
+namespace OkapiLauncher.Contracts.Services;
 
 public interface IThemeSelectorService
 {

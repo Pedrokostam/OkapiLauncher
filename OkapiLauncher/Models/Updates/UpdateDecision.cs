@@ -1,4 +1,4 @@
-﻿namespace AuroraVisionLauncher.Models.Updates;
+﻿namespace OkapiLauncher.Models.Updates;
 
 public enum UpdateDecision
 {

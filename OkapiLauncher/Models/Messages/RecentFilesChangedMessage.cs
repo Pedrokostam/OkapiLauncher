@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 
-namespace AuroraVisionLauncher.Models.Messages;
+namespace OkapiLauncher.Models.Messages;
 internal class RecentFilesChangedMessage : ValueChangedMessage<IEnumerable<RecentlyOpenedFileFacade>>
 {
     List<RecentlyOpenedFileFacade> _recentlyOpenedFiles;

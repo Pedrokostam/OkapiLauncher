@@ -1,4 +1,4 @@
-﻿namespace AuroraVisionLauncher.Core.Models.Apps;
+﻿namespace OkapiLauncher.Core.Models.Apps;
 
 public enum LogLevel
 {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuroraVisionLauncher.Helpers;
+namespace OkapiLauncher.Helpers;
 internal static class ExplorerHelper
 {
     /// <summary>

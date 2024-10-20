@@ -1,8 +1,8 @@
-﻿using AuroraVisionLauncher.Core.Models.Apps;
-using AuroraVisionLauncher.Models;
-using AuroraVisionLauncher.Models.Updates;
+﻿using OkapiLauncher.Core.Models.Apps;
+using OkapiLauncher.Models;
+using OkapiLauncher.Models.Updates;
 
-namespace AuroraVisionLauncher.Contracts.Services;
+namespace OkapiLauncher.Contracts.Services;
 
 public interface IContentDialogService
 {

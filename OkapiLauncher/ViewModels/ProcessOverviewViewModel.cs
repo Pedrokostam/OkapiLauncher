@@ -9,18 +9,18 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Accessibility;
-using AuroraVisionLauncher.Contracts;
-using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.Contracts.ViewModels;
-using AuroraVisionLauncher.Helpers;
-using AuroraVisionLauncher.Models;
-using AuroraVisionLauncher.Models.Messages;
-using AuroraVisionLauncher.Services;
+using OkapiLauncher.Contracts;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Contracts.ViewModels;
+using OkapiLauncher.Helpers;
+using OkapiLauncher.Models;
+using OkapiLauncher.Models.Messages;
+using OkapiLauncher.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 
-namespace AuroraVisionLauncher.ViewModels;
+namespace OkapiLauncher.ViewModels;
 public partial class ProcessOverviewViewModel : ObservableRecipient, INavigationAware, ITransientWindow, IRecipient<FreshAppProcesses>
 {
     private readonly IProcessManagerService _processManagerService;

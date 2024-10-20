@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.IO;
 
-namespace AuroraVisionLauncher.Validators;
+namespace OkapiLauncher.Validators;
 
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public sealed class MustBeDirectoryAttribute : ValidationAttribute

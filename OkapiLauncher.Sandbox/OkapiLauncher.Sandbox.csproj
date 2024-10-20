@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AuroraVisionLauncher.Core\AuroraVisionLauncher.Core.csproj" />
+    <ProjectReference Include="..\OkapiLauncher.Core\OkapiLauncher.Core.csproj" />
   </ItemGroup>
 
 </Project>

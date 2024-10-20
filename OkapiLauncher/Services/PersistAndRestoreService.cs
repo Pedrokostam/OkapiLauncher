@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.IO;
 using System.Text.Json;
-using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.Core.Contracts.Services;
-using AuroraVisionLauncher.Models;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Core.Contracts.Services;
+using OkapiLauncher.Models;
 
 using Microsoft.Extensions.Options;
 
-namespace AuroraVisionLauncher.Services;
+namespace OkapiLauncher.Services;
 
 public class PersistAndRestoreService : IPersistAndRestoreService
 {

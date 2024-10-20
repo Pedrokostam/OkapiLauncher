@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using AuroraVisionLauncher.Core.Models.Apps;
-using AuroraVisionLauncher.Models;
+using OkapiLauncher.Core.Models.Apps;
+using OkapiLauncher.Models;
 
-namespace AuroraVisionLauncher.Helpers;
+namespace OkapiLauncher.Helpers;
 public class CommandLineOptionsTemplateSelector : DataTemplateSelector
 {
     public override DataTemplate? SelectTemplate(object? item, DependencyObject container)

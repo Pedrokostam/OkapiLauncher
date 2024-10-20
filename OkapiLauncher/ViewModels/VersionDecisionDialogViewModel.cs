@@ -4,12 +4,12 @@ using System.Linq;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
-using AuroraVisionLauncher.Contracts.ViewModels;
-using AuroraVisionLauncher.Models.Updates;
+using OkapiLauncher.Contracts.ViewModels;
+using OkapiLauncher.Models.Updates;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace AuroraVisionLauncher.ViewModels;
+namespace OkapiLauncher.ViewModels;
 public partial class VersionDecisionDialogViewModel : ObservableValidator, INavigationAware, IDialogViewModel<UpdatePromptResult>
 {
     //public Func<Task> CloseDialog { get; }

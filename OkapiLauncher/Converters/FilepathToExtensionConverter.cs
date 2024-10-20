@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace AuroraVisionLauncher.Converters
+namespace OkapiLauncher.Converters
 {
     public class FilepathToExtensionConverter : IValueConverter
     {

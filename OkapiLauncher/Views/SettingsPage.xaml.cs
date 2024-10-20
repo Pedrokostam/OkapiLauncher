@@ -1,10 +1,10 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using AuroraVisionLauncher.ViewModels;
+using OkapiLauncher.ViewModels;
 using ControlzEx.Theming;
 
-namespace AuroraVisionLauncher.Views;
+namespace OkapiLauncher.Views;
 
 public partial class SettingsPage : Page
 {

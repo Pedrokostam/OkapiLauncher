@@ -1,11 +1,11 @@
 ﻿<Application
-    x:Class="AuroraVisionLauncher.App"
+    x:Class="OkapiLauncher.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Dialog="http://metro.mahapps.com/winfx/xaml/controls"
-    xmlns:conv="clr-namespace:AuroraVisionLauncher.Converters"
+    xmlns:conv="clr-namespace:OkapiLauncher.Converters"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:theming="clr-namespace:AuroraVisionLauncher.Services"
+    xmlns:theming="clr-namespace:OkapiLauncher.Services"
     DispatcherUnhandledException="OnDispatcherUnhandledException"
     Exit="OnExit"
     Startup="OnStartup">

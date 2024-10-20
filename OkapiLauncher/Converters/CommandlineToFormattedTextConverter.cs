@@ -9,9 +9,9 @@ using System.Windows;
 using System.Windows.Data;
 using System.Text.RegularExpressions;
 using System.Windows.Media;
-using AuroraVisionLauncher.Properties;
+using OkapiLauncher.Properties;
 
-namespace AuroraVisionLauncher.Converters;
+namespace OkapiLauncher.Converters;
 public class CommandlineToFormattedTextConverter : IValueConverter
 {
     private static readonly Regex Tokenizer = new(@"(""[^""]+""|\S+)", RegexOptions.ExplicitCapture, TimeSpan.FromMilliseconds(200));

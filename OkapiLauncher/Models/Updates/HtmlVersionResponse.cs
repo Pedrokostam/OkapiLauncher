@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace AuroraVisionLauncher.Models.Updates;
+namespace OkapiLauncher.Models.Updates;
 public record HtmlVersionResponse
 {
     public enum PromptAction

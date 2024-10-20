@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Windows;
-namespace AuroraVisionLauncher.Controls;
+namespace OkapiLauncher.Controls;
 
 [StructLayout(LayoutKind.Auto)]
 public readonly record struct RelativePlacement

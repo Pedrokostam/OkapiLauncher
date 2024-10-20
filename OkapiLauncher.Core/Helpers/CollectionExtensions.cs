@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuroraVisionLauncher.Core.Helpers;
+namespace OkapiLauncher.Core.Helpers;
 public static class CollectionExtensions
 {
     public static int FindInsertionIndex<T>(this IList<T> collection, Func<T,bool> condition)

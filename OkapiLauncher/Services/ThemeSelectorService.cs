@@ -3,15 +3,15 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
-using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.Helpers;
-using AuroraVisionLauncher.Models;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Helpers;
+using OkapiLauncher.Models;
 
 using ControlzEx.Theming;
 
 using MahApps.Metro.Theming;
 
-namespace AuroraVisionLauncher.Services;
+namespace OkapiLauncher.Services;
 /*
 Taupe - #FF87794E
 Cyan - #FF1BA1E2

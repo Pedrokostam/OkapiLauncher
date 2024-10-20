@@ -7,12 +7,12 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using AuroraVisionLauncher.Models.Messages;
+using OkapiLauncher.Models.Messages;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 
-namespace AuroraVisionLauncher.Models
+namespace OkapiLauncher.Models
 {
     public partial class SimpleProcess : ObservableObject, IEquatable<SimpleProcess>, IComparable<SimpleProcess>
     {

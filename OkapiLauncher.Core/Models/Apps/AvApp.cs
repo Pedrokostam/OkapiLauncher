@@ -6,10 +6,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Timers;
-using AuroraVisionLauncher.Core.Helpers;
-using AuroraVisionLauncher.Core.Models.Projects;
+using OkapiLauncher.Core.Helpers;
+using OkapiLauncher.Core.Models.Projects;
 
-namespace AuroraVisionLauncher.Core.Models.Apps;
+namespace OkapiLauncher.Core.Models.Apps;
 public record AvApp : IAvApp
 {
     public string Path { get; }

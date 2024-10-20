@@ -8,13 +8,13 @@ using System.Threading.Channels;
 using System.Timers;
 using System.Windows;
 using System.Windows.Threading;
-using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.Core.Models.Apps;
-using AuroraVisionLauncher.Models;
-using AuroraVisionLauncher.Models.Messages;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Core.Models.Apps;
+using OkapiLauncher.Models;
+using OkapiLauncher.Models.Messages;
 using CommunityToolkit.Mvvm.Messaging;
 
-namespace AuroraVisionLauncher.Services
+namespace OkapiLauncher.Services
 {
     public class ProcessManagerService : IProcessManagerService, IRecipient<OpenAppRequest>, IRecipient<KillProcessRequest>, IRecipient<KillAllProcessesRequest>
     {

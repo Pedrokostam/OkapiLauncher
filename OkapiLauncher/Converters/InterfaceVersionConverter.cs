@@ -7,10 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Markup;
-using AuroraVisionLauncher.Core.Models;
-using AuroraVisionLauncher.Models;
+using OkapiLauncher.Core.Models;
+using OkapiLauncher.Models;
 
-namespace AuroraVisionLauncher.Converters;
+namespace OkapiLauncher.Converters;
 internal class InterfaceVersionConverter : IValueConverter
 {
     public static readonly InterfaceVersionConverter Instance = new();

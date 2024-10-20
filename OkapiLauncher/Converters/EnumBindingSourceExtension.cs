@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Markup;
 
-namespace AuroraVisionLauncher.Converters;
+namespace OkapiLauncher.Converters;
 
 public class EnumBindingSourceExtension : MarkupExtension
 {

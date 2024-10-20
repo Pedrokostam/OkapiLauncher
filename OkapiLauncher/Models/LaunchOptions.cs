@@ -1,11 +1,11 @@
 ﻿using System.Diagnostics;
-using AuroraVisionLauncher.Core.Models;
-using AuroraVisionLauncher.Core.Models.Apps;
+using OkapiLauncher.Core.Models;
+using OkapiLauncher.Core.Models.Apps;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Windows.System.RemoteDesktop;
 
-namespace AuroraVisionLauncher.Models;
+namespace OkapiLauncher.Models;
 
 public abstract partial class LaunchOptions : ObservableObject
 {

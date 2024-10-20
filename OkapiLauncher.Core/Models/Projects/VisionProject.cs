@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuroraVisionLauncher.Core.Models.Projects
+namespace OkapiLauncher.Core.Models.Projects
 {
     public record VisionProject : IVisionProject
     {

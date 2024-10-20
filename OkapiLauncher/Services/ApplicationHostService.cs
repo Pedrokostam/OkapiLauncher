@@ -1,11 +1,11 @@
-﻿using AuroraVisionLauncher.Contracts.Activation;
-using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.Contracts.Views;
-using AuroraVisionLauncher.ViewModels;
+﻿using OkapiLauncher.Contracts.Activation;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Contracts.Views;
+using OkapiLauncher.ViewModels;
 
 using Microsoft.Extensions.Hosting;
 
-namespace AuroraVisionLauncher.Services;
+namespace OkapiLauncher.Services;
 
 public class ApplicationHostService : IHostedService
 {

@@ -2,7 +2,7 @@
 
 using MahApps.Metro.Controls;
 
-namespace AuroraVisionLauncher.Contracts.Services;
+namespace OkapiLauncher.Contracts.Services;
 
 public interface IRightPaneService
 {

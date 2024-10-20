@@ -1,4 +1,4 @@
-﻿namespace AuroraVisionLauncher.Core.Contracts.Services;
+﻿namespace OkapiLauncher.Core.Contracts.Services;
 
 public interface IFileService
 {

@@ -9,13 +9,13 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
-using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.Helpers;
-using AuroraVisionLauncher.Models;
-using AuroraVisionLauncher.Models.Updates;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Helpers;
+using OkapiLauncher.Models;
+using OkapiLauncher.Models.Updates;
 using Microsoft.Extensions.Options;
 
-namespace AuroraVisionLauncher.Services;
+namespace OkapiLauncher.Services;
 public class UpdateCheckService : IUpdateCheckService
 {
 
@@ -58,10 +58,10 @@ public class UpdateCheckService : IUpdateCheckService
     private async Task CheckForUpdates_impl(bool isAuto)
     {
         using HttpClient client = new HttpClient();
-        client.DefaultRequestHeaders.Add("User-Agent", "AuroraVisionLauncher"); // GitHub requires a user-agent header
+        client.DefaultRequestHeaders.Add("User-Agent", "OkapiLauncher"); // GitHub requires a user-agent header
         try
         {
-            HttpResponseMessage response = await client.GetAsync("https://api.github.com/repos/PedroKostam/AuroraVisionLauncher/releases/latest");
+            HttpResponseMessage response = await client.GetAsync("https://api.github.com/repos/PedroKostam/OkapiLauncher/releases/latest");
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();
             JsonDocument responseDocument = JsonDocument.Parse(responseBody);

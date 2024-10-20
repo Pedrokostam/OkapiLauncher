@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuroraVisionLauncher.Core.Exceptions;
+namespace OkapiLauncher.Core.Exceptions;
 public class InvalidAppTypeNameException:Exception
 {
     public InvalidAppTypeNameException(string name) : base($"Given name does not match any app type: {name}")

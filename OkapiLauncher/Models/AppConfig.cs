@@ -1,4 +1,4 @@
-﻿namespace AuroraVisionLauncher.Models;
+﻿namespace OkapiLauncher.Models;
 
 public class AppConfig
 {

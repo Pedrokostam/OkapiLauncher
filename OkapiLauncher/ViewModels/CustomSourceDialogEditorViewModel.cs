@@ -6,16 +6,16 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AuroraVisionLauncher.Contracts.ViewModels;
-using AuroraVisionLauncher.Core.Models.Apps;
-using AuroraVisionLauncher.Models;
-using AuroraVisionLauncher.Validators;
+using OkapiLauncher.Contracts.ViewModels;
+using OkapiLauncher.Core.Models.Apps;
+using OkapiLauncher.Models;
+using OkapiLauncher.Validators;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
-namespace AuroraVisionLauncher.ViewModels;
+namespace OkapiLauncher.ViewModels;
 
 
 public partial class CustomSourceDialogEditorViewModel : ObservableValidator, INavigationAware, IDialogViewModel

@@ -17,7 +17,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using ControlzEx.Theming;
 using Material.Icons;
 
-namespace AuroraVisionLauncher.Controls
+namespace OkapiLauncher.Controls
 {
     /// <summary>
     /// Interaction logic for ViewSwitchButton.xaml

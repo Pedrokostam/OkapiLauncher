@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AuroraVisionLauncher.Tests.MSTest;
+namespace OkapiLauncher.Tests.MSTest;
 
 // TODO: Add appropriate unit tests.
 [TestClass]

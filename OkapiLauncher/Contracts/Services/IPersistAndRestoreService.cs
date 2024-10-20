@@ -1,4 +1,4 @@
-﻿namespace AuroraVisionLauncher.Contracts.Services;
+﻿namespace OkapiLauncher.Contracts.Services;
 
 public interface IPersistAndRestoreService
 {

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace AuroraVisionLauncher.Core.Models.Projects;
+namespace OkapiLauncher.Core.Models.Projects;
 public static class ProjectReader
 {
     static readonly Encoding _encoder = new UTF8Encoding(false);

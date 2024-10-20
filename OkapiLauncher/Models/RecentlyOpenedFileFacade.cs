@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
-using AuroraVisionLauncher.Core.Models;
+using OkapiLauncher.Core.Models;
 
-namespace AuroraVisionLauncher.Models;
+namespace OkapiLauncher.Models;
 public readonly record struct RecentlyOpenedFileFacade(string FilePath, DateTime OpenedOn, int Index)
 {
     public override int GetHashCode()

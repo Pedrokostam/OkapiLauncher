@@ -1,4 +1,4 @@
-﻿namespace AuroraVisionLauncher.Contracts;
+﻿namespace OkapiLauncher.Contracts;
 
 /// <summary>
 /// Represents a transient windows, which can have multiple instances of.

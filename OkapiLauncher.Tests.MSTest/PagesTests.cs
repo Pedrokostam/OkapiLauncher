@@ -1,21 +1,21 @@
 ﻿using System.IO;
 using System.Reflection;
 using System.Windows;
-using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.Contracts.Views;
-using AuroraVisionLauncher.Core.Contracts.Services;
-using AuroraVisionLauncher.Core.Services;
-using AuroraVisionLauncher.Models;
-using AuroraVisionLauncher.Services;
-using AuroraVisionLauncher.ViewModels;
-using AuroraVisionLauncher.Views;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Contracts.Views;
+using OkapiLauncher.Core.Contracts.Services;
+using OkapiLauncher.Core.Services;
+using OkapiLauncher.Models;
+using OkapiLauncher.Services;
+using OkapiLauncher.ViewModels;
+using OkapiLauncher.Views;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AuroraVisionLauncher.Tests.MSTest;
+namespace OkapiLauncher.Tests.MSTest;
 
 [TestClass]
 public class PagesTests

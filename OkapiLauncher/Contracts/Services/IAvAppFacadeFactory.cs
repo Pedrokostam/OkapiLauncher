@@ -1,9 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
-using AuroraVisionLauncher.Core.Models.Apps;
-using AuroraVisionLauncher.Models;
+using OkapiLauncher.Core.Models.Apps;
+using OkapiLauncher.Models;
 
-namespace AuroraVisionLauncher.Contracts.Services;
+namespace OkapiLauncher.Contracts.Services;
 public interface IAvAppFacadeFactory
 {
     IReadOnlyList<AvApp> AvApps { get; }

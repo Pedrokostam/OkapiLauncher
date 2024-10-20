@@ -1,15 +1,15 @@
 ﻿using System.Windows.Threading;
-using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.Contracts.ViewModels;
-using AuroraVisionLauncher.Models;
-using AuroraVisionLauncher.Services;
-using AuroraVisionLauncher.Helpers;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Contracts.ViewModels;
+using OkapiLauncher.Models;
+using OkapiLauncher.Services;
+using OkapiLauncher.Helpers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
-using AuroraVisionLauncher.Models.Messages;
+using OkapiLauncher.Models.Messages;
 using System.Windows;
 
-namespace AuroraVisionLauncher.ViewModels;
+namespace OkapiLauncher.ViewModels;
 
 public abstract class ProcessRefreshViewModel : ObservableRecipient, INavigationAware, IRecipient<FreshAppProcesses>
 {

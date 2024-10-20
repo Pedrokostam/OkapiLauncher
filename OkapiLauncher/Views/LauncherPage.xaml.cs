@@ -1,8 +1,8 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Input;
-using AuroraVisionLauncher.ViewModels;
+using OkapiLauncher.ViewModels;
 
-namespace AuroraVisionLauncher.Views;
+namespace OkapiLauncher.Views;
 
 public partial class LauncherPage : Page
 {

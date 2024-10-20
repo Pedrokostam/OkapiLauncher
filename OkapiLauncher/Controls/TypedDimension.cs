@@ -1,5 +1,5 @@
 ﻿using System.Runtime.InteropServices;
-namespace AuroraVisionLauncher.Controls;
+namespace OkapiLauncher.Controls;
 
 [StructLayout(LayoutKind.Auto)]
 public readonly record struct TypedDimension

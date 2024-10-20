@@ -1,9 +1,9 @@
 ﻿using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
-using AuroraVisionLauncher.Core.Models.Apps;
+using OkapiLauncher.Core.Models.Apps;
 
-namespace AuroraVisionLauncher.Converters;
+namespace OkapiLauncher.Converters;
 
 public class AvAppToImageConverter : IValueConverter
 {

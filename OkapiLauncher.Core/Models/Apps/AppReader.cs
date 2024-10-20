@@ -8,12 +8,12 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AuroraVisionLauncher.Core.Helpers;
-using AuroraVisionLauncher.Core.Exceptions;
+using OkapiLauncher.Core.Helpers;
+using OkapiLauncher.Core.Exceptions;
 using System.Data;
 using Microsoft.Win32;
 
-namespace AuroraVisionLauncher.Core.Models.Apps;
+namespace OkapiLauncher.Core.Models.Apps;
 public static partial class AppReader
 {
     private static readonly PathStem[] _pathStems = [

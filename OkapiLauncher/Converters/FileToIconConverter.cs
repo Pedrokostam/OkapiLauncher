@@ -1,4 +1,4 @@
-﻿using AuroraVisionLauncher.Helpers;
+﻿using OkapiLauncher.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -11,7 +11,7 @@ using System.Windows.Data;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 
-namespace AuroraVisionLauncher.Converters
+namespace OkapiLauncher.Converters
 {
     class FileToIconConverter : IValueConverter
     {

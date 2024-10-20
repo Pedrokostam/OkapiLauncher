@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MahApps.Metro.Controls.Dialogs;
 
-namespace AuroraVisionLauncher.Views
+namespace OkapiLauncher.Views
 {
     /// <summary>
     /// Interaction logic for KillProcessDialog.xaml

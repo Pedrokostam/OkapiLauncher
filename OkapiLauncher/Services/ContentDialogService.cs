@@ -4,20 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Effects;
-using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.Contracts.ViewModels;
-using AuroraVisionLauncher.Contracts.Views;
-using AuroraVisionLauncher.Core.Models.Apps;
-using AuroraVisionLauncher.Models;
-using AuroraVisionLauncher.Models.Updates;
-using AuroraVisionLauncher.Properties;
-using AuroraVisionLauncher.ViewModels;
-using AuroraVisionLauncher.Views;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Contracts.ViewModels;
+using OkapiLauncher.Contracts.Views;
+using OkapiLauncher.Core.Models.Apps;
+using OkapiLauncher.Models;
+using OkapiLauncher.Models.Updates;
+using OkapiLauncher.Properties;
+using OkapiLauncher.ViewModels;
+using OkapiLauncher.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MahApps.Metro.Controls.Dialogs;
 
-namespace AuroraVisionLauncher.Services;
+namespace OkapiLauncher.Services;
 public class ContentDialogService : IContentDialogService
 {
     private readonly IDialogCoordinator _dialogCoordinator;

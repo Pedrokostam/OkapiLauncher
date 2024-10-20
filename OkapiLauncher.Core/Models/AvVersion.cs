@@ -5,9 +5,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AuroraVisionLauncher.Core.Models.Apps;
+using OkapiLauncher.Core.Models.Apps;
 
-namespace AuroraVisionLauncher.Core.Models;
+namespace OkapiLauncher.Core.Models;
 public class AvVersion : IAvVersion
 {
     public static readonly Version MissingVersionBase = new(0, 0, 0, 0);

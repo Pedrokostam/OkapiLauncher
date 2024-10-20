@@ -6,14 +6,14 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
-using AuroraVisionLauncher.Core.Models.Apps;
+using OkapiLauncher.Core.Models.Apps;
 using Microsoft.Extensions.Logging;
-using AuroraVisionLauncher.Core.Helpers;
+using OkapiLauncher.Core.Helpers;
 using System.Diagnostics;
 using System.Windows.Threading;
 using System.Windows;
 
-namespace AuroraVisionLauncher.Models.Messages;
+namespace OkapiLauncher.Models.Messages;
 public class FreshAppProcesses
 {
     private readonly Dictionary<string, HashSet<SimpleProcess>> _dict;

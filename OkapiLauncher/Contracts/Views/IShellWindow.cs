@@ -2,7 +2,7 @@
 
 using MahApps.Metro.Controls;
 
-namespace AuroraVisionLauncher.Contracts.Views;
+namespace OkapiLauncher.Contracts.Views;
 
 public interface IShellWindow
 {

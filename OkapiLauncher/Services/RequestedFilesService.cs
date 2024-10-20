@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AuroraVisionLauncher.Contracts.Services;
+using OkapiLauncher.Contracts.Services;
 
-namespace AuroraVisionLauncher.Services;
+namespace OkapiLauncher.Services;
 public class RequestedFilesService : IRequestedFilesService
 {
     readonly private Queue<string> _files;

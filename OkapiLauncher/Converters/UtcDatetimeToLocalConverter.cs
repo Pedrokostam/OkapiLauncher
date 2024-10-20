@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace AuroraVisionLauncher.Converters;
+namespace OkapiLauncher.Converters;
 public class UtcDatetimeToLocalConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object parameter, CultureInfo culture)

@@ -1,4 +1,4 @@
-﻿namespace AuroraVisionLauncher.Contracts.Activation;
+﻿namespace OkapiLauncher.Contracts.Activation;
 
 public interface IActivationHandler
 {

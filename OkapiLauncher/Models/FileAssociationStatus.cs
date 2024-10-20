@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuroraVisionLauncher.Models;
+namespace OkapiLauncher.Models;
 public record FileAssociationStatus(string Extension, bool Associated)
 {
 }

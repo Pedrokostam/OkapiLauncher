@@ -5,7 +5,7 @@
 		<IsPackable>false</IsPackable>
 		<AssetTargetFallback>uap10.0.18362</AssetTargetFallback>
 		<Platforms>x64;AnyCPU</Platforms>
-		<RootNamespace>AuroraVisionLauncher.Tests.MSTest</RootNamespace>
+		<RootNamespace>OkapiLauncher.Tests.MSTest</RootNamespace>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
@@ -30,8 +30,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\AuroraVisionLauncher.Core\AuroraVisionLauncher.Core.csproj" />
-		<ProjectReference Include="..\AuroraVisionLauncher\AuroraVisionLauncher.csproj" />
+		<ProjectReference Include="..\OkapiLauncher.Core\OkapiLauncher.Core.csproj" />
+		<ProjectReference Include="..\OkapiLauncher\OkapiLauncher.csproj" />
 	</ItemGroup>
 
 </Project>

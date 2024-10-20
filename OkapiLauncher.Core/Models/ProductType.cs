@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AuroraVisionLauncher.Core.Exceptions;
+using OkapiLauncher.Core.Exceptions;
 using Windows.ApplicationModel;
 
-namespace AuroraVisionLauncher.Core.Models;
+namespace OkapiLauncher.Core.Models;
 public enum AvType
 {
     Professional,

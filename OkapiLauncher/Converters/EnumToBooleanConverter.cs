@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Windows.Data;
 
-namespace AuroraVisionLauncher.Converters;
+namespace OkapiLauncher.Converters;
 
 public class EnumToBooleanConverter : IValueConverter
 {

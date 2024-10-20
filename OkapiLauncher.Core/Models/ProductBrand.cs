@@ -2,10 +2,10 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
-using AuroraVisionLauncher.Core.Exceptions;
-using AuroraVisionLauncher.Core.Models.Projects;
+using OkapiLauncher.Core.Exceptions;
+using OkapiLauncher.Core.Models.Projects;
 
-namespace AuroraVisionLauncher.Core.Models;
+namespace OkapiLauncher.Core.Models;
 public enum AvBrand
 {
     Aurora,

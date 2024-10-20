@@ -2,21 +2,21 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
-using AuroraVisionLauncher.Contracts;
-using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.Contracts.ViewModels;
-using AuroraVisionLauncher.Contracts.Views;
-using AuroraVisionLauncher.Core.Models.Apps;
-using AuroraVisionLauncher.Models;
-using AuroraVisionLauncher.ViewModels;
-using AuroraVisionLauncher.Views;
+using OkapiLauncher.Contracts;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Contracts.ViewModels;
+using OkapiLauncher.Contracts.Views;
+using OkapiLauncher.Core.Models.Apps;
+using OkapiLauncher.Models;
+using OkapiLauncher.ViewModels;
+using OkapiLauncher.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ControlzEx.Theming;
 using MahApps.Metro.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using Windows.ApplicationModel.VoiceCommands;
 
-namespace AuroraVisionLauncher.Services;
+namespace OkapiLauncher.Services;
 
 public class WindowManagerService : IWindowManagerService
 {

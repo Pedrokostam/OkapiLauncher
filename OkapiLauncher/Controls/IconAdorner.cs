@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 using Material.Icons.WPF;
-namespace AuroraVisionLauncher.Controls;
+namespace OkapiLauncher.Controls;
 
 public class IconAdorner : AdornerContentPresenter
 {

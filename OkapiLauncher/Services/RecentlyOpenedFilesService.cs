@@ -7,15 +7,15 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
-using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.Core.Models;
-using AuroraVisionLauncher.Helpers;
-using AuroraVisionLauncher.Models;
-using AuroraVisionLauncher.Models.Messages;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Core.Models;
+using OkapiLauncher.Helpers;
+using OkapiLauncher.Models;
+using OkapiLauncher.Models.Messages;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 
-namespace AuroraVisionLauncher.Services;
+namespace OkapiLauncher.Services;
 public class RecentlyOpenedFilesService : ObservableRecipient, IRecentlyOpenedFilesService
 {
     private readonly string Key = "LastOpenedFiles";

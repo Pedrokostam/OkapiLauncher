@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Windows.ApplicationModel.Resources.Core;
 
-namespace AuroraVisionLauncher.Helpers;
+namespace OkapiLauncher.Helpers;
 public class SimpleArgumentRule : ValidationRule
 {
     public override ValidationResult Validate(object value, CultureInfo cultureInfo)

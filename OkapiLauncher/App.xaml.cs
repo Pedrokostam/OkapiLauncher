@@ -3,15 +3,15 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
 
-using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.Contracts.Views;
-using AuroraVisionLauncher.Core.Contracts.Services;
-using AuroraVisionLauncher.Core.Services;
-using AuroraVisionLauncher.Models;
-using AuroraVisionLauncher.Models.Messages;
-using AuroraVisionLauncher.Services;
-using AuroraVisionLauncher.ViewModels;
-using AuroraVisionLauncher.Views;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Contracts.Views;
+using OkapiLauncher.Core.Contracts.Services;
+using OkapiLauncher.Core.Services;
+using OkapiLauncher.Models;
+using OkapiLauncher.Models.Messages;
+using OkapiLauncher.Services;
+using OkapiLauncher.ViewModels;
+using OkapiLauncher.Views;
 
 using CommunityToolkit.Mvvm.Messaging;
 using MahApps.Metro.Controls.Dialogs;
@@ -20,7 +20,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Windows.ApplicationModel.Resources.Core;
 
-namespace AuroraVisionLauncher;
+namespace OkapiLauncher;
 
 // For more information about application lifecycle events see https://docs.microsoft.com/dotnet/framework/wpf/app-development/application-management-overview
 

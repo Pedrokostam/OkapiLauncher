@@ -2,8 +2,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mdicons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
-    xmlns:mod="clr-namespace:AuroraVisionLauncher.Models"
-    xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties">
+    xmlns:mod="clr-namespace:OkapiLauncher.Models"
+    xmlns:properties="clr-namespace:OkapiLauncher.Properties">
     <DataTemplate DataType="{x:Type mod:VisionProjectFacade}">
         <Grid Margin="20,5,20,5">
             <Grid.Resources>

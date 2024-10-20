@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace AuroraVisionLauncher.Models;
+namespace OkapiLauncher.Models;
 
 public partial class StudioLaunchOptions : LaunchOptions
 {

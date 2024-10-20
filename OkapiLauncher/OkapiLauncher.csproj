@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
-		<RootNamespace>AuroraVisionLauncher</RootNamespace>
+		<RootNamespace>OkapiLauncher</RootNamespace>
 		<LangVersion>latest</LangVersion>
 		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 		<UseWPF>true</UseWPF>
@@ -41,7 +41,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<AssemblyAttribute Include="AuroraVisionLauncher.BuildDateAttribute">
+		<AssemblyAttribute Include="OkapiLauncher.BuildDateAttribute">
 			<_Parameter1>$([System.DateTime]::UtcNow.ToString("yyyyMMddHHmmss"))</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
@@ -95,7 +95,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\AuroraVisionLauncher.Core\AuroraVisionLauncher.Core.csproj" />
+		<ProjectReference Include="..\OkapiLauncher.Core\OkapiLauncher.Core.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

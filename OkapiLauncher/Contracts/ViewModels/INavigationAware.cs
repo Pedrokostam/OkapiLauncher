@@ -1,4 +1,4 @@
-﻿namespace AuroraVisionLauncher.Contracts.ViewModels;
+﻿namespace OkapiLauncher.Contracts.ViewModels;
 
 public interface INavigationAware
 {

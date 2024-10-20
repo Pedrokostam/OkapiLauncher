@@ -10,7 +10,7 @@ using System.Windows.Media.Imaging;
 using System.Drawing.Imaging;
 using System.IO;
 
-namespace AuroraVisionLauncher.Helpers
+namespace OkapiLauncher.Helpers
 {
     public static class IconHelper
     {

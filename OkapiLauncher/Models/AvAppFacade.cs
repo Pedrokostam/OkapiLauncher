@@ -8,13 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using ABI.Windows.Foundation;
-using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.Core.Models;
-using AuroraVisionLauncher.Core.Models.Apps;
-using AuroraVisionLauncher.Core.Models.Projects;
-using AuroraVisionLauncher.Helpers;
-using AuroraVisionLauncher.Models.Messages;
-using AuroraVisionLauncher.ViewModels;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Core.Models;
+using OkapiLauncher.Core.Models.Apps;
+using OkapiLauncher.Core.Models.Projects;
+using OkapiLauncher.Helpers;
+using OkapiLauncher.Models.Messages;
+using OkapiLauncher.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -22,7 +22,7 @@ using Windows.ApplicationModel.VoiceCommands;
 using ObservableCollections;
 using System.Diagnostics.CodeAnalysis;
 
-namespace AuroraVisionLauncher.Models;
+namespace OkapiLauncher.Models;
 public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFacade>, IEquatable<AvAppFacade>
 {
     readonly private AvApp _avApp;

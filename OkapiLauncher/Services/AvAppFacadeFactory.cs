@@ -8,12 +8,12 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.Core.Models.Apps;
-using AuroraVisionLauncher.Models;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Core.Models.Apps;
+using OkapiLauncher.Models;
 using CommunityToolkit.Mvvm.Messaging;
 
-namespace AuroraVisionLauncher.Services;
+namespace OkapiLauncher.Services;
 public class AvAppFacadeFactory : IAvAppFacadeFactory
 {
 

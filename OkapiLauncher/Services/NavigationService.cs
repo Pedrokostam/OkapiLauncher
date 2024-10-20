@@ -2,11 +2,11 @@
 using System.Windows.Controls;
 using System.Windows.Navigation;
 
-using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.Contracts.ViewModels;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Contracts.ViewModels;
 using Windows.Media.Playback;
 
-namespace AuroraVisionLauncher.Services;
+namespace OkapiLauncher.Services;
 
 public class NavigationService : INavigationService
 {

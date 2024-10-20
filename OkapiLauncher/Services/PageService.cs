@@ -1,12 +1,12 @@
 ﻿using System.Windows.Controls;
 
-using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.ViewModels;
-using AuroraVisionLauncher.Views;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.ViewModels;
+using OkapiLauncher.Views;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace AuroraVisionLauncher.Services;
+namespace OkapiLauncher.Services;
 
 public class PageService : IPageService
 {

@@ -1,13 +1,13 @@
 ﻿<controls:CustomDialog
-    x:Class="AuroraVisionLauncher.Views.KillProcessDialog"
+    x:Class="OkapiLauncher.Views.KillProcessDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:AuroraVisionLauncher.Views"
+    xmlns:local="clr-namespace:OkapiLauncher.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:properties="clr-namespace:AuroraVisionLauncher.Properties"
-    xmlns:vms="clr-namespace:AuroraVisionLauncher.ViewModels"
+    xmlns:properties="clr-namespace:OkapiLauncher.Properties"
+    xmlns:vms="clr-namespace:OkapiLauncher.ViewModels"
     d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False,
                                      Type={x:Type vms:KillProcessDialogViewModel}}"
     d:DesignHeight="450"

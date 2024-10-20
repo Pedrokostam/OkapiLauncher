@@ -1,4 +1,4 @@
-﻿using AuroraVisionLauncher.Core.Models.Apps;
+﻿using OkapiLauncher.Core.Models.Apps;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace AuroraVisionLauncher.Models;
+namespace OkapiLauncher.Models;
 public partial class CustomAppSource : ObservableObject, IAppSource
 {
     [ObservableProperty]

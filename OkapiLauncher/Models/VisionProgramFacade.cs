@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using AuroraVisionLauncher.Core.Models;
-using AuroraVisionLauncher.Core.Models.Projects;
-using AuroraVisionLauncher.Helpers;
+using OkapiLauncher.Core.Models;
+using OkapiLauncher.Core.Models.Projects;
+using OkapiLauncher.Helpers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace AuroraVisionLauncher.Models;
+namespace OkapiLauncher.Models;
 public partial class VisionProjectFacade : ObservableObject, IVisionProject
 {
     public string Name { get; }

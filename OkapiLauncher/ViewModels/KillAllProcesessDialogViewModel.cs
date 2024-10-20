@@ -1,9 +1,9 @@
-﻿using AuroraVisionLauncher.Contracts.ViewModels;
-using AuroraVisionLauncher.Core.Models.Apps;
+﻿using OkapiLauncher.Contracts.ViewModels;
+using OkapiLauncher.Core.Models.Apps;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace AuroraVisionLauncher.ViewModels;
+namespace OkapiLauncher.ViewModels;
 
 public partial class KillAllProcesessDialogViewModel : ObservableValidator, INavigationAware, IDialogViewModel<bool>
 {

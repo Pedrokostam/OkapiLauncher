@@ -1,4 +1,4 @@
-﻿namespace AuroraVisionLauncher.Core.Models;
+﻿namespace OkapiLauncher.Core.Models;
 
 public readonly record struct RecentlyOpenedFile(string FilePath, DateTime OpenedOn)
 {

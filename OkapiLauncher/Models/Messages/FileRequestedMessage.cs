@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 using Windows.System;
 
-namespace AuroraVisionLauncher.Models.Messages;
+namespace OkapiLauncher.Models.Messages;
 public class FileRequestedMessage : ValueChangedMessage<string>
 {
     public FileRequestedMessage(string filepath) : base(filepath)

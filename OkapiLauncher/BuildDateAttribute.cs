@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuroraVisionLauncher
+namespace OkapiLauncher
 {
     [AttributeUsage(AttributeTargets.Assembly)]
     internal class BuildDateAttribute : Attribute

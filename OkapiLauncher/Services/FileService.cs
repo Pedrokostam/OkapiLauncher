@@ -1,14 +1,14 @@
 ﻿using System.IO;
 using System.Text;
 
-using AuroraVisionLauncher.Core.Contracts.Services;
+using OkapiLauncher.Core.Contracts.Services;
 
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Windows.Media;
-using AuroraVisionLauncher.Helpers;
+using OkapiLauncher.Helpers;
 
-namespace AuroraVisionLauncher.Core.Services;
+namespace OkapiLauncher.Core.Services;
 
 public class FileService : IFileService
 {

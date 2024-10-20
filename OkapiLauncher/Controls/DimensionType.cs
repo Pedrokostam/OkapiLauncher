@@ -1,4 +1,4 @@
-﻿namespace AuroraVisionLauncher.Controls;
+﻿namespace OkapiLauncher.Controls;
 
 public enum DimensionType
 {

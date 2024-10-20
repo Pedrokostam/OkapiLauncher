@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
-using AuroraVisionLauncher.Models;
+using OkapiLauncher.Models;
 
-namespace AuroraVisionLauncher.Contracts.Services;
+namespace OkapiLauncher.Contracts.Services;
 public interface ICustomAppSourceService
 {
     ObservableCollection<CustomAppSource> CustomSources { get; }

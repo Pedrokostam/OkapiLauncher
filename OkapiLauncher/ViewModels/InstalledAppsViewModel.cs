@@ -1,19 +1,19 @@
 ﻿using System.Collections.ObjectModel;
-using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.Core.Models.Apps;
-using AuroraVisionLauncher.Models;
-using AuroraVisionLauncher.Services;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Core.Models.Apps;
+using OkapiLauncher.Models;
+using OkapiLauncher.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.ComponentModel;
 using System.Windows.Data;
-using AuroraVisionLauncher.Converters;
+using OkapiLauncher.Converters;
 using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.VisualBasic;
-using AuroraVisionLauncher.Views;
+using OkapiLauncher.Views;
 
-namespace AuroraVisionLauncher.ViewModels;
+namespace OkapiLauncher.ViewModels;
 public sealed partial class InstalledAppsViewModel : ProcessRefreshViewModel
 {
     [ObservableProperty]

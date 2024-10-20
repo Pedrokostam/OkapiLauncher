@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 
-using AuroraVisionLauncher.Contracts.Services;
+using OkapiLauncher.Contracts.Services;
 
-namespace AuroraVisionLauncher.Services;
+namespace OkapiLauncher.Services;
 
 public class SystemService : ISystemService
 {

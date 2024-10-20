@@ -1,4 +1,4 @@
-﻿namespace AuroraVisionLauncher.Core.Models.Apps;
+﻿namespace OkapiLauncher.Core.Models.Apps;
 public static partial class AppReader
 {
     internal record AppSource(string? Description, string SourcePath, bool IsFromEnvironment) : IAppSource

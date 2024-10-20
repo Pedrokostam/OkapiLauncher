@@ -14,10 +14,10 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Material.Icons.WPF;
 using Material.Icons;
-using AuroraVisionLauncher.Models;
+using OkapiLauncher.Models;
 
 
-namespace AuroraVisionLauncher.Controls
+namespace OkapiLauncher.Controls
 {
     /// <summary>
     /// Interaction logic for AvAppFacadeListItem.xaml

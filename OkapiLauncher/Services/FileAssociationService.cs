@@ -8,16 +8,16 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Text;
 using System.Windows;
-using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.Helpers;
-using AuroraVisionLauncher.Models;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Helpers;
+using OkapiLauncher.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.Win32;
 using Windows.Networking.NetworkOperators;
 using System.Text.Json;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 
-namespace AuroraVisionLauncher.Services;
+namespace OkapiLauncher.Services;
 public class FileAssociationService : IFileAssociationService
 {
     private class VanishingScript : IDisposable
@@ -28,7 +28,7 @@ public class FileAssociationService : IFileAssociationService
             var name = Guid.NewGuid() + ".ps1";
             FilePath = Path.Join(Path.GetTempPath(), name);
             Assembly assembly = Assembly.GetExecutingAssembly();
-            using Stream? stream = assembly.GetManifestResourceStream("AuroraVisionLauncher.Services.Set-FileAssociations.ps1");
+            using Stream? stream = assembly.GetManifestResourceStream("OkapiLauncher.Services.Set-FileAssociations.ps1");
             ArgumentNullException.ThrowIfNull(stream);
             using FileStream filestream = new FileStream(FilePath, FileMode.Create, FileAccess.Write);
             stream.CopyTo(filestream);
@@ -88,7 +88,7 @@ public class FileAssociationService : IFileAssociationService
         new AssociationPackage("Resources/Icons/FabImageRuntime.ico",".fiexe"),
         ];
 
-    public const string RegistryAppName = "AuroraVisionLauncher";
+    public const string RegistryAppName = "OkapiLauncher";
     private readonly AppConfig _appConfig;
 
     //public Dictionary<string, string> GetCurrentAssociations()
@@ -120,7 +120,7 @@ public class FileAssociationService : IFileAssociationService
         {
             try
             {
-                // create name for registry key, like AuroraVisionLauncher.avproj
+                // create name for registry key, like OkapiLauncher.avproj
                 var registryKeyName = GetExtensionRegistryName(association);
                 // delete existing keys
                 string extensionSubkey = CreateRegistryPathString("Software", "Classes", registryKeyName);
