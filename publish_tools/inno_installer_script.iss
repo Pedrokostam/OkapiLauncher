@@ -9,11 +9,13 @@
 ;#define VERSION "0.0.0.0"
 ;#define BINDIR ""
 ;#define OUTDIR ""
+;#define GUID ""
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{2C508297-5294-4681-BB5E-D2B20F6FC4AB}
+;emit need to escape first bracket by doubling it
+AppId={{{#GUID}}
 OutputDir={#OUTDIR}
 AppName={#APPNAME}
 AppVersion={#VERSION}

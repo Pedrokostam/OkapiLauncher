@@ -341,7 +341,6 @@
   </data>
   <data name="CompatibilityOutdatedDescription" xml:space="preserve">
     <value>May load studio projects of earlier versions. User may be required to fix issues with changed ports.</value>
-    <comment>. </comment>
   </data>
   <data name="CompatibilityUnknownDescription" xml:space="preserve">
     <value>Version of project is unknown - cannot determine compatibility</value>
@@ -428,7 +427,7 @@
     <value>Install update</value>
   </data>
   <data name="VersionCheckDialogDisableAutoChecksButtonContent" xml:space="preserve">
-    <value>Disables automatic checks</value>
+    <value>Disable automatic checks</value>
   </data>
   <data name="VersionCheckDialogHeader" xml:space="preserve">
     <value>Newer version detected</value>
@@ -483,6 +482,38 @@
   </data>
   <data name="KillAllProcessesDialogHeader" xml:space="preserve">
     <value>Confirm termination of all process of app</value>
+  </data>
+  <data name="DownloadFileHeader" xml:space="preserve">
+    <value>Downloading: {0}</value>
+  </data>
+  <data name="DownloadFileCancelButtonContent" xml:space="preserve">
+    <value>Cancel download</value>
+  </data>
+  <data name="DownloadFileNotFromInstallerWarning" xml:space="preserve">
+    <value>Currently used app was installed manually - make sure to enter correct installation folder</value>
+  </data>
+  <data name="VersionCheckDialogLaunchPageButtonTooltip" xml:space="preserve">
+    <value>Open the download page to check the release notes and download the update manually</value>
+  </data>
+  <data name="VersionCheckDialogSkipVersionButtonTooltip" xml:space="preserve">
+    <value>Will not automatically prompt to update to {0} anymore</value>
+  </data>
+  <data name="VersionCheckDialogUpdateButtonTooltipOk" xml:space="preserve">
+    <value>Automatically download installer and start update process</value>
+  </data>
+  <data name="VersionCheckDialogUpdateButtonTooltipBAD" xml:space="preserve">
+    <value>This installation of the app is not the one recognized by the system.
+
+Delete this installation and launch the official app to proceed with the update.</value>
+  </data>
+  <data name="VersionCheckDialogCancelButtonTooltip" xml:space="preserve">
+    <value>Temporarily ignore the update</value>
+  </data>
+  <data name="DownloadFileCancelButtonTooltip" xml:space="preserve">
+    <value>Cancel downloading</value>
+  </data>
+  <data name="VersionCheckDialogDisableAutoChecksButtonTooltip" xml:space="preserve">
+    <value>Disables automatic update checks at the start of the application</value>
   </data>
   <data name="ShellViewButtonInstalledAppsTooltip" xml:space="preserve">
     <value>View all installed apps</value>

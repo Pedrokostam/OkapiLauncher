@@ -37,6 +37,15 @@ if (Test-Path $outputInfoFile) {
 [xml]$csproj = Get-Content $ProjPath
 $version = $csproj.SelectSingleNode('/Project/PropertyGroup/Version').InnerText
 
+# GUID
+$assemblyInfoPath = Join-Path $ProjectDir Properties AssemblyInfo.cs
+$matchedGuid = Gi $assemblyInfoPath | sls -Pattern '^\s*\[assembly: Guid\("(?<guid>[\w-]+)"'
+if($matchedGuid){
+    $GUID = $matchedGuid.Matches[0].Groups['guid']
+}else{
+    Write-Error 'Could not find GUID of the app'
+}
+
 # REPO
 $appSettingsPath = Join-Path $ProjectDir appsettings.json 
 $json = Get-Content $appSettingsPath | ConvertFrom-Json
@@ -81,6 +90,7 @@ while ($true) {
         "/DBINDIR=$Binaries"
         "/DOUTDIR=$BaseOutputDir"
         "/DAPPURL=$repoUrl"
+        "/DGUID=$Guid"
         $InnoScriptPath
     )
     $innoLog = ''

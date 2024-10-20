@@ -177,12 +177,7 @@ public class FileAssociationService : IFileAssociationService
         var iconFolder = Path.Combine(appdata, _appConfig.IconsFolder);
         return Path.Combine(iconFolder, assoc.IconName);
     }
-    private static bool IsAdministrator()
-    {
-        using WindowsIdentity identity = WindowsIdentity.GetCurrent();
-        WindowsPrincipal principal = new WindowsPrincipal(identity);
-        return principal.IsInRole(WindowsBuiltInRole.Administrator);
-    }
+   
     private ProcessStartInfo GetStartInfo(string mainAppExecutablePath, VanishingScript scriptToRun, bool runAsAdministrator)
     {
         var startInfo = new ProcessStartInfo()

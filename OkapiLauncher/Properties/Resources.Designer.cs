@@ -331,6 +331,42 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel download.
+        /// </summary>
+        public static string DownloadFileCancelButtonContent {
+            get {
+                return ResourceManager.GetString("DownloadFileCancelButtonContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel downloading.
+        /// </summary>
+        public static string DownloadFileCancelButtonTooltip {
+            get {
+                return ResourceManager.GetString("DownloadFileCancelButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloading: {0}.
+        /// </summary>
+        public static string DownloadFileHeader {
+            get {
+                return ResourceManager.GetString("DownloadFileHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Currently used app was installed manually - make sure to enter correct installation folder.
+        /// </summary>
+        public static string DownloadFileNotFromInstallerWarning {
+            get {
+                return ResourceManager.GetString("DownloadFileNotFromInstallerWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string ErrorDialogHeader {
@@ -1087,11 +1123,29 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Disables automatic checks.
+        ///   Looks up a localized string similar to Temporarily ignore the update.
+        /// </summary>
+        public static string VersionCheckDialogCancelButtonTooltip {
+            get {
+                return ResourceManager.GetString("VersionCheckDialogCancelButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disable automatic checks.
         /// </summary>
         public static string VersionCheckDialogDisableAutoChecksButtonContent {
             get {
                 return ResourceManager.GetString("VersionCheckDialogDisableAutoChecksButtonContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disables automatic update checks at the start of the application.
+        /// </summary>
+        public static string VersionCheckDialogDisableAutoChecksButtonTooltip {
+            get {
+                return ResourceManager.GetString("VersionCheckDialogDisableAutoChecksButtonTooltip", resourceCulture);
             }
         }
         
@@ -1110,6 +1164,15 @@ namespace OkapiLauncher.Properties {
         public static string VersionCheckDialogLaunchPageButtonContent {
             get {
                 return ResourceManager.GetString("VersionCheckDialogLaunchPageButtonContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open the download page to check the release notes and download the update manually.
+        /// </summary>
+        public static string VersionCheckDialogLaunchPageButtonTooltip {
+            get {
+                return ResourceManager.GetString("VersionCheckDialogLaunchPageButtonTooltip", resourceCulture);
             }
         }
         
@@ -1168,11 +1231,40 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Will not automatically prompt to update to {0} anymore.
+        /// </summary>
+        public static string VersionCheckDialogSkipVersionButtonTooltip {
+            get {
+                return ResourceManager.GetString("VersionCheckDialogSkipVersionButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Install update.
         /// </summary>
         public static string VersionCheckDialogUpdateButtonContent {
             get {
                 return ResourceManager.GetString("VersionCheckDialogUpdateButtonContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This installation of the app is not the one recognized by the system.
+        ///
+        ///Delete this installation and launch the official app to proceed with the update..
+        /// </summary>
+        public static string VersionCheckDialogUpdateButtonTooltipBAD {
+            get {
+                return ResourceManager.GetString("VersionCheckDialogUpdateButtonTooltipBAD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Automatically download installer and start update process.
+        /// </summary>
+        public static string VersionCheckDialogUpdateButtonTooltipOk {
+            get {
+                return ResourceManager.GetString("VersionCheckDialogUpdateButtonTooltipOk", resourceCulture);
             }
         }
         
