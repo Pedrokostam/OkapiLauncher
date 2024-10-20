@@ -71,7 +71,10 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
     private void OnNavigated(object? sender, string? viewModelName)
     {
         GoBackCommand.NotifyCanExecuteChanged();
+        CurrentViewModel = Type.GetType(viewModelName ?? string.Empty);
     }
+    [ObservableProperty]
+    private Type? _currentViewModel;
 
     [RelayCommand()]
     private void OnMenuFileExit()
@@ -99,7 +102,7 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
         var dialog = new Microsoft.Win32.OpenFileDialog
         {
             Filter = "All Files (*.*)|*.*|Aurora Vision Files|*.avproj;*.avexe|FabImage Files|*.fiproj;*.fiexe|Project Files|*.avproj;*.fiproj|Runtime Files|*.avexe;*.fiexe",
-            Multiselect = false
+            Multiselect = false,
         };
         var result = dialog.ShowDialog();
         if (result == true)

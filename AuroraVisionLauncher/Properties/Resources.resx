@@ -117,8 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ShellMenuItemViewsInstalledAppsPageHeader" xml:space="preserve">
-    <value>Installed _applications</value>
+  <data name="ShellViewButtonInstalledAppsHeader" xml:space="preserve">
+    <value>Installed applications</value>
   </data>
   <data name="InstalledAppsPageTitle" xml:space="preserve">
     <value>Installed applications</value>
@@ -153,8 +153,8 @@
   <data name="SettingsPageRadioButtonWindowsDefaultTheme" xml:space="preserve">
     <value>System</value>
   </data>
-  <data name="ShellMenuItemViewsLauncherPageHeader" xml:space="preserve">
-    <value>_Launcher</value>
+  <data name="ShellViewButtonLauncherHeader" xml:space="preserve">
+    <value>Launcher</value>
   </data>
   <data name="MainPageTitle" xml:space="preserve">
     <value>Opening project</value>
@@ -483,5 +483,14 @@
   </data>
   <data name="KillAllProcessesDialogHeader" xml:space="preserve">
     <value>Confirm termination of all process of app</value>
+  </data>
+  <data name="ShellViewButtonInstalledAppsTooltip" xml:space="preserve">
+    <value>View all installed apps</value>
+  </data>
+  <data name="ShellViewButtonLauncherTooltipEnabled" xml:space="preserve">
+    <value>View last loaded project</value>
+  </data>
+  <data name="ShellViewButtonLauncherTooltipDisabled" xml:space="preserve">
+    <value>Load any project to enable this view</value>
   </data>
 </root>

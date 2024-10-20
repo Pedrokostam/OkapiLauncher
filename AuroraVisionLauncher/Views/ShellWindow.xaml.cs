@@ -24,8 +24,8 @@ public partial class ShellWindow : MetroWindow, IShellWindow
             Command = new RelayCommand(Collect),
         };
         var sep = new Separator();
-        FileMenu.Items.Insert(FileMenu.Items.Count - 2, sep);
-        FileMenu.Items.Insert(FileMenu.Items.Count - 2, mi);
+        FileMenu.Items.Add(sep);
+        FileMenu.Items.Add(mi);
 #endif
     }
 #if DEBUG
