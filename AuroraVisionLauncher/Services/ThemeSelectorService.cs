@@ -112,8 +112,8 @@ public class ThemeSelectorService : IThemeSelectorService
         // TODO: Mahapps.Metro supports syncronization with high contrast but you have to provide custom high contrast themes
         // We've added basic high contrast dictionaries for Dark and Light themes
         // Please complete these themes following the docs on https://mahapps.com/docs/themes/thememanager#creating-custom-themes
-        ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(DarkTheme), libraryThemeProvider: null));
-        ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(LightTheme), libraryThemeProvider: null));
+        //ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(DarkTheme), libraryThemeProvider: null));
+        //ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(LightTheme), libraryThemeProvider: null));
         //ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(_hcDarkTheme), MahAppsLibraryThemeProvider.DefaultInstance));
         //ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(_hcLightTheme), MahAppsLibraryThemeProvider.DefaultInstance));
         SetTheme(SelectedTheme, SelectedCustomColorAccent);
@@ -125,9 +125,11 @@ public class ThemeSelectorService : IThemeSelectorService
         Theme activeTheme;
         if (themeEnum != AppTheme.System)
         {
+            string baseColorName = themeEnum switch { AppTheme.Light => "Red", _ => "Yellow" };
+            string themeName = $"{themeEnum}.{baseColorName}";
             if (customColor is null)
             {
-                activeTheme = ThemeManager.Current.ChangeTheme(Application.Current, themeEnum.ToString(), false)!;
+                activeTheme = ThemeManager.Current.ChangeTheme(Application.Current, themeName, false)!;
             }
             else
             {
