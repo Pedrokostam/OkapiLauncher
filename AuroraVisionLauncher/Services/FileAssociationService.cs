@@ -205,7 +205,7 @@ public class FileAssociationService : IFileAssociationService
         startInfo.ArgumentList.Add(GetParameterJson());
         return startInfo;
     }
-    public void SetAssociationsToApp(string? mainAppExecutablePath = null)
+    public async Task SetAssociationsToApp(string? mainAppExecutablePath = null)
     {
         var t = CheckCurrentAssociations(mainAppExecutablePath);
         mainAppExecutablePath ??= Environment.ProcessPath!;
@@ -221,7 +221,7 @@ public class FileAssociationService : IFileAssociationService
         {
             return;
         }
-        process.WaitForExit();
+        await process.WaitForExitAsync();
         // TODO add checking whether association are correct
     }
     private void RemoveExplorerAssociations()

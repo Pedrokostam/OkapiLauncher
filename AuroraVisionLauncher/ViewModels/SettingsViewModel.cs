@@ -118,7 +118,7 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     private async Task AssociateAppWithExtensions()
     {
         AssociationInProgress = true;
-        await Task.Run(() => _fileAssociationService.SetAssociationsToApp());
+        await _fileAssociationService.SetAssociationsToApp();
         AssociationInProgress = false;
         UpdateStatus();
     }
