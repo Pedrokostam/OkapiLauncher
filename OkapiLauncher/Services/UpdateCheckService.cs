@@ -61,7 +61,7 @@ public class UpdateCheckService : IUpdateCheckService
         client.DefaultRequestHeaders.Add("User-Agent", "OkapiLauncher"); // GitHub requires a user-agent header
         try
         {
-            HttpResponseMessage response = await client.GetAsync("https://api.github.com/repos/PedroKostam/OkapiLauncher/releases/latest");
+            HttpResponseMessage response = await client.GetAsync(_appConfig.UpdateLink);
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();
             JsonDocument responseDocument = JsonDocument.Parse(responseBody);
@@ -123,7 +123,6 @@ public class UpdateCheckService : IUpdateCheckService
             _persistAndRestoreService.DataRestored += _persistAndRestoreService_DataRestored;
         }
     }
-
     private void _persistAndRestoreService_DataRestored(object? sender, EventArgs e)
     {
         InitializeData();
