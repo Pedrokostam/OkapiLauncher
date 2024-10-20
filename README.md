@@ -1,1 +1,1 @@
-# AuroraVisionLauncher
+# Okapi Launcher
