@@ -979,24 +979,6 @@ namespace AuroraVisionLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Installed _applications.
-        /// </summary>
-        public static string ShellMenuItemViewsInstalledAppsPageHeader {
-            get {
-                return ResourceManager.GetString("ShellMenuItemViewsInstalledAppsPageHeader", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to _Launcher.
-        /// </summary>
-        public static string ShellMenuItemViewsLauncherPageHeader {
-            get {
-                return ResourceManager.GetString("ShellMenuItemViewsLauncherPageHeader", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Recently opened files.
         /// </summary>
         public static string ShellMenuRecentFiles {
@@ -1011,6 +993,51 @@ namespace AuroraVisionLauncher.Properties {
         public static string ShellMenuViewsHeader {
             get {
                 return ResourceManager.GetString("ShellMenuViewsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Installed applications.
+        /// </summary>
+        public static string ShellViewButtonInstalledAppsHeader {
+            get {
+                return ResourceManager.GetString("ShellViewButtonInstalledAppsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View all installed apps.
+        /// </summary>
+        public static string ShellViewButtonInstalledAppsTooltip {
+            get {
+                return ResourceManager.GetString("ShellViewButtonInstalledAppsTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Launcher.
+        /// </summary>
+        public static string ShellViewButtonLauncherHeader {
+            get {
+                return ResourceManager.GetString("ShellViewButtonLauncherHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load any project to enable this view.
+        /// </summary>
+        public static string ShellViewButtonLauncherTooltipDisabled {
+            get {
+                return ResourceManager.GetString("ShellViewButtonLauncherTooltipDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View last loaded project.
+        /// </summary>
+        public static string ShellViewButtonLauncherTooltipEnabled {
+            get {
+                return ResourceManager.GetString("ShellViewButtonLauncherTooltipEnabled", resourceCulture);
             }
         }
         

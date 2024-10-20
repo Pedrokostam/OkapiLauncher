@@ -47,6 +47,7 @@ namespace AuroraVisionLauncher.Controls;
 /// </summary>
 public class WarningLaunchButton : Button
 {
+
     // Define a DependencyProperty for Count
     public static readonly DependencyProperty DisplayWarningProperty =
         DependencyProperty.Register(nameof(DisplayWarning), typeof(bool), typeof(WarningLaunchButton),
