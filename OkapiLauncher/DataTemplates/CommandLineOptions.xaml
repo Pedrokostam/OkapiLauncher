@@ -1,0 +1,110 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:conv="clr-namespace:OkapiLauncher.Converters"
+    xmlns:coremod="clr-namespace:OkapiLauncher.Core.Models.Apps;assembly=OkapiLauncher.Core"
+    xmlns:helpers="clr-namespace:OkapiLauncher.Helpers"
+    xmlns:mod="clr-namespace:OkapiLauncher.Models"
+    xmlns:properties="clr-namespace:OkapiLauncher.Properties">
+    <helpers:CommandLineOptionsTemplateSelector x:Key="commandLineOptionsTemplateSelector" />
+    <Style
+        x:Key="NoOptionsDisclaimer"
+        BasedOn="{StaticResource {x:Type TextBlock}}"
+        TargetType="TextBlock">
+        <Setter Property="Padding" Value="20" />
+        <Setter Property="FontSize" Value="10" />
+        <Setter Property="FontStyle" Value="Italic" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="FontSize" Value="30" />
+        <Setter Property="Opacity" Value="0.5" />
+        <Setter Property="TextWrapping" Value="WrapWithOverflow" />
+        <!--<Setter Property="FontFamily" Value="Lucida Calligraphy, Times New Roman" />-->
+    </Style>
+    <DataTemplate x:Key="NoCommandLineOptionsTemplate" DataType="{x:Type mod:NoLaunchOptions}">
+        <TextBlock Style="{StaticResource NoOptionsDisclaimer}" Text="{x:Static properties:Resources.LaunchOptionsNoOptions}" />
+    </DataTemplate>
+    <DataTemplate x:Key="StudioCommandLineOptionsTemplate" DataType="{x:Type mod:StudioLaunchOptions}">
+        <TextBlock Style="{StaticResource NoOptionsDisclaimer}" Text="{x:Static properties:Resources.LaunchOptionsStudioOptions}" />
+    </DataTemplate>
+    <DataTemplate x:Key="ExecutorCommandLineOptionsTemplate" DataType="{x:Type mod:ExecutorLaunchOptions}">
+        <Grid Height="auto" TextBlock.FontSize="16">
+            <Grid.Resources>
+                <Style BasedOn="{StaticResource {x:Type CheckBox}}" TargetType="CheckBox">
+                    <Setter Property="FontSize" Value="16" />
+                </Style>
+                <Style BasedOn="{StaticResource {x:Type ComboBox}}" TargetType="ComboBox">
+                    <Setter Property="FontSize" Value="16" />
+                </Style>
+                <Style BasedOn="{StaticResource {x:Type Separator}}" TargetType="Separator">
+                    <Setter Property="Margin" Value="3,0,3,0" />
+                </Style>
+            </Grid.Resources>
+            <StackPanel Margin="5,0,5,0" Orientation="Horizontal">
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Text="{x:Static properties:Resources.LaunchOptionsExecutorLogLevelTitle}"
+                    TextAlignment="Right"
+                    ToolTip="{x:Static properties:Resources.LaunchOptionsExecutorLogLevelTooltip}" />
+                <ComboBox
+                    Grid.Column="1"
+                    Width="100"
+                    ItemsSource="{conv:EnumBindingSource {x:Type coremod:LogLevel}}"
+                    SelectedItem="{Binding LogLevel, Mode=TwoWay}"
+                    ToolTip="{x:Static properties:Resources.LaunchOptionsExecutorLogLevelTooltip}" />
+                <Separator />
+                <TextBlock
+                    Grid.Row="1"
+                    VerticalAlignment="Center"
+                    Text="{x:Static properties:Resources.LaunchOptionsExecutorLogPipeTitle}"
+                    ToolTip="{x:Static properties:Resources.LaunchOptionsExecutorLogPipeTooltip}" />
+                <TextBox
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Width="160"
+                    VerticalContentAlignment="Center"
+                    FontSize="16"
+                    ToolTip="{x:Static properties:Resources.LaunchOptionsExecutorLogPipeTooltip}">
+                    <TextBox.Text>
+                        <Binding
+                            Mode="TwoWay"
+                            Path="LogPipe"
+                            UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <helpers:SimpleArgumentRule />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <Separator />
+                <CheckBox
+                    x:Name="ConsoleCheckBox"
+                    Grid.Row="1"
+                    Content="{x:Static properties:Resources.LaunchOptionsExecutorConsoleModeTitle}"
+                    IsChecked="{Binding Console, Mode=TwoWay}"
+                    ToolTip="{x:Static properties:Resources.LaunchOptionsExecutorConsoleModeTooltip}" />
+                <Separator />
+                <CheckBox
+                    Grid.Row="2"
+                    Content="{x:Static properties:Resources.LaunchOptionsExecutorAutoCloseTitle}"
+                    IsChecked="{Binding AutoClose, Mode=TwoWay}"
+                    IsEnabled="{Binding ElementName=ConsoleCheckBox, Path=IsChecked}"
+                    ToolTip="{x:Static properties:Resources.LaunchOptionsExecutorAutoCloseTooltip}" />
+                <Separator />
+                <Separator />
+                <Separator />
+                <Separator />
+                <Button
+                    Grid.Row="3"
+                    HorizontalAlignment="Right"
+                    Command="{Binding ResetCommand}"
+                    FontFamily="Segoe UI"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    ToolTip="{x:Static properties:Resources.LaunchOptionsResetButtonTooltip}">
+                    <TextBlock Padding="5,1,5,1" Text="{x:Static properties:Resources.LaunchOptionsResetButton}" />
+                </Button>
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+</ResourceDictionary>
