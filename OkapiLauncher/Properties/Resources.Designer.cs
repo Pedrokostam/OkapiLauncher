@@ -61,7 +61,7 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Aurora Vision Launcher.
+        ///   Looks up a localized string similar to Okapi Launcher.
         /// </summary>
         public static string AppDisplayName {
             get {
