@@ -62,9 +62,17 @@ public class BindableRichTextBox : RichTextBox
             return new FlowDocument(para);
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotSupportedException();
+            if (value is not FlowDocument doc)
+            {
+                return null;
+            }
+            if (parameter is System.Windows.Documents.TextSelection selection)
+            {
+                return selection.Text;
+            }
+            return new TextRange(doc.ContentStart, doc.ContentEnd).Text;
         }
     }
     public static readonly DependencyProperty DocumentProperty =
@@ -87,22 +95,22 @@ public class BindableRichTextBox : RichTextBox
     {
         ContextMenu = null;
     }
-    public new FlowDocument Document
-    {
-        get
-        {
-            return (FlowDocument)this.GetValue(DocumentProperty);
-        }
+    //public new FlowDocument Document
+    //{
+    //    get
+    //    {
+    //        return (FlowDocument)this.GetValue(DocumentProperty);
+    //    }
 
-        set
-        {
-            if (value is not null && (Text is not null || Formatter is not null))
-            {
-                throw new InvalidOperationException("Cannot set both Document and Text/Formatter properties");
-            }
-            this.SetValue(DocumentProperty, value);
-        }
-    }
+    //    set
+    //    {
+    //        if (value is not null && (Text is not null || Formatter is not null))
+    //        {
+    //            throw new InvalidOperationException("Cannot set both Document and Text/Formatter properties");
+    //        }
+    //        this.SetValue(DocumentProperty, value);
+    //    }
+    //}
     public string Text
     {
         get
@@ -112,10 +120,10 @@ public class BindableRichTextBox : RichTextBox
 
         set
         {
-            if (value is not null && Document is not null)
-            {
-                throw new InvalidOperationException("Cannot set both Document and Text/Formatter properties");
-            }
+            //if (value is not null && Document is not null)
+            //{
+            //    throw new InvalidOperationException("Cannot set both Document and Text/Formatter properties");
+            //}
             this.SetValue(DocumentProperty, value);
         }
     }
@@ -128,10 +136,10 @@ public class BindableRichTextBox : RichTextBox
 
         set
         {
-            if (value is not null && Document is not null)
-            {
-                throw new InvalidOperationException("Cannot set both Document and Text/Formatter properties");
-            }
+            //if (value is not null && Document is not null)
+            //{
+            //    throw new InvalidOperationException("Cannot set both Document and Text/Formatter properties");
+            //}
             this.SetValue(DocumentProperty, value);
         }
     }
@@ -162,20 +170,14 @@ public class BindableRichTextBox : RichTextBox
     }
     protected override void OnPreviewKeyDown(KeyEventArgs e)
     {
-        if (!(e.Key == Key.C && Keyboard.Modifiers.HasFlag(ModifierKeys.Control)))
+        if (e.Key == Key.C && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
         {
-            base.OnPreviewKeyDown(e);
+            var text = (string)Formatter.ConvertBack(Document, typeof(string), Selection, null);
+            Clipboard.SetText(text);
+            e.Handled = true;
+            return;
         }
-        else
-        {
-            if (Text is not null)
-            {
-                Clipboard.SetText(Text);
-                e.Handled = true;
-                return;
-            }
-            base.OnPreviewKeyDown(e);
-        }
-
+        base.OnPreviewKeyDown(e);
     }
+
 }

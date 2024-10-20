@@ -16,6 +16,7 @@ public class CommandlineToFormattedTextConverter : IValueConverter
 {
     private static readonly Regex Tokenizer = new(@"(""[^""]+""|\S+)", RegexOptions.ExplicitCapture, TimeSpan.FromMilliseconds(200));
     private static readonly Regex ArgumentFinder = new(@"(?<=^)-*-(?=\w)", RegexOptions.ExplicitCapture, TimeSpan.FromMilliseconds(200));
+    private const char WordJoiner = '\u2060';
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         if (value is not string input)
@@ -42,7 +43,7 @@ public class CommandlineToFormattedTextConverter : IValueConverter
         foreach (var part in parts.Skip(1))
         {
             para.Inlines.Add(new Run(" "));
-            var text = ArgumentFinder.Replace(part, "$0\u2060"); // add word joiner after hyphens
+            var text = ArgumentFinder.Replace(part, $"$0{WordJoiner}"); // add word joiner after hyphens
             var run = new Run(text);
             if (text.StartsWith('-'))
             {
@@ -67,8 +68,21 @@ public class CommandlineToFormattedTextConverter : IValueConverter
         return doc;
     }
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        throw new NotImplementedException();
+        if (value is not FlowDocument doc)
+        {
+            return null;
+        }
+        string result;
+        if (parameter is System.Windows.Documents.TextSelection selection)
+        {
+            result = selection.Text;
+        }
+        else
+        {
+            result = new TextRange(doc.ContentStart, doc.ContentEnd).Text;
+        }
+        return result.Replace(WordJoiner.ToString(), "",StringComparison.Ordinal);
     }
 }
