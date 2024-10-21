@@ -216,11 +216,12 @@
                                     </MenuItem>
                                 </MenuItem>
 
-                                <!--<MenuItem AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}" Header="{x:Static properties:Resources.ShellMenuViewsHeader}">
-                                -->
-                                <!--  TODO: Review the MenuItem headers in Resources.resx file for all of your views and place '_' before the letter that you want to use for menu keyboard usage  -->
-                                <!--
-                            </MenuItem>-->
+                                <MenuItem AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}" Header="{x:Static properties:Resources.ShellMenuHelpHeader}">
+                                    <MenuItem
+                                        AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
+                                        Command="{Binding MenuViewsAboutPageCommand}"
+                                        Header="{x:Static properties:Resources.ShellMenuItemViewsAboutPageHeader}" />
+                                </MenuItem>
                             </Menu>
                         </Grid>
                         <Frame

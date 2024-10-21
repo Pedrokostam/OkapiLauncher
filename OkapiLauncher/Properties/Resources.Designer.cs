@@ -61,6 +61,15 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string AboutPageTitle {
+            get {
+                return ResourceManager.GetString("AboutPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Okapi Launcher.
         /// </summary>
         public static string AppDisplayName {
@@ -988,6 +997,15 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Help.
+        /// </summary>
+        public static string ShellMenuHelpHeader {
+            get {
+                return ResourceManager.GetString("ShellMenuHelpHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Exit.
         /// </summary>
         public static string ShellMenuItemFileExitHeader {
@@ -1015,20 +1033,20 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string ShellMenuItemViewsAboutPageHeader {
+            get {
+                return ResourceManager.GetString("ShellMenuItemViewsAboutPageHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Recently opened files.
         /// </summary>
         public static string ShellMenuRecentFiles {
             get {
                 return ResourceManager.GetString("ShellMenuRecentFiles", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to _Views.
-        /// </summary>
-        public static string ShellMenuViewsHeader {
-            get {
-                return ResourceManager.GetString("ShellMenuViewsHeader", resourceCulture);
             }
         }
         

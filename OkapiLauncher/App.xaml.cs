@@ -3,6 +3,14 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
 
+using CommunityToolkit.Mvvm.Messaging;
+
+using MahApps.Metro.Controls.Dialogs;
+
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Contracts.Views;
 using OkapiLauncher.Core.Contracts.Services;
@@ -13,11 +21,6 @@ using OkapiLauncher.Services;
 using OkapiLauncher.ViewModels;
 using OkapiLauncher.Views;
 
-using CommunityToolkit.Mvvm.Messaging;
-using MahApps.Metro.Controls.Dialogs;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Windows.ApplicationModel.Resources.Core;
 
 namespace OkapiLauncher;
@@ -117,6 +120,9 @@ public partial class App : Application
 
         services.AddTransient<InstalledAppsViewModel>();
         services.AddTransient<InstalledAppsPage>();
+
+        services.AddTransient<AboutViewModel>();
+        services.AddTransient<AboutPage>();
 
         // Configuration
         services.Configure<AppConfig>(context.Configuration.GetSection(nameof(AppConfig)));

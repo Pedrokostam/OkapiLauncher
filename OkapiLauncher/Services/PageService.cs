@@ -1,10 +1,10 @@
 ﻿using System.Windows.Controls;
 
+using CommunityToolkit.Mvvm.ComponentModel;
+
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.ViewModels;
 using OkapiLauncher.Views;
-
-using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace OkapiLauncher.Services;
 
@@ -20,6 +20,7 @@ public class PageService : IPageService
         Configure<SettingsViewModel, SettingsPage>();
         Configure<InstalledAppsViewModel, InstalledAppsPage>();
         Configure<ProcessOverviewViewModel, ProcessOverviewPage>();
+        Configure<AboutViewModel, AboutPage>();
     }
 
     public Type GetPageType(string key)

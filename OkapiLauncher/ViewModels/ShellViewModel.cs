@@ -3,15 +3,16 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+
+using MahApps.Metro.Controls.Dialogs;
+
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Models;
 using OkapiLauncher.Models.Messages;
 using OkapiLauncher.Properties;
-
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
-using MahApps.Metro.Controls.Dialogs;
 
 namespace OkapiLauncher.ViewModels;
 
@@ -95,6 +96,11 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
     [RelayCommand()]
     private void OnMenuViewsInstalledApps()
         => _navigationService.NavigateTo(typeof(InstalledAppsViewModel).FullName!, parameter: null);
+
+    [RelayCommand()]
+    private void OnMenuViewsAboutPage()
+        => _navigationService.NavigateTo<AboutViewModel>(parameter: null);
+
     //=> _navigationService.NavigateTo(typeof(InstalledAppsViewModel).FullName!, parameter: null, clearNavigation: true);
     [RelayCommand()]
     private void OnMenuFileOpenProject()
