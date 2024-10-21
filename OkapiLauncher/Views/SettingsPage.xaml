@@ -8,8 +8,8 @@
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mdicons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
-    xmlns:models="clr-namespace:OkapiLauncher.Models"
     xmlns:properties="clr-namespace:OkapiLauncher.Properties"
+    xmlns:models="clr-namespace:OkapiLauncher.Models"
     xmlns:vms="clr-namespace:OkapiLauncher.ViewModels"
     x:Name="RootPage"
     d:Background="Gray"
@@ -253,34 +253,7 @@
                                     Style="{StaticResource SettingsButton}" />
                             </Grid>
                         </StackPanel>
-                        <TextBlock
-                            Margin="{StaticResource SmallTopMargin}"
-                            Style="{StaticResource SubtitleTextStyle}"
-                            Text="{x:Static properties:Resources.SettingsPageAboutTitle}" />
-                        <TextBlock
-                            Margin="{StaticResource XSmallTopMargin}"
-                            Style="{StaticResource BodyTextStyle}"
-                            Text="{Binding VersionDescription, Mode=OneWay}" />
-                        <TextBlock
-                            Margin="{StaticResource XSmallTopMargin}"
-                            Style="{StaticResource BodyTextStyle}"
-                            Text="{x:Static properties:Resources.SettingsPageAboutText}"
-                            TextAlignment="Right" />
-
-                        <TextBlock
-                            Margin="{StaticResource SmallTopMargin}"
-                            AutomationProperties.Name="{Binding Text, ElementName=settingsGithubLink}"
-                            ToolTip="{Binding Link}">
-                            <Hyperlink AutomationProperties.Name="{Binding Text, ElementName=settingsGithubLink}" Command="{Binding PrivacyStatementCommand}">
-                                <StackPanel Orientation="Horizontal">
-                                    <mdicons:MaterialIcon VerticalAlignment="Bottom" Kind="{StaticResource IconGithub}" />
-                                    <TextBlock
-                                        x:Name="settingsGithubLink"
-                                        Style="{StaticResource BodyTextStyle}"
-                                        Text="{x:Static properties:Resources.SettingsPageGithubLink}" />
-                                </StackPanel>
-                            </Hyperlink>
-                        </TextBlock>
+                       
                     </StackPanel>
                 </Grid>
             </ScrollViewer>

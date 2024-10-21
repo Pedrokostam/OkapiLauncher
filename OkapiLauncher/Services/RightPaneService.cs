@@ -12,7 +12,7 @@ public class RightPaneService : IRightPaneService
 {
     private readonly IPageService _pageService;
     private Frame _frame;
-    private object _lastParameterUsed;
+    private object? _lastParameterUsed;
     private SplitView _splitView;
 
     public event EventHandler PaneOpened;
@@ -38,7 +38,7 @@ public class RightPaneService : IRightPaneService
         _splitView.PaneClosed -= OnPaneClosed;
     }
 
-    public void OpenInRightPane(string pageKey, object parameter = null)
+    public void OpenInRightPane(string pageKey, object? parameter = null)
     {
         var pageType = _pageService.GetPageType(pageKey);
         if (_frame.Content?.GetType() != pageType || (parameter != null && !parameter.Equals(_lastParameterUsed)))
@@ -60,7 +60,7 @@ public class RightPaneService : IRightPaneService
         PaneOpened?.Invoke(_splitView, EventArgs.Empty);
     }
 
-    private void OnNavigated(object sender, NavigationEventArgs e)
+    private void OnNavigated(object? sender, NavigationEventArgs e)
     {
         if (sender is Frame frame)
         {
@@ -73,6 +73,9 @@ public class RightPaneService : IRightPaneService
         }
     }
 
-    private void OnPaneClosed(object sender, EventArgs e)
+    private void OnPaneClosed(object? sender, EventArgs e)
         => PaneClosed?.Invoke(sender, e);
+
+    public void OpenInRightPane<T>(object? parameter = null)=>OpenInRightPane(typeof(T).FullName!, parameter);
+   
 }

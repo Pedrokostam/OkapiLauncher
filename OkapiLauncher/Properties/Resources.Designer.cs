@@ -61,6 +61,44 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Built on {0:yyyy-MM-dd}.
+        /// </summary>
+        public static string AboutPageBuiltOn {
+            get {
+                return ResourceManager.GetString("AboutPageBuiltOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Okapi Launcher application is an independent tool designed to facilitate access to applications based on the Aurora Vision environment. Please note that Okapi Launcher is not affiliated with, endorsed by, or in any way associated with the owners, developers, or companies of the third-party applications it supports.
+        ///
+        ///All trademarks, service marks, logos, and copyrights related to the applications and companies referenced within Okapi Launcher are the property of their respective owners. The use of thes [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string AboutPageDisclaimer {
+            get {
+                return ResourceManager.GetString("AboutPageDisclaimer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Repository link (bug reports, feature requests, contact).
+        /// </summary>
+        public static string AboutPageGithubLink {
+            get {
+                return ResourceManager.GetString("AboutPageGithubLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string AboutPageTitle {
+            get {
+                return ResourceManager.GetString("AboutPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Okapi Launcher.
         /// </summary>
         public static string AppDisplayName {
@@ -862,15 +900,6 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Repository link (report bugs and improvements).
-        /// </summary>
-        public static string SettingsPageGithubLink {
-            get {
-                return ResourceManager.GetString("SettingsPageGithubLink", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Open app folder.
         /// </summary>
         public static string SettingsPageOpenInstallationFolderButton {
@@ -988,6 +1017,15 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Help.
+        /// </summary>
+        public static string ShellMenuHelpHeader {
+            get {
+                return ResourceManager.GetString("ShellMenuHelpHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Exit.
         /// </summary>
         public static string ShellMenuItemFileExitHeader {
@@ -1015,20 +1053,20 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string ShellMenuItemViewsAboutPageHeader {
+            get {
+                return ResourceManager.GetString("ShellMenuItemViewsAboutPageHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Recently opened files.
         /// </summary>
         public static string ShellMenuRecentFiles {
             get {
                 return ResourceManager.GetString("ShellMenuRecentFiles", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to _Views.
-        /// </summary>
-        public static string ShellMenuViewsHeader {
-            get {
-                return ResourceManager.GetString("ShellMenuViewsHeader", resourceCulture);
             }
         }
         
