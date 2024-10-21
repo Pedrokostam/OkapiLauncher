@@ -148,7 +148,7 @@
     <value>Personalization</value>
   </data>
   <data name="SettingsPageGithubLink" xml:space="preserve">
-    <value>Repository link (report bugs and improvements)</value>
+    <value>Repository link (bug reports, feature requests, contact)</value>
   </data>
   <data name="SettingsPageRadioButtonDarkTheme" xml:space="preserve">
     <value>Dark</value>
@@ -529,5 +529,13 @@ Delete this installation and launch the official app to proceed with the update.
   </data>
   <data name="ShellViewButtonLauncherTooltipDisabled" xml:space="preserve">
     <value>Load any project to enable this view</value>
+  </data>
+  <data name="AboutPageBuiltOn" xml:space="preserve">
+    <value>Built on {0:yyyy-MM-dd}</value>
+  </data>
+  <data name="AboutPageDisclaimer" xml:space="preserve">
+    <value>The Okapi Launcher application is an independent tool designed to facilitate access to applications based on the Aurora Vision environment. Please note that Okapi Launcher is not affiliated with, endorsed by, or in any way associated with the owners, developers, or companies of the third-party applications it supports.
+
+All trademarks, service marks, logos, and copyrights related to the applications and companies referenced within Okapi Launcher are the property of their respective owners. The use of these names is solely for identification and reference purposes, and does not imply any endorsement, approval, or association.</value>
   </data>
 </root>

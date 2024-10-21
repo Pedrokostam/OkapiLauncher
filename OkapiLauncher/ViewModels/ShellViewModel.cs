@@ -99,7 +99,7 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
 
     [RelayCommand()]
     private void OnMenuViewsAboutPage()
-        => _navigationService.NavigateTo<AboutViewModel>(parameter: null);
+        => _rightPaneService.OpenInRightPane<AboutViewModel>(parameter: null);
 
     //=> _navigationService.NavigateTo(typeof(InstalledAppsViewModel).FullName!, parameter: null, clearNavigation: true);
     [RelayCommand()]

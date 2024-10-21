@@ -61,6 +61,26 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Built on {0:yyyy-MM-dd}.
+        /// </summary>
+        public static string AboutPageBuiltOn {
+            get {
+                return ResourceManager.GetString("AboutPageBuiltOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Okapi Launcher application is an independent tool designed to facilitate access to applications based on the Aurora Vision environment. Please note that Okapi Launcher is not affiliated with, endorsed by, or in any way associated with the owners, developers, or companies of the third-party applications it supports.
+        ///
+        ///All trademarks, service marks, logos, and copyrights related to the applications and companies referenced within Okapi Launcher are the property of their respective owners. The use of thes [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string AboutPageDisclaimer {
+            get {
+                return ResourceManager.GetString("AboutPageDisclaimer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to About.
         /// </summary>
         public static string AboutPageTitle {
@@ -871,7 +891,7 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Repository link (report bugs and improvements).
+        ///   Looks up a localized string similar to Repository link (bug reports, feature requests, contact).
         /// </summary>
         public static string SettingsPageGithubLink {
             get {

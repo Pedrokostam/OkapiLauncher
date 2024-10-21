@@ -6,6 +6,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mdicons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
     xmlns:properties="clr-namespace:OkapiLauncher.Properties"
+    xmlns:vms="clr-namespace:OkapiLauncher.ViewModels"
+    d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False,
+                                     Type={x:Type vms:AboutViewModel}}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     Style="{DynamicResource MahApps.Styles.Page}"
@@ -19,16 +22,70 @@
             Margin="{StaticResource MediumLeftMargin}"
             Style="{StaticResource PageTitleStyle}"
             Text="{x:Static properties:Resources.AboutPageTitle}" />
-        <Grid
-            Grid.Row="1"
-            Margin="{StaticResource MediumLeftRightMargin}"
-            Background="{DynamicResource MahApps.Brushes.Gray10}">
+        <Grid Grid.Row="1" Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel>
+                <TextBlock
+                    Margin="{StaticResource SmallTopMargin}"
+                    d:Text="Okapi Launcher 1.5.0.0"
+                    Style="{StaticResource SubtitleTextStyle}">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} {1}">
+                            <Binding Source="{x:Static properties:Resources.AppDisplayName}" />
+                            <Binding Path="Version" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+                <TextBlock
+                    Margin="{StaticResource XSmallTopMargin}"
+                    d:Text="Built on 2000-01-01"
+                    DockPanel.Dock="Top"
+                    Style="{StaticResource BodyTextStyle}"
+                    Text="{Binding BuildDate, Mode=OneWay, StringFormat={x:Static properties:Resources.AboutPageBuiltOn}}" />
+                <!--<TextBlock
+                    Margin="{StaticResource XSmallTopMargin}"
+                    DockPanel.Dock="Top"
+                    Style="{StaticResource BodyTextStyle}"
+                    Text="{x:Static properties:Resources.SettingsPageAboutText}"
+                    TextAlignment="Right" />-->
+                <TextBlock
+                    Margin="{StaticResource SmallTopMargin}"
+                    AutomationProperties.Name="{Binding Text, ElementName=settingsGithubLink}"
+                    DockPanel.Dock="Top"
+                    ToolTip="{Binding Link}">
+                    <Hyperlink AutomationProperties.Name="{Binding Text, ElementName=settingsGithubLink}" Command="{Binding OpenRepoPageCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <mdicons:MaterialIcon
+                                Height="20"
+                                VerticalAlignment="Bottom"
+                                Kind="{StaticResource IconGithub}" />
+                            <TextBlock
+                                x:Name="settingsGithubLink"
+                                Style="{StaticResource BodyTextStyle}"
+                                Text="{x:Static properties:Resources.SettingsPageGithubLink}"
+                                ToolTip="{Binding Link}" />
+                        </StackPanel>
+                    </Hyperlink>
+                </TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Row="1" VerticalAlignment="Bottom">
+                <TextBlock
+                    Margin="{StaticResource SmallTopMargin}"
+                    Style="{StaticResource SubtitleTextStyle}"
+                    Text="Disclaimer" />
+                <TextBlock
+                    Margin="{StaticResource XSmallTopMargin}"
+                    Style="{StaticResource BodyTextStyle}"
+                    Text="{x:Static properties:Resources.AboutPageDisclaimer}" />
+            </StackPanel>
             <!--
                 The Mahapps Gray10 color represents where you should place your content.
                 Place your content here.
             -->
-            <StackPanel>
-
+            <!--<StackPanel>
                 <TextBlock
                     Margin="{StaticResource SmallTopMargin}"
                     Style="{StaticResource SubtitleTextStyle}"
@@ -43,27 +100,14 @@
                     Text="{x:Static properties:Resources.SettingsPageAboutText}"
                     TextAlignment="Right" />
 
-                <TextBlock
-                    Margin="{StaticResource SmallTopMargin}"
-                    AutomationProperties.Name="{Binding Text, ElementName=settingsGithubLink}"
-                    ToolTip="{Binding Link}">
-                    <Hyperlink AutomationProperties.Name="{Binding Text, ElementName=settingsGithubLink}" Command="{Binding PrivacyStatementCommand}">
-                        <StackPanel Orientation="Horizontal">
-                            <mdicons:MaterialIcon VerticalAlignment="Bottom" Kind="{StaticResource IconGithub}" />
-                            <TextBlock
-                                x:Name="settingsGithubLink"
-                                Style="{StaticResource BodyTextStyle}"
-                                Text="{x:Static properties:Resources.SettingsPageGithubLink}" />
-                        </StackPanel>
-                    </Hyperlink>
-                </TextBlock>
+
                 <TextBlock>
                     Disclaimer
                     This application is an independent tool designed to help users launch projects in [Other App Name]. It is not affiliated with, endorsed, or sponsored by [Other App Name] or its developers. All trademarks, logos, and brand names are the property of their respective owners. Use of these names does not imply any partnership, endorsement, or association.
                     [Your App Name] provides functionality that enhances project management and workflows. However, it does not modify or interact with the underlying functionality of [Other App Name] beyond initiating projects or processes already supported by that application.
                     Please note that all risks related to the use of [Your App Name] and [Other App Name] are the user's responsibility. [Your Company] is not responsible for any issues, damages, or losses resulting from the use of [Other App Name].
                 </TextBlock>
-            </StackPanel>
+            </StackPanel>-->
         </Grid>
     </Grid>
 </Page>
