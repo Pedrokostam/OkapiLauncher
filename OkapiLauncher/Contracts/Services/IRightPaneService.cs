@@ -10,7 +10,8 @@ public interface IRightPaneService
 
     event EventHandler PaneClosed;
 
-    void OpenInRightPane(string pageKey, object parameter = null);
+    void OpenInRightPane(string pageKey, object? parameter = null);
+    void OpenInRightPane<T>(object? parameter = null);
 
     void Initialize(Frame rightPaneFrame, SplitView splitView);
 
