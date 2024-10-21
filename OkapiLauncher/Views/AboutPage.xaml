@@ -65,7 +65,7 @@
                             <TextBlock
                                 x:Name="settingsGithubLink"
                                 Style="{StaticResource BodyTextStyle}"
-                                Text="{x:Static properties:Resources.SettingsPageGithubLink}"
+                                Text="{x:Static properties:Resources.AboutPageGithubLink}"
                                 ToolTip="{Binding Link}" />
                         </StackPanel>
                     </Hyperlink>

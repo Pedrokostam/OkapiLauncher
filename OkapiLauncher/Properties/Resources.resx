@@ -147,7 +147,7 @@
   <data name="SettingsPagePersonalizationTitle" xml:space="preserve">
     <value>Personalization</value>
   </data>
-  <data name="SettingsPageGithubLink" xml:space="preserve">
+  <data name="AboutPageGithubLink" xml:space="preserve">
     <value>Repository link (bug reports, feature requests, contact)</value>
   </data>
   <data name="SettingsPageRadioButtonDarkTheme" xml:space="preserve">

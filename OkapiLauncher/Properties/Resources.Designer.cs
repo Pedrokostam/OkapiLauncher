@@ -81,6 +81,15 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Repository link (bug reports, feature requests, contact).
+        /// </summary>
+        public static string AboutPageGithubLink {
+            get {
+                return ResourceManager.GetString("AboutPageGithubLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to About.
         /// </summary>
         public static string AboutPageTitle {
@@ -887,15 +896,6 @@ namespace OkapiLauncher.Properties {
         public static string SettingsPageFileAssociationHeader {
             get {
                 return ResourceManager.GetString("SettingsPageFileAssociationHeader", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Repository link (bug reports, feature requests, contact).
-        /// </summary>
-        public static string SettingsPageGithubLink {
-            get {
-                return ResourceManager.GetString("SettingsPageGithubLink", resourceCulture);
             }
         }
         
