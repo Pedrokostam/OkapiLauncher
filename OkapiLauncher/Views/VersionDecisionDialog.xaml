@@ -44,15 +44,9 @@
             Margin="0,-15,0,0"
             Style="{StaticResource PageTitleStyle}"
             Text="{x:Static properties:Resources.VersionCheckDialogHeader}" />
-        <TextBlock
-            Grid.Row="1"
-            Text="{Binding Message}" />
-        <TextBlock
-            Grid.Row="2"
-            Text="{Binding VersionTitle, StringFormat={x:Static properties:Resources.VersionCheckDialogMessageSecondFormat}}" />
-        <TextBlock
-            Grid.Row="3"
-            Text="{x:Static properties:Resources.VersionCheckDialogQuestion}" />
+        <TextBlock Grid.Row="1" Text="{Binding Message}" />
+        <TextBlock Grid.Row="2" Text="{Binding VersionTitle, StringFormat={x:Static properties:Resources.VersionCheckDialogMessageSecondFormat}}" />
+        <TextBlock Grid.Row="3" Text="{x:Static properties:Resources.VersionCheckDialogQuestion}" />
         <Grid Grid.Row="4">
             <Grid>
                 <Grid Grid.Column="1">
@@ -140,11 +134,11 @@
             <Border
                 Grid.Row="2"
                 Margin="0,15,0,15"
-                Padding="5"
-                BorderBrush="{DynamicResource MahApps.Brushes.IdealForeground}"
-                BorderThickness="1"
-                CornerRadius="2">
+                BorderBrush="{DynamicResource MahApps.Brushes.Highlight}"
+                BorderThickness="3"
+                CornerRadius="4">
                 <ProgressBar
+                    Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
                     BorderThickness="0"
                     Maximum="100"
                     Minimum="0"

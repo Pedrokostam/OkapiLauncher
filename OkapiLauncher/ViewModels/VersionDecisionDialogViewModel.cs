@@ -13,6 +13,7 @@ using OkapiLauncher.Models.Updates;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
+using OkapiLauncher.ViewModels;
 
 namespace AuroraVisionLauncher.ViewModels;
 public partial class VersionDecisionDialogViewModel(UpdateDataCarier information) : ObservableValidator, INavigationAware, IDialogViewModel<UpdatePromptResult>
@@ -26,7 +27,7 @@ public partial class VersionDecisionDialogViewModel(UpdateDataCarier information
     private readonly TaskCompletionSource<UpdatePromptResult> _done = new();
     public string Message => string.Format(
         System.Globalization.CultureInfo.InvariantCulture,
-        Properties.Resources.VersionCheckDialogMessageFormat,
+        OkapiLauncher.Properties.Resources.VersionCheckDialogMessageFormat,
         UpdateInfo.HtmlResponse?.VersionTag,
         UpdateInfo.HtmlResponse?.ReleaseDate.ToLocalTime());
 
@@ -75,18 +76,47 @@ public partial class VersionDecisionDialogViewModel(UpdateDataCarier information
     [ObservableProperty]
     private DownloadProgressViewModel? _progressViewModel = null;
 
+    private static string GetFilepath(string link)
+    {
+        var root = Path.GetTempPath();
+        var filename = Path.GetFileName(link);
+        var backupPath = Path.Join(root, Guid.NewGuid() + ".exe");
+        if (filename is null || filename.IndexOfAny([.. Path.GetInvalidFileNameChars()]) >= 0)
+        {
+            return backupPath;
+        }
+        var filepath = Path.Join(root, filename);
+        if (File.Exists(filepath))
+        {
+            try
+            {
+                File.Delete(filepath);
+            }
+            catch
+            {
+                return backupPath;
+            }
+        }
+        return filepath;
+    }
+
     [RelayCommand(CanExecute = nameof(AutoUpdateEnabled))]
     private async Task DownloadUpdater()
     {
         ProgressViewModel = new(UpdateInfo);
-        string destinationFilePath = Path.GetTempFileName();
-        var isDownloaded = await ProgressViewModel.DownloadFileAsync(destinationFilePath);
-        //ProgressViewModel = null;
+        var link = UpdateInfo.HtmlResponse?.InstallerDownloadLink;
+        if(link is null)
+        {
+            return;
+        }
+        string filepath = GetFilepath(link);
+        var isDownloaded = await ProgressViewModel.DownloadFileAsync(filepath);
+        ProgressViewModel = null;
         if (!isDownloaded)
         {
             return;
         }
-        UpdaterFilePath = destinationFilePath;
+        UpdaterFilePath = filepath;
         SetResult(UpdateDecision.LaunchUpdater);
     }
     public string? UpdaterFilePath { get; private set; } = null;
