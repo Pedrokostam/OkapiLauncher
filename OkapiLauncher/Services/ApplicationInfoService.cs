@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using OkapiLauncher.Contracts.Services;
 using static OkapiLauncher.Contracts.Services.IApplicationInfoService;

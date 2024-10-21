@@ -14,6 +14,7 @@ using OkapiLauncher.Helpers;
 using OkapiLauncher.Models;
 using OkapiLauncher.Models.Updates;
 using Microsoft.Extensions.Options;
+using System.Windows.Input;
 
 namespace OkapiLauncher.Services;
 public class UpdateCheckService : IUpdateCheckService

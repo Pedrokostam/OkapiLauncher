@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
-
+using System.IO;
 using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Helpers;
 
 namespace OkapiLauncher.Services;
 
@@ -15,7 +16,6 @@ public class SystemService : ISystemService
 
     public void LaunchInstaller(string? installerPath)
     {
-        installerPath = @"C:\Users\Pedro\source\repos\AuroraVisionLauncher\Release\AuroraVisionLauncher 1.1.1.0 installer.exe";
         if (!File.Exists(installerPath))
         {
             return;

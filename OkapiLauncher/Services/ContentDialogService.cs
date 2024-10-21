@@ -16,6 +16,7 @@ using OkapiLauncher.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MahApps.Metro.Controls.Dialogs;
+using AuroraVisionLauncher.ViewModels;
 
 namespace OkapiLauncher.Services;
 public class ContentDialogService : IContentDialogService
