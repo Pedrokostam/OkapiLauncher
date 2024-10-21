@@ -6,7 +6,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuroraVisionLauncher.Helpers;
+namespace OkapiLauncher.Helpers;
 internal class PrivilegeHelper
 {
     public enum RequiredElevation

@@ -5,9 +5,9 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using AuroraVisionLauncher.Contracts.Services;
+using OkapiLauncher.Contracts.Services;
 
-namespace AuroraVisionLauncher.Models.Updates;
+namespace OkapiLauncher.Models.Updates;
 public class UpdateDataCarier
 {
     private UpdateDataCarier(HtmlVersionResponse? htmlResponse, bool isAutomaticUpdateCheck, DateTime appBuildDate, IApplicationInfoService.InstallationScope isAppRegistered, string[] ignoredVersions)

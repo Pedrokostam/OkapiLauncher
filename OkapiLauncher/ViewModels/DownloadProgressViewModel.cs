@@ -5,13 +5,13 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using AuroraVisionLauncher.Contracts.Services;
-using AuroraVisionLauncher.Helpers;
-using AuroraVisionLauncher.Models.Updates;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Helpers;
+using OkapiLauncher.Models.Updates;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace AuroraVisionLauncher.ViewModels;
+namespace OkapiLauncher.ViewModels;
 public partial class DownloadProgressViewModel : ObservableObject
 {
     public DownloadProgressViewModel(UpdateDataCarier updateInfo)

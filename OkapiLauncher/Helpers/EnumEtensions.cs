@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AuroraVisionLauncher.Contracts.Services;
+using OkapiLauncher.Contracts.Services;
 
-namespace AuroraVisionLauncher.Helpers;
+namespace OkapiLauncher.Helpers;
 public static class EnumEtensions
 {
     public static  bool IsRegisteredApp(this IApplicationInfoService.InstallationScope scope)
