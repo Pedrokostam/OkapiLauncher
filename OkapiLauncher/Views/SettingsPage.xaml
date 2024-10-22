@@ -8,8 +8,8 @@
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mdicons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
-    xmlns:properties="clr-namespace:OkapiLauncher.Properties"
     xmlns:models="clr-namespace:OkapiLauncher.Models"
+    xmlns:properties="clr-namespace:OkapiLauncher.Properties"
     xmlns:vms="clr-namespace:OkapiLauncher.ViewModels"
     x:Name="RootPage"
     d:Background="Gray"
@@ -43,13 +43,14 @@
                 <Grid x:Name="SourcesGrid" Grid.Row="1">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="48" />
-                        <RowDefinition />
+                        <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
                     <TextBlock
                         Margin="{StaticResource SmallTopMargin}"
                         Style="{StaticResource SubtitleTextStyle}"
-                        Text="{x:Static properties:Resources.SettingsPageCustomSourcesHeader}" />
+                        Text="{x:Static properties:Resources.SettingsPageCustomSourcesHeader}"
+                        ToolTip="{x:Static properties:Resources.SettingsPageCustomSourcesTooltip}" />
                     <Button
                         Grid.Row="2"
                         Command="{Binding AddNewSourceCommand}"
@@ -60,6 +61,26 @@
                         d:ItemsSource="{d:SampleData ItemCount=5}"
                         ItemsSource="{Binding CustomSources}"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListView.Style>
+                            <Style BasedOn="{StaticResource {x:Type ListView}}" TargetType="{x:Type ListView}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Items.Count}" Value="0">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <TextBlock
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Top"
+                                                        Style="{StaticResource EmptyListPlaceholder}"
+                                                        Text="{x:Static properties:Resources.SettingsPageNoCustomSourceMessage}"
+                                                        ToolTip="{x:Static properties:Resources.SettingsPageCustomSourcesTooltip}" />
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.Style>
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -109,50 +130,7 @@
                         </ListView.ItemTemplate>
                     </ListView>
                 </Grid>
-                <DockPanel x:Name="AssociationGrid" Grid.Row="0">
-                    <TextBlock
-                        DockPanel.Dock="Top"
-                        Style="{StaticResource SubtitleTextStyle}"
-                        Text="{x:Static properties:Resources.SettingsPageFileAssociationHeader}" />
-                    <Button
-                        Command="{Binding AssociateAppWithExtensionsCommand}"
-                        Content="{x:Static properties:Resources.SettingsPageSetFileAssociationsButton}"
-                        DockPanel.Dock="Bottom"
-                        Style="{StaticResource SettingsButton}"
-                        ToolTip="{x:Static properties:Resources.SettingsPageSetFileAssociationsButtonTooltip}" />
-                    <ItemsControl
-                        d:ItemsSource="{d:SampleData ItemCount=5}"
-                        DockPanel.Dock="Left"
-                        Focusable="False"
-                        ItemsSource="{Binding FileAssociationStatus}">
-                        <ItemsControl.Resources>
-                            <converters:BoolSelectorConverter
-                                x:Key="BoolIconKind"
-                                FalseValue="EmojiSadOutline"
-                                TrueValue="CheckOutline" />
-                            <converters:BoolSelectorConverter
-                                x:Key="BoolColor"
-                                FalseValue="Red"
-                                TrueValue="Green" />
-                        </ItemsControl.Resources>
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="{x:Type models:FileAssociationStatus}">
-                                <StackPanel Margin="5,0,10,5" Orientation="Vertical">
-                                    <TextBlock Style="{StaticResource SubtitleTextStyle}" Text="{Binding Extension}" />
-                                    <mdicons:MaterialIcon Foreground="{Binding Associated, Converter={StaticResource BoolColor}}" Kind="{Binding Associated, Converter={StaticResource BoolIconKind}}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                    <Border Margin="5,0,0,0" HorizontalAlignment="Left">
-                        <mah:ProgressRing Width="45" IsActive="{Binding AssociationInProgress}" />
-                    </Border>
-                </DockPanel>
+
             </Grid>
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <Grid Margin="{StaticResource SmallTopBottomMargin}">
@@ -242,7 +220,7 @@
                                 </Grid.ColumnDefinitions>
                                 <CheckBox
                                     Content="{x:Static properties:Resources.SettingsPageCheckForUpdatesOnStartup}"
-                                    FontSize="16" 
+                                    FontSize="16"
                                     IsChecked="{Binding AutoCheckForUpdates}"
                                     ToolTip="{x:Static properties:Resources.SettingsPageCheckForUpdatesOnStartupTooltip}" />
                                 <Button
@@ -253,7 +231,60 @@
                                     Style="{StaticResource SettingsButton}" />
                             </Grid>
                         </StackPanel>
-                       
+                        <DockPanel
+                            x:Name="AssociationGrid"
+                            Grid.Row="4"
+                            Margin="0,10,0,0">
+                            <TextBlock
+                                DockPanel.Dock="Top"
+                                Style="{StaticResource SubtitleTextStyle}"
+                                Text="{x:Static properties:Resources.SettingsPageFileAssociationHeader}" />
+                            <Button
+                                Command="{Binding AssociateAppWithExtensionsCommand}"
+                                Content="{x:Static properties:Resources.SettingsPageSetFileAssociationsButton}"
+                                DockPanel.Dock="Bottom"
+                                Style="{StaticResource SettingsButton}"
+                                ToolTip="{x:Static properties:Resources.SettingsPageSetFileAssociationsButtonTooltip}" />
+                            <ItemsControl
+                                d:ItemsSource="{d:SampleData ItemCount=5}"
+                                DockPanel.Dock="Left"
+                                Focusable="False"
+                                ItemsSource="{Binding FileAssociationStatus}">
+                                <ItemsControl.Resources>
+                                    <converters:BoolSelectorConverter
+                                        x:Key="BoolIconKind"
+                                        FalseValue="EmojiSadOutline"
+                                        TrueValue="CheckOutline" />
+                                    <converters:BoolSelectorConverter
+                                        x:Key="BoolTooltip"
+                                        FalseValue="{x:Static properties:Resources.SettingsPageFileAssociationExtensionTooltipFalse}"
+                                        TrueValue="{x:Static properties:Resources.SettingsPageFileAssociationExtensionTooltipTrue}" />
+                                    <converters:BoolSelectorConverter
+                                        x:Key="BoolColor"
+                                        FalseValue="Red"
+                                        TrueValue="Green" />
+                                </ItemsControl.Resources>
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type models:FileAssociationStatus}">
+                                        <StackPanel
+                                            Margin="5,0,10,5"
+                                            Orientation="Vertical"
+                                            ToolTip="{Binding Associated, Converter={StaticResource BoolTooltip}}">
+                                            <TextBlock Style="{StaticResource SubtitleTextStyle}" Text="{Binding Extension}" />
+                                            <mdicons:MaterialIcon Foreground="{Binding Associated, Converter={StaticResource BoolColor}}" Kind="{Binding Associated, Converter={StaticResource BoolIconKind}}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <Border Margin="5,0,0,0" HorizontalAlignment="Left">
+                                <mah:ProgressRing Width="45" IsActive="{Binding AssociationInProgress}" />
+                            </Border>
+                        </DockPanel>
                     </StackPanel>
                 </Grid>
             </ScrollViewer>

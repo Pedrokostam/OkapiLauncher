@@ -891,11 +891,47 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If you have any app installation that is not detected by this launcher, you can define it here..
+        /// </summary>
+        public static string SettingsPageCustomSourcesTooltip {
+            get {
+                return ResourceManager.GetString("SettingsPageCustomSourcesTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Windows will open these files with a different application.
+        /// </summary>
+        public static string SettingsPageFileAssociationExtensionTooltipFalse {
+            get {
+                return ResourceManager.GetString("SettingsPageFileAssociationExtensionTooltipFalse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Okapi Launcher will be used to open these files by default.
+        /// </summary>
+        public static string SettingsPageFileAssociationExtensionTooltipTrue {
+            get {
+                return ResourceManager.GetString("SettingsPageFileAssociationExtensionTooltipTrue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File associations.
         /// </summary>
         public static string SettingsPageFileAssociationHeader {
             get {
                 return ResourceManager.GetString("SettingsPageFileAssociationHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No custom sources defined.
+        /// </summary>
+        public static string SettingsPageNoCustomSourceMessage {
+            get {
+                return ResourceManager.GetString("SettingsPageNoCustomSourceMessage", resourceCulture);
             }
         }
         

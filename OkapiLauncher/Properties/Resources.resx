@@ -538,4 +538,16 @@ Delete this installation and launch the official app to proceed with the update.
 
 All trademarks, service marks, logos, and copyrights related to the applications and companies referenced within Okapi Launcher are the property of their respective owners. The use of these names is solely for identification and reference purposes, and does not imply any endorsement, approval, or association.</value>
   </data>
+  <data name="SettingsPageNoCustomSourceMessage" xml:space="preserve">
+    <value>No custom sources defined</value>
+  </data>
+  <data name="SettingsPageCustomSourcesTooltip" xml:space="preserve">
+    <value>If you have any app installation that is not detected by this launcher, you can define it here.</value>
+  </data>
+  <data name="SettingsPageFileAssociationExtensionTooltipTrue" xml:space="preserve">
+    <value>Okapi Launcher will be used to open these files by default</value>
+  </data>
+  <data name="SettingsPageFileAssociationExtensionTooltipFalse" xml:space="preserve">
+    <value>Windows will open these files with a different application</value>
+  </data>
 </root>
