@@ -215,13 +215,18 @@
                                         </MenuItem.Icon>
                                     </MenuItem>
                                 </MenuItem>
-
                                 <MenuItem AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}" Header="{x:Static properties:Resources.ShellMenuHelpHeader}">
+                                    <MenuItem
+                                        AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
+                                        Command="{Binding MenuViewHelpPageCommand}"
+                                        Header="{x:Static properties:Resources.ShellMenuItemViewsHelpPageHeader}" />
                                     <MenuItem
                                         AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
                                         Command="{Binding MenuViewsAboutPageCommand}"
                                         Header="{x:Static properties:Resources.ShellMenuItemViewsAboutPageHeader}" />
+
                                 </MenuItem>
+
                             </Menu>
                         </Grid>
                         <Frame

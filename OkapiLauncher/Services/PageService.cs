@@ -21,6 +21,7 @@ public class PageService : IPageService
         Configure<InstalledAppsViewModel, InstalledAppsPage>();
         Configure<ProcessOverviewViewModel, ProcessOverviewPage>();
         Configure<AboutViewModel, AboutPage>();
+        Configure<HelpViewModel, HelpPage>();
     }
 
     public Type GetPageType(string key)

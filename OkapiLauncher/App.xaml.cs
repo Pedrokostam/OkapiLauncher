@@ -124,6 +124,9 @@ public partial class App : Application
         services.AddTransient<AboutViewModel>();
         services.AddTransient<AboutPage>();
 
+        services.AddTransient<HelpViewModel>();
+        services.AddTransient<HelpPage>();
+
         // Configuration
         services.Configure<AppConfig>(context.Configuration.GetSection(nameof(AppConfig)));
         services.AddSingleton<IRightPaneService, RightPaneService>();

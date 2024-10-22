@@ -1314,5 +1314,27 @@ namespace OkapiLauncher.Properties {
                 return ResourceManager.GetString("WarningLanchButtonWarningTooltip", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Help.
+        /// </summary>
+        public static string HelpPageTitle
+        {
+            get
+            {
+                return ResourceManager.GetString("HelpPageTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to MenuItemViewsHelpPageHeader.
+        /// </summary>
+        public static string ShellMenuItemViewsHelpPageHeader
+        {
+            get
+            {
+                return ResourceManager.GetString("ShellMenuItemViewsHelpPageHeader", resourceCulture);
+            }
+        }
     }
 }

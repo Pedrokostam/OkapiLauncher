@@ -13,6 +13,7 @@ using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Models;
 using OkapiLauncher.Models.Messages;
 using OkapiLauncher.Properties;
+using OkapiLauncher.Views;
 
 namespace OkapiLauncher.ViewModels;
 
@@ -96,6 +97,10 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
     [RelayCommand()]
     private void OnMenuViewsInstalledApps()
         => _navigationService.NavigateTo(typeof(InstalledAppsViewModel).FullName!, parameter: null);
+
+    [RelayCommand()]
+    private void OnMenuViewHelpPage()
+        => _navigationService.NavigateTo(typeof(HelpViewModel).FullName!, parameter: null);
 
     [RelayCommand()]
     private void OnMenuViewsAboutPage()
