@@ -131,7 +131,7 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
             int i => i,
             _ => -1
         };
-        if (RecentlyOpenedFiles.Count < intIndex)
+        if (RecentlyOpenedFiles.Count <= intIndex)
         {
             return;
         }
