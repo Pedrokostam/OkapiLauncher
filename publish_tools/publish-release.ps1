@@ -12,8 +12,8 @@ $ErrorActionPreference = 'Stop' # any error should stop the procedure
 $outputInfoFile = Join-Path $PSScriptRoot 'output_info.json'
 $PublishTools = Join-Path $SolutionDir 'publish_tools'
 $innoCompilerPath = 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe'
-$AppName = 'AuroraVisionLauncher'
-$ProjectName = 'AuroraVisionLauncher'
+$AppName = 'Okapi Launcher'
+$ProjectName = 'OkapiLauncher'
 $ProjectDir = Join-Path $SolutionDir $ProjectName
 $CsProjName = "$($ProjectName).csproj"
 $AppExeName = "$($ProjectName).exe"
@@ -36,6 +36,15 @@ if (Test-Path $outputInfoFile) {
 # VERSION
 [xml]$csproj = Get-Content $ProjPath
 $version = $csproj.SelectSingleNode('/Project/PropertyGroup/Version').InnerText
+
+# GUID
+$assemblyInfoPath = Join-Path $ProjectDir Properties AssemblyInfo.cs
+$matchedGuid = Gi $assemblyInfoPath | sls -Pattern '^\s*\[assembly: Guid\("(?<guid>[\w-]+)"'
+if($matchedGuid){
+    $GUID = $matchedGuid.Matches[0].Groups['guid']
+}else{
+    Write-Error 'Could not find GUID of the app'
+}
 
 # REPO
 $appSettingsPath = Join-Path $ProjectDir appsettings.json 
@@ -81,6 +90,7 @@ while ($true) {
         "/DBINDIR=$Binaries"
         "/DOUTDIR=$BaseOutputDir"
         "/DAPPURL=$repoUrl"
+        "/DGUID=$Guid"
         $InnoScriptPath
     )
     $innoLog = ''

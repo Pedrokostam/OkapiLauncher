@@ -9,11 +9,13 @@
 ;#define VERSION "0.0.0.0"
 ;#define BINDIR ""
 ;#define OUTDIR ""
+;#define GUID ""
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{2C508297-5294-4681-BB5E-D2B20F6FC4AB}
+;emit need to escape first bracket by doubling it
+AppId={{{#GUID}}
 OutputDir={#OUTDIR}
 AppName={#APPNAME}
 AppVersion={#VERSION}
@@ -64,23 +66,18 @@ Name: "{autodesktop}\{#APPNAME}"; Filename: "{app}\{#APPEXENAME}"; Tasks: deskto
 [Run]
 Filename: "{app}\{#APPEXENAME}"; Description: "{cm:LaunchProgram,{#StringChange(APPNAME, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
-[Code]
-function InitializeUninstall(): Boolean;
-  var ErrorCode: Integer;
-BEGIN
-    result := True;
-    IF ShellExec('open','tasklist.exe','/fi /im "ImageName eq {#APPEXENAME}"','',SW_HIDE,ewNoWait,ErrorCode) THEN
-    BEGIN
-        IF (MsgBox('The app will be closed before uninstalling. Continue?', mbConfirmation, MB_YESNO) = IDYES) THEN
-        BEGIN
-            ShellExec('open','taskkill.exe','/f /im "{#APPEXENAME}"','',SW_HIDE,ewNoWait,ErrorCode);
-            Exit;
-        END
-        ELSE
-        BEGIN
-            MsgBox('Uninstallation interrupted.',mbError,MB_OK);
-            result := False;
-            Exit;
-        END;
-    END;
-END;
+;[Code]
+;function InitializeUninstall(): Boolean;
+;  var ErrorCode: Integer;
+;BEGIN
+;    result := True;
+;    WHILE ShellExec('open','tasklist.exe','/fi "ImageName eq {#APPEXENAME}"','',SW_HIDE,ewNoWait,ErrorCode) DO
+;    BEGIN
+;        IF (MsgBox('The app {#APPNAME} is currently running. To continue with the uninstallation, the application must be closed.', mbError, MB_RETRYCANCEL) = IDCANCEL) THEN
+;        	BEGIN
+;        	result := False;
+;        	Exit;
+;        	END;
+;        END;
+;    END;
+;END.

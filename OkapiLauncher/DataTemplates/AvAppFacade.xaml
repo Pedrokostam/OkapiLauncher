@@ -1,0 +1,232 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:OkapiLauncher.Controls"
+    xmlns:conv="[conv ]clr-namespace:OkapiLauncher.Converters"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:mdicons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
+    xmlns:mod="clr-namespace:OkapiLauncher.Models"
+    xmlns:properties="clr-namespace:OkapiLauncher.Properties"
+    xmlns:vms="clr-namespace:OkapiLauncher.ViewModels">
+    <DataTemplate x:Key="FullAppInfo" DataType="{x:Type mod:AvAppFacade}">
+        <StackPanel>
+            <TextBlock Text="{Binding Description, StringFormat='{}Name: {0}'}" Visibility="{Binding Description, Converter={StaticResource NullVisibilityConverter}}" />
+            <TextBlock Text="{Binding Name, StringFormat='{}App name: {0}'}" />
+            <TextBlock Text="{Binding Brand, StringFormat='{}Brand: {0}'}" />
+            <TextBlock Text="{Binding Version, StringFormat='{}Version: {0}'}" />
+            <TextBlock Text="{Binding SecondaryVersion, StringFormat='{}Other version: {0}'}" Visibility="{Binding SecondaryVersion, Converter={StaticResource NullVisibilityConverter}}" />
+            <TextBlock Text="{Binding Path, StringFormat='{}Path: {0}'}" />
+        </StackPanel>
+    </DataTemplate>
+    <DataTemplate x:Key="Header_VersionRow" DataType="{x:Type mod:AvAppFacade}">
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Style="{StaticResource AppTitleStyle}">
+                <Run Text="{Binding Version, Mode=OneWay}" />
+                <Run Text="{Binding SecondaryVersion, Mode=OneWay, TargetNullValue='', StringFormat='{}({0}) '}" />
+            </TextBlock>
+            <Border
+                Margin="0,4,0,4"
+                Background="{DynamicResource MahApps.Brushes.Highlight}"
+                CornerRadius="10"
+                Opacity=".8">
+                <TextBlock
+                    Margin="8,0,8,0"
+                    VerticalAlignment="Center"
+                    FontSize="{StaticResource MediumFontSize}"
+                    FontStyle="Normal"
+                    Foreground="{DynamicResource MahApps.Brushes.IdealForeground}"
+                    Style="{StaticResource AppTitleStyle}"
+                    Text="{x:Static properties:Resources.AvAppDevelopmentVersion}"
+                    Visibility="{Binding IsDevelopmentVersion, Converter={StaticResource BoolVisibilityConverter}}" />
+            </Border>
+        </StackPanel>
+    </DataTemplate>
+    <DataTemplate x:Key="Header_NameRow" DataType="{x:Type mod:AvAppFacade}">
+        <StackPanel Orientation="Horizontal">
+            <TextBlock
+                Padding="0,0,8,0"
+                Style="{StaticResource AppTitleStyle}"
+                Text="{Binding Description}"
+                TextDecorations="{Binding IsCustom, Converter={StaticResource CustomToUnderlineConverter}}" />
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="1"
+                Grid.ColumnSpan="2"
+                Style="{StaticResource AppFilePathStyle}"
+                Text="{Binding Path, Converter={StaticResource PathToFilenameConverter}}"
+                ToolTip="{Binding Path}" />
+        </StackPanel>
+    </DataTemplate>
+    <DataTemplate x:Key="AppHeader" DataType="{x:Type mod:AvAppFacade}">
+        <Grid Margin="0,0,10,0" VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0" Padding="0,0,10,0">
+                <Image
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Source="{Binding Converter={StaticResource AppToImageConverter}}" />
+            </Border>
+            <StackPanel Grid.Column="1">
+                <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource Header_NameRow}" />
+                <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource Header_VersionRow}" />
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+    <DataTemplate x:Key="AppHeaderProcess">
+        <Grid Margin="0,0,10,0" VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Border
+                Grid.RowSpan="3"
+                Grid.Column="0"
+                Padding="0,0,10,0">
+                <Image
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Source="{Binding Converter={StaticResource AppToImageConverter}}" />
+            </Border>
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="1"
+                Style="{StaticResource AppTitleStyle}">
+                <Run Text="{Binding Version, Mode=OneWay}" />
+                <Run Text="{Binding SecondaryVersion, Mode=OneWay, TargetNullValue='', StringFormat='{}({0}) '}" />
+            </TextBlock>
+            <StackPanel
+                Grid.Row="0"
+                Grid.Column="1"
+                Orientation="Horizontal">
+                <TextBlock Style="{StaticResource AppTitleStyle}" Text="{Binding Name, Mode=OneWay}" />
+                <Border
+                    Margin="0,4,0,4"
+                    Background="{DynamicResource MahApps.Brushes.Highlight}"
+                    CornerRadius="10"
+                    Opacity=".8">
+                    <TextBlock
+                        Margin="8,0,8,0"
+                        VerticalAlignment="Center"
+                        FontSize="{StaticResource MediumFontSize}"
+                        FontStyle="Normal"
+                        Foreground="{DynamicResource MahApps.Brushes.IdealForeground}"
+                        Style="{StaticResource AppTitleStyle}"
+                        Text="{x:Static properties:Resources.AvAppDevelopmentVersion}"
+                        Visibility="{Binding IsDevelopmentVersion, Converter={StaticResource BoolVisibilityConverter}}" />
+                </Border>
+            </StackPanel>
+            <TextBlock
+                Grid.Row="2"
+                Grid.Column="1"
+                Style="{StaticResource AppFilePathStyle}"
+                Text="{Binding Path}" />
+        </Grid>
+    </DataTemplate>
+    <DataTemplate x:Key="AvAppFacadeDataTemplate" DataType="{x:Type mod:AvAppFacade}">
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ToolTip>
+                <ToolTip>
+                    <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource FullAppInfo}" />
+                </ToolTip>
+            </Grid.ToolTip>
+            <Grid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Command="{Binding OpenContainingFolderCommand}" Header="{x:Static properties:Resources.AvAppOpenInstallationFolder}" />
+                    <MenuItem Command="{Binding CopyExecutablePathCommand}" Header="{x:Static properties:Resources.AvAppCopyPath}" />
+                    <MenuItem
+                        Command="{Binding LaunchWithoutProgramCommand}"
+                        Header="{x:Static properties:Resources.AvAppLaunchWithNoProgram}"
+                        Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <MenuItem
+                        Command="{Binding ShowProcessOverviewCommand}"
+                        Header="Open process overview window"
+                        Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </ContextMenu>
+            </Grid.ContextMenu>
+            <Rectangle Fill="Transparent" />
+            <Grid Margin="15,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <ContentControl
+                    Grid.Column="0"
+                    Content="{Binding}"
+                    ContentTemplate="{StaticResource AppHeader}" />
+                <StackPanel
+                    Grid.Column="1"
+                    Margin="5,0,10,0"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal"
+                    Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <!--<mdicons:MaterialIcon VerticalAlignment="Center">
+                        <mdicons:MaterialIcon.Style>
+                            <Style TargetType="{x:Type mdicons:MaterialIcon}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsLaunched}" Value="False">
+                                        <Setter Property="Kind" Value="{StaticResource IconIsNotLaunched}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsLaunched}" Value="True">
+                                        <Setter Property="Kind" Value="{StaticResource IconIsLaunched}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </mdicons:MaterialIcon.Style>
+                    </mdicons:MaterialIcon>-->
+                    <TextBlock Margin="5,0,0,0">
+                        <TextBlock.Style>
+                            <Style BasedOn="{StaticResource BaseTextBlockStyle}" TargetType="{x:Type TextBlock}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsLaunched}" Value="False">
+                                        <Setter Property="Text" Value="Not running" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsLaunched}" Value="True">
+                                        <Setter Property="Text" Value="{Binding ActiveProcesses.Count, StringFormat={x:Static properties:Resources.AvAppProcessesActive}}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </StackPanel>
+                <controls:WarningLaunchButton
+                    Grid.Column="2"
+                    Width="40"
+                    Command="{Binding LaunchWithoutProgramCommand}"
+                    DisplayWarning="{Binding WarnAboutNewProcess}"
+                    Style="{StaticResource SymbolButton}"
+                    ToolTip="{x:Static properties:Resources.AvAppLaunchWithNoProgram}"
+                    Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <mdicons:MaterialIcon Kind="{StaticResource IconLaunch}" />
+                </controls:WarningLaunchButton>
+                <Button
+                    Grid.Column="3"
+                    Width="40"
+                    Command="{Binding CopyExecutablePathCommand}"
+                    Style="{StaticResource SymbolButton}"
+                    ToolTip="{x:Static properties:Resources.AvAppCopyPath}">
+                    <mdicons:MaterialIcon Kind="{StaticResource IconCopy}" />
+                </Button>
+                <Button
+                    Grid.Column="4"
+                    Width="40"
+                    Command="{Binding OpenContainingFolderCommand}"
+                    Style="{StaticResource SymbolButton}"
+                    ToolTip="{x:Static properties:Resources.AvAppOpenInstallationFolder}">
+                    <mdicons:MaterialIcon Kind="{StaticResource IconOpenFolder}" />
+                </Button>
+            </Grid>
+        </Grid>
+    </DataTemplate>
+</ResourceDictionary>
