@@ -95,7 +95,7 @@
             <controls:WarningLaunchButton
                 x:Name="LaunchButton"
                 Grid.Column="2"
-                Width="40"
+                Width="45"
                 Click="LaunchButton_Click"
                 DisplayWarning="{Binding WarnAboutNewProcess}"
                 Style="{StaticResource SymbolButton}"
@@ -104,7 +104,7 @@
             </controls:WarningLaunchButton>
             <Button
                 Grid.Column="3"
-                Width="40"
+                Width="45"
                 Command="{Binding CopyExecutablePathCommand}"
                 Style="{StaticResource SymbolButton}"
                 ToolTip="{x:Static properties:Resources.AvAppCopyPath}">
@@ -112,7 +112,7 @@
             </Button>
             <Button
                 Grid.Column="4"
-                Width="40"
+                Width="45"
                 Command="{Binding OpenContainingFolderCommand}"
                 Style="{StaticResource SymbolButton}"
                 ToolTip="{x:Static properties:Resources.AvAppOpenInstallationFolder}">

@@ -166,7 +166,7 @@
                                         Header="{x:Static properties:Resources.ShellMenuItemFileSettingsOpenProject}"
                                         InputGestureText="Ctrl + O">
                                         <MenuItem.Icon>
-                                            <mdicons:MaterialIcon Kind="{StaticResource IconOpenFolder}" />
+                                            <mdicons:MaterialIcon Kind="FolderOpen" />
                                         </MenuItem.Icon>
                                     </MenuItem>
                                     <MenuItem
