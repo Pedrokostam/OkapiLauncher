@@ -468,7 +468,7 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Confirm termination of all process of app.
+        ///   Looks up a localized string similar to Confirm termination of all processes of app.
         /// </summary>
         public static string KillAllProcessesDialogHeader {
             get {
@@ -477,7 +477,7 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to kill all process of app:.
+        ///   Looks up a localized string similar to Are you sure you want to kill all processes of app:.
         /// </summary>
         public static string KillAllProcessesDialogMessage {
             get {

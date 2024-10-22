@@ -484,10 +484,10 @@
     <value>No</value>
   </data>
   <data name="KillAllProcessesDialogMessage" xml:space="preserve">
-    <value>Are you sure you want to kill all process of app:</value>
+    <value>Are you sure you want to kill all processes of app:</value>
   </data>
   <data name="KillAllProcessesDialogHeader" xml:space="preserve">
-    <value>Confirm termination of all process of app</value>
+    <value>Confirm termination of all processes of app</value>
   </data>
   <data name="DownloadFileHeader" xml:space="preserve">
     <value>Downloading: {0}</value>

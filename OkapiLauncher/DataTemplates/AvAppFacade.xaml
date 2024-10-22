@@ -171,7 +171,7 @@
                     VerticalAlignment="Center"
                     Orientation="Horizontal"
                     Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <mdicons:MaterialIcon VerticalAlignment="Center">
+                    <!--<mdicons:MaterialIcon VerticalAlignment="Center">
                         <mdicons:MaterialIcon.Style>
                             <Style TargetType="{x:Type mdicons:MaterialIcon}">
                                 <Style.Triggers>
@@ -184,7 +184,7 @@
                                 </Style.Triggers>
                             </Style>
                         </mdicons:MaterialIcon.Style>
-                    </mdicons:MaterialIcon>
+                    </mdicons:MaterialIcon>-->
                     <TextBlock Margin="5,0,0,0">
                         <TextBlock.Style>
                             <Style BasedOn="{StaticResource BaseTextBlockStyle}" TargetType="{x:Type TextBlock}">
