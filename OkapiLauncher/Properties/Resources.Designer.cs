@@ -882,6 +882,24 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use the default accent colors for Light and Dark themes.
+        /// </summary>
+        public static string SettingsPageCustomColorResetTooltip {
+            get {
+                return ResourceManager.GetString("SettingsPageCustomColorResetTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the accent color (only applicable for non-system themes).
+        /// </summary>
+        public static string SettingsPageCustomColorTooltip {
+            get {
+                return ResourceManager.GetString("SettingsPageCustomColorTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Custom sources.
         /// </summary>
         public static string SettingsPageCustomSourcesHeader {

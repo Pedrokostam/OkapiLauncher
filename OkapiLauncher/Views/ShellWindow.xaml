@@ -99,10 +99,7 @@
                 OpenPaneLength="500"
                 PanePlacement="Right">
                 <controls:SplitView.Pane>
-                    <Border
-                        Background="{DynamicResource MahApps.Brushes.Control.Background}"
-                        BorderBrush="{DynamicResource MahApps.Brushes.Controls.Border}"
-                        BorderThickness="1,1,0,0">
+                    <Border Background="{DynamicResource MahApps.Brushes.ThemeBackground}" BorderThickness="1,1,0,0">
                         <Frame
                             x:Name="rightPaneFrame"
                             Focusable="False"
@@ -122,7 +119,13 @@
                                 <ColumnDefinition Width="5*" />
                                 <ColumnDefinition Width="1*" />
                             </Grid.ColumnDefinitions>
-
+                            <Ellipse
+                                Grid.Column="1"
+                                Height="2"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Bottom"
+                                Fill="{DynamicResource MahApps.Brushes.Accent}"
+                                Opacity="0.85" />
                             <StackPanel
                                 Grid.Column="1"
                                 Margin="5"
@@ -232,24 +235,6 @@
                     </Grid>
                 </controls:SplitView.Content>
             </controls:SplitView>
-            <Popup
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                AllowsTransparency="True"
-                IsOpen="False"
-                Placement="Center"
-                PlacementTarget="{Binding ElementName=splitView}"
-                PopupAnimation="Slide">
-                <TextBlock>
-                    jsbncvckhjsdbcvbsdhjbnchjksdbncjihksdbhjkcbsdjhkbcihjksdbicbshdbcihjksdbc sd
-                    sfsdfs
-                    dfs
-                    df
-                    sd
-                    fs
-                    dfsdfsdfsdf
-                </TextBlock>
-            </Popup>
         </Grid>
     </controls:MetroWindow.Content>
 </controls:MetroWindow>

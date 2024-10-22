@@ -159,12 +159,16 @@
                                     mah:TextBoxHelper.Watermark="Select a color"
                                     IsEnabled="{Binding Theme, Mode=OneWay, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=!System}"
                                     IsRecentColorPaletteVisible="False"
-                                    SelectedColor="{Binding CurrentAccent, Delay=250}" />
+                                    SelectedColor="{Binding CurrentAccent, Delay=250}"
+                                    ToolTip="{x:Static properties:Resources.SettingsPageCustomColorTooltip}"
+                                    ToolTipService.ShowOnDisabled="True" />
                                 <Button
                                     Grid.Row="2"
                                     Grid.Column="1"
                                     Command="{Binding ResetColorCommand}"
-                                    Content="Reset color" />
+                                    Content="Reset color"
+                                    ToolTip="{x:Static properties:Resources.SettingsPageCustomColorResetTooltip}"
+                                    ToolTipService.ShowOnDisabled="True" />
                                 <RadioButton
                                     Content="{x:Static properties:Resources.SettingsPageRadioButtonLightTheme}"
                                     FontSize="{StaticResource MediumFontSize}"

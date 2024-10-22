@@ -550,4 +550,10 @@ All trademarks, service marks, logos, and copyrights related to the applications
   <data name="SettingsPageFileAssociationExtensionTooltipFalse" xml:space="preserve">
     <value>Windows will open these files with a different application</value>
   </data>
+  <data name="SettingsPageCustomColorTooltip" xml:space="preserve">
+    <value>Select the accent color (only applicable for non-system themes)</value>
+  </data>
+  <data name="SettingsPageCustomColorResetTooltip" xml:space="preserve">
+    <value>Use the default accent colors for Light and Dark themes</value>
+  </data>
 </root>
