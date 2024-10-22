@@ -32,11 +32,11 @@
     <x:Static x:Key="IconPaste" Member="icons:MaterialIconKind.ContentPaste" />
     <x:Static x:Key="IconInstalledApps" Member="icons:MaterialIconKind.Apps" />
     <x:Static x:Key="IconLaunch" Member="icons:MaterialIconKind.Launch" />
+    <x:Static x:Key="IconLauncher" Member="icons:MaterialIconKind.CogPlay" />
     <x:Static x:Key="IconOpenFolder" Member="icons:MaterialIconKind.FolderEyeOutline" />
     <x:Static x:Key="IconDelete" Member="icons:MaterialIconKind.Delete" />
     <x:Static x:Key="IconEdit" Member="icons:MaterialIconKind.Pencil" />
     <x:Static x:Key="IconGithub" Member="icons:MaterialIconKind.Github" />
-    <x:Static x:Key="IconLauncher" Member="icons:MaterialIconKind.CogPlay" />
     <x:Static x:Key="IconTurnOff" Member="icons:MaterialIconKind.CloseThick" />
     <x:Static x:Key="IconSettings" Member="icons:MaterialIconKind.Tools" />
     <x:Static x:Key="IconKill" Member="icons:MaterialIconKind.Power" />

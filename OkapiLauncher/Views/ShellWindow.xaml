@@ -141,7 +141,7 @@
                                     Command="{Binding MenuViewsLauncherCommand}"
                                     CurrentObject="{Binding CurrentViewModel}"
                                     ExpectedObject="{x:Type vms:LauncherViewModel}"
-                                    IconKind="{StaticResource IconLaunch}"
+                                    IconKind="{StaticResource IconLauncher}"
                                     Text="{x:Static properties:Resources.ShellViewButtonLauncherHeader}"
                                     ToolTip="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource LauncherTooltipSelector}}"
                                     ToolTipService.ShowOnDisabled="True" />
