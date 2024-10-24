@@ -76,8 +76,8 @@ public partial class CustomSourceDialogEditorViewModel : ObservableValidator, IN
     private void Accept()
     {
         Debug.WriteLine("Accept");
-        _source.Path = Path;
-        _source.Description = Description;
+        _source.Path = Path.Trim();
+        _source.Description = Description.Trim();
         _done.SetResult();
     }
 
