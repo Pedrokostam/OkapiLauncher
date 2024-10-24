@@ -191,6 +191,11 @@ public class ProductBrand : IComparable<ProductBrand>
         throw new InvalidBrandNameException(signature);
     }
 
+    public string GetLicenseKeyFolderPath()
+    {
+        var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        return Path.Join(localAppData, Name, "Licenses");
+    }
 
     public bool SupportsBrand(ProductBrand brand)
     {
