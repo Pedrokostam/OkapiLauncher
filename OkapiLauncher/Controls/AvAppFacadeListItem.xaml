@@ -28,6 +28,10 @@
                 x:Key="LicenseTooltipConverter"
                 FalseValue="{x:Static properties:Resources.AvAppOpenLicenseFolderDisabled}"
                 TrueValue="{x:Static properties:Resources.AvAppOpenLicenseFolder}" />
+            <converters:BoolSelectorConverter
+                x:Key="LogTooltipConverter"
+                FalseValue="{x:Static properties:Resources.AvAppOpenLogFolderDisabled}"
+                TrueValue="{x:Static properties:Resources.AvAppOpenLogFolder}" />
         </Grid.Resources>
         <Grid.ToolTip>
             <ToolTip>
@@ -36,8 +40,17 @@
         </Grid.ToolTip>
         <Grid.ContextMenu>
             <ContextMenu>
-                <MenuItem Command="{Binding OpenContainingFolderCommand}" Header="{x:Static properties:Resources.AvAppOpenInstallationFolder}" />
-                <MenuItem Command="{Binding CopyExecutablePathCommand}" Header="{x:Static properties:Resources.AvAppCopyPath}" />
+                <MenuItem Command="{Binding OpenContainingFolderCommand}" Header="{x:Static properties:Resources.AvAppOpenInstallationFolder}">
+                    <MenuItem.Icon>
+                        <mdicons:MaterialIcon Kind="{StaticResource IconOpenFolder}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Command="{Binding CopyExecutablePathCommand}" Header="{x:Static properties:Resources.AvAppCopyPath}">
+                    <MenuItem.Icon>
+                        <mdicons:MaterialIcon Kind="{StaticResource IconCopy}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 <MenuItem
                     Click="LaunchButton_Click"
                     Header="{x:Static properties:Resources.AvAppLaunchWithNoProgram}"
@@ -45,21 +58,43 @@
                     <MenuItem.Tag>
                         <sys:Boolean>true</sys:Boolean>
                     </MenuItem.Tag>
+                    <MenuItem.Icon>
+                        <mdicons:MaterialIcon Kind="{StaticResource IconLaunch}" />
+                    </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
                     Command="{Binding ShowProcessOverviewCommand}"
                     Header="Open process overview window"
-                    Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <mdicons:MaterialIcon Kind="{StaticResource IconProcess}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
                 <MenuItem
                     Command="{Binding OpenLicenseFolderCommand}"
                     Header="{x:Static properties:Resources.AvAppOpenLicenseFolder}"
-                    IsEnabled="{Binding CanOpenLicenseFolder}" />
+                    IsEnabled="{Binding CanOpenLicenseFolder}">
+                    <MenuItem.Icon>
+                        <mdicons:MaterialIcon Kind="{StaticResource IconLicenseFolder}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    Command="{Binding OpenLogFolderCommand}"
+                    Header="{x:Static properties:Resources.AvAppOpenLogFolder}"
+                    IsEnabled="{Binding CanOpenLogFolder}"
+                    Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <mdicons:MaterialIcon Kind="{StaticResource IconLogFolder}" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </ContextMenu>
         </Grid.ContextMenu>
         <Rectangle Fill="Transparent" />
         <Grid Margin="15,0,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="auto" />
@@ -140,6 +175,16 @@
                 ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource LicenseTooltipConverter}}"
                 ToolTipService.ShowOnDisabled="True">
                 <mdicons:MaterialIcon Kind="{StaticResource IconLicenseFolder}" />
+            </Button>
+            <Button
+                Grid.Column="6"
+                Width="45"
+                Command="{Binding OpenLogFolderCommand}"
+                Style="{StaticResource SymbolButton}"
+                ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource LogTooltipConverter}}"
+                ToolTipService.ShowOnDisabled="True"
+                Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <mdicons:MaterialIcon Kind="{StaticResource IconLogFolder}" />
             </Button>
         </Grid>
     </Grid>
