@@ -32,8 +32,8 @@ public partial class CustomSourceDialogEditorViewModel : ObservableValidator, IN
         UpdateMatchedApp();
     }
     [ObservableProperty]
-    [MinLength(1, ErrorMessageResourceName = "ValidationStringEmpty", ErrorMessageResourceType = typeof(Resources))]
-    [RegularExpression(@"\S+", ErrorMessageResourceName = "ValidationStringEmpty", ErrorMessageResourceType = typeof(Resources))]
+    [Required(ErrorMessageResourceName = "ValidationStringEmpty", ErrorMessageResourceType = typeof(Resources))]
+    [RegularExpression(@".*\S+.*", ErrorMessageResourceName = "ValidationStringEmpty", ErrorMessageResourceType = typeof(Resources))]
     [NotifyDataErrorInfo]
     private string _description;
     [ObservableProperty]
@@ -41,8 +41,8 @@ public partial class CustomSourceDialogEditorViewModel : ObservableValidator, IN
     [NotifyPropertyChangedFor(nameof(SourcePath))]
     [NotifyCanExecuteChangedFor(nameof(AcceptCommand))]
     [NotifyDataErrorInfo]
-    [MinLength(1, ErrorMessageResourceName = "ValidationStringEmpty", ErrorMessageResourceType = typeof(Resources))]
-    [RegularExpression(@"\S+", ErrorMessageResourceName = "ValidationStringEmpty",ErrorMessageResourceType =typeof(Resources))]
+    [Required(ErrorMessageResourceName = "ValidationStringEmpty", ErrorMessageResourceType = typeof(Resources))]
+    [RegularExpression(@".*\S+.*", ErrorMessageResourceName = "ValidationStringEmpty",ErrorMessageResourceType =typeof(Resources))]
     private string _path;
     public string SourcePath => CustomAppSource.ExpandPath(Path);
 
@@ -53,7 +53,7 @@ public partial class CustomSourceDialogEditorViewModel : ObservableValidator, IN
 
     private void UpdateMatchedApp()
     {
-        MatchedApp = AppReader.GetAvAppFromSource(new CustomAppSource() { Description = Description, Path = Path });
+        MatchedApp = AppReader.GetAvAppFromSource(new CustomAppSource() { Description = Description, Path = Path.Trim() });
     }
 
     public bool PathExists => File.Exists(Path);
