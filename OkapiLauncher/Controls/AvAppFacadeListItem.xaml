@@ -7,18 +7,25 @@
     xmlns:local="clr-namespace:OkapiLauncher.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mdicons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
+    xmlns:converters="clr-namespace:OkapiLauncher.Converters"
     xmlns:models="clr-namespace:OkapiLauncher.Models"
     xmlns:properties="clr-namespace:OkapiLauncher.Properties"
     xmlns:sys="clr-namespace:System;assembly=System.Runtime"
     Name="UC_Root"
-    d:DataContext="{d:DesignInstance Type=models:AvAppFacade}"
+    d:DataContext="{d:DesignInstance Type=models:AvAppFacade,
+                                     IsDesignTimeCreatable=False}"
     d:DesignWidth="800"
     MouseDoubleClick="UserControl_MouseDoubleClick"
     mc:Ignorable="d">
     <Grid
         x:Name="RootGrid"
         HorizontalAlignment="Stretch"
+        d:DataContext="{d:DesignInstance Type=models:AvAppFacade,
+                                         IsDesignTimeCreatable=False}"
         DataContext="{Binding DataContext, ElementName=UC_Root}">
+        <Grid.Resources>
+            <converters:BoolSelectorConverter x:Key="LicenseTooltipConverter" TrueValue="{x:Static properties:Resources.AvAppOpenLicenseFolder}" FalseValue="{x:Static properties:Resources.AvAppOpenLicenseFolderDisabled}"/>
+        </Grid.Resources>
         <Grid.ToolTip>
             <ToolTip>
                 <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource FullAppInfo}" />
@@ -117,6 +124,15 @@
                 Style="{StaticResource SymbolButton}"
                 ToolTip="{x:Static properties:Resources.AvAppOpenInstallationFolder}">
                 <mdicons:MaterialIcon Kind="{StaticResource IconOpenFolder}" />
+            </Button>
+            <Button
+                Grid.Column="5"
+                Width="45"
+                Command="{Binding OpenLicenseFolderCommand}"
+                Style="{StaticResource SymbolButton}"
+                ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled,Converter={StaticResource LicenseTooltipConverter}}"
+                ToolTipService.ShowOnDisabled="True">
+                <mdicons:MaterialIcon Kind="KeyOutline" />
             </Button>
         </Grid>
     </Grid>

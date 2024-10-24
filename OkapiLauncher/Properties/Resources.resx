@@ -556,4 +556,13 @@ All trademarks, service marks, logos, and copyrights related to the applications
   <data name="SettingsPageCustomColorResetTooltip" xml:space="preserve">
     <value>Use the default accent colors for Light and Dark themes</value>
   </data>
+  <data name="ValidationStringEmpty" xml:space="preserve">
+    <value>The field {0} cannot be an empty string.</value>
+  </data>
+  <data name="AvAppOpenLicenseFolder" xml:space="preserve">
+    <value>Open the license folder for the current user</value>
+  </data>
+  <data name="AvAppOpenLicenseFolderDisabled" xml:space="preserve">
+    <value>The current user does not have the license folder for this app</value>
+  </data>
 </root>
