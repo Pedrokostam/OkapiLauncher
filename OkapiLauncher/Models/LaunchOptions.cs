@@ -21,7 +21,7 @@ public abstract partial class LaunchOptions : ObservableObject
     /// </summary>
     /// <param name="avapp"></param>
     /// <returns></returns>
-    public static LaunchOptions Get(ProductType? productType)
+    private static LaunchOptions Get(ProductType? productType)
     {
         if(productType == ProductType.Professional)
         {

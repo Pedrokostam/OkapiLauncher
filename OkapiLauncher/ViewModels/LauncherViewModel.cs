@@ -68,7 +68,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
             return;
         }
 
-        var args = LaunchOptions.Get(appToLaunch.Type)?.GetCommandLineArgs();
+        var args = LaunchOptions.Get(appToLaunch,VisionProject?.Path)?.GetCommandLineArgs();
         if(args is null)
         {
             return;
