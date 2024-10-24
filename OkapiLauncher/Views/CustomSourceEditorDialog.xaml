@@ -70,6 +70,7 @@
                     x:Name="DescriptionBox"
                     controls:TextBoxHelper.ClearTextButton="True"
                     MaxLines="1"
+                    Style="{StaticResource MahApps.Styles.TextBox}"
                     Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
             </GroupBox>
             <GroupBox BorderThickness="0" Header="{x:Static properties:Resources.CustomSourceEditorPathHeader}">
@@ -94,6 +95,7 @@
                         VerticalContentAlignment="Center"
                         controls:TextBoxHelper.ClearTextButton="True"
                         MaxLines="1"
+                        Style="{StaticResource MahApps.Styles.TextBox}"
                         Text="{Binding Path, UpdateSourceTrigger=PropertyChanged, Delay=250}"
                         ToolTip="{Binding SourcePath}" />
                 </Grid>
