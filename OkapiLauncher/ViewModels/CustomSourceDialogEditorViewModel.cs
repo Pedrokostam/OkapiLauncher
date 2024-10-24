@@ -31,11 +31,12 @@ public partial class CustomSourceDialogEditorViewModel : ObservableValidator, IN
         UpdateMatchedApp();
     }
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(SourcePath))]
+    [NotifyCanExecuteChangedFor(nameof(AcceptCommand))]
     [MinLength(1)]
     [NotifyDataErrorInfo]
     private string _description;
     [ObservableProperty]
-    //[MustBeDirectory]
     [NotifyPropertyChangedFor(nameof(SourcePath))]
     [NotifyCanExecuteChangedFor(nameof(AcceptCommand))]
     [NotifyDataErrorInfo]
