@@ -207,6 +207,24 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open the license folder for the current user.
+        /// </summary>
+        public static string AvAppOpenLicenseFolder {
+            get {
+                return ResourceManager.GetString("AvAppOpenLicenseFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The current user does not have the license folder for this app.
+        /// </summary>
+        public static string AvAppOpenLicenseFolderDisabled {
+            get {
+                return ResourceManager.GetString("AvAppOpenLicenseFolderDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Active processes: {0}.
         /// </summary>
         public static string AvAppProcessesActive {
@@ -1202,6 +1220,15 @@ namespace OkapiLauncher.Properties {
         public static string ValidationArgumentNoWhitespace {
             get {
                 return ResourceManager.GetString("ValidationArgumentNoWhitespace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The field {0} cannot be an empty string..
+        /// </summary>
+        public static string ValidationStringEmpty {
+            get {
+                return ResourceManager.GetString("ValidationStringEmpty", resourceCulture);
             }
         }
         

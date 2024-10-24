@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:converters="clr-namespace:OkapiLauncher.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:OkapiLauncher.Views"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
@@ -23,6 +24,12 @@
     mc:Ignorable="d">
 
     <Grid Background="{DynamicResource MahApps.Brushes.Gray10}">
+        <Grid.Resources>
+            <converters:BoolSelectorConverter
+                x:Key="LicenseTooltipConverter"
+                FalseValue="{x:Static properties:Resources.AvAppOpenLicenseFolderDisabled}"
+                TrueValue="{x:Static properties:Resources.AvAppOpenLicenseFolder}" />
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
@@ -34,10 +41,15 @@
                     <MenuItem Command="{Binding OpenContainingFolderCommand}" Header="{x:Static properties:Resources.AvAppOpenInstallationFolder}" />
                     <MenuItem Command="{Binding CopyExecutablePathCommand}" Header="{x:Static properties:Resources.AvAppCopyPath}" />
                     <MenuItem Command="{Binding LaunchWithoutProgramCommand}" Header="{x:Static properties:Resources.AvAppLaunchWithNoProgram}" />
+                    <MenuItem
+                        Command="{Binding LaunchWithoutProgramCommand}"
+                        Header="{x:Static properties:Resources.AvAppOpenLicenseFolder}"
+                        IsEnabled="{Binding CanOpenLicenseFolder}" />
                 </ContextMenu>
             </Grid.ContextMenu>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="auto" />
@@ -73,6 +85,15 @@
             </Button>
             <Button
                 Grid.Column="4"
+                Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
+                Command="{Binding OpenLicenseFolderCommand}"
+                Style="{StaticResource SymbolButton}"
+                ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource LicenseTooltipConverter}}"
+                ToolTipService.ShowOnDisabled="True">
+                <mdicons:MaterialIcon Kind="{StaticResource IconLicenseFolder}" />
+            </Button>
+            <Button
+                Grid.Column="5"
                 Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
                 Command="{Binding DataContext.KillAllProcessesCommand, ElementName=RootPage}"
                 Style="{StaticResource SymbolButton}"
