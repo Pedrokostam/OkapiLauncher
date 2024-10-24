@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-
+using IWshRuntimeLibrary;
 using OkapiLauncher.Contracts.Views;
 using OkapiLauncher.Models.Messages;
 using OkapiLauncher.ViewModels;
@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
+using System.IO;
 
 namespace OkapiLauncher.Views;
 
@@ -60,8 +61,20 @@ public partial class ShellWindow : MetroWindow, IShellWindow
             var files = (string[])e.Data.GetData(DataFormats.FileDrop);
             if (files.Length == 1)
             {
+                string filepath = files[0];
+                if (Path.GetExtension(filepath).Equals(".lnk", StringComparison.OrdinalIgnoreCase))
+                {
+                    var shell = new WshShell();
+                    var shortcut = shell?.CreateShortcut(filepath) as IWshShortcut;
+                    string? dereferencedPath = shortcut?.TargetPath;
+                    if (dereferencedPath is null)
+                    {
+                        return;
+                    }
+                    filepath = dereferencedPath;
+                }
                 ((ShellViewModel)DataContext).MenuViewsLauncherCommand.NotifyCanExecuteChanged();
-                ((App)App.Current).GetService<IMessenger>().Send(new FileRequestedMessage(files[0]));
+                ((App)App.Current).GetService<IMessenger>().Send(new FileRequestedMessage(filepath));
             }
         }
     }
