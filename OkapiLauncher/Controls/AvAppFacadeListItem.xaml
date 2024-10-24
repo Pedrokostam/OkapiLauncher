@@ -50,6 +50,10 @@
                     Command="{Binding ShowProcessOverviewCommand}"
                     Header="Open process overview window"
                     Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <MenuItem
+                    Command="{Binding OpenLicenseFolderCommand}"
+                    Header="{x:Static properties:Resources.AvAppOpenLicenseFolder}"
+                    IsEnabled="{Binding CanOpenLicenseFolder}" />
             </ContextMenu>
         </Grid.ContextMenu>
         <Rectangle Fill="Transparent" />

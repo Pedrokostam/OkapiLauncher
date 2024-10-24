@@ -104,7 +104,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     //    _messenger.Send(new KillAllProcessesRequest(this,));
     //}
 
-    private bool CanOpenLicenseFolder() => Directory.Exists(Brand.GetLicenseKeyFolderPath());
+    public bool CanOpenLicenseFolder => Directory.Exists(Brand.GetLicenseKeyFolderPath());
 
     [RelayCommand]
     private void ShowProcessOverview()
