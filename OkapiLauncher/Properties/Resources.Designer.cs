@@ -1206,6 +1206,15 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The field {0} cannot be an empty string..
+        /// </summary>
+        public static string ValidationStringEmpty {
+            get {
+                return ResourceManager.GetString("ValidationStringEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ignore.
         /// </summary>
         public static string VersionCheckDialogCancelButtonContent {

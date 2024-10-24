@@ -14,6 +14,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using OkapiLauncher.Properties;
 
 namespace OkapiLauncher.ViewModels;
 
@@ -31,7 +32,8 @@ public partial class CustomSourceDialogEditorViewModel : ObservableValidator, IN
         UpdateMatchedApp();
     }
     [ObservableProperty]
-    [MinLength(1)]
+    [MinLength(1, ErrorMessageResourceName = "ValidationStringEmpty", ErrorMessageResourceType = typeof(Resources))]
+    [RegularExpression(@"\S+", ErrorMessageResourceName = "ValidationStringEmpty", ErrorMessageResourceType = typeof(Resources))]
     [NotifyDataErrorInfo]
     private string _description;
     [ObservableProperty]
@@ -39,7 +41,8 @@ public partial class CustomSourceDialogEditorViewModel : ObservableValidator, IN
     [NotifyPropertyChangedFor(nameof(SourcePath))]
     [NotifyCanExecuteChangedFor(nameof(AcceptCommand))]
     [NotifyDataErrorInfo]
-    [MinLength(1)]
+    [MinLength(1, ErrorMessageResourceName = "ValidationStringEmpty", ErrorMessageResourceType = typeof(Resources))]
+    [RegularExpression(@"\S+", ErrorMessageResourceName = "ValidationStringEmpty",ErrorMessageResourceType =typeof(Resources))]
     private string _path;
     public string SourcePath => CustomAppSource.ExpandPath(Path);
 

@@ -556,4 +556,7 @@ All trademarks, service marks, logos, and copyrights related to the applications
   <data name="SettingsPageCustomColorResetTooltip" xml:space="preserve">
     <value>Use the default accent colors for Light and Dark themes</value>
   </data>
+  <data name="ValidationStringEmpty" xml:space="preserve">
+    <value>The field {0} cannot be an empty string.</value>
+  </data>
 </root>
