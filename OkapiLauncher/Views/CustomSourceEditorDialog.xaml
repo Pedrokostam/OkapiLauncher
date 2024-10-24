@@ -72,14 +72,18 @@
                     MaxLines="1"
                     Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
             </GroupBox>
-            <GroupBox Header="{x:Static properties:Resources.CustomSourceEditorPathHeader}">
+            <GroupBox BorderThickness="0" Header="{x:Static properties:Resources.CustomSourceEditorPathHeader}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
-                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="25" />
                     </Grid.ColumnDefinitions>
                     <Button
                         Grid.Column="1"
+                        Margin="0"
+                        Padding="0"
+                        Background="Transparent"
+                        BorderThickness="0"
                         Command="{Binding OpenFilePickerCommand}"
                         Style="{StaticResource InlineSettingsButton}"
                         ToolTip="{x:Static properties:Resources.CustomSourceEditorButtonFolderPickerTooltip}">
@@ -87,7 +91,6 @@
                     </Button>
                     <TextBox
                         x:Name="PathBox"
-                        Height="auto"
                         VerticalContentAlignment="Center"
                         controls:TextBoxHelper.ClearTextButton="True"
                         MaxLines="1"
