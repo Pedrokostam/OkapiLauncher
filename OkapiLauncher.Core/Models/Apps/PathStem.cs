@@ -18,7 +18,7 @@ namespace OkapiLauncher.Core.Models.Apps
         /// The filename of the executable.
         /// </summary>
         public string Filename => _parts[^1];
-        public int MaxDepth => _parts.Length;
+        public int MaxDepth => _parts.Length-1;
         /// <summary>
         /// Folders which, if the path ends in them should be exited for their parent. If the path to match ends at one of this, its parent will be analyzed instead. Order does not matter, unlike in <see cref="Parts"/>
         /// </summary>
@@ -72,28 +72,22 @@ namespace OkapiLauncher.Core.Models.Apps
             {
                 return null;
             }
-            var options = new EnumerationOptions()
+            /*
+             * Since we have the relative path from the root folder (in the form of Parts)
+             * And we know that the current path is a folder (and not any avoidable folder)
+             * We can just simply combine current path with Parts and check if the file exists.
+             */
+            var parts = Parts.Prepend(path).ToArray();
+            var combinedPath= Path.Join(parts);
+            if (File.Exists(combinedPath))
             {
-                MaxRecursionDepth = MaxDepth,
-                RecurseSubdirectories = true,
-                MatchCasing = MatchCasing.CaseInsensitive,
-            };
-            var fileEnumerator = Directory.EnumerateFiles(path, Filename, options);
-            string? exeFilepath = null;
-            foreach (var file in fileEnumerator)
-            {
-                if (!file.EndsWith(Ending, StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
-                if (exeFilepath is not null)
-                {
-                    throw new InvalidOperationException("Multiple matching files found");
-                }
-                exeFilepath = file;
+                return combinedPath;
             }
-            return exeFilepath;
-
+            return null;
+            /*
+             * This way we have no possibility of discovering multiple files
+             * We do not need to iterate over potentially many files
+             */
         }
     }
 }
