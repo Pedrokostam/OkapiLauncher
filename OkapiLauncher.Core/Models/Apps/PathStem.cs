@@ -26,7 +26,7 @@ namespace OkapiLauncher.Core.Models.Apps
         /// <summary>
         /// Combined <see cref="Parts"/> using the system separator and lowercased.
         /// </summary>
-        public string Ending { get; set; }
+        public string Ending { get; }
 
         public ReadOnlySpan<string> Preceding => new(_parts, 0, _parts.Length - 1);
         /// <summary>
@@ -40,7 +40,7 @@ namespace OkapiLauncher.Core.Models.Apps
                 throw new ArgumentException("At least the filename must be specified");
             }
             _parts = parts;
-            Ending = string.Join(Path.DirectorySeparatorChar, _parts).ToLowerInvariant();
+            Ending = string.Join(Path.DirectorySeparatorChar, _parts);
         }
         /// <summary>
         /// Checks whether the given filepath matches. The filepath will match if it ends at any of the parts or the root folder of the app.
