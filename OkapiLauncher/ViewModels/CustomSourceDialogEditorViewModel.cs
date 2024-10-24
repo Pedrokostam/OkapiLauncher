@@ -34,10 +34,11 @@ public partial class CustomSourceDialogEditorViewModel : ObservableValidator, IN
     [ObservableProperty]
     [Required(ErrorMessageResourceName = "ValidationStringEmpty", ErrorMessageResourceType = typeof(Resources))]
     [RegularExpression(@".*\S+.*", ErrorMessageResourceName = "ValidationStringEmpty", ErrorMessageResourceType = typeof(Resources))]
+    [NotifyPropertyChangedFor(nameof(SourcePath))]
+    [NotifyCanExecuteChangedFor(nameof(AcceptCommand))]
     [NotifyDataErrorInfo]
     private string _description;
     [ObservableProperty]
-    //[MustBeDirectory]
     [NotifyPropertyChangedFor(nameof(SourcePath))]
     [NotifyCanExecuteChangedFor(nameof(AcceptCommand))]
     [NotifyDataErrorInfo]
