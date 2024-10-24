@@ -35,6 +35,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     public string NameWithVersion => $"{Name} {Version}";
     public bool IsDevelopmentVersion => Version.IsDevelopmentVersion;
     public bool IsExecutable => _avApp.IsExecutable;
+    public string  LogFolderPath=> _avApp.LogFolderPath;
 
     public string? Description => _avApp.Description ?? Name;
     public bool IsCustom => _avApp.IsCustom;
@@ -98,6 +99,13 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     {
         ExplorerHelper.OpenExplorer(Brand.GetLicenseKeyFolderPath());
     }
+
+    [RelayCommand(CanExecute =nameof(CanOpenLogFolder))]
+    private void OpenLogFolder()
+    {
+        ExplorerHelper.OpenExplorer(LogFolderPath);
+
+    }
     //[RelayCommand]
     //private void KillAllProcesses()
     //{
@@ -105,6 +113,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     //}
 
     public bool CanOpenLicenseFolder => Directory.Exists(Brand.GetLicenseKeyFolderPath());
+    public bool CanOpenLogFolder => Directory.Exists(LogFolderPath);
 
     [RelayCommand]
     private void ShowProcessOverview()

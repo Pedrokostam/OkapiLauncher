@@ -225,6 +225,24 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open the folder with logs.
+        /// </summary>
+        public static string AvAppOpenLogFolder {
+            get {
+                return ResourceManager.GetString("AvAppOpenLogFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The log folder for this app does not exist.
+        /// </summary>
+        public static string AvAppOpenLogFolderDisabled {
+            get {
+                return ResourceManager.GetString("AvAppOpenLogFolderDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Active processes: {0}.
         /// </summary>
         public static string AvAppProcessesActive {
