@@ -109,6 +109,7 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
         {
             Filter = "All Files (*.*)|*.*|Aurora Vision Files|*.avproj;*.avexe|FabImage Files|*.fiproj;*.fiexe|Project Files|*.avproj;*.fiproj|Runtime Files|*.avexe;*.fiexe",
             Multiselect = false,
+            DereferenceLinks= true,
         };
         var result = dialog.ShowDialog();
         if (result == true)
