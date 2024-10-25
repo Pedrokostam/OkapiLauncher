@@ -83,7 +83,7 @@
                     Command="{Binding OpenLogFolderCommand}"
                     Header="{x:Static properties:Resources.AvAppOpenLogFolder}"
                     IsEnabled="{Binding CanOpenLogFolder}"
-                    Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    Visibility="{Binding LogFolderPath, Converter={StaticResource NullVisibilityConverter}}">
                     <MenuItem.Icon>
                         <mdicons:MaterialIcon Kind="{StaticResource IconLogFolder}" />
                     </MenuItem.Icon>
@@ -183,7 +183,7 @@
                 Style="{StaticResource SymbolButton}"
                 ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource LogTooltipConverter}}"
                 ToolTipService.ShowOnDisabled="True"
-                Visibility="{Binding IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                Visibility="{Binding LogFolderPath, Converter={StaticResource NullVisibilityConverter}}">
                 <mdicons:MaterialIcon Kind="{StaticResource IconLogFolder}" />
             </Button>
         </Grid>

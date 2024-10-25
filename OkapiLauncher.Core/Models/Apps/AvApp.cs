@@ -14,7 +14,7 @@ public record AvApp : IAvApp
 {
     public string Path { get; }
     public string RootPath { get; }
-    public string LogFolderPath { get; }
+    public string? LogFolderPath { get; }
     public AvVersion Version { get; }
     public AvVersion? SecondaryVersion { get; }
     public string Name { get; }
@@ -160,9 +160,14 @@ public record AvApp : IAvApp
         return Name.CompareTo(other.Name);
     }
 
-    private static string GetLogFolderPath(IAvApp app)
+    private static string? GetLogFolderPath(IAvApp app)
     {
         var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-        return System.IO.Path.Join(localAppData,app.Brand.Name, System.IO.Path.GetFileName(app.RootPath), "Logs");
+        return app.Type.Type switch
+        {
+            AvType.Professional or AvType.Runtime => System.IO.Path.Join(localAppData, app.Brand.Name, System.IO.Path.GetFileName(app.RootPath), "Logs"),
+            AvType.DeepLearning => System.IO.Path.Join(localAppData, app.Brand.Name, System.IO.Path.GetFileName(app.RootPath)),
+            _ => null,
+        };
     }
 }
