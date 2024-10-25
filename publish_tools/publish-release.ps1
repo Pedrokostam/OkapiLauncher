@@ -39,10 +39,10 @@ $version = $csproj.SelectSingleNode('/Project/PropertyGroup/Version').InnerText
 
 # GUID
 $assemblyInfoPath = Join-Path $ProjectDir Properties AssemblyInfo.cs
-$matchedGuid = Gi $assemblyInfoPath | sls -Pattern '^\s*\[assembly: Guid\("(?<guid>[\w-]+)"'
-if($matchedGuid){
+$matchedGuid = Get-Item $assemblyInfoPath | Select-String -Pattern '^\s*\[assembly: Guid\("(?<guid>[\w-]+)"'
+if ($matchedGuid) {
     $GUID = $matchedGuid.Matches[0].Groups['guid']
-}else{
+} else {
     Write-Error 'Could not find GUID of the app'
 }
 
@@ -100,8 +100,8 @@ while ($true) {
         break
     } else {
         $retries--
-        if($retries -le 0){
-            Write-Error "Could not compile installer"
+        if ($retries -le 0) {
+            Write-Error 'Could not compile installer'
         }
         Start-Sleep -Seconds 3
     }

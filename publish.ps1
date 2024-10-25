@@ -5,7 +5,8 @@ param (
     $NoZip
 )
 $params =@(
-     '-file' 
+    '-noprofile'
+     '-file'
      "$PSScriptRoot\publish_tools\publish-release.ps1"
 )
 if($NoZip.IsPresent){

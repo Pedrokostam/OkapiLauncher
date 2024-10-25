@@ -14,6 +14,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using OkapiLauncher.Properties;
 
 namespace OkapiLauncher.ViewModels;
 
@@ -31,15 +32,18 @@ public partial class CustomSourceDialogEditorViewModel : ObservableValidator, IN
         UpdateMatchedApp();
     }
     [ObservableProperty]
-    [MinLength(1)]
-    [NotifyDataErrorInfo]
-    private string _description;
-    [ObservableProperty]
-    //[MustBeDirectory]
+    [Required(ErrorMessageResourceName = "ValidationStringEmpty", ErrorMessageResourceType = typeof(Resources))]
+    [RegularExpression(@".*\S+.*", ErrorMessageResourceName = "ValidationStringEmpty", ErrorMessageResourceType = typeof(Resources))]
     [NotifyPropertyChangedFor(nameof(SourcePath))]
     [NotifyCanExecuteChangedFor(nameof(AcceptCommand))]
     [NotifyDataErrorInfo]
-    [MinLength(1)]
+    private string _description;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(SourcePath))]
+    [NotifyCanExecuteChangedFor(nameof(AcceptCommand))]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessageResourceName = "ValidationStringEmpty", ErrorMessageResourceType = typeof(Resources))]
+    [RegularExpression(@".*\S+.*", ErrorMessageResourceName = "ValidationStringEmpty",ErrorMessageResourceType =typeof(Resources))]
     private string _path;
     public string SourcePath => CustomAppSource.ExpandPath(Path);
 
@@ -50,7 +54,7 @@ public partial class CustomSourceDialogEditorViewModel : ObservableValidator, IN
 
     private void UpdateMatchedApp()
     {
-        MatchedApp = AppReader.GetAvAppFromSource(new CustomAppSource() { Description = Description, Path = Path });
+        MatchedApp = AppReader.GetAvAppFromSource(new CustomAppSource() { Description = Description, Path = Path.Trim() });
     }
 
     public bool PathExists => File.Exists(Path);
@@ -73,8 +77,8 @@ public partial class CustomSourceDialogEditorViewModel : ObservableValidator, IN
     private void Accept()
     {
         Debug.WriteLine("Accept");
-        _source.Path = Path;
-        _source.Description = Description;
+        _source.Path = Path.Trim();
+        _source.Description = Description.Trim();
         _done.SetResult();
     }
 

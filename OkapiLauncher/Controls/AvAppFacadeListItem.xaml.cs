@@ -45,7 +45,7 @@ namespace OkapiLauncher.Controls
                 userControl.LaunchButton.SetIconKind(kind);
                 var tooltip = userControl.LaunchCommand is null ? Properties.Resources.AvAppLaunchWithNoProgram : Properties.Resources.AvAppLaunchWithProgram;
                 userControl.LaunchButton.ToolTip = tooltip;
-                foreach (MenuItem menuItem in userControl.RootGrid.ContextMenu.Items)
+                foreach (MenuItem menuItem in userControl.RootGrid.ContextMenu.Items.OfType<MenuItem>())
                 {
                     if(menuItem.Tag is bool tagged && tagged)
                     {
