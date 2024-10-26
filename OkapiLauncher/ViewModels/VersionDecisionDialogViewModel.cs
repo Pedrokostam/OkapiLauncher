@@ -35,10 +35,14 @@ public partial class VersionDecisionDialogViewModel(UpdateDataCarier information
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(DisableAutomaticChecksCommand))]
     private bool _shouldDisableAutoUpdates;
+    /// <summary>
+    /// In theory we should also check whether the settings for automatic checks is true, but normally you cannot create this VM with that setting set to False
+    /// and IsAutomaticUpdateCheck set to True.
+    /// </summary>
     public bool AutomaticButtonEnabled => UpdateInfo.IsAutomaticUpdateCheck && !ShouldDisableAutoUpdates;
     private void SetResult(UpdateDecision decision)
     {
-        _done.SetResult(new UpdatePromptResult(decision, AutomaticButtonEnabled, UpdaterFilePath));
+        _done.SetResult(new UpdatePromptResult(decision, ShouldDisableAutoUpdates, UpdaterFilePath));
     }
     public void OnNavigatedFrom()
     {
