@@ -94,14 +94,18 @@ public class ApplicationInfoService : IApplicationInfoService
     private InstallationScope CheckUninstallKeys(RegistryKey rootKey)
     {
         using var uninstall = rootKey.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall") ?? throw new InvalidOperationException("Cuold not access registry");
+        var uninstallKeys = uninstall.GetSubKeyNames();
         string guidString = GetGuid().ToString();
-        var matchingKeyName = uninstall.GetSubKeyNames().FirstOrDefault(x => x.Contains(guidString, StringComparison.OrdinalIgnoreCase));
+        var matchingKeyName = uninstallKeys.FirstOrDefault(x => x.Contains(guidString, StringComparison.OrdinalIgnoreCase));
         if (matchingKeyName is null)
         {
             return InstallationScope.Portable;
         }
         using var matchingKey = uninstall.OpenSubKey(matchingKeyName);
-        if (string.Equals(matchingKey?.GetValue("InstallLocation") as string, GetFolder(), StringComparison.OrdinalIgnoreCase))
+        var installationPath = matchingKey?.GetValue("InstallLocation") as string;
+        installationPath = installationPath?.TrimEnd(Path.DirectorySeparatorChar);
+        var thisInstanceFolder = GetFolder();
+        if (string.Equals(installationPath, thisInstanceFolder, StringComparison.OrdinalIgnoreCase))
         {
             return rootKey == Registry.LocalMachine ? InstallationScope.LocalMachine : InstallationScope.CurrentUser;
         }
