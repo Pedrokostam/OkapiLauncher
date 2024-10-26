@@ -38,7 +38,7 @@ public partial class VersionDecisionDialogViewModel(UpdateDataCarier information
     public bool AutomaticButtonEnabled => UpdateInfo.IsAutomaticUpdateCheck && !ShouldDisableAutoUpdates;
     private void SetResult(UpdateDecision decision)
     {
-        _done.SetResult(new UpdatePromptResult(decision, AutomaticButtonEnabled, UpdaterFilePath));
+        _done.SetResult(new UpdatePromptResult(decision, ShouldDisableAutoUpdates, UpdaterFilePath));
     }
     public void OnNavigatedFrom()
     {
