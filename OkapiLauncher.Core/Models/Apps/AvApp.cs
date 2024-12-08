@@ -166,7 +166,7 @@ public record AvApp : IAvApp
         return app.Type.Type switch
         {
             AvType.Professional or AvType.Runtime => System.IO.Path.Join(localAppData, app.Brand.Name, System.IO.Path.GetFileName(app.RootPath), "Logs"),
-            AvType.DeepLearning => System.IO.Path.Join(localAppData, app.Brand.Name, System.IO.Path.GetFileName(app.RootPath)),
+            AvType.DeepLearningGPU => System.IO.Path.Join(localAppData, app.Brand.Name, System.IO.Path.GetFileName(app.RootPath)),
             _ => null,
         };
     }

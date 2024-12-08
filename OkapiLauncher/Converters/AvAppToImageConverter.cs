@@ -16,7 +16,7 @@ public class AvAppToImageConverter : IValueConverter
         }
         var brand = app.Brand.Name.Replace(" ", "");
         var type = app.Type.Name;
-        var iconName = $"{brand}{type}.png";
+        var iconName = $"{brand}{type}.png".Replace(" ", "");
         var path =  "pack://application:,,,/Resources/Symbols/" + iconName;
         var bmp = new BitmapImage();
         bmp.BeginInit();

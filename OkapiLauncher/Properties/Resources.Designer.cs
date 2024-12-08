@@ -108,11 +108,20 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Deep Learning.
+        ///   Looks up a localized string similar to Deep Learning CPU.
         /// </summary>
-        public static string AppProductTypeDeepLearningLabel {
+        public static string AppProductTypeDeepLearningCPULabel {
             get {
-                return ResourceManager.GetString("AppProductTypeDeepLearningLabel", resourceCulture);
+                return ResourceManager.GetString("AppProductTypeDeepLearningCPULabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deep Learning GPU.
+        /// </summary>
+        public static string AppProductTypeDeepLearningGPULabel {
+            get {
+                return ResourceManager.GetString("AppProductTypeDeepLearningGPULabel", resourceCulture);
             }
         }
         
