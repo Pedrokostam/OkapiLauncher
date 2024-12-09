@@ -47,7 +47,7 @@ public record AvApp : IAvApp
         Path = mainInfo.FileName;
         Version = AvVersion.Parse(mainInfo) ?? throw new VersionNotFoundException("The ProductVersion field is empty");
         SecondaryVersion = secondaryVersion;
-        Name = mainInfo.ProductName ?? "N/A";
+        Name = GetName(mainInfo, type);
         ProcessName = System.IO.Path.GetFileNameWithoutExtension(mainInfo.InternalName!);
         Type = type;
         Brand = brand;
@@ -55,7 +55,16 @@ public record AvApp : IAvApp
         RootPath = rootInstallationPath;
         LogFolderPath = GetLogFolderPath(this);
     }
-  
+    private static string GetName(FileVersionInfo finfo, ProductType type)
+    {
+        string baseName = finfo.ProductName ?? type.Name;
+        return type.Type switch
+        {
+            AvType.DeepLearningGPU => $"{baseName} GPU",
+            AvType.DeepLearningCPU => $"{baseName} CPU",
+            _ => baseName,
+        };
+    }
     public bool CanOpen(IVisionProject project)
     {
         return SupportedProgramTypes.Contains(project.Type) && Brand.SupportsBrand(project.Brand);
@@ -89,7 +98,7 @@ public record AvApp : IAvApp
         if (project.Type.Type == AvType.Runtime)
         {
             // Avexes dont have a version, so we just select the newest available runtime
-             return apps.IndexOfMax(x=>x.Version);
+            return apps.IndexOfMax(x => x.Version);
         }
         var weights = new List<double>();
         bool hasPositive = false;
