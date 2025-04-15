@@ -46,6 +46,19 @@ jobs:
           $zipPath = Get-ChildItem $releaseDir -Filter "*_${version}.zip" | Select-Object -First 1
           $installerPath = Get-ChildItem $releaseDir -Filter "*$version*installer.exe" | Select-Object -First 1
 
+          if (-not $version) {
+            Write-Error "Version not found"
+            exit 1
+          }
+          if (-not $zipPath) {
+            Write-Error "ZIP file not found for version $version"
+            exit 1
+          }
+          if (-not $installerPath) {
+            Write-Error "Installer EXE not found for version $version"
+            exit 1
+          }
+
           echo "zip=$($zipPath.FullName)" >> $env:GITHUB_OUTPUT
           echo "installer=$($installerPath.FullName)" >> $env:GITHUB_OUTPUT
           echo "version=$version" >> $env:GITHUB_OUTPUT
