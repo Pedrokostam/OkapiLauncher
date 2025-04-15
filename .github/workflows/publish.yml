@@ -1,0 +1,59 @@
+name: Release
+
+on:
+  pull_request:
+    branches:
+      - fake-release
+    types: [closed]
+
+jobs:
+  create-release:
+    #if: >
+    #  github.event.pull_request.merged == true &&
+    #  (startsWith(github.event.pull_request.head.ref, 'release/') ||
+    #   startsWith(github.event.pull_request.head.ref, 'hotfix/'))
+    runs-on: windows-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Confirm PowerShell 7 is available
+        run: pwsh -v
+
+      - name: Install Inno Setup
+        run: |
+          winget install --id=JRSoftware.InnoSetup -e --accept-package-agreements --accept-source-agreements
+
+      - name: Run publish script
+        shell: pwsh
+        run: ./publish.ps1
+
+      - name: Find built artifacts
+        id: artifacts
+        shell: pwsh
+        run: |
+          $version = . ./get-version.ps1
+          $releaseDir = Resolve-Path ./Release
+          $zipPath = Get-ChildItem $releaseDir -Filter "*_${version}.zip" | Select-Object -First 1
+          $installerPath = Get-ChildItem $releaseDir -Filter "*$version*installer.exe" | Select-Object -First 1
+
+          echo "zip=$($zipPath.FullName)" >> $env:GITHUB_OUTPUT
+          echo "installer=$($installerPath.FullName)" >> $env:GITHUB_OUTPUT
+          echo "version=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Create Test GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.version }}
+          name: Okapi Launcher ${{ steps.version.outputs.version }}
+          generate_release_notes: true
+          prerelease: true
+          files: |
+            ${{ steps.artifacts.outputs.zip }}
+            ${{ steps.artifacts.outputs.installer }}
