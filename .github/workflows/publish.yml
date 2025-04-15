@@ -5,6 +5,9 @@ on:
     branches:
       - fake-release
     types: [closed]
+  push:
+    branches:
+      - fake-release
 
 jobs:
   create-release:
