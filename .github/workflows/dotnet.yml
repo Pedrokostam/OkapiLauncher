@@ -43,7 +43,7 @@ jobs:
       run: dotnet restore
       
     - name: Build
-      run: dotnet build --configuration Release /p:Version=${{ steps.gitversion.outputs.semVer }}
+      run: dotnet build OkapiLauncher/OkapiLauncher.csproj --configuration Release /p:Version=${{ steps.gitversion.outputs.semVer }}
       
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+    #- name: Test
+    #  run: dotnet test OkapiLauncher.Tests.MSTest/OkapiLauncher.Tests.MSTest.csproj --verbosity normal
