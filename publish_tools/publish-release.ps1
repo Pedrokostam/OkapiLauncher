@@ -20,6 +20,7 @@ $AppExeName = "$($ProjectName).exe"
 $ProjPath = Join-Path $ProjectDir $CsProjName
 $BaseOutputDir = Join-Path $SolutionDir 'Release'
 $Binaries = Join-Path $BaseOutputDir $AppName
+$ExePath = Join-Path $Binaries "$ProjectName.exe"
 $InnoScriptPath = Join-Path $PublishTools 'inno_installer_script.iss'
 
 ## TEST PATHS
@@ -32,10 +33,6 @@ if (Test-Path $BaseOutputDir) {
 if (Test-Path $outputInfoFile) {
     Remove-Item -Force $outputInfoFile
 }
-
-# VERSION
-[xml]$csproj = Get-Content $ProjPath
-$version = $csproj.SelectSingleNode('/Project/PropertyGroup/Version').InnerText
 
 # GUID
 $assemblyInfoPath = Join-Path $ProjectDir Properties AssemblyInfo.cs
@@ -50,9 +47,6 @@ if ($matchedGuid) {
 $appSettingsPath = Join-Path $ProjectDir appsettings.json 
 $json = Get-Content $appSettingsPath | ConvertFrom-Json
 $repoUrl = $json.AppConfig.githubLink
-
-# VARIABLES CONT'D
-$ZipPath = Join-Path $BaseOutputDir "$($AppName)_$($Version).zip"
     
 # ---   DOTNET   ---
 $dotnetParams = @(
@@ -68,6 +62,13 @@ $dotnetParams = @(
     '/p:WarningLevel=0'
 )
 dotnet @dotnetParams
+
+# VERSION
+$exeItem = Get-Item $ExePath
+$version = $exeItem.VersionInfo.FileVersion # Reads version from built exe. Assumes GitVersion is run as task during build.
+
+# VARIABLES CONT'D
+$ZipPath = Join-Path $BaseOutputDir "$($AppName)_$($Version).zip"
 
 # ---   COMPRESS   ---
 if (-not $NoZip.IsPresent) {

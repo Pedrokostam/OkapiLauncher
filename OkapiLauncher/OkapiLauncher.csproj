@@ -11,7 +11,7 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<ApplicationIcon>Resources\Icons\AppIcon.ico</ApplicationIcon>
-		<Version>1.6.0.2</Version>
+		<!--<Version>1.6.0.2</Version>-->
 		<PublishReadyToRun>true</PublishReadyToRun>
 		<InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);Microsoft.Extensions.Configuration.Binder.SourceGeneration</InterceptorsPreviewNamespaces>
 	</PropertyGroup>
@@ -80,6 +80,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
+		<PackageReference Include="GitVersion.MsBuild" Version="6.2.0">
+		  <PrivateAssets>all</PrivateAssets>
+		  <!--<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>-->
+		</PackageReference>
 		<PackageReference Include="MahApps.Metro" Version="2.4.10" />
 		<PackageReference Include="Material.Icons.WPF" Version="2.1.10" />
 		<PackageReference Include="Meziantou.Analyzer" Version="2.0.169">
