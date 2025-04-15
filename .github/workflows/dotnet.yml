@@ -15,8 +15,8 @@ jobs:
 
     steps:
     
-    - name: GitTools
-      uses: GitTools/actions@v3.2.0
+    #- name: GitTools
+    #  uses: GitTools/actions@v3.2.0
     
     - uses: actions/checkout@v4
       with:
@@ -25,7 +25,7 @@ jobs:
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v0
       with:
-        versionSpec: '6.2.x'
+        versionSpec: '6.1.x'
 
     - name: Run GitVersion
       id: gitversion
