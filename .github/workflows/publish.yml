@@ -28,7 +28,7 @@ jobs:
 
       - name: Install Inno Setup
         run: |
-          winget install --id=JRSoftware.InnoSetup -e --accept-package-agreements --accept-source-agreements
+          choco install innosetup --no-progress -y
 
       - name: Run publish script
         shell: pwsh
