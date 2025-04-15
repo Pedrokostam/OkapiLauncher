@@ -41,7 +41,7 @@ jobs:
         id: artifacts
         shell: pwsh
         run: |
-          $version = . ./get-version.ps1
+          $version = . ./publish_tools/get-version.ps1
           $releaseDir = Resolve-Path ./Release
           $zipPath = Get-ChildItem $releaseDir -Filter "*_${version}.zip" | Select-Object -First 1
           $installerPath = Get-ChildItem $releaseDir -Filter "*$version*installer.exe" | Select-Object -First 1
