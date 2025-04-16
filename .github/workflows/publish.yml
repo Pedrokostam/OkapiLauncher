@@ -10,11 +10,15 @@ on:
       - fake-release
 
 jobs:
-  create-release:
+  publish:
     #if: >
     #  github.event.pull_request.merged == true &&
     #  (startsWith(github.event.pull_request.head.ref, 'release/') ||
     #   startsWith(github.event.pull_request.head.ref, 'hotfix/'))
+    defaults:
+      run:
+        shell: pwsh
+
     runs-on: windows-latest
 
     permissions:
@@ -34,34 +38,43 @@ jobs:
           choco install innosetup --no-progress -y
 
       - name: Run publish script
-        shell: pwsh
         run: ./publish.ps1
 
       - name: Find built artifacts
         id: artifacts
-        shell: pwsh
         run: |
           $version = . ./publish_tools/get-version.ps1
-          $releaseDir = Resolve-Path ./Release
-          $zipPath = Get-ChildItem $releaseDir -Filter "*_${version}.zip" | Select-Object -First 1
-          $installerPath = Get-ChildItem $releaseDir -Filter "*$version*installer.exe" | Select-Object -First 1
-
           if (-not $version) {
-            Write-Error "Version not found"
-            exit 1
+            throw "Version not found"
+          }else{
+            Write-Host "Version is $version"
           }
+          $releaseDir = Resolve-Path ./Release
+
+          $zipPath = Get-ChildItem $releaseDir -Filter "*_${version}.zip" | Select-Object -First 1
           if (-not $zipPath) {
-            Write-Error "ZIP file not found for version $version"
-            exit 1
+            throw "ZIP file not found for version $version"
+          }else{
+            Write-Host "Zip is $zipPath"
           }
+
+          $installerPath = Get-ChildItem $releaseDir -Filter "*$version*installer.exe" | Select-Object -First 1
           if (-not $installerPath) {
-            Write-Error "Installer EXE not found for version $version"
-            exit 1
+            throw "Installer EXE not found for version $version"
+          }else{
+            Write-Host "Installer is $installerPath"
           }
 
           echo "zip=$($zipPath.FullName)" >> $env:GITHUB_OUTPUT
           echo "installer=$($installerPath.FullName)" >> $env:GITHUB_OUTPUT
           echo "version=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Test variables
+        run: |
+          Write-Host ${{ steps.version.outputs.version }}
+          Write-Host ${{ steps.artifacts.outputs.zip }}
+          Write-Host ${{ steps.version.outputs.installer }}
+
 
       - name: Create Test GitHub Release
         uses: softprops/action-gh-release@v2
@@ -69,7 +82,7 @@ jobs:
           tag_name: ${{ steps.version.outputs.version }}
           name: Okapi Launcher ${{ steps.version.outputs.version }}
           generate_release_notes: true
-          prerelease: true
+          draft: true
           files: |
             ${{ steps.artifacts.outputs.zip }}
             ${{ steps.artifacts.outputs.installer }}

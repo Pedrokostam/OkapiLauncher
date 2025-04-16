@@ -9,7 +9,10 @@ on:
   pull_request:
 
 jobs:
-  build:
+  test:
+    defaults:
+      run:
+        shell: pwsh
 
     runs-on: windows-latest
 
