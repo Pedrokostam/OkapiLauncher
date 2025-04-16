@@ -44,12 +44,12 @@ jobs:
       - name: Install Inno Setup
         run: |
           choco install innosetup --no-progress -y
-          echo "Inno Setup installed" >> $GITHUB_STEP_SUMMARY
+          echo "Inno Setup installed" >> $env:GITHUB_STEP_SUMMARY
 
       - name: Run publish script
         run: |
           ./publish.ps1
-          echo "Publish script completed" >> $GITHUB_STEP_SUMMARY
+          echo "Publish script completed" >> $env:GITHUB_STEP_SUMMARY
 
       - name: Find built artifacts
         id: artifacts
@@ -80,17 +80,17 @@ jobs:
           echo "zip=$($zipPath.FullName)" >> $env:GITHUB_OUTPUT
           echo "installer=$($installerPath.FullName)" >> $env:GITHUB_OUTPUT
           echo "version=$version" >> $env:GITHUB_OUTPUT
-          echo "'$($installerPath.Name)' and '$($zipPath.Name)' succesfully found" >> $GITHUB_STEP_SUMMARY
+          echo "'$($installerPath.Name)' and '$($zipPath.Name)' succesfully found" >> $env:GITHUB_STEP_SUMMARY
 
       - name: Create Test GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.artifacts.outputs.version }}
-          name: Okapi Launcher ${{ steps.artifacts.outputs.version }}
+          name: "[${{ github.head_ref && fromJson('\"' + github.head_ref + '\"').split('/')[0] || github.ref_name }}] Okapi Launcher ${{ steps.artifacts.outputs.version }}"
           generate_release_notes: true
           draft: true
           files: |
             ${{ steps.artifacts.outputs.zip }}
             ${{ steps.artifacts.outputs.installer }}
           run: |
-            echo "Created new release for version ${{ steps.artifacts.outputs.version }}"
+            echo "Created new release for version ${{ steps.artifacts.outputs.version }}" >> $env:GITHUB_STEP_SUMMARY
