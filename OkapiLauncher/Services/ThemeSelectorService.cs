@@ -65,13 +65,13 @@ public class ThemeSelectorService : IThemeSelectorService
 {
     //private const string _hcDarkTheme = "pack://application:,,,/Styles/Themes/HC.Dark.Blue.xaml";
     //private const string _hcLightTheme = "pack://application:,,,/Styles/Themes/HC.Light.Blue.xaml";
-    private const string DarkTheme = "pack://application:,,,/Styles/Themes/Dark.xaml";
-    private const string LightTheme = "pack://application:,,,/Styles/Themes/Light.xaml";
+    //private const string DarkTheme = "pack://application:,,,/Styles/Themes/Dark.xaml";
+    //private const string LightTheme = "pack://application:,,,/Styles/Themes/Light.xaml";
     private const string CustomThemeColorKey = "CustomThemeColor";
     private const string ThemeKey = "Theme";
 
-    private static readonly ResourceDictionary OtherDark = new ResourceDictionary() { Source = new Uri("pack://application:,,,/Styles/Themes/Dark.Other.xaml") };
-    private static readonly ResourceDictionary OtherLight = new ResourceDictionary() { Source = new Uri("pack://application:,,,/Styles/Themes/Light.Other.xaml") };
+    private static readonly ResourceDictionary OtherDark = new() { Source = new Uri("pack://application:,,,/Styles/Themes/Dark.Other.xaml") };
+    private static readonly ResourceDictionary OtherLight = new() { Source = new Uri("pack://application:,,,/Styles/Themes/Light.Other.xaml") };
     /// <summary>
     /// Is a dependency to ensure its instantiated before.
     /// </summary>
@@ -85,10 +85,10 @@ public class ThemeSelectorService : IThemeSelectorService
         {
             InitializeData();
         }
-        _persistAndRestoreService.DataRestored += _persistAndRestoreService_DataRestored;
+        _persistAndRestoreService.DataRestored += PersistAndRestoreService_DataRestored;
     }
 
-    private void _persistAndRestoreService_DataRestored(object? sender, EventArgs e)
+    private void PersistAndRestoreService_DataRestored(object? sender, EventArgs e)
     {
         InitializeData();
     }
@@ -109,7 +109,7 @@ public class ThemeSelectorService : IThemeSelectorService
         //{
         //    Debug.WriteLine($"{t.ColorScheme} - {t.PrimaryAccentColor}");
         //}
-        // TODO: Mahapps.Metro supports syncronization with high contrast but you have to provide custom high contrast themes
+        // TO_DO: Mahapps.Metro supports syncronization with high contrast but you have to provide custom high contrast themes
         // We've added basic high contrast dictionaries for Dark and Light themes
         // Please complete these themes following the docs on https://mahapps.com/docs/themes/thememanager#creating-custom-themes
         //ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(DarkTheme), libraryThemeProvider: null));
@@ -129,7 +129,7 @@ public class ThemeSelectorService : IThemeSelectorService
             string themeName = $"{themeEnum}.{baseColorName}";
             if (customColor is null)
             {
-                activeTheme = ThemeManager.Current.ChangeTheme(Application.Current, themeName, false)!;
+                activeTheme = ThemeManager.Current.ChangeTheme(Application.Current, themeName, highContrast: false)!;
             }
             else
             {
@@ -172,7 +172,7 @@ public class ThemeSelectorService : IThemeSelectorService
     AppTheme IThemeSelectorService.GetCurrentTheme() => SelectedTheme;
 
     Color? IThemeSelectorService.GetCurrentAccent() => SelectedCustomColorAccent;
-    public AppTheme SelectedTheme
+    public static AppTheme SelectedTheme
     {
         get
         {
@@ -181,7 +181,7 @@ public class ThemeSelectorService : IThemeSelectorService
         set => App.Current.Properties[ThemeKey] = value;
     }
 
-    public Color? SelectedCustomColorAccent
+    public static Color? SelectedCustomColorAccent
     {
         get
         {
