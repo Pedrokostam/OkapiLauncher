@@ -26,16 +26,22 @@
 		<None Remove="Resources\Icons\FabImageRuntime.ico" />
 		<None Remove="Resources\Icons\FabImageStudio.ico" />
 		<None Remove="Resources\Symbols\AdaptiveVisionDeepLearning.png" />
+		<None Remove="Resources\Symbols\AdaptiveVisionDeepLearningCPU.png" />
+		<None Remove="Resources\Symbols\AdaptiveVisionDeepLearningGPU.png" />
 		<None Remove="Resources\Symbols\AdaptiveVisionExecutor.png" />
 		<None Remove="Resources\Symbols\AdaptiveVisionLibrary.png" />
 		<None Remove="Resources\Symbols\AdaptiveVisionProfessional.png" />
 		<None Remove="Resources\Symbols\AdaptiveVisionRuntime.png" />
 		<None Remove="Resources\Symbols\AuroraVisionDeepLearning.png" />
+		<None Remove="Resources\Symbols\AuroraVisionDeepLearningCPU.png" />
+		<None Remove="Resources\Symbols\AuroraVisionDeepLearningGPU.png" />
 		<None Remove="Resources\Symbols\AuroraVisionExecutor.png" />
 		<None Remove="Resources\Symbols\AuroraVisionLibrary.png" />
 		<None Remove="Resources\Symbols\AuroraVisionProfessional.png" />
 		<None Remove="Resources\Symbols\AuroraVisionRuntime.png" />
 		<None Remove="Resources\Symbols\FabImageDeepLearning.png" />
+		<None Remove="Resources\Symbols\FabImageDeepLearningCPU.png" />
+		<None Remove="Resources\Symbols\FabImageDeepLearningGPU.png" />
 		<None Remove="Resources\Symbols\FabImageLibrary.png" />
 		<None Remove="Resources\Symbols\FabImageProfessional.png" />
 		<None Remove="Resources\Symbols\FabImageRuntime.png" />
@@ -66,15 +72,18 @@
 		<Resource Include="Resources\Icons\AuroraVisionStudio.ico" />
 		<Resource Include="Resources\Icons\FabImageRuntime.ico" />
 		<Resource Include="Resources\Icons\FabImageStudio.ico" />
-		<Resource Include="Resources\Symbols\AdaptiveVisionDeepLearning.png" />
+		<Resource Include="Resources\Symbols\AdaptiveVisionDeepLearningCPU.png" />
+		<Resource Include="Resources\Symbols\AdaptiveVisionDeepLearningGPU.png" />
 		<Resource Include="Resources\Symbols\AdaptiveVisionLibrary.png" />
 		<Resource Include="Resources\Symbols\AdaptiveVisionRuntime.png" />
 		<Resource Include="Resources\Symbols\AdaptiveVisionProfessional.png" />
-		<Resource Include="Resources\Symbols\AuroraVisionDeepLearning.png" />
+		<Resource Include="Resources\Symbols\AuroraVisionDeepLearningCPU.png" />
+		<Resource Include="Resources\Symbols\AuroraVisionDeepLearningGPU.png" />
 		<Resource Include="Resources\Symbols\AuroraVisionLibrary.png" />
 		<Resource Include="Resources\Symbols\AuroraVisionRuntime.png" />
 		<Resource Include="Resources\Symbols\AuroraVisionProfessional.png" />
-		<Resource Include="Resources\Symbols\FabImageDeepLearning.png" />
+		<Resource Include="Resources\Symbols\FabImageDeepLearningCPU.png" />
+		<Resource Include="Resources\Symbols\FabImageDeepLearningGPU.png" />
 		<Resource Include="Resources\Symbols\FabImageLibrary.png" />
 		<Resource Include="Resources\Symbols\FabImageRuntime.png" />
 		<Resource Include="Resources\Symbols\FabImageProfessional.png" />
@@ -117,6 +126,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<EmbeddedResource Update="Properties\Resources - Copy.resx">
+		  <SubType>Designer</SubType>
+		  <LastGenOutput>Resources - Copy.Designer.cs</LastGenOutput>
+		  <Generator>PublicResXFileCodeGenerator</Generator>
+		</EmbeddedResource>
 		<EmbeddedResource Update="Properties\Resources.resx">
 			<Generator>PublicResXFileCodeGenerator</Generator>
 			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
