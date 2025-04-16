@@ -76,10 +76,7 @@ jobs:
           }else{
             Write-Host "Installer at $installerPath"
           }
-          $branchName = {{github.head_ref}}
-          if ($branchName -eq "") {
-            $branchName = {{github.ref_name}}
-          }
+          $branchName = "${{ github.head_ref || github.ref_name }}"
           $branchName = ($branchName -split '/')[0]
 
           echo "type=$branchName" >> $env:GITHUB_OUTPUT
