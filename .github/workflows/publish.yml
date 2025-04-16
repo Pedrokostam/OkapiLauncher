@@ -51,8 +51,8 @@ jobs:
           ./publish.ps1
           echo "Publish script completed" >> $env:GITHUB_STEP_SUMMARY
 
-      - name: Find built artifacts
-        id: artifacts
+      - name: Find built data
+        id: data
         run: |
           $releaseDir = Resolve-Path ./Release
 
@@ -76,7 +76,13 @@ jobs:
           }else{
             Write-Host "Installer at $installerPath"
           }
+          $branchName = {{github.head_ref}}
+          if ($branchName -eq "") {
+            $branchName = {{github.ref_name}}
+          }
+          $branchName = ($branchName -split '/')[0]
 
+          echo "type=$branchName" >> $env:GITHUB_OUTPUT"
           echo "zip=$($zipPath.FullName)" >> $env:GITHUB_OUTPUT
           echo "installer=$($installerPath.FullName)" >> $env:GITHUB_OUTPUT
           echo "version=$version" >> $env:GITHUB_OUTPUT
@@ -85,12 +91,12 @@ jobs:
       - name: Create Test GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.artifacts.outputs.version }}
-          name: "[${{ github.head_ref && fromJson('\"' + github.head_ref + '\"').split('/')[0] || github.ref_name }}] Okapi Launcher ${{ steps.artifacts.outputs.version }}"
+          tag_name: ${{ steps.data.outputs.version }}
+          name: "[${{ steps.data.outputs.type }}] Okapi Launcher ${{ steps.data.outputs.version }}"
           generate_release_notes: true
           draft: true
           files: |
-            ${{ steps.artifacts.outputs.zip }}
-            ${{ steps.artifacts.outputs.installer }}
+            ${{ steps.data.outputs.zip }}
+            ${{ steps.data.outputs.installer }}
           run: |
-            echo "Created new release for version ${{ steps.artifacts.outputs.version }}" >> $env:GITHUB_STEP_SUMMARY
+            echo "Created new release for version ${{ steps.data.outputs.version }}" >> $env:GITHUB_STEP_SUMMARY
