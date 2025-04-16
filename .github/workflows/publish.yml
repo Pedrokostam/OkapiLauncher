@@ -82,7 +82,7 @@ jobs:
           }
           $branchName = ($branchName -split '/')[0]
 
-          echo "type=$branchName" >> $env:GITHUB_OUTPUT"
+          echo "type=$branchName" >> $env:GITHUB_OUTPUT
           echo "zip=$($zipPath.FullName)" >> $env:GITHUB_OUTPUT
           echo "installer=$($installerPath.FullName)" >> $env:GITHUB_OUTPUT
           echo "version=$version" >> $env:GITHUB_OUTPUT
