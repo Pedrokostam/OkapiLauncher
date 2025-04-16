@@ -2,20 +2,21 @@ name: Release
 
 on:
   pull_request:
-    branches:
-      - fake-release
+    branches: ["main", "fake-release"]
     types: [closed]
 
 jobs:
-  create-release:
-    #if: >
-    #  github.event.pull_request.merged == true &&
-    #  (startsWith(github.event.pull_request.head.ref, 'release/') ||
-    #   startsWith(github.event.pull_request.head.ref, 'hotfix/'))
+  publish:
+    if: github.event.pull_request.merged == true
+    defaults:
+      run:
+        shell: pwsh
+
     runs-on: windows-latest
 
     permissions:
       contents: write
+      pull-requests: write  
 
     steps:
       - name: Checkout code
@@ -23,37 +24,72 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
       - name: Confirm PowerShell 7 is available
         run: pwsh -v
 
       - name: Install Inno Setup
         run: |
-          winget install --id=JRSoftware.InnoSetup -e --accept-package-agreements --accept-source-agreements
+          choco install innosetup --no-progress -y
+          echo "Inno Setup installed" >> $env:GITHUB_STEP_SUMMARY
 
       - name: Run publish script
-        shell: pwsh
-        run: ./publish.ps1
-
-      - name: Find built artifacts
-        id: artifacts
-        shell: pwsh
         run: |
-          $version = . ./get-version.ps1
-          $releaseDir = Resolve-Path ./Release
-          $zipPath = Get-ChildItem $releaseDir -Filter "*_${version}.zip" | Select-Object -First 1
-          $installerPath = Get-ChildItem $releaseDir -Filter "*$version*installer.exe" | Select-Object -First 1
+          ./publish.ps1
+          echo "Publish script completed" >> $env:GITHUB_STEP_SUMMARY
 
+      - name: Find built data
+        id: data
+        run: |
+          $releaseDir = Resolve-Path ./Release
+
+          $version = . ./publish_tools/get-version.ps1
+          if (-not $version) {
+            throw "Version not found"
+          }else{
+            Write-Host "Version is $version"
+          }
+
+          $zipPath = Get-ChildItem $releaseDir -Filter "*${version}.zip" | Select-Object -First 1
+          if (-not $zipPath) {
+            throw "ZIP file not found for version $version"
+          }else{
+            Write-Host "Zip iat $zipPath"
+          }
+
+          $installerPath = Get-ChildItem $releaseDir -Filter "*$version*installer.exe" | Select-Object -First 1
+          if (-not $installerPath) {
+            throw "Installer EXE not found for version $version"
+          }else{
+            Write-Host "Installer at $installerPath"
+          }
+          $branchName = "${{ github.head_ref || github.ref_name }}"
+          $branchName = ($branchName -split '/')[0]
+
+          echo "type=$branchName" >> $env:GITHUB_OUTPUT
           echo "zip=$($zipPath.FullName)" >> $env:GITHUB_OUTPUT
           echo "installer=$($installerPath.FullName)" >> $env:GITHUB_OUTPUT
           echo "version=$version" >> $env:GITHUB_OUTPUT
+          echo "'$($installerPath.Name)' and '$($zipPath.Name)' succesfully found" >> $env:GITHUB_STEP_SUMMARY
 
       - name: Create Test GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.version.outputs.version }}
-          name: Okapi Launcher ${{ steps.version.outputs.version }}
+          tag_name: ${{ steps.data.outputs.version }}
+          name: "[${{ steps.data.outputs.type }}] Okapi Launcher ${{ steps.data.outputs.version }}"
           generate_release_notes: true
-          prerelease: true
+          draft: true
           files: |
-            ${{ steps.artifacts.outputs.zip }}
-            ${{ steps.artifacts.outputs.installer }}
+            ${{ steps.data.outputs.zip }}
+            ${{ steps.data.outputs.installer }}
+
+      - name: Final log
+        run: |
+          echo "Created new release for version ${{ steps.data.outputs.version }}" >> $env:GITHUB_STEP_SUMMARY

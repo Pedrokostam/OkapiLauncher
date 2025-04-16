@@ -4,19 +4,22 @@
 name: Build and test
 
 on:
-  push:
-    branches: [ "main","release/**","actions_test" ]
   pull_request:
+    branches: [ "main","release/**","actions_test","fake-release" ]
+    types: [opened, synchronize, reopened]
 
 jobs:
-  build:
+  test:
+    defaults:
+      run:
+        shell: pwsh
 
     runs-on: windows-latest
 
+    permissions:
+      pull-requests: write  
+
     steps:
-    
-    #- name: GitTools
-    #  uses: GitTools/actions@v3.2.0
     
     - uses: actions/checkout@v4
       with:
@@ -29,18 +32,6 @@ jobs:
         key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj') }}
         restore-keys: |
           nuget-${{ runner.os }}-
-
-    #- name: Install GitVersion
-    #  uses: gittools/actions/gitversion/setup@v3
-    #  with:
-    #    versionSpec: '6.2.x'
-
-    #- name: Run GitVersion
-    #  id: gitversion
-    #  uses: gittools/actions/gitversion/execute@v3
-
-    #- name: Display calculated version
-    #  run: 'echo "GitVersion: ${{ steps.gitversion.outputs.semVer }}"'
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
