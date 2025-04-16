@@ -5,23 +5,23 @@ param (
     $NoZip
 )
 
-$SolutionDir = Split-Path $PSScriptRoot -Parent
-$ErrorActionPreference = 'Stop' # any error should stop the procedure
+$SolutionDir = Split-Path $PSScriptRoot -Parent                        # ./OkapiLauncher
+$ErrorActionPreference = 'Stop'                                        # any error should stop the procedure
 
 # VARIABLES
-$outputInfoFile = Join-Path $PSScriptRoot 'output_info.json'
-$PublishTools = Join-Path $SolutionDir 'publish_tools'
-$innoCompilerPath = 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe'
-$AppName = 'Okapi Launcher'
-$ProjectName = 'OkapiLauncher'
-$ProjectDir = Join-Path $SolutionDir $ProjectName
-$CsProjName = "$($ProjectName).csproj"
-$AppExeName = "$($ProjectName).exe"
-$ProjPath = Join-Path $ProjectDir $CsProjName
-$BaseOutputDir = Join-Path $SolutionDir 'Release'
-$Binaries = Join-Path $BaseOutputDir $AppName
-$ExePath = Join-Path $Binaries "$ProjectName.exe"
-$InnoScriptPath = Join-Path $PublishTools 'inno_installer_script.iss'
+$PublishTools = Join-Path $SolutionDir 'publish_tools'                 # ./OkapiLauncher/publish_tools
+$outputInfoFile = Join-Path $PublishTools 'output_info.json'           # ./OkapiLauncher/publish_tools/output_info.json
+$innoCompilerPath = 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe'     # {INNO}
+$AppName = 'Okapi Launcher'                                            # Okapi Launcher
+$ProjectName = 'OkapiLauncher'                                         # OkapiLauncher
+$ProjectDir = Join-Path $SolutionDir $ProjectName                      # ./OkapiLauncher/OkapiLauncher
+$CsProjName = "$($ProjectName).csproj"                                 # ./OkapiLauncher/OkapiLauncher.csproj
+$AppExeName = "$($ProjectName).exe"                                    # ./OkapiLauncher/OkapiLauncher.exe
+$ProjPath = Join-Path $ProjectDir $CsProjName                          # ./OkapiLauncher/OkapiLauncher/OkapiLauncher.csproj
+$BaseOutputDir = Join-Path $SolutionDir 'Release'                      # ./OkapiLauncher/Release
+$Binaries = Join-Path $BaseOutputDir $AppName                          # ./OkapiLauncher/Release/Okapi Lancher
+$ExePath = Join-Path $Binaries $AppExeName                             # ./OkapiLauncher/Release/Okapi Lancher/OkapiLauncher.exe
+$InnoScriptPath = Join-Path $PublishTools 'inno_installer_script.iss'  # 
 
 ## TEST PATHS
 if (-not (Test-Path $innoCompilerPath)) {
@@ -49,6 +49,9 @@ $json = Get-Content $appSettingsPath | ConvertFrom-Json
 $repoUrl = $json.AppConfig.githubLink
     
 # ---   DOTNET   ---
+Write-Host ""
+Write-Host "================== PERFORMING BUILD =================="
+Write-Host ""
 $dotnetParams = @(
     'publish'
     $ProjPath
@@ -71,6 +74,9 @@ $version = $exeItem.VersionInfo.FileVersion # Reads version from built exe. Assu
 $ZipPath = Join-Path $BaseOutputDir "$($AppName)_$($Version).zip"
 
 # ---   COMPRESS   ---
+Write-Host ""
+Write-Host "================== COMPRESSING =================="
+Write-Host ""
 if (-not $NoZip.IsPresent) {
     $compressParams = @{
         LiteralPath      = $Binaries
@@ -81,6 +87,9 @@ if (-not $NoZip.IsPresent) {
 }
 
 # ---   INNO   ---
+Write-Host ""
+Write-Host "================== CREATING INSTALLER =================="
+Write-Host ""
 $retries = 5
 while ($true) {
     # repeat creation until there is no error

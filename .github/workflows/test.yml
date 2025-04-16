@@ -18,9 +18,6 @@ jobs:
 
     steps:
     
-    #- name: GitTools
-    #  uses: GitTools/actions@v3.2.0
-    
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
@@ -32,18 +29,6 @@ jobs:
         key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj') }}
         restore-keys: |
           nuget-${{ runner.os }}-
-
-    #- name: Install GitVersion
-    #  uses: gittools/actions/gitversion/setup@v3
-    #  with:
-    #    versionSpec: '6.2.x'
-
-    #- name: Run GitVersion
-    #  id: gitversion
-    #  uses: gittools/actions/gitversion/execute@v3
-
-    #- name: Display calculated version
-    #  run: 'echo "GitVersion: ${{ steps.gitversion.outputs.semVer }}"'
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
