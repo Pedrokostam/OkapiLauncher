@@ -18,9 +18,9 @@ using System.Text.Json;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 
 namespace OkapiLauncher.Services;
-public class FileAssociationService : IFileAssociationService
+public partial class FileAssociationService : IFileAssociationService
 {
-    private class VanishingScript : IDisposable
+    internal partial class VanishingScript : IDisposable
     {
         public string FilePath { get; }
         public VanishingScript()
@@ -105,6 +105,7 @@ public class FileAssociationService : IFileAssociationService
     //    return userAssociations;
     //}
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0290:Use primary constructor", Justification = "The fields should be readonly")]
     public FileAssociationService(IOptions<AppConfig> appConfig)
     {
         this._appConfig = appConfig.Value;
@@ -258,7 +259,7 @@ public class FileAssociationService : IFileAssociationService
     {
         try
         {
-            key.DeleteSubKeyTree(treeName, true);
+            key.DeleteSubKeyTree(treeName, throwOnMissingSubKey: true);
             var names = key.GetSubKeyNames();
             if (names.Contains(treeName, StringComparer.OrdinalIgnoreCase))
             {
@@ -272,12 +273,10 @@ public class FileAssociationService : IFileAssociationService
             {
                 return;
             }
-            var names = subkey.GetSubKeyNames();
             foreach (var item in subkey.GetSubKeyNames())
             {
                 MegaDeleteTree(subkey, item);
             }
-            var names2 = subkey.GetSubKeyNames();
             subkey.Close();
             key.DeleteSubKey(treeName, throwOnMissingSubKey: false);
         }

@@ -29,7 +29,9 @@ namespace OkapiLauncher.Models
         public string Path { get; }
 
 
-        public SimpleProcess(Process proc, IMessenger messenger) : this(proc, messenger, proc.MainModule!.FileName ?? throw new ArgumentNullException("path"))
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "Good luck with compound properties")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MA0015:Specify the parameter name in ArgumentException", Justification = "Good luck with compound properties")]
+        public SimpleProcess(Process proc, IMessenger messenger) : this(proc, messenger, proc.MainModule!.FileName ?? throw new ArgumentNullException("Filename of MainModule"))
         {
         }
 

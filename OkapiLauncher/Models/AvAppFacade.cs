@@ -35,7 +35,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     public string NameWithVersion => $"{Name} {Version}";
     public bool IsDevelopmentVersion => Version.IsDevelopmentVersion;
     public bool IsExecutable => _avApp.IsExecutable;
-    public string  LogFolderPath=> _avApp.LogFolderPath;
+    public string? LogFolderPath => _avApp.LogFolderPath;
 
     public string? Description => _avApp.Description ?? Name;
     public bool IsCustom => _avApp.IsCustom;
@@ -53,7 +53,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     private Compatibility? _compatibility = null;
     private readonly IMessenger _messenger;
 
-    public ObservableCollection<SimpleProcess> ActiveProcesses { get; } = new();
+    public ObservableCollection<SimpleProcess> ActiveProcesses { get; } = [];
 
     public bool IsLaunched => ActiveProcesses.Count > 0;
 
@@ -94,16 +94,17 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
         Clipboard.SetText(Path);
     }
 
-    [RelayCommand(CanExecute =nameof(CanOpenLicenseFolder))]
+    [RelayCommand(CanExecute = nameof(CanOpenLicenseFolder))]
     private void OpenLicenseFolder()
     {
         ExplorerHelper.OpenExplorer(Brand.GetLicenseKeyFolderPath());
     }
 
-    [RelayCommand(CanExecute =nameof(CanOpenLogFolder))]
+    [RelayCommand(CanExecute = nameof(CanOpenLogFolder))]
     private void OpenLogFolder()
     {
-        ExplorerHelper.OpenExplorer(LogFolderPath);
+        if (LogFolderPath is not null)
+            ExplorerHelper.OpenExplorer(LogFolderPath);
 
     }
     //[RelayCommand]
@@ -158,4 +159,24 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     }
 
     public override string ToString() => _avApp.ToString();
+
+    public static bool operator <(AvAppFacade left, AvAppFacade right)
+    {
+        return left is null ? right is not null : left.CompareTo(right) < 0;
+    }
+
+    public static bool operator <=(AvAppFacade left, AvAppFacade right)
+    {
+        return left is null || left.CompareTo(right) <= 0;
+    }
+
+    public static bool operator >(AvAppFacade left, AvAppFacade right)
+    {
+        return left is not null && left.CompareTo(right) > 0;
+    }
+
+    public static bool operator >=(AvAppFacade left, AvAppFacade right)
+    {
+        return left is null ? right is null : left.CompareTo(right) >= 0;
+    }
 }

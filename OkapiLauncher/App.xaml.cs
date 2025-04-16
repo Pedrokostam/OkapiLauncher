@@ -43,17 +43,17 @@ public partial class App : Application
     }
     public bool ShouldCloseAfterLaunching { get;  set; } = false;
 
-    private async void OnStartup(object sender, StartupEventArgs e)
+    private async void OnStartup(object sender, StartupEventArgs startupArgs)
     {
-        if (e.Args.Length > 1)
+        if (startupArgs.Args.Length > 1)
         {
-            MessageBox.Show($"Launcher expects at most one argument.\nProvided arguments: {e.Args.Length}.", "Invalid startup arguments", MessageBoxButton.OK, MessageBoxImage.Error);
-            throw new ArgumentException("Received too many arguments.");
+            MessageBox.Show($"Launcher expects at most one argument.\nProvided arguments: {startupArgs.Args.Length}.", "Invalid startup arguments", MessageBoxButton.OK, MessageBoxImage.Error);
+            throw new ArgumentException("Received too many arguments.",nameof(startupArgs));
         }
         var appLocation = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location)!;
 
         // For more information about .NET generic host see  https://docs.microsoft.com/aspnet/core/fundamentals/host/generic-host?view=aspnetcore-3.0
-        _host = Host.CreateDefaultBuilder(e.Args)
+        _host = Host.CreateDefaultBuilder(startupArgs.Args)
                 .ConfigureAppConfiguration(c =>
                 {
                     c.SetBasePath(appLocation);
@@ -63,17 +63,15 @@ public partial class App : Application
         await _host.StartAsync();
         // initialize launcher vm, so that it can start listening to FileRequestMessages
         GetService<FileOpenerBroker>();
-        if (e.Args.Length == 1)
+        if (startupArgs.Args.Length == 1)
         {
             ShouldCloseAfterLaunching = true;
-            GetService<IMessenger>().Send(new FileRequestedMessage(e.Args[0]));
+            GetService<IMessenger>().Send(new FileRequestedMessage(startupArgs.Args[0]));
         }
     }
 
     private void ConfigureServices(HostBuilderContext context, IServiceCollection services)
     {
-        // TODO: Register your services, viewmodels and pages here
-
         // App Host
         services.AddHostedService<ApplicationHostService>();
 
