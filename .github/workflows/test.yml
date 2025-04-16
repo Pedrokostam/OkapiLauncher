@@ -4,9 +4,9 @@
 name: Build and test
 
 on:
-  push:
-    branches: [ "main","release/**","actions_test" ]
   pull_request:
+    branches: [ "main","release/**","actions_test","fake-release" ]
+    types: [opened, synchronize, reopened]
 
 jobs:
   test:
@@ -15,6 +15,9 @@ jobs:
         shell: pwsh
 
     runs-on: windows-latest
+
+    permissions:
+      pull-requests: write  
 
     steps:
     

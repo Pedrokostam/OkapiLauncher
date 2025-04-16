@@ -2,19 +2,12 @@ name: Release
 
 on:
   pull_request:
-    branches:
-      - fake-release
+    branches: ["main", "fake-release"]
     types: [closed]
-  push:
-    branches:
-      - fake-release
 
 jobs:
   publish:
-    #if: >
-    #  github.event.pull_request.merged == true &&
-    #  (startsWith(github.event.pull_request.head.ref, 'release/') ||
-    #   startsWith(github.event.pull_request.head.ref, 'hotfix/'))
+    if: github.event.pull_request.merged == true
     defaults:
       run:
         shell: pwsh
@@ -23,6 +16,7 @@ jobs:
 
     permissions:
       contents: write
+      pull-requests: write  
 
     steps:
       - name: Checkout code
@@ -95,5 +89,7 @@ jobs:
           files: |
             ${{ steps.data.outputs.zip }}
             ${{ steps.data.outputs.installer }}
-          run: |
-            echo "Created new release for version ${{ steps.data.outputs.version }}" >> $env:GITHUB_STEP_SUMMARY
+
+      - name: Final log
+        run: |
+          echo "Created new release for version ${{ steps.data.outputs.version }}" >> $env:GITHUB_STEP_SUMMARY
