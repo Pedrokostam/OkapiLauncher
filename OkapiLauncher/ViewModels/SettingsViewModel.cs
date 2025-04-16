@@ -21,7 +21,6 @@ using Microsoft.Extensions.Options;
 
 namespace OkapiLauncher.ViewModels;
 
-// TODO: Change the URL for your privacy policy in the appsettings.json file, currently set to https://YourPrivacyUrlGoesHere
 public partial class SettingsViewModel : ObservableObject, INavigationAware
 {
     private readonly AppConfig _appConfig;
@@ -96,7 +95,7 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
         Theme = _themeSelectorService.GetCurrentTheme();
     }
 
-    public ObservableCollection<FileAssociationStatus> FileAssociationStatus { get; } = new();
+    public ObservableCollection<FileAssociationStatus> FileAssociationStatus { get; } = [];
     public ObservableCollection<CustomAppSource> CustomSources => _customAppSourceService.CustomSources;
 
     partial void OnCurrentAccentChanged(System.Windows.Media.Color? value) => OnSetTheme(Theme.ToString());

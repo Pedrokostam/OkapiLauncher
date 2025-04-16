@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Input;
 
@@ -8,7 +9,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 
 using MahApps.Metro.Controls.Dialogs;
-
+using OkapiLauncher.Contracts.EventArgs;
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Models;
 using OkapiLauncher.Models.Messages;
@@ -69,15 +70,16 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
     private void OnGoBack()
         => _navigationService.GoBack();
 
-    private void OnNavigated(object? sender, string? viewModelName)
+    private void OnNavigated(object? sender, NavigatedToEventArgs? navArgs)
     {
         GoBackCommand.NotifyCanExecuteChanged();
-        CurrentViewModel = Type.GetType(viewModelName ?? string.Empty);
+        CurrentViewModel = Type.GetType(navArgs?.DataContextFullName!);
     }
     [ObservableProperty]
     private Type? _currentViewModel;
 
     [RelayCommand()]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Can't static a relay command")]
     private void OnMenuFileExit()
         => Application.Current.Shutdown();
 
@@ -128,9 +130,9 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
     {
         int intIndex = index switch
         {
-            string strindex => int.Parse(strindex,null),
+            string strindex => int.Parse(strindex, provider: CultureInfo.InvariantCulture),
             int i => i,
-            _ => -1
+            _ => -1,
         };
         if (RecentlyOpenedFiles.Count <= intIndex)
         {
@@ -155,6 +157,7 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
     
 
     [RelayCommand]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Can't static a relay command")]
     private void Collect()
     {
         GC.Collect();

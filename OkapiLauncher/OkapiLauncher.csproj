@@ -11,11 +11,13 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<ApplicationIcon>Resources\Icons\AppIcon.ico</ApplicationIcon>
-		<!--<Version>1.6.0.2</Version>-->
 		<PublishReadyToRun>true</PublishReadyToRun>
 		<InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);Microsoft.Extensions.Configuration.Binder.SourceGeneration</InterceptorsPreviewNamespaces>
 	</PropertyGroup>
-
+	<PropertyGroup>
+		<!--Needed for AOT and trimming on array operations-->
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
 	<ItemGroup>
 		<None Remove="Resources\Icons\AdaptiveVisionExecutor.ico" />
 		<None Remove="Resources\Icons\AdaptiveVisionStudio.ico" />
@@ -81,8 +83,8 @@
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
 		<PackageReference Include="GitVersion.MsBuild" Version="6.2.0">
-		  <PrivateAssets>all</PrivateAssets>
-		  <!--<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>-->
+			<PrivateAssets>all</PrivateAssets>
+			<!--<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>-->
 		</PackageReference>
 		<PackageReference Include="MahApps.Metro" Version="2.4.10" />
 		<PackageReference Include="Material.Icons.WPF" Version="2.1.10" />
@@ -94,8 +96,12 @@
 		<PackageReference Include="ObservableCollections" Version="3.1.1" />
 		<PackageReference Include="System.Drawing.Common" Version="8.0.10" />
 		<PackageReference Include="System.Text.Json" Version="8.0.5" />
-		<PackageReference Include="WindowsAPICodePack-Core" Version="1.1.2" />
-		<PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
+		<PackageReference Include="WindowsAPICodePack-Core" Version="1.1.2" >
+			<NoWarn>NU1701</NoWarn>
+		</PackageReference>
+		<PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" >
+			<NoWarn>NU1701</NoWarn>
+		</PackageReference>
 	</ItemGroup>
 
 	<ItemGroup>
