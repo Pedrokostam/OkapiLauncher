@@ -12,6 +12,8 @@ using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Core.Models.Apps;
 using OkapiLauncher.Models;
 using CommunityToolkit.Mvvm.Messaging;
+using System.Windows.Shell;
+using Microsoft.WindowsAPICodePack.Taskbar;
 
 namespace OkapiLauncher.Services;
 public class AvAppFacadeFactory : IAvAppFacadeFactory
@@ -58,6 +60,22 @@ public class AvAppFacadeFactory : IAvAppFacadeFactory
         _avApps.Clear();
         var detected = AppReader.GetInstalledAvApps(_customAppSourceService.CustomSources);
         _avApps.AddRange(detected);
+        var jumpList = new System.Windows.Shell.JumpList();
+        jumpList.ShowFrequentCategory = false;
+        jumpList.ShowRecentCategory = true;
+        foreach(var app in _avApps)
+        {
+            var jumpListItem = new JumpTask()
+            {
+                Title = app.Name,
+                Arguments = app.Path,
+                Description = $"Launch ${app.Name}",
+                ApplicationPath = System.Diagnostics.Process.GetCurrentProcess().MainModule!.FileName,
+                IconResourcePath = System.Diagnostics.Process.GetCurrentProcess().MainModule!.FileName
+            };
+            jumpList.JumpItems.Add(jumpListItem);
+        }
+        System.Windows.Shell.JumpList.SetJumpList(System.Windows.Application.Current, jumpList);
     }
 
     public IEnumerable<AvAppFacade> CreateAllFacades() => AvApps.Select(Create);
