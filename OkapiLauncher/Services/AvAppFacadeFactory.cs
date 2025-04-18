@@ -24,11 +24,13 @@ public class AvAppFacadeFactory : IAvAppFacadeFactory
     private readonly IWindowManagerService _windowManagerService;
     private readonly IMessenger _messenger;
     private readonly ICustomAppSourceService _customAppSourceService;
+    private readonly IJumpListService _jumpListService;
 
     public IReadOnlyList<AvApp> AvApps => _avApps.AsReadOnly();
-    public AvAppFacadeFactory(IWindowManagerService windowManagerService, IMessenger messenger, ICustomAppSourceService customAppSourceService)
+    public AvAppFacadeFactory(IWindowManagerService windowManagerService, IMessenger messenger, ICustomAppSourceService customAppSourceService, IJumpListService jumpListService)
     {
         _customAppSourceService = customAppSourceService;
+        _jumpListService = jumpListService;
         _windowManagerService = windowManagerService;
         _messenger = messenger;
         RediscoverApps();
@@ -60,22 +62,7 @@ public class AvAppFacadeFactory : IAvAppFacadeFactory
         _avApps.Clear();
         var detected = AppReader.GetInstalledAvApps(_customAppSourceService.CustomSources);
         _avApps.AddRange(detected);
-        var jumpList = new System.Windows.Shell.JumpList();
-        jumpList.ShowFrequentCategory = false;
-        jumpList.ShowRecentCategory = true;
-        foreach(var app in _avApps)
-        {
-            var jumpListItem = new JumpTask()
-            {
-                Title = app.Name,
-                Arguments = app.Path,
-                Description = $"Launch ${app.Name}",
-                ApplicationPath = System.Diagnostics.Process.GetCurrentProcess().MainModule!.FileName,
-                IconResourcePath = System.Diagnostics.Process.GetCurrentProcess().MainModule!.FileName
-            };
-            jumpList.JumpItems.Add(jumpListItem);
-        }
-        System.Windows.Shell.JumpList.SetJumpList(System.Windows.Application.Current, jumpList);
+        _jumpListService.SetTasks(_avApps);
     }
 
     public IEnumerable<AvAppFacade> CreateAllFacades() => AvApps.Select(Create);

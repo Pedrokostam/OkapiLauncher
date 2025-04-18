@@ -209,4 +209,5 @@ public class ProductBrand : IComparable<ProductBrand>
         return Brand.CompareTo(other.Brand);
     }
     public override string ToString() => Name;
+    public static implicit operator AvBrand(ProductBrand brand) => brand.Brand;
 }

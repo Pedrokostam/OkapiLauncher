@@ -19,11 +19,13 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 	<ItemGroup>
+		<None Remove="Resources\Icons\AdaptiveVisionDeepLearning.ico" />
 		<None Remove="Resources\Icons\AdaptiveVisionExecutor.ico" />
 		<None Remove="Resources\Icons\AdaptiveVisionStudio.ico" />
+		<None Remove="Resources\Icons\AuroraVisionDeepLearning.ico" />
 		<None Remove="Resources\Icons\AuroraVisionExecutor.ico" />
 		<None Remove="Resources\Icons\AuroraVisionStudio.ico" />
-		<None Remove="Resources\Icons\FabImageRuntime.ico" />
+		<None Remove="Resources\Icons\FabImageDeepLearning.ico" />
 		<None Remove="Resources\Icons\FabImageStudio.ico" />
 		<None Remove="Resources\Symbols\AdaptiveVisionDeepLearning.png" />
 		<None Remove="Resources\Symbols\AdaptiveVisionExecutor.png" />
@@ -59,12 +61,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Resource Include="Resources\Icons\AdaptiveVisionDeepLearning.ico" />
 		<Resource Include="Resources\Icons\AppIcon.ico" />
 		<Resource Include="Resources\Icons\AdaptiveVisionExecutor.ico" />
 		<Resource Include="Resources\Icons\AdaptiveVisionStudio.ico" />
+		<Resource Include="Resources\Icons\AuroraVisionDeepLearning.ico" />
 		<Resource Include="Resources\Icons\AuroraVisionExecutor.ico" />
 		<Resource Include="Resources\Icons\AuroraVisionStudio.ico" />
-		<Resource Include="Resources\Icons\FabImageRuntime.ico" />
+		<Resource Include="Resources\Icons\FabImageDeepLearning.ico" />
+		<Resource Include="Resources\Icons\FabImageExecutor.ico" />
 		<Resource Include="Resources\Icons\FabImageStudio.ico" />
 		<Resource Include="Resources\Symbols\AdaptiveVisionDeepLearning.png" />
 		<Resource Include="Resources\Symbols\AdaptiveVisionLibrary.png" />
@@ -96,10 +101,10 @@
 		<PackageReference Include="ObservableCollections" Version="3.1.1" />
 		<PackageReference Include="System.Drawing.Common" Version="8.0.10" />
 		<PackageReference Include="System.Text.Json" Version="8.0.5" />
-		<PackageReference Include="WindowsAPICodePack-Core" Version="1.1.2" >
+		<PackageReference Include="WindowsAPICodePack-Core" Version="1.1.2">
 			<NoWarn>NU1701</NoWarn>
 		</PackageReference>
-		<PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" >
+		<PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1">
 			<NoWarn>NU1701</NoWarn>
 		</PackageReference>
 	</ItemGroup>

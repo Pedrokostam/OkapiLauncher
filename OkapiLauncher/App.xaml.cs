@@ -98,6 +98,7 @@ public partial class App : Application
         services.AddSingleton<IUpdateCheckService, UpdateCheckService>();
         services.AddSingleton<FileOpenerBroker>();
         services.AddSingleton<ICustomAppSourceService,CustomAppSourceService>();
+        services.AddSingleton<IJumpListService,JumpListService>();
 
         services.AddSingleton<IProcessManagerService, ProcessManagerService>();
         // Views and ViewModels
