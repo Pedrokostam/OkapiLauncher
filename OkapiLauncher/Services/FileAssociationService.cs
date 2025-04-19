@@ -23,6 +23,11 @@ using System.Security.Policy;
 namespace OkapiLauncher.Services;
 public partial class FileAssociationService : IFileAssociationService
 {
+    /// <summary>
+    /// Represents a temporary PowerShell script that is created in the system's temporary directory
+    /// and automatically deleted when disposed. This is useful for executing transient scripts
+    /// without leaving residual files on the system.
+    /// </summary>
     internal partial class VanishingScript : IDisposable
     {
         public string FilePath { get; }
@@ -84,20 +89,28 @@ public partial class FileAssociationService : IFileAssociationService
         public string IconName => Path.GetFileName(IconPath);
     }
 
-    private readonly AssociationPackage[] _associations = [
+    /// <summary>
+    /// All application associated with their icons.
+    /// </summary>
+    private readonly AssociationPackage[] _iconAssociations = [
         new AssociationPackage(AvBrand.Aurora,AvType.Professional,"Resources/Icons/AuroraVisionStudio.ico",".avproj"),
         new AssociationPackage(AvBrand.Aurora,AvType.Runtime,"Resources/Icons/AuroraVisionExecutor.ico",".avexe"),
         new AssociationPackage(AvBrand.FabImage,AvType.Professional,"Resources/Icons/FabImageStudio.ico",".fiproj"),
         new AssociationPackage(AvBrand.FabImage,AvType.Runtime,"Resources/Icons/FabImageExecutor.ico",".fiexe"),
 
-        new AssociationPackage(AvBrand.Adaptive,AvType.Professional,"Resources/Icons/AdaptiveVisionStudio.ico",null),
+        new AssociationPackage(AvBrand.Adaptive,AvType.Professional,"Resources/Icons/AdaptiveVisionStudio.ico",Extension: null),
         new AssociationPackage(AvBrand.Adaptive,AvType.Runtime,"Resources/Icons/AdaptiveVisionExecutor.ico", Extension: null),
         new AssociationPackage(AvBrand.Adaptive,AvType.DeepLearning,"Resources/Icons/AdaptiveVisionDeepLearning.ico", Extension: null),
         new AssociationPackage(AvBrand.Aurora,AvType.DeepLearning,"Resources/Icons/AuroraVisionDeepLearning.ico", Extension: null),
         new AssociationPackage(AvBrand.FabImage,AvType.DeepLearning,"Resources/Icons/FabImageDeepLearning.ico", Extension: null),
     ];
+    /// <summary>
+    /// All applications that have an extension associated with them.
+    /// </summary>
+    private IEnumerable<AssociationPackage > Associations => _iconAssociations.Where(x=>x.Extension is not null);
 
     public const string RegistryAppName = "OkapiLauncher";
+
     private readonly AppConfig _appConfig;
 
     //public Dictionary<string, string> GetCurrentAssociations()
@@ -126,7 +139,7 @@ public partial class FileAssociationService : IFileAssociationService
     /// <param name="appName"></param>
     private void SetAppShellKeys(string mainAppPath)
     {
-        foreach (var association in _associations)
+        foreach (var association in _iconAssociations)
         {
             try
             {
@@ -190,7 +203,7 @@ public partial class FileAssociationService : IFileAssociationService
         var appdata = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         var iconFolder = Path.Combine(appdata, _appConfig.IconsFolder);
         Directory.CreateDirectory(iconFolder);
-        foreach (var assoc in _associations)
+        foreach (var assoc in _iconAssociations)
         {
             string iconPath = GetFullIconPath(assoc);
             var iconStream = ResourceHelper.GetResourceStream(assoc.IconPath);
@@ -211,7 +224,7 @@ public partial class FileAssociationService : IFileAssociationService
     }
     public string GetLocalIconPath(AvBrand brand, AvType type)
     {
-        var assoc = _associations.FirstOrDefault(x => x.Brand == brand && x.Type == type);
+        var assoc = _iconAssociations.FirstOrDefault(x => x.Brand == brand && x.Type == type);
         if (assoc == default)
         {
             throw new KeyNotFoundException($"No icon for {brand} {type}");
@@ -263,7 +276,7 @@ public partial class FileAssociationService : IFileAssociationService
     {
 
         using var fileExts = CreateOrOpenRegistryPathWritable("Software", "Microsoft", "Windows", "CurrentVersion", "Explorer", "FileExts");
-        foreach (var assoc in _associations)
+        foreach (var assoc in Associations)
         {
             if (assoc.Extension is null)
             {
@@ -327,7 +340,7 @@ public partial class FileAssociationService : IFileAssociationService
 
     private void SetAssociations()
     {
-        foreach (var association in _associations)
+        foreach (var association in Associations)
         {
             if (association.Extension is null)
             {
@@ -354,7 +367,7 @@ public partial class FileAssociationService : IFileAssociationService
     }
     private string GetParameterJson()
     {
-        var assoc = _associations.Select(x => x with { IconPath = GetFullIconPath(x) });
+        var assoc = Associations.Select(x => x with { IconPath = GetFullIconPath(x) });
         return JsonSerializer.Serialize(assoc, new JsonSerializerOptions { WriteIndented = false });
     }
 
@@ -372,7 +385,7 @@ public partial class FileAssociationService : IFileAssociationService
         var list = new List<FileAssociationStatus>();
         mainAppExecutablePath ??= Environment.ProcessPath!;
         string mainAppName = Path.GetFileName(mainAppExecutablePath);
-        foreach (var association in _associations)
+        foreach (var association in _iconAssociations)
         {
             if (association.Extension is null)
             {
