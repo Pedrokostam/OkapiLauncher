@@ -100,14 +100,18 @@ public partial class FileAssociationService : IFileAssociationService
 
         new AssociationPackage(AvBrand.Adaptive,AvType.Professional,"Resources/Icons/AdaptiveVisionStudio.ico",Extension: null),
         new AssociationPackage(AvBrand.Adaptive,AvType.Runtime,"Resources/Icons/AdaptiveVisionExecutor.ico", Extension: null),
-        new AssociationPackage(AvBrand.Adaptive,AvType.DeepLearning,"Resources/Icons/AdaptiveVisionDeepLearning.ico", Extension: null),
-        new AssociationPackage(AvBrand.Aurora,AvType.DeepLearning,"Resources/Icons/AuroraVisionDeepLearning.ico", Extension: null),
-        new AssociationPackage(AvBrand.FabImage,AvType.DeepLearning,"Resources/Icons/FabImageDeepLearning.ico", Extension: null),
+        new AssociationPackage(AvBrand.Adaptive,AvType.DeepLearningGPU,"Resources/Icons/AdaptiveVisionDeepLearning.ico", Extension: null),
+        new AssociationPackage(AvBrand.Aurora,AvType.DeepLearningGPU,"Resources/Icons/AuroraVisionDeepLearning.ico", Extension: null),
+        new AssociationPackage(AvBrand.FabImage,AvType.DeepLearningGPU,"Resources/Icons/FabImageDeepLearning.ico", Extension: null),
+
+        new AssociationPackage(AvBrand.Adaptive,AvType.DeepLearningCPU,"Resources/Icons/AdaptiveVisionDeepLearning.ico", Extension: null),
+        new AssociationPackage(AvBrand.Aurora,AvType.DeepLearningCPU,"Resources/Icons/AuroraVisionDeepLearning.ico", Extension: null),
+        new AssociationPackage(AvBrand.FabImage,AvType.DeepLearningCPU,"Resources/Icons/FabImageDeepLearning.ico", Extension: null),
     ];
     /// <summary>
     /// All applications that have an extension associated with them.
     /// </summary>
-    private IEnumerable<AssociationPackage > Associations => _iconAssociations.Where(x=>x.Extension is not null);
+    private IEnumerable<AssociationPackage> Associations => _iconAssociations.Where(x => x.Extension is not null);
 
     public const string RegistryAppName = "OkapiLauncher";
 
