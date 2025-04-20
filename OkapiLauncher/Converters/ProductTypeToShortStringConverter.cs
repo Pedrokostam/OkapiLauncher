@@ -20,7 +20,7 @@ public class ProductTypeToShortStringConverter : IValueConverter
         {
             AvType.Professional => "Pro",
             AvType.Runtime => "Runtime",
-            AvType.DeepLearning => "DL",
+            AvType.DeepLearningGPU => "DL",
             AvType.Library => "Lib",
             _ => throw new NotSupportedException()
         };

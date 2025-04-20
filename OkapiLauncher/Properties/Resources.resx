@@ -327,8 +327,8 @@
   <data name="ShellKillChildrenButton" xml:space="preserve">
     <value>Kill all child windows</value>
   </data>
-  <data name="AppProductTypeDeepLearningLabel" xml:space="preserve">
-    <value>Deep Learning</value>
+  <data name="AppProductTypeDeepLearningCPULabel" xml:space="preserve">
+    <value>Deep Learning CPU</value>
   </data>
   <data name="AppProductTypeLibraryLabel" xml:space="preserve">
     <value>Library</value>
@@ -573,5 +573,8 @@ All trademarks, service marks, logos, and copyrights related to the applications
   </data>
   <data name="JumplistLaunchAppDescription" xml:space="preserve">
     <value>Launch {0}</value>
+  </data>
+  <data name="AppProductTypeDeepLearningGPULabel" xml:space="preserve">
+    <value>Deep Learning GPU</value>
   </data>
 </root>
