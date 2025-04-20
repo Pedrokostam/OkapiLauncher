@@ -18,15 +18,15 @@ public class SimpleArgumentRule : ValidationRule
             return new ValidationResult(isValid: false, Properties.Resources.ValidationArgumentHasToBeString);
         }
         s = s.Trim();
-        if (s.Contains(' '))
+        if (s.Contains(' ', StringComparison.Ordinal))
         {
             return new ValidationResult(isValid: false, Properties.Resources.ValidationArgumentNoWhitespace);
         }
-        if (s.Contains('"'))
+        if (s.Contains('"', StringComparison.Ordinal))
         {
             return new ValidationResult(isValid: false, Properties.Resources.ValidationArgumentNoDoubleQuotes);
         }
-        if (s.Contains('\''))
+        if (s.Contains('\'', StringComparison.Ordinal))
         {
             return new ValidationResult(isValid: false, Properties.Resources.ValidationArgumentNoSingleQuotes);
         }

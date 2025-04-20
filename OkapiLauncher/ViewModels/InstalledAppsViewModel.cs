@@ -46,7 +46,7 @@ public sealed partial class InstalledAppsViewModel : ProcessRefreshViewModel
             AppSortProperty.Brand => new PropertyGroupDescription(nameof(AvAppFacade.Brand)),
             AppSortProperty.Version => new PropertyGroupDescription(nameof(AvAppFacade.Version), InterfaceVersionConverter.Instance),
             AppSortProperty.Name => new PropertyGroupDescription(nameof(AvAppFacade.Name)),
-            _ => throw new NotSupportedException()
+            _ => throw new NotSupportedException(),
         };
         Apps.GroupDescriptions.Add(gd);
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -7,13 +8,16 @@ using System.Threading.Tasks;
 using System.Windows.Shell;
 using System.Xml.Linq;
 using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Converters;
 using OkapiLauncher.Core.Models;
 using OkapiLauncher.Core.Models.Apps;
+using OkapiLauncher.Helpers;
 using OkapiLauncher.Models;
 
 namespace OkapiLauncher.Services;
 public class JumpListService : IJumpListService
 {
+    private static readonly AppTypeToStringConverter _appTypeToStringConverter = new();
     internal class RecentJumpItem : JumpTask
     {
         public RecentJumpItem(RecentlyOpenedFileFacade roff) : base()
@@ -31,11 +35,11 @@ public class JumpListService : IJumpListService
         {
             var name = $"{app.Name} {app.Version}";
             Title = name;
-            Arguments = app.Path;
-            Description = $"Launch {name}";
-            ApplicationPath = Environment.ProcessPath;
+            Arguments = null;
+            Description = string.Format(ResourceHelper.GetTextResource("JumplistLaunchAppDescription")!, name);
+            ApplicationPath = app.Path;
             IconResourcePath = fileAssociationService.GetLocalIconPath(app.Brand, app.Type);
-            CustomCategory = "Applications";
+            CustomCategory = _appTypeToStringConverter.Convert(app.Type,typeof(string), parameter: null!,CultureInfo.InvariantCulture) as string;
         }
     }
     private bool _iconsRestored = false;
@@ -43,17 +47,7 @@ public class JumpListService : IJumpListService
 
     public const int RecentItemsLimit = 10;
 
-    private JumpList AppJumpList => JumpList.GetJumpList(App.Current);
-
-    //public void SetRecentItems(IEnumerable<RecentlyOpenedFileFacade> items)
-    //{
-    //    AppJumpList.JumpItems.RemoveAll(x => x is RecentJumpItem);
-    //    foreach (var file in items)
-    //    {
-    //        AppJumpList.JumpItems.Add(new RecentJumpItem(file));
-    //    }
-    //    AppJumpList.Apply();
-    //}
+    private static JumpList AppJumpList => JumpList.GetJumpList(App.Current);
 
     public void SetTasks(IEnumerable<AvApp> tasks)
     {
@@ -63,9 +57,9 @@ public class JumpListService : IJumpListService
             _iconsRestored = true;
         }
         AppJumpList.JumpItems.RemoveAll(x => x is AppJumpItem);
-        foreach (var app in tasks.Where(x => x.IsExecutable).Reverse())
+        foreach (var app in tasks.Where(x => x.IsExecutable).OrderBy(x=>x))
         {
-            AppJumpList.JumpItems.Insert(0,new AppJumpItem(app, _fileAssociationService));
+            AppJumpList.JumpItems.Insert(0, new AppJumpItem(app, _fileAssociationService));
         }
         AppJumpList.Apply();
     }
@@ -78,7 +72,5 @@ public class JumpListService : IJumpListService
         }
         AppJumpList.ShowFrequentCategory = false;
         AppJumpList.ShowRecentCategory = false;
-        //var jlist = JumpList.GetJumpList(App.Current) ?? new();
-        //JumpList.SetJumpList(App.Current, jlist);
     }
 }
