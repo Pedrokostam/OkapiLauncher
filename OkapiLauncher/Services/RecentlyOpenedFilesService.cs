@@ -18,18 +18,21 @@ using CommunityToolkit.Mvvm.Messaging;
 namespace OkapiLauncher.Services;
 public class RecentlyOpenedFilesService : ObservableRecipient, IRecentlyOpenedFilesService
 {
-    private readonly string Key = "LastOpenedFiles";
+    private const string Key = "LastOpenedFiles";
     const int FileCountLimit = 30;
     private List<RecentlyOpenedFile> LastOpenedPaths => (List<RecentlyOpenedFile>)App.Current.Properties[Key]!;
     /// <summary>
     /// Is a dependency to ensure its instantiated before.
     /// </summary>
     private readonly IPersistAndRestoreService _persistAndRestoreService;
+    //private readonly IJumpListService _jumpListService;
+
     public string? LastOpenedFile { get; private set; }
 
-    public RecentlyOpenedFilesService(IMessenger messenger, IPersistAndRestoreService persistAndRestoreService) : base(messenger)
+    public RecentlyOpenedFilesService(IMessenger messenger, IPersistAndRestoreService persistAndRestoreService/*, IJumpListService jumpListService*/) : base(messenger)
     {
         _persistAndRestoreService = persistAndRestoreService;
+        //_jumpListService = jumpListService;
         if (_persistAndRestoreService.IsDataRestored)
         {
             // if already restored, get
@@ -69,6 +72,7 @@ public class RecentlyOpenedFilesService : ObservableRecipient, IRecentlyOpenedFi
         IEnumerable<RecentlyOpenedFileFacade> enumerable = GetFacades();
         LastOpenedFile = file;
         Messenger.Send(new RecentFilesChangedMessage(enumerable));
+        //_jumpListService?.SetRecentItems(enumerable);
     }
 
     private IEnumerable<RecentlyOpenedFileFacade> GetFacades()
