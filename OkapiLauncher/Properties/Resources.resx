@@ -571,6 +571,9 @@ All trademarks, service marks, logos, and copyrights related to the applications
   <data name="AvAppOpenLogFolderDisabled" xml:space="preserve">
     <value>The log folder for this app does not exist</value>
   </data>
+  <data name="JumplistLaunchAppDescription" xml:space="preserve">
+    <value>Launch {0}</value>
+  </data>
   <data name="AppProductTypeDeepLearningGPULabel" xml:space="preserve">
     <value>Deep Learning GPU</value>
   </data>

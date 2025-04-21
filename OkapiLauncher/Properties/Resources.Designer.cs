@@ -513,6 +513,15 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Launch {0}.
+        /// </summary>
+        public static string JumplistLaunchAppDescription {
+            get {
+                return ResourceManager.GetString("JumplistLaunchAppDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm termination of all processes of app.
         /// </summary>
         public static string KillAllProcessesDialogHeader {

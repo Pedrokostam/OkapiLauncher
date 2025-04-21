@@ -38,6 +38,7 @@ public partial class CustomSourceDialogEditorViewModel : ObservableValidator, IN
     [NotifyCanExecuteChangedFor(nameof(AcceptCommand))]
     [NotifyDataErrorInfo]
     private string _description;
+
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SourcePath))]
     [NotifyCanExecuteChangedFor(nameof(AcceptCommand))]

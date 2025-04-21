@@ -17,7 +17,7 @@ internal static class ExplorerHelper
         Process.Start(new ProcessStartInfo()
         {
             FileName = "explorer.exe",
-            Arguments = @$"/select, ""{path}"""
+            Arguments = @$"/select, ""{path}""",
         });
     }
     public static void OpenExplorer(string path)
@@ -25,7 +25,7 @@ internal static class ExplorerHelper
         Process.Start(new ProcessStartInfo()
         {
             FileName = "explorer.exe",
-            Arguments = @$"""{path}"""
+            Arguments = @$"""{path}""",
         });
     }
 }
