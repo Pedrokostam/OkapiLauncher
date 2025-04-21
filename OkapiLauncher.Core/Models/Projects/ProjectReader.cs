@@ -117,7 +117,7 @@ public static class ProjectReader
             name = xml.Name;
             version = xml.Version;
         }
-        else if (header.Type.Type.HasFlag(AvType.DeepLearning))
+        else if (header.Type.HasFlag(AvType.DeepLearning))
         {
             name = Path.GetFileName(Path.GetDirectoryName(filepath) ?? "OOPS");
             version = AvVersion.MissingVersion;
@@ -130,7 +130,7 @@ public static class ProjectReader
         }
 
         VisionProject project = new(
-            path: header.Type.Type.HasFlag(AvType.DeepLearning) ? Path.GetDirectoryName(filepath)! : filepath,
+            path: header.Type.HasFlag(AvType.DeepLearning) ? Path.GetDirectoryName(filepath)! : filepath,
             brand: header.Brand,
             type: header.Type,
             name: name,

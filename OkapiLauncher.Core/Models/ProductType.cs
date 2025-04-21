@@ -155,5 +155,8 @@ public class ProductType : IComparable<ProductType>, IComparable
     public int CompareTo(object? obj) => CompareTo(obj as ProductType);
     public static implicit operator AvType(ProductType type) => type.Type;
 
-
+    public bool HasFlag(AvType type)
+    {
+        return Type.HasFlag(type);
+    }
 }
