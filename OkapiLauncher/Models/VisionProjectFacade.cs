@@ -22,7 +22,7 @@ public partial class VisionProjectFacade : ObservableObject, IVisionProject
     public ProductBrand Brand { get; }
     public DateTime DateModified { get; }
 
-    public bool Exists => File.Exists(Path);
+    public bool Exists => File.Exists(Path) || Directory.Exists(Path);
 
     IAvVersion IProduct.Version => Version;
 
