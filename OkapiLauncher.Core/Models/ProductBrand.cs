@@ -8,6 +8,7 @@ using OkapiLauncher.Core.Models.Projects;
 namespace OkapiLauncher.Core.Models;
 public enum AvBrand
 {
+    Any,
     Aurora,
     Adaptive,
     FabImage,
@@ -17,6 +18,7 @@ public class ProductBrand : IComparable<ProductBrand>
     public static readonly ProductBrand Aurora = new ProductBrand("Aurora Vision", AvBrand.Aurora);
     public static readonly ProductBrand Adaptive = new ProductBrand("Adaptive Vision", AvBrand.Adaptive);
     public static readonly ProductBrand FabImage = new ProductBrand("FabImage", AvBrand.FabImage);
+    public static readonly ProductBrand AnyBrand = new ProductBrand("N/A", AvBrand.Any);
 
     private readonly static Regex _brandFinder;
     private readonly List<ProductBrand> _supportedBrands = [];
@@ -25,6 +27,7 @@ public class ProductBrand : IComparable<ProductBrand>
     {
         return type switch
         {
+            AvBrand.Any => AnyBrand,
             AvBrand.Aurora => Aurora,
             AvBrand.Adaptive => Adaptive,
             AvBrand.FabImage => FabImage,
@@ -40,6 +43,11 @@ public class ProductBrand : IComparable<ProductBrand>
         Adaptive._supportedBrands.Add(Adaptive);
 
         FabImage._supportedBrands.Add(FabImage);
+
+        AnyBrand._supportedBrands.Add(Aurora);
+        AnyBrand._supportedBrands.Add(FabImage);
+        AnyBrand._supportedBrands.Add(Adaptive);
+        AnyBrand._supportedBrands.Add(AnyBrand);
 
         string brandFinderPattern = $"({Aurora.Name}|{FabImage.Name}|{Adaptive.Name})";
         _brandFinder = new Regex(brandFinderPattern,
