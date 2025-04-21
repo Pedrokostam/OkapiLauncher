@@ -128,7 +128,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
             {
                 SelectedApp = null;
             }
-            _lastOpenedFilesService.AddLastFile(filepath);
+            _lastOpenedFilesService.AddLastFile(project.Path);
             _navigationService.NavigateTo(GetType().FullName!);
             _processManagerService.GetCurrentState.UpdateStates(Apps);
             return true;
