@@ -107,7 +107,6 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
 
     public async Task<bool> OpenProject(string filepath)
     {
-
         try
         {
             var project = ProjectReader.OpenProject(filepath);

@@ -24,7 +24,7 @@
     <DataTemplate x:Key="NoCommandLineOptionsTemplate" DataType="{x:Type mod:NoLaunchOptions}">
         <TextBlock Style="{StaticResource NoOptionsDisclaimer}" Text="{x:Static properties:Resources.LaunchOptionsNoOptions}" />
     </DataTemplate>
-    <DataTemplate x:Key="StudioCommandLineOptionsTemplate" DataType="{x:Type mod:StudioLaunchOptions}">
+    <DataTemplate x:Key="StudioCommandLineOptionsTemplate" DataType="{x:Type mod:SingleArgOptions}">
         <TextBlock Style="{StaticResource NoOptionsDisclaimer}" Text="{x:Static properties:Resources.LaunchOptionsStudioOptions}" />
     </DataTemplate>
     <DataTemplate x:Key="ExecutorCommandLineOptionsTemplate" DataType="{x:Type mod:ExecutorLaunchOptions}">

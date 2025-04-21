@@ -39,10 +39,13 @@ public class ProductBrand : IComparable<ProductBrand>
     {
         Aurora._supportedBrands.Add(Aurora);
         Aurora._supportedBrands.Add(Adaptive);
+        Aurora._supportedBrands.Add(AnyBrand);
 
         Adaptive._supportedBrands.Add(Adaptive);
+        Adaptive._supportedBrands.Add(AnyBrand);
 
         FabImage._supportedBrands.Add(FabImage);
+        FabImage._supportedBrands.Add(AnyBrand);
 
         AnyBrand._supportedBrands.Add(Aurora);
         AnyBrand._supportedBrands.Add(FabImage);

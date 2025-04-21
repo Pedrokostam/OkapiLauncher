@@ -9,7 +9,7 @@ namespace OkapiLauncher.Models;
 
 public abstract partial class LaunchOptions : ObservableObject
 {
-    private static readonly StudioLaunchOptions _studioOptions = new();
+    private static readonly SingleArgOptions _singleArgOptions = new();
     private static readonly NoLaunchOptions _noOptions = new();
     private static readonly ExecutorLaunchOptions _executorOptions = new();
 
@@ -25,7 +25,11 @@ public abstract partial class LaunchOptions : ObservableObject
     {
         if(productType == ProductType.Professional)
         {
-            return _studioOptions;  
+            return _singleArgOptions;  
+        }
+        if(productType?.Type.HasFlag(AvType.DeepLearning) ?? false)
+        {
+            return _singleArgOptions;
         }
         if (productType == ProductType.Runtime)
         {
