@@ -18,7 +18,7 @@ public class ProductBrand : IComparable<ProductBrand>
     public static readonly ProductBrand Aurora = new ProductBrand("Aurora Vision", AvBrand.Aurora);
     public static readonly ProductBrand Adaptive = new ProductBrand("Adaptive Vision", AvBrand.Adaptive);
     public static readonly ProductBrand FabImage = new ProductBrand("FabImage", AvBrand.FabImage);
-    public static readonly ProductBrand AnyBrand = new ProductBrand("N/A", AvBrand.Any);
+    public static readonly ProductBrand AnyBrand = new ProductBrand("Indeterminate brand", AvBrand.Any);
 
     private readonly static Regex _brandFinder;
     private readonly List<ProductBrand> _supportedBrands = [];

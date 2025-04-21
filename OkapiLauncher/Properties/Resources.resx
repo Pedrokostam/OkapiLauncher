@@ -580,4 +580,10 @@ All trademarks, service marks, logos, and copyrights related to the applications
   <data name="ErrorNoApplicableFileInFolder" xml:space="preserve">
     <value>No applicable file found in the folder.</value>
   </data>
+  <data name="AppProductTypeDeepLearningLabel" xml:space="preserve">
+    <value>Deep Learning</value>
+  </data>
+  <data name="ProjectProductTypeDeepLearningLabel" xml:space="preserve">
+    <value>Deep Learning model</value>
+  </data>
 </root>
