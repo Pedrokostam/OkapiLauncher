@@ -477,6 +477,15 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No applicable file found in the folder..
+        /// </summary>
+        public static string ErrorNoApplicableFileInFolder {
+            get {
+                return ResourceManager.GetString("ErrorNoApplicableFileInFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not determine type of project..
         /// </summary>
         public static string ErrorUnknownFileType {

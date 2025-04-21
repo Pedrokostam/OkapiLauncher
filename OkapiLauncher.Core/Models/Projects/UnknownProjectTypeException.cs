@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage.Search;
 
 namespace OkapiLauncher.Core.Models.Projects;
 public class UnknownProjectTypeException : Exception

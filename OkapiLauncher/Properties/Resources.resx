@@ -327,9 +327,6 @@
   <data name="ShellKillChildrenButton" xml:space="preserve">
     <value>Kill all child windows</value>
   </data>
-  <data name="AppProductTypeDeepLearningCPULabel" xml:space="preserve">
-    <value>Deep Learning CPU</value>
-  </data>
   <data name="AppProductTypeLibraryLabel" xml:space="preserve">
     <value>Library</value>
   </data>
@@ -571,10 +568,16 @@ All trademarks, service marks, logos, and copyrights related to the applications
   <data name="AvAppOpenLogFolderDisabled" xml:space="preserve">
     <value>The log folder for this app does not exist</value>
   </data>
+  <data name="AppProductTypeDeepLearningCPULabel" xml:space="preserve">
+    <value>Deep Learning CPU</value>
+  </data>
   <data name="JumplistLaunchAppDescription" xml:space="preserve">
     <value>Launch {0}</value>
   </data>
   <data name="AppProductTypeDeepLearningGPULabel" xml:space="preserve">
     <value>Deep Learning GPU</value>
+  </data>
+  <data name="ErrorNoApplicableFileInFolder" xml:space="preserve">
+    <value>No applicable file found in the folder.</value>
   </data>
 </root>

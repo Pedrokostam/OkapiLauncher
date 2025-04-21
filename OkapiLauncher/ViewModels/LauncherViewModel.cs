@@ -20,6 +20,7 @@ using Microsoft.VisualBasic;
 using OkapiLauncher.Core.Models;
 using OkapiLauncher.Properties;
 using OkapiLauncher.Views;
+using System.Text.RegularExpressions;
 
 namespace OkapiLauncher.ViewModels;
 
@@ -68,8 +69,8 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
             return;
         }
 
-        var args = LaunchOptions.Get(appToLaunch,VisionProject.Path)?.GetCommandLineArgs();
-        if(args is null)
+        var args = LaunchOptions.Get(appToLaunch, VisionProject.Path)?.GetCommandLineArgs();
+        if (args is null)
         {
             return;
         }
@@ -104,14 +105,39 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
             Clipboard.SetText(LaunchOptions.ArgumentString);
         }
     }
+    static readonly Regex FileDetector = new(@"(?<NORMAL>\.(avproj|avexe|fiproj|fiexe))|(?<DL>pluginconfig.xml)", RegexOptions.Compiled | RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(500));
+
+    /// <summary>
+    /// Either returns <paramref name="path"/> as is if it is a directory, or attempts to find one of applicable files.
+    /// </summary>
+    /// <param name="path">Path to a project/exe/pluginconfig file.</param>
+    /// <returns></returns>
+    /// <exception cref="Exception">If the path was a folder and no applicable file was found.</exception>
+    private string HandleDirectories(string path)
+    {
+        if (Directory.Exists(path))
+        {
+            var files = Directory.EnumerateFiles(path);
+            foreach (var file in files)
+            {
+                if (FileDetector.IsMatch(Path.GetFileName(file)))
+                {
+                    return file;
+                }
+            }
+            throw new NoApplicableFileException(path);
+        }
+        return path;
+    }
 
     public async Task<bool> OpenProject(string filepath)
     {
+
         try
         {
+            filepath = HandleDirectories(filepath);
             var project = ProjectReader.OpenProject(filepath);
             VisionProject = new VisionProjectFacade(project);
-
             var matchingApps = _appFactory.AvApps
                 .Where(x => x.CanOpen(VisionProject))
                 .OrderByDescending(x => x.Version);
@@ -151,6 +177,11 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
         catch (UnknownProjectTypeException)
         {
             await _contentDialogService.ShowError(Resources.ErrorUnknownFileType);
+            return false;
+        }
+        catch (NoApplicableFileException)
+        {
+            await _contentDialogService.ShowError(Resources.ErrorNoApplicableFileInFolder);
             return false;
         }
 
