@@ -126,6 +126,15 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Deep Learning.
+        /// </summary>
+        public static string AppProductTypeDeepLearningLabel {
+            get {
+                return ResourceManager.GetString("AppProductTypeDeepLearningLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Library.
         /// </summary>
         public static string AppProductTypeLibraryLabel {
@@ -473,6 +482,15 @@ namespace OkapiLauncher.Properties {
         public static string ErrorInvalidXml {
             get {
                 return ResourceManager.GetString("ErrorInvalidXml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No applicable file found in the folder..
+        /// </summary>
+        public static string ErrorNoApplicableFileInFolder {
+            get {
+                return ResourceManager.GetString("ErrorNoApplicableFileInFolder", resourceCulture);
             }
         }
         
@@ -851,6 +869,15 @@ namespace OkapiLauncher.Properties {
         public static string ProgramDetailsSavedWithVersionMissing {
             get {
                 return ResourceManager.GetString("ProgramDetailsSavedWithVersionMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deep Learning model.
+        /// </summary>
+        public static string ProjectProductTypeDeepLearningLabel {
+            get {
+                return ResourceManager.GetString("ProjectProductTypeDeepLearningLabel", resourceCulture);
             }
         }
         

@@ -7,13 +7,18 @@ using OkapiLauncher.Core.Exceptions;
 using Windows.ApplicationModel;
 
 namespace OkapiLauncher.Core.Models;
+[Flags]
 public enum AvType
 {
-    Professional,
-    Runtime,
-    DeepLearningGPU,
-    DeepLearningCPU,
-    Library
+    None = 0,
+    Professional = 1,
+    Runtime = 2,
+    Library = 4,
+    DeepLearning = 8,
+    CPU = 16,
+    GPU = 32,
+    DeepLearningGPU = DeepLearning + GPU,
+    DeepLearningCPU = DeepLearning + CPU,
 }
 public class ProductType : IComparable<ProductType>, IComparable
 {
@@ -21,6 +26,7 @@ public class ProductType : IComparable<ProductType>, IComparable
     public static readonly ProductType Runtime = new("Runtime", AvType.Runtime);
     public static readonly ProductType DeepLearningGPU = new("DeepLearning GPU", AvType.DeepLearningGPU);
     public static readonly ProductType DeepLearningCPU = new("DeepLearning CPU", AvType.DeepLearningCPU);
+    public static readonly ProductType AnyDeepLearning = new("DeepLearning", AvType.DeepLearning);
     public static readonly ProductType Library = new("Library", AvType.Library);
     public string Name { get; }
     private readonly List<ProductType> _supportedAvTypes = [];
@@ -33,9 +39,10 @@ public class ProductType : IComparable<ProductType>, IComparable
         {
             AvType.Professional => Professional,
             AvType.Runtime => Runtime,
+            AvType.Library => Library,
             AvType.DeepLearningGPU => DeepLearningGPU,
             AvType.DeepLearningCPU => DeepLearningCPU,
-            AvType.Library => Library,
+            AvType.DeepLearning => AnyDeepLearning,
             _ => throw new NotSupportedException()
         };
     }
@@ -76,8 +83,17 @@ public class ProductType : IComparable<ProductType>, IComparable
         Runtime._supportedAvTypes.Add(Runtime);
         Runtime._supportedAvTypes.Add(Professional);
 
+        DeepLearningGPU._supportedAvTypes.Add(AnyDeepLearning);
         DeepLearningGPU._supportedAvTypes.Add(DeepLearningGPU);
+        DeepLearningGPU._supportedAvTypes.Add(DeepLearningCPU);
+
+        DeepLearningCPU._supportedAvTypes.Add(AnyDeepLearning);
+        DeepLearningCPU._supportedAvTypes.Add(DeepLearningGPU);
         DeepLearningCPU._supportedAvTypes.Add(DeepLearningCPU);
+
+        AnyDeepLearning._supportedAvTypes.Add(AnyDeepLearning);
+        AnyDeepLearning._supportedAvTypes.Add(DeepLearningGPU);
+        AnyDeepLearning._supportedAvTypes.Add(DeepLearningCPU);
 
         Library._supportedAvTypes.Add(Library);
     }
@@ -139,5 +155,8 @@ public class ProductType : IComparable<ProductType>, IComparable
     public int CompareTo(object? obj) => CompareTo(obj as ProductType);
     public static implicit operator AvType(ProductType type) => type.Type;
 
-
+    public bool HasFlag(AvType type)
+    {
+        return Type.HasFlag(type);
+    }
 }
