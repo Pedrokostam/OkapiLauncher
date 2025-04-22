@@ -42,6 +42,8 @@
     <x:Static x:Key="IconGithub" Member="icons:MaterialIconKind.Github" />
     <x:Static x:Key="IconTurnOff" Member="icons:MaterialIconKind.CloseThick" />
     <x:Static x:Key="IconSettings" Member="icons:MaterialIconKind.Tools" />
+    <x:Static x:Key="IconRecentFiles" Member="icons:MaterialIconKind.History" />
+    <x:Static x:Key="IconRecentNativeFiles" Member="icons:MaterialIconKind.ClipboardTextClockOutline" />
     <x:Static x:Key="IconKill" Member="icons:MaterialIconKind.Power" />
     <x:Static x:Key="IconFocusOn" Member="icons:MaterialIconKind.TargetVariant" />
     <x:Static x:Key="IconKillAll" Member="icons:MaterialIconKind.Bomb" />

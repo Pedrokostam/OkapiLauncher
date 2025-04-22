@@ -963,6 +963,24 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear missing recent files.
+        /// </summary>
+        public static string SettingsPageClearMissingRecentsButton {
+            get {
+                return ResourceManager.GetString("SettingsPageClearMissingRecentsButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removes files that are no longer available from both recent files lists..
+        /// </summary>
+        public static string SettingsPageClearMissingRecentsTooltip {
+            get {
+                return ResourceManager.GetString("SettingsPageClearMissingRecentsTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use the default accent colors for Light and Dark themes.
         /// </summary>
         public static string SettingsPageCustomColorResetTooltip {
@@ -1206,11 +1224,29 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Items that were recently opened by each available app (including those not coming from Okapi)..
+        /// </summary>
+        public static string ShellMenuNativeRecentFilesTooltip {
+            get {
+                return ResourceManager.GetString("ShellMenuNativeRecentFilesTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Recently opened files.
         /// </summary>
         public static string ShellMenuRecentFiles {
             get {
                 return ResourceManager.GetString("ShellMenuRecentFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Items that were recently open in Okapi Launcher..
+        /// </summary>
+        public static string ShellMenuRecentFilesTooltip {
+            get {
+                return ResourceManager.GetString("ShellMenuRecentFilesTooltip", resourceCulture);
             }
         }
         

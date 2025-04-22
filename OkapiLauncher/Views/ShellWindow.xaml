@@ -173,11 +173,16 @@
                                             <mdicons:MaterialIcon Kind="FolderOpen" />
                                         </MenuItem.Icon>
                                     </MenuItem>
+                                    <Separator />
                                     <MenuItem
                                         AlternationCount="2"
                                         AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
                                         Header="{x:Static properties:Resources.ShellMenuRecentFiles}"
+                                        ToolTip="{x:Static properties:Resources.ShellMenuRecentFilesTooltip}"
                                         ItemsSource="{Binding RecentlyOpenedFiles}">
+                                        <MenuItem.Icon>
+                                            <mdicons:MaterialIcon Kind="{StaticResource IconRecentFiles}" />
+                                        </MenuItem.Icon>
                                         <MenuItem.ItemContainerStyle>
                                             <Style BasedOn="{StaticResource MahApps.Styles.MenuItem}" TargetType="MenuItem">
                                                 <Setter Property="Header" Value="{Binding FilePath, Converter={StaticResource PathToFilenameConverter}, ConverterParameter=50}" />
@@ -204,7 +209,11 @@
                                         AlternationCount="2"
                                         AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
                                         Header="{x:Static properties:Resources.ShellMenuNativeRecentFiles}"
+                                        ToolTip="{x:Static properties:Resources.ShellMenuNativeRecentFilesTooltip}"
                                         ItemsSource="{Binding NativeRecentFiles}">
+                                        <MenuItem.Icon>
+                                            <mdicons:MaterialIcon Kind="{StaticResource IconRecentNativeFiles}" />
+                                        </MenuItem.Icon>
                                         <MenuItem.ItemContainerStyle>
                                             <Style BasedOn="{StaticResource MahApps.Styles.MenuItem}" TargetType="MenuItem">
                                                 <Setter Property="Header" Value="{Binding App.NameWithVersion}" />

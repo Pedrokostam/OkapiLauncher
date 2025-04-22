@@ -589,4 +589,16 @@ All trademarks, service marks, logos, and copyrights related to the applications
   <data name="ShellMenuNativeRecentFiles" xml:space="preserve">
     <value>Recent files per _App</value>
   </data>
+  <data name="SettingsPageClearMissingRecentsTooltip" xml:space="preserve">
+    <value>Removes files that are no longer available from both recent files lists.</value>
+  </data>
+  <data name="SettingsPageClearMissingRecentsButton" xml:space="preserve">
+    <value>Clear missing recent files</value>
+  </data>
+  <data name="ShellMenuRecentFilesTooltip" xml:space="preserve">
+    <value>Items that were recently open in Okapi Launcher.</value>
+  </data>
+  <data name="ShellMenuNativeRecentFilesTooltip" xml:space="preserve">
+    <value>Items that were recently opened by each available app (including those not coming from Okapi).</value>
+  </data>
 </root>
