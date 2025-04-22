@@ -99,6 +99,7 @@ public partial class App : Application
         services.AddSingleton<FileOpenerBroker>();
         services.AddSingleton<ICustomAppSourceService,CustomAppSourceService>();
         services.AddSingleton<IJumpListService,JumpListService>();
+        services.AddSingleton<IAppNativeRecentFilesService, AppNativeRecentFilesService>();
 
         services.AddSingleton<IProcessManagerService, ProcessManagerService>();
         // Views and ViewModels

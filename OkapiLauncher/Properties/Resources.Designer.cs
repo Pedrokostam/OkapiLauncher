@@ -1188,7 +1188,7 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to About.
+        ///   Looks up a localized string similar to _About.
         /// </summary>
         public static string ShellMenuItemViewsAboutPageHeader {
             get {
@@ -1197,7 +1197,16 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Recently opened files.
+        ///   Looks up a localized string similar to Recent files per _App.
+        /// </summary>
+        public static string ShellMenuNativeRecentFiles {
+            get {
+                return ResourceManager.GetString("ShellMenuNativeRecentFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Recently opened files.
         /// </summary>
         public static string ShellMenuRecentFiles {
             get {

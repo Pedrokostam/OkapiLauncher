@@ -162,7 +162,8 @@
                                 <MenuItem
                                     x:Name="FileMenu"
                                     AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
-                                    Header="{x:Static properties:Resources.ShellMenuFileHeader}">
+                                    Header="{x:Static properties:Resources.ShellMenuFileHeader}"
+                                    IsSubmenuOpen="{Binding IsFileMenuOpen}">
                                     <MenuItem
                                         AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
                                         Command="{Binding MenuFileOpenProjectCommand}"
@@ -198,6 +199,57 @@
                                                 </Style.Triggers>
                                             </Style>
                                         </MenuItem.ItemContainerStyle>
+                                    </MenuItem>
+                                    <MenuItem
+                                        AlternationCount="2"
+                                        AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
+                                        Header="{x:Static properties:Resources.ShellMenuNativeRecentFiles}"
+                                        ItemsSource="{Binding NativeRecentFiles}">
+                                        <MenuItem.ItemContainerStyle>
+                                            <Style BasedOn="{StaticResource MahApps.Styles.MenuItem}" TargetType="MenuItem">
+                                                <Setter Property="Header" Value="{Binding App.NameWithVersion}" />
+                                                <Setter Property="ItemsSource" Value="{Binding Filepaths}" />
+                                                <Setter Property="ItemContainerStyle">
+                                                    <Setter.Value>
+                                                        <Style BasedOn="{StaticResource MahApps.Styles.MenuItem}" TargetType="MenuItem">
+                                                            <Setter Property="Header" Value="{Binding ., Converter={StaticResource PathToFilenameConverter}, ConverterParameter=50}" />
+                                                            <Setter Property="Command" Value="{Binding DataContext.MenuOpenRecentNativeFileCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                                                            <Setter Property="CommandParameter" Value="{Binding}" />
+                                                            <Setter Property="ToolTip">
+                                                                <Setter.Value>
+                                                                    <StackPanel>
+                                                                        <TextBlock Text="{Binding}" />
+                                                                    </StackPanel>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </MenuItem.ItemContainerStyle>
+                                        <!--<MenuItem.ItemTemplate>
+                                            <HierarchicalDataTemplate ItemsSource="{Binding Filepaths}">
+                                                <TextBlock Text="{Binding App.Name}" />
+                                                <HierarchicalDataTemplate.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <MenuItem>
+                                                            <MenuItem.Style>
+                                                                <Style BasedOn="{StaticResource MahApps.Styles.MenuItem}" TargetType="MenuItem">
+                                                                    <Setter Property="Header" Value="{Binding ., Converter={StaticResource PathToFilenameConverter}, ConverterParameter=50}" />
+                                                                    <Setter Property="ToolTip">
+                                                                        <Setter.Value>
+                                                                            <StackPanel>
+                                                                                <TextBlock Text="{Binding}" />
+                                                                            </StackPanel>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                </Style>
+                                                            </MenuItem.Style>
+                                                        </MenuItem>
+                                                    </DataTemplate>
+                                                </HierarchicalDataTemplate.ItemTemplate>
+                                            </HierarchicalDataTemplate>
+                                        </MenuItem.ItemTemplate>-->
                                     </MenuItem>
                                     <Separator />
                                     <MenuItem
