@@ -15,9 +15,11 @@ public record AvApp : IAvApp
     public string Path { get; }
     public string RootPath { get; }
     public string? LogFolderPath { get; }
+    public string AppDataPath { get; }
     public AvVersion Version { get; }
     public AvVersion? SecondaryVersion { get; }
     public string Name { get; }
+    public string NameWithVersion => $"{Name} {Version}";
     public string? Description { get; }
     public bool IsCustom => Description is not null;
     public string ProcessName { get; }
@@ -54,6 +56,7 @@ public record AvApp : IAvApp
         Description = description;
         RootPath = rootInstallationPath;
         LogFolderPath = GetLogFolderPath(this);
+        AppDataPath = GetAppDataPath(this);
     }
     private static string GetName(FileVersionInfo finfo, ProductType type)
     {
@@ -171,12 +174,17 @@ public record AvApp : IAvApp
 
     private static string? GetLogFolderPath(IAvApp app)
     {
-        var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         return app.Type.Type switch
         {
-            AvType.Professional or AvType.Runtime => System.IO.Path.Join(localAppData, app.Brand.Name, System.IO.Path.GetFileName(app.RootPath), "Logs"),
-            AvType.DeepLearningGPU => System.IO.Path.Join(localAppData, app.Brand.Name, System.IO.Path.GetFileName(app.RootPath)),
+            AvType.Professional or AvType.Runtime => System.IO.Path.Join(GetAppDataPath(app), "Logs"),
+            AvType.DeepLearningGPU => GetAppDataPath(app),
             _ => null,
         };
+    }
+
+    private static string GetAppDataPath(IAvApp app)
+    {
+        var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        return System.IO.Path.Join(localAppData, app.Brand.Name, System.IO.Path.GetFileName(app.RootPath));
     }
 }
