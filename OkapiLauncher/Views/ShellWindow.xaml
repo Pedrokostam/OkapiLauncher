@@ -157,6 +157,14 @@
                                     IconKind="{StaticResource IconInstalledApps}"
                                     Text="{x:Static properties:Resources.ShellViewButtonInstalledAppsHeader}"
                                     ToolTip="{x:Static properties:Resources.ShellViewButtonInstalledAppsTooltip}" />
+                                <usercontrols:ViewSwitchButton
+                                    Width="250"
+                                    Margin="10,0,10,0"
+                                    Command="{Binding MenuFileSettingsCommand}"
+                                    CurrentObject="{Binding CurrentViewModel}"
+                                    ExpectedObject="{x:Type vms:SettingsViewModel}"
+                                    IconKind="{StaticResource IconSettings}"
+                                    Text="{x:Static properties:Resources.ShellMenuItemFileSettingsPageHeader}" />
                             </StackPanel>
                             <Menu Focusable="False">
                                 <MenuItem
@@ -178,8 +186,8 @@
                                         AlternationCount="2"
                                         AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
                                         Header="{x:Static properties:Resources.ShellMenuRecentFiles}"
-                                        ToolTip="{x:Static properties:Resources.ShellMenuRecentFilesTooltip}"
-                                        ItemsSource="{Binding RecentlyOpenedFiles}">
+                                        ItemsSource="{Binding RecentlyOpenedFiles}"
+                                        ToolTip="{x:Static properties:Resources.ShellMenuRecentFilesTooltip}">
                                         <MenuItem.Icon>
                                             <mdicons:MaterialIcon Kind="{StaticResource IconRecentFiles}" />
                                         </MenuItem.Icon>
@@ -209,8 +217,8 @@
                                         AlternationCount="2"
                                         AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
                                         Header="{x:Static properties:Resources.ShellMenuNativeRecentFiles}"
-                                        ToolTip="{x:Static properties:Resources.ShellMenuNativeRecentFilesTooltip}"
-                                        ItemsSource="{Binding NativeRecentFiles}">
+                                        ItemsSource="{Binding NativeRecentFiles}"
+                                        ToolTip="{x:Static properties:Resources.ShellMenuNativeRecentFilesTooltip}">
                                         <MenuItem.Icon>
                                             <mdicons:MaterialIcon Kind="{StaticResource IconRecentNativeFiles}" />
                                         </MenuItem.Icon>
