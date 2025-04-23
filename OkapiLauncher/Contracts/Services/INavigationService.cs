@@ -1,10 +1,11 @@
-﻿using System.Windows.Controls;
+﻿using System.Security.Policy;
+using System.Windows.Controls;
+using System.Windows.Navigation;
 
 namespace OkapiLauncher.Contracts.Services;
-
 public interface INavigationService
 {
-    event EventHandler<string> Navigated;
+    event EventHandler<Contracts.EventArgs.NavigatedToEventArgs> Navigated;
 
     bool CanGoBack { get; }
     object? CurrentDataContext { get; }

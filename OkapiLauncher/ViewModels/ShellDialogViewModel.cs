@@ -7,7 +7,7 @@ namespace OkapiLauncher.ViewModels;
 
 public partial class ShellDialogViewModel : ObservableObject
 {
-    public Action<bool?> SetResult { get; set; }
+    public Action<bool?>? SetResult { get; set; }
 
     public ShellDialogViewModel()
     {
@@ -16,6 +16,10 @@ public partial class ShellDialogViewModel : ObservableObject
     private void OnClose()
     {
         bool result = true;
+        if (SetResult is null)
+        {
+            return;
+        }
         SetResult(result);
     }
 }

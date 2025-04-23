@@ -7,12 +7,14 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Windows.Media;
 using OkapiLauncher.Helpers;
+using System.Windows.Shell;
+using System.Windows;
 
 namespace OkapiLauncher.Core.Services;
 
 public class FileService : IFileService
 {
-    
+
     public T? Read<T>(string folderPath, string fileName)
     {
         var t = JsonSerializerOptions.Default.IsReadOnly;

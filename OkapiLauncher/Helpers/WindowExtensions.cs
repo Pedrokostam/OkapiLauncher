@@ -1,10 +1,12 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
+using OkapiLauncher.Helpers;
 
-namespace System.Windows;
+namespace OkapiLauncher.Helpers;
 
 public static class WindowExtensions
 {
-    public static object GetDataContext(this Window window)
+    public static object? GetDataContext(this Window window)
     {
         if (window.Content is Frame frame)
         {

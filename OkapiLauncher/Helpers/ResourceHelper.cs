@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using OkapiLauncher.Properties;
 
 namespace OkapiLauncher.Helpers;
 public static class ResourceHelper
@@ -60,5 +62,10 @@ public static class ResourceHelper
         icon = new Icon(stream);
         stream.Dispose();
         return true;
+    }
+
+    public static string? GetTextResource(string pathToResource)
+    {
+        return Resources.ResourceManager.GetString(pathToResource,CultureInfo.InvariantCulture);
     }
 }

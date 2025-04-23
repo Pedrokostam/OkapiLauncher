@@ -125,7 +125,7 @@ public static partial class AppReader
     }
     private static AvVersion? GetSecondaryVersion(string rootFolder, ProductType type, ProductBrand brand)
     {
-        if (type.Type != AvType.DeepLearning)
+        if (type.Type != AvType.DeepLearningGPU)
         {
             return null;
         }

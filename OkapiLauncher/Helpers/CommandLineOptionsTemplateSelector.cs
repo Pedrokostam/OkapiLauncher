@@ -21,7 +21,7 @@ public class CommandLineOptionsTemplateSelector : DataTemplateSelector
         return options switch
         {
             NoLaunchOptions => element.FindResource("NoCommandLineOptionsTemplate") as DataTemplate,
-            StudioLaunchOptions =>element.FindResource("StudioCommandLineOptionsTemplate") as DataTemplate,
+            SingleArgOptions =>element.FindResource("StudioCommandLineOptionsTemplate") as DataTemplate,
             ExecutorLaunchOptions => element.FindResource("ExecutorCommandLineOptionsTemplate") as DataTemplate,
             _ => null
         };

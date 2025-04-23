@@ -21,7 +21,7 @@ public class PathToFilenameConverter : IValueConverter
         {
             maxLength = integer;
         }
-        else if (parameter is string s && int.TryParse(s, out integer))
+        else if (parameter is string s && int.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out integer))
         {
             maxLength = integer;
         }
@@ -31,20 +31,20 @@ public class PathToFilenameConverter : IValueConverter
         }
         var name = Path.GetFileNameWithoutExtension(path);
         var extension = Path.GetExtension(path);
-        if(extension.Length > maxLength)
+        if (extension.Length > maxLength)
         {
-            throw new ArgumentException("Too short permitted length.",nameof(parameter));
+            throw new ArgumentException("Too short permitted length.", nameof(parameter));
         }
-        if(name.Length + extension.Length > maxLength)
+        if (name.Length + extension.Length > maxLength)
         {
             var nameLength = maxLength - extension.Length - 3;
-            name = name[..nameLength]+ "[…]";
+            name = name[..nameLength] + "[…]";
         }
-        return name+extension;
+        return name + extension;
     }
 
     public object? ConvertBack(object? value, Type targetType, object parameter, CultureInfo culture)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 }

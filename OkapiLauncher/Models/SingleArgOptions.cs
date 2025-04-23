@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace OkapiLauncher.Models;
 
-public partial class StudioLaunchOptions : LaunchOptions
+public partial class SingleArgOptions : LaunchOptions
 {
 
     public override bool HasAnyOptions => false;

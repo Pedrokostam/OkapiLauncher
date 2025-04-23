@@ -108,6 +108,24 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Deep Learning CPU.
+        /// </summary>
+        public static string AppProductTypeDeepLearningCPULabel {
+            get {
+                return ResourceManager.GetString("AppProductTypeDeepLearningCPULabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deep Learning GPU.
+        /// </summary>
+        public static string AppProductTypeDeepLearningGPULabel {
+            get {
+                return ResourceManager.GetString("AppProductTypeDeepLearningGPULabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deep Learning.
         /// </summary>
         public static string AppProductTypeDeepLearningLabel {
@@ -468,6 +486,15 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No applicable file found in the folder..
+        /// </summary>
+        public static string ErrorNoApplicableFileInFolder {
+            get {
+                return ResourceManager.GetString("ErrorNoApplicableFileInFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not determine type of project..
         /// </summary>
         public static string ErrorUnknownFileType {
@@ -500,6 +527,15 @@ namespace OkapiLauncher.Properties {
         public static string InstalledAppsPageTitle {
             get {
                 return ResourceManager.GetString("InstalledAppsPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Launch {0}.
+        /// </summary>
+        public static string JumplistLaunchAppDescription {
+            get {
+                return ResourceManager.GetString("JumplistLaunchAppDescription", resourceCulture);
             }
         }
         
@@ -837,6 +873,15 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Deep Learning model.
+        /// </summary>
+        public static string ProjectProductTypeDeepLearningLabel {
+            get {
+                return ResourceManager.GetString("ProjectProductTypeDeepLearningLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Studio professional project.
         /// </summary>
         public static string ProjectProductTypeProfessionalLabel {
@@ -914,6 +959,24 @@ namespace OkapiLauncher.Properties {
         public static string SettingsPageChooseThemeText {
             get {
                 return ResourceManager.GetString("SettingsPageChooseThemeText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear missing recent files.
+        /// </summary>
+        public static string SettingsPageClearMissingRecentsButton {
+            get {
+                return ResourceManager.GetString("SettingsPageClearMissingRecentsButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removes files that are no longer available from both recent files lists..
+        /// </summary>
+        public static string SettingsPageClearMissingRecentsTooltip {
+            get {
+                return ResourceManager.GetString("SettingsPageClearMissingRecentsTooltip", resourceCulture);
             }
         }
         
@@ -1143,7 +1206,7 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to About.
+        ///   Looks up a localized string similar to _About.
         /// </summary>
         public static string ShellMenuItemViewsAboutPageHeader {
             get {
@@ -1152,11 +1215,38 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Recently opened files.
+        ///   Looks up a localized string similar to Recent files per _App.
+        /// </summary>
+        public static string ShellMenuNativeRecentFiles {
+            get {
+                return ResourceManager.GetString("ShellMenuNativeRecentFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Items that were recently opened by each available app (including those not coming from Okapi)..
+        /// </summary>
+        public static string ShellMenuNativeRecentFilesTooltip {
+            get {
+                return ResourceManager.GetString("ShellMenuNativeRecentFilesTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Recently opened files.
         /// </summary>
         public static string ShellMenuRecentFiles {
             get {
                 return ResourceManager.GetString("ShellMenuRecentFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Items that were recently open in Okapi Launcher..
+        /// </summary>
+        public static string ShellMenuRecentFilesTooltip {
+            get {
+                return ResourceManager.GetString("ShellMenuRecentFilesTooltip", resourceCulture);
             }
         }
         

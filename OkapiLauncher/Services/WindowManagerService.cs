@@ -15,6 +15,8 @@ using ControlzEx.Theming;
 using MahApps.Metro.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using Windows.ApplicationModel.VoiceCommands;
+using OkapiLauncher.Helpers;
+using OkapiLauncher.Contracts.EventArgs;
 
 namespace OkapiLauncher.Services;
 
@@ -26,12 +28,13 @@ public class WindowManagerService : IWindowManagerService
     public Window MainWindow
         => Application.Current.MainWindow;
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0290:Use primary constructor", Justification = "The fields should be readonly")]
     public WindowManagerService(IServiceProvider serviceProvider, IPageService pageService)
     {
         _serviceProvider = serviceProvider;
         _pageService = pageService;
     }
-    private string GetWindowTitle(string key, object? parameter)
+    private static string GetWindowTitle(string key, object? parameter)
     {
         if(string.Equals(key,typeof(ProcessOverviewViewModel).FullName, StringComparison.Ordinal))
         {

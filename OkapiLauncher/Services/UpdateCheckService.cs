@@ -38,26 +38,26 @@ public class UpdateCheckService : IUpdateCheckService
         get => (bool)App.Current.Properties[AutoCheckKey]!;
         set => App.Current.Properties[AutoCheckKey] = value;
     }
-    public DateTime LastCheckDate
+    private static DateTime LastCheckDate
     {
         get => (DateTime)App.Current.Properties[LastCheckDateKey]!;
         set => App.Current.Properties[LastCheckDateKey] = value;
     }
-    public string? IgnoredVersion
+    private static string? IgnoredVersion
     {
         get => App.Current.Properties[IgnoredReleaseKey] as string;
         set => App.Current.Properties[IgnoredReleaseKey] = value;
     }
     public async Task AutoPromptUpdate()
     {
-        if (DebugOverride() ||  AutoCheckForUpdatesEnabled && LastCheckDate.Date != DateTime.UtcNow.Date)
+        if (DebugOverride() || AutoCheckForUpdatesEnabled && LastCheckDate.Date != DateTime.UtcNow.Date)
         {
             await CheckForUpdates_impl(isAuto: true);
         }
     }
     public async Task ManualPrompUpdate() => await CheckForUpdates_impl(isAuto: false);
 
-    private bool DebugOverride()
+    private static bool DebugOverride()
     {
 #if DEBUG
         var modifiers = Keyboard.Modifiers;
@@ -133,12 +133,12 @@ public class UpdateCheckService : IUpdateCheckService
         else
         {
             // otherwise wait for restore
-            _persistAndRestoreService.DataRestored += _persistAndRestoreService_DataRestored;
+            _persistAndRestoreService.DataRestored += PersistAndRestoreService_DataRestored;
         }
 
         _applicationInfoService = applicationInfoService;
     }
-    private void _persistAndRestoreService_DataRestored(object? sender, EventArgs e)
+    private void PersistAndRestoreService_DataRestored(object? sender, EventArgs e)
     {
         InitializeData();
     }

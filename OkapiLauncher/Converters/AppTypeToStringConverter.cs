@@ -19,7 +19,7 @@ public class AppTypeToStringConverter : IValueConverter
         {
             return value;
         }
-        string key = $"AppProductType{productType.Name}Label";
+        string key = $"AppProductType{productType.Name}Label".Replace(" ","");
         return Resources.ResourceManager.GetString(key, culture: null) ?? "UNKNOWN TYPE";
     }
 
