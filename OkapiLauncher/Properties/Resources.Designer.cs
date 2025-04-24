@@ -1116,7 +1116,7 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set this app as default for all related extensions.
+        ///   Looks up a localized string similar to Associate all.
         /// </summary>
         public static string SettingsPageSetFileAssociationsButton {
             get {
@@ -1292,6 +1292,15 @@ namespace OkapiLauncher.Properties {
         public static string ShellViewButtonLauncherTooltipEnabled {
             get {
                 return ResourceManager.GetString("ShellViewButtonLauncherTooltipEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string ShellViewButtonSettingHeader {
+            get {
+                return ResourceManager.GetString("ShellViewButtonSettingHeader", resourceCulture);
             }
         }
         

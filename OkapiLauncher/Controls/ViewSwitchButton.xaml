@@ -30,7 +30,7 @@
         <Grid
             Height="{Binding ElementName=PART_Header, Path=ActualHeight}"
             HorizontalAlignment="Center"
-            VerticalAlignment="Center">
+            VerticalAlignment="Bottom">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="1*" />

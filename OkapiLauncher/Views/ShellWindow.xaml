@@ -160,11 +160,11 @@
                                 <usercontrols:ViewSwitchButton
                                     Width="250"
                                     Margin="10,0,10,0"
-                                    Command="{Binding MenuFileSettingsCommand}"
+                                    Command="{Binding MenuViewsSettingsCommand}"
                                     CurrentObject="{Binding CurrentViewModel}"
                                     ExpectedObject="{x:Type vms:SettingsViewModel}"
                                     IconKind="{StaticResource IconSettings}"
-                                    Text="{x:Static properties:Resources.ShellMenuItemFileSettingsPageHeader}" />
+                                    Text="{x:Static properties:Resources.ShellViewButtonSettingHeader}" />
                             </StackPanel>
                             <Menu Focusable="False">
                                 <MenuItem
@@ -244,34 +244,11 @@
                                                 </Setter>
                                             </Style>
                                         </MenuItem.ItemContainerStyle>
-                                        <!--<MenuItem.ItemTemplate>
-                                            <HierarchicalDataTemplate ItemsSource="{Binding Filepaths}">
-                                                <TextBlock Text="{Binding App.Name}" />
-                                                <HierarchicalDataTemplate.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <MenuItem>
-                                                            <MenuItem.Style>
-                                                                <Style BasedOn="{StaticResource MahApps.Styles.MenuItem}" TargetType="MenuItem">
-                                                                    <Setter Property="Header" Value="{Binding ., Converter={StaticResource PathToFilenameConverter}, ConverterParameter=50}" />
-                                                                    <Setter Property="ToolTip">
-                                                                        <Setter.Value>
-                                                                            <StackPanel>
-                                                                                <TextBlock Text="{Binding}" />
-                                                                            </StackPanel>
-                                                                        </Setter.Value>
-                                                                    </Setter>
-                                                                </Style>
-                                                            </MenuItem.Style>
-                                                        </MenuItem>
-                                                    </DataTemplate>
-                                                </HierarchicalDataTemplate.ItemTemplate>
-                                            </HierarchicalDataTemplate>
-                                        </MenuItem.ItemTemplate>-->
                                     </MenuItem>
                                     <Separator />
                                     <MenuItem
                                         AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
-                                        Command="{Binding MenuFileSettingsCommand}"
+                                        Command="{Binding MenuViewsSettingsCommand}"
                                         Header="{x:Static properties:Resources.ShellMenuItemFileSettingsPageHeader}">
                                         <MenuItem.Icon>
                                             <mdicons:MaterialIcon Kind="{StaticResource IconSettings}" />
