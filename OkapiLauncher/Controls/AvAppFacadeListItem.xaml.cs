@@ -105,5 +105,10 @@ namespace OkapiLauncher.Controls
         {
             Launch();
         }
+
+        private void UC_Root_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
