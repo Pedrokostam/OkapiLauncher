@@ -18,6 +18,8 @@ using CommunityToolkit.Mvvm.Input;
 using ControlzEx.Theming;
 using MahApps.Metro.Controls;
 using Microsoft.Extensions.Options;
+using CommunityToolkit.Mvvm.Messaging;
+using OkapiLauncher.Core.Models.Apps;
 
 namespace OkapiLauncher.ViewModels;
 
@@ -32,6 +34,7 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     private readonly ICustomAppSourceService _customAppSourceService;
     private readonly IContentDialogService _contentDialogService;
     private readonly IAvAppFacadeFactory _avAppFacadeFactory;
+    private readonly IMessenger _messenger;
 
     public SettingsViewModel(IOptions<AppConfig> appConfig,
                              IThemeSelectorService themeSelectorService,
@@ -41,7 +44,8 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
                              IUpdateCheckService updateCheckService,
                              ICustomAppSourceService customAppSourceService,
                              IContentDialogService contentDialogService,
-                             IAvAppFacadeFactory avAppFacadeFactory
+                             IAvAppFacadeFactory avAppFacadeFactory,
+                             IMessenger messenger
                              )
     {
         _appConfig = appConfig.Value;
@@ -54,8 +58,25 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
         _customAppSourceService = customAppSourceService;
         _contentDialogService = contentDialogService;
         _avAppFacadeFactory = avAppFacadeFactory;
+        _messenger = messenger;
         _autoCheckForUpdates = _updateCheckService.AutoCheckForUpdatesEnabled;
+        var app = AvApp.Dummy("AdoptedVisionStudio.exe",
+                              new(2, 0, 0, 8),
+                              new(2, 0, 2, 3),
+                              "Adopted Vision Studio",
+                              AvType.Professional,
+                              AvBrand.Adaptive,
+                              "Custom app",
+                              "",
+                              "",
+                              "");
+        _avAppFacadeDummy =new(app,
+                               null,
+                               _messenger);
     }
+
+    [ObservableProperty]
+    private AvAppFacade _avAppFacadeDummy;
 
     [ObservableProperty]
     private string _link;

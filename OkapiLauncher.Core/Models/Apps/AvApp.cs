@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Timers;
@@ -22,6 +23,8 @@ public record AvApp : IAvApp
     public string NameWithVersion => $"{Name} {Version}";
     public string? Description { get; }
     public bool IsCustom => Description is not null;
+    
+    public bool IsDummy { get; }= false;
     public string ProcessName { get; }
     public bool IsExecutable => Type.IsExecutable;
     public bool IsDevelopmentVersion => Version.Build >= 1000;
@@ -57,6 +60,21 @@ public record AvApp : IAvApp
         RootPath = rootInstallationPath;
         LogFolderPath = GetLogFolderPath(this);
         AppDataPath = GetAppDataPath(this);
+    }
+    private AvApp(string filename, AvVersion mainVersion, AvVersion? secondaryVersion, string name, AvType type, AvBrand brand, string description, string rootInstallationPath, string logFolderPath, string appDataPath)
+    {
+        Path = filename;
+        Version = mainVersion;
+        SecondaryVersion = secondaryVersion;
+        Name = name;
+        ProcessName = "Okapi_Dummy_App";
+        Type = ProductType.FromAvType(type);
+        Brand = ProductBrand.FromAvBrand(brand);
+        Description = description;
+        RootPath = rootInstallationPath;
+        LogFolderPath = logFolderPath;
+        AppDataPath = appDataPath;
+        IsDummy = true;
     }
     private static string GetName(FileVersionInfo finfo, ProductType type)
     {
@@ -186,5 +204,9 @@ public record AvApp : IAvApp
     {
         var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         return System.IO.Path.Join(localAppData, app.Brand.Name, System.IO.Path.GetFileName(app.RootPath));
+    }
+    public static AvApp Dummy(string filename, AvVersion mainVersion, AvVersion? secondaryVersion, string name, AvType type, AvBrand brand, string description, string rootInstallationPath, string logFolderPath, string appDataPath)
+    {
+        return new AvApp(filename, mainVersion, secondaryVersion, name, type, brand, description, rootInstallationPath, logFolderPath, appDataPath);
     }
 }

@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using Material.Icons.WPF;
 using Material.Icons;
 using OkapiLauncher.Models;
+using System.Diagnostics;
 
 
 namespace OkapiLauncher.Controls
@@ -34,7 +35,7 @@ namespace OkapiLauncher.Controls
 
         // Using a DependencyProperty as the backing store for LaunchCommand.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LaunchCommandProperty =
-            DependencyProperty.Register(nameof(LaunchCommand), typeof(ICommand), typeof(AvAppFacadeListItem), new PropertyMetadata(null, OnLaunchCommandChanged));
+            DependencyProperty.Register(nameof(LaunchCommand), typeof(ICommand), typeof(AvAppFacadeListItem), new PropertyMetadata(defaultValue: null, OnLaunchCommandChanged));
 
 
         private static void OnLaunchCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -63,19 +64,20 @@ namespace OkapiLauncher.Controls
                 nameof(AppFacade),
                 typeof(AvAppFacade),
                 typeof(AvAppFacadeListItem),
-                new PropertyMetadata(null, OnUserControlDataContextChanged));
+                new PropertyMetadata(defaultValue: null, OnUserControlAppFacadeChanged));
 
         public AvAppFacade? AppFacade
         {
             get => GetValue(AppFacadeProperty) as AvAppFacade;
             set => SetValue(AppFacadeProperty, value);
         }
-        private static void OnUserControlDataContextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+
+        private static void OnUserControlAppFacadeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is AvAppFacadeListItem userControl)
+            if (d is AvAppFacadeListItem userControl && !Equals(userControl.AppFacade, e.NewValue as AvAppFacade))
             {
                 // When the UserControlDataContext changes, update the DataContext of the root element
-                userControl.DataContext = e.NewValue;
+                userControl.AppFacade = e.NewValue as AvAppFacade;
             }
         }
 

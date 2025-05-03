@@ -11,6 +11,7 @@
     xmlns:mdicons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
     xmlns:models="clr-namespace:OkapiLauncher.Models"
     xmlns:properties="clr-namespace:OkapiLauncher.Properties"
+    xmlns:usercontrols="clr-namespace:OkapiLauncher.Controls"
     xmlns:vms="clr-namespace:OkapiLauncher.ViewModels"
     x:Name="RootPage"
     d:Background="Gray"
@@ -43,19 +44,30 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
-                <Grid x:Name="SourcesGrid" Grid.Row="1">
+                <Grid
+                    x:Name="SourcesGrid"
+                    Grid.Row="1"
+                    Margin="{StaticResource SmallTopBottomMargin}">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="48" />
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
-                    <TextBlock
+                    <!--<TextBlock
                         Margin="{StaticResource SmallTopMargin}"
                         Style="{StaticResource SubtitleTextStyle}"
                         Text="{x:Static properties:Resources.SettingsPageCustomSourcesHeader}"
-                        ToolTip="{x:Static properties:Resources.SettingsPageCustomSourcesTooltip}" />
+                        ToolTip="{x:Static properties:Resources.SettingsPageCustomSourcesTooltip}" />-->
 
-                    <Expander Grid.Row="1" Header="{Binding CustomSources.Count}">
+                    <Expander Grid.Row="1">
+                        <Expander.Header>
+                            <DockPanel ToolTip="{x:Static properties:Resources.SettingsPageCustomSourcesTooltip}">
+                                <TextBlock
+                                    DockPanel.Dock="Right"
+                                    Style="{StaticResource SubtitleTextStyle}"
+                                    Text="{Binding CustomSources.Count}" />
+                                <TextBlock Style="{StaticResource SubtitleTextStyle}" Text="{x:Static properties:Resources.SettingsPageCustomSourcesHeader}" />
+                            </DockPanel>
+                        </Expander.Header>
                         <Expander.Style>
                             <Style BasedOn="{StaticResource MahApps.Styles.Expander}" TargetType="Expander">
                                 <Setter Property="mah:HeaderedControlHelper.HeaderBackground" Value="{DynamicResource Custom.Brushes.Background.Lowlight}" />
@@ -265,7 +277,7 @@
                                 </Grid>
                             </Grid>
                         </Border>
-                        <Border Grid.Row="4" Style="{StaticResource SettingsItem}">
+                        <Border Style="{StaticResource SettingsItem}">
                             <Grid x:Name="AssociationGrid" Margin="0,0,0,0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto" />
@@ -328,6 +340,9 @@
                                     IsIndeterminate="True"
                                     Visibility="{Binding AssociationInProgress, Converter={StaticResource BoolToVisibilityConverter}}" />
                             </Grid>
+                        </Border>
+                        <Border Style="{StaticResource SettingsItem}">
+                            <usercontrols:AvAppFacadeListItem AppFacade="{Binding AvAppFacadeDummy}" />
                         </Border>
                     </StackPanel>
                 </Grid>
