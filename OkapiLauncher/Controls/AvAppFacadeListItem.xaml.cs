@@ -16,6 +16,8 @@ using Material.Icons.WPF;
 using Material.Icons;
 using OkapiLauncher.Models;
 using System.Diagnostics;
+using OkapiLauncher.Controls.Utilities;
+using System.Windows.Media.Media3D;
 
 
 namespace OkapiLauncher.Controls
@@ -35,29 +37,29 @@ namespace OkapiLauncher.Controls
 
         // Using a DependencyProperty as the backing store for LaunchCommand.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LaunchCommandProperty =
-            DependencyProperty.Register(nameof(LaunchCommand), typeof(ICommand), typeof(AvAppFacadeListItem), new PropertyMetadata(defaultValue: null, OnLaunchCommandChanged));
+            DependencyProperty.Register(nameof(LaunchCommand), typeof(ICommand), typeof(AvAppFacadeListItem), new PropertyMetadata(defaultValue: null));
 
 
-        private static void OnLaunchCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (d is AvAppFacadeListItem userControl)
-            {
-                var kind = userControl.LaunchCommand is null ? MaterialIconKind.Launch : MaterialIconKind.Powershell;
-                userControl.LaunchButton.SetIconKind(kind);
-                var tooltip = userControl.LaunchCommand is null ? Properties.Resources.AvAppLaunchWithNoProgram : Properties.Resources.AvAppLaunchWithProgram;
-                userControl.LaunchButton.ToolTip = tooltip;
-                foreach (MenuItem menuItem in userControl.RootGrid.ContextMenu.Items.OfType<MenuItem>())
-                {
-                    if(menuItem.Tag is bool tagged && tagged)
-                    {
-                        menuItem.Header = tooltip;
-                        return;
-                    }
-                }
-                // When the UserControlDataContext changes, update the DataContext of the root element
-            }
+        //private static void OnLaunchCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        //{
+        //    if (d is AvAppFacadeListItem userControl)
+        //    {
+        //        var kind = userControl.LaunchCommand is null ? MaterialIconKind.Launch : MaterialIconKind.Powershell;
+        //        userControl.LaunchButton.SetIconKind(kind);
+        //        var tooltip = userControl.LaunchCommand is null ? Properties.Resources.AvAppLaunchWithNoProgram : Properties.Resources.AvAppLaunchWithProgram;
+        //        userControl.LaunchButton.ToolTip = tooltip;
+        //        foreach (MenuItem menuItem in userControl.RootGrid.ContextMenu.Items.OfType<MenuItem>())
+        //        {
+        //            if(menuItem.Tag is bool tagged && tagged)
+        //            {
+        //                menuItem.Header = tooltip;
+        //                return;
+        //            }
+        //        }
+        //        // When the UserControlDataContext changes, update the DataContext of the root element
+        //    }
 
-        }
+        //}
 
         public static readonly DependencyProperty AppFacadeProperty =
             DependencyProperty.Register(
@@ -76,8 +78,17 @@ namespace OkapiLauncher.Controls
         {
             if (d is AvAppFacadeListItem userControl && !Equals(userControl.AppFacade, e.NewValue as AvAppFacade))
             {
+                var aaf = e.NewValue as AvAppFacade;
                 // When the UserControlDataContext changes, update the DataContext of the root element
-                userControl.AppFacade = e.NewValue as AvAppFacade;
+                userControl.AppFacade = aaf;
+                if (aaf is not null)
+                {
+                    AppContextMenu.CreateAppContextMenu(userControl.RootGrid, aaf, userControl.LaunchCommand);
+                }
+                else
+                {
+                    userControl.RootGrid.ContextMenu = null;
+                }
             }
         }
 
@@ -108,9 +119,12 @@ namespace OkapiLauncher.Controls
             Launch();
         }
 
-        private void UC_Root_Loaded(object sender, RoutedEventArgs e)
+        private void RootGrid_Loaded(object sender, RoutedEventArgs e)
         {
-
+            if (AppFacade is not null)
+            {
+                AppContextMenu.CreateAppContextMenu((sender as Grid)!, AppFacade, LaunchButton_Click);
+            }
         }
     }
 }

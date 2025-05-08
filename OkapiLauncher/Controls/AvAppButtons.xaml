@@ -12,9 +12,7 @@
     xmlns:properties="clr-namespace:OkapiLauncher.Properties"
     xmlns:utils="clr-namespace:OkapiLauncher.Controls.Utilities"
     Name="UC_Root"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
-    mc:Ignorable="d">
+    mc:Ignorable="d" Loaded="UC_Root_Loaded">
     <Grid DataContext="{Binding ElementName=UC_Root}">
         <Grid.Resources>
             <converters:BoolSelectorConverter

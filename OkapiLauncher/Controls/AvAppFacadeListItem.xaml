@@ -18,7 +18,8 @@
     <Grid
         x:Name="RootGrid"
         HorizontalAlignment="Stretch"
-        DataContext="{Binding ElementName=UC_Root}">
+        DataContext="{Binding ElementName=UC_Root}"
+        Loaded="RootGrid_Loaded">
         <Grid.Resources>
             <converters:BoolSelectorConverter
                 x:Key="LicenseTooltipConverter"
@@ -34,7 +35,8 @@
                 <ContentPresenter Content="{Binding AppFacade}" ContentTemplate="{StaticResource FullAppInfo}" />
             </ToolTip>
         </Grid.ToolTip>
-        <Grid.ContextMenu>
+        <!--  CONTEXT MENU IS DONE IN CODE BEHIND  -->
+        <!--<Grid.ContextMenu>
             <ContextMenu>
                 <MenuItem Command="{Binding AppFacade.OpenContainingFolderCommand}" Header="{x:Static properties:Resources.AvAppOpenInstallationFolder}">
                     <MenuItem.Icon>
@@ -85,15 +87,11 @@
                     </MenuItem.Icon>
                 </MenuItem>
             </ContextMenu>
-        </Grid.ContextMenu>
+        </Grid.ContextMenu>-->
         <Rectangle Fill="Transparent" />
         <Grid Margin="15,0,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
@@ -137,51 +135,7 @@
                     </TextBlock.Style>
                 </TextBlock>
             </StackPanel>
-            <controls:WarningLaunchButton
-                x:Name="LaunchButton"
-                Grid.Column="2"
-                Width="45"
-                Click="LaunchButton_Click"
-                DisplayWarning="{Binding AppFacade.WarnAboutNewProcess}"
-                Style="{StaticResource SymbolButton}"
-                Visibility="{Binding AppFacade.IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <mdicons:MaterialIcon Kind="{StaticResource IconLaunch}" />
-            </controls:WarningLaunchButton>
-            <Button
-                Grid.Column="3"
-                Width="45"
-                Command="{Binding AppFacade.CopyExecutablePathCommand}"
-                Style="{StaticResource SymbolButton}"
-                ToolTip="{x:Static properties:Resources.AvAppCopyPath}">
-                <mdicons:MaterialIcon Kind="{StaticResource IconCopy}" />
-            </Button>
-            <Button
-                Grid.Column="4"
-                Width="45"
-                Command="{Binding AppFacade.OpenContainingFolderCommand}"
-                Style="{StaticResource SymbolButton}"
-                ToolTip="{x:Static properties:Resources.AvAppOpenInstallationFolder}">
-                <mdicons:MaterialIcon Kind="{StaticResource IconOpenFolder}" />
-            </Button>
-            <Button
-                Grid.Column="5"
-                Width="45"
-                Command="{Binding AppFacade.OpenLicenseFolderCommand}"
-                Style="{StaticResource SymbolButton}"
-                ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource LicenseTooltipConverter}}"
-                ToolTipService.ShowOnDisabled="True">
-                <mdicons:MaterialIcon Kind="{StaticResource IconLicenseFolder}" />
-            </Button>
-            <Button
-                Grid.Column="6"
-                Width="45"
-                Command="{Binding AppFacade.OpenLogFolderCommand}"
-                Style="{StaticResource SymbolButton}"
-                ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource LogTooltipConverter}}"
-                ToolTipService.ShowOnDisabled="True"
-                Visibility="{Binding AppFacade.LogFolderPath, Converter={StaticResource NullVisibilityConverter}}">
-                <mdicons:MaterialIcon Kind="{StaticResource IconLogFolder}" />
-            </Button>
+            <local:AvAppButtons Grid.Column="2" AppFacade="{Binding AppFacade}" />
         </Grid>
     </Grid>
 </UserControl>

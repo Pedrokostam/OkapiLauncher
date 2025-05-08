@@ -33,8 +33,6 @@ public partial class AvAppButtons : UserControl
         DependencyProperty.Register(nameof(LaunchCommand), typeof(ICommand), typeof(AvAppButtons), new PropertyMetadata(defaultValue: null, OnLaunchCommandChanged));
 
 
-
-
     public Settings ButtonSettings
     {
         get { return (Settings)GetValue(ButtonSettingsProperty); }
@@ -49,24 +47,29 @@ public partial class AvAppButtons : UserControl
 
     private static void OnLaunchCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-
-        if (d is AvAppFacadeListItem userControl)
+        if (d is AvAppButtons userControl)
         {
-            var kind = userControl.LaunchCommand is null ? MaterialIconKind.Launch : MaterialIconKind.Powershell;
-            userControl.LaunchButton.SetIconKind(kind);
-            var tooltip = userControl.LaunchCommand is null ? Properties.Resources.AvAppLaunchWithNoProgram : Properties.Resources.AvAppLaunchWithProgram;
-            userControl.LaunchButton.ToolTip = tooltip;
-            foreach (MenuItem menuItem in userControl.RootGrid.ContextMenu.Items.OfType<MenuItem>())
-            {
-                if (menuItem.Tag is bool tagged && tagged)
-                {
-                    menuItem.Header = tooltip;
-                    return;
-                }
-            }
+            UpdateLaunchButton(userControl);
+            //{
+            //    if (menuItem.Tag is bool tagged && tagged)
+            //    {
+            //        menuItem.Header = tooltip;
+            //        return;
+            //    }
+            //}
             // When the UserControlDataContext changes, update the DataContext of the root element
         }
 
+    }
+
+    private static void UpdateLaunchButton(AvAppButtons userControl)
+    {
+        var kind = userControl.LaunchCommand is null ? MaterialIconKind.Launch : MaterialIconKind.Powershell;
+        userControl.LaunchButton.SetIconKind(kind);
+        var tooltip = userControl.LaunchCommand is null ? Properties.Resources.AvAppLaunchWithNoProgram : Properties.Resources.AvAppLaunchWithProgram;
+        userControl.LaunchButton.ToolTip = tooltip;
+        //foreach (MenuItem menuItem in userControl.RootGrid.ContextMenu.Items.OfType<MenuItem>())
+        userControl.LaunchButton.IsEnabled = userControl.AppFacade?.IsExecutable ?? false;
     }
 
     public static readonly DependencyProperty AppFacadeProperty =
@@ -88,6 +91,7 @@ public partial class AvAppButtons : UserControl
         {
             // When the UserControlDataContext changes, update the DataContext of the root element
             userControl.AppFacade = e.NewValue as AvAppFacade;
+            UpdateControl(userControl);
         }
     }
 
@@ -96,17 +100,49 @@ public partial class AvAppButtons : UserControl
         if (d is AvAppButtons userControl && e.NewValue is Settings s)
         {
             userControl.ButtonSettings = s;
-            foreach (var but in userControl.ButtonGrid.Children.OfType<Button>())
-            {
-                var tag = (ButtonVisibility)but.Tag;
-                Grid.SetColumn(but, s.GetPosition(tag));
-                bool isVisible = s.VisibleButtons.HasFlag(tag) && (but.IsEnabled || s.ShowDisabledButtons);
-                but.Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
-            }
+            UpdateControl(userControl);
+
         }
+    }
+
+    private static void UpdateButtons(AvAppButtons userControl)
+    {
+        foreach (var but in userControl.ButtonGrid.Children.OfType<Button>())
+        {
+            var tag = (ButtonVisibility)but.Tag;
+            Grid.SetColumn(but, userControl.ButtonSettings.GetPosition(tag));
+            bool isVisible = userControl.ButtonSettings.VisibleButtons.HasFlag(tag) && (but.IsEnabled || userControl.ButtonSettings.ShowDisabledButtons);
+            but.Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
+        }
+    }
+
+    private void LaunchButton_Click(object sender, RoutedEventArgs e)
+    {
+        Launch();
+    }
+    private void Launch()
+    {
+        if (LaunchCommand is null)
+        {
+            AppFacade?.LaunchWithoutProgram();
+        }
+        else
+        {
+            LaunchCommand.Execute(AppFacade);
+        }
+    }
+    private static void UpdateControl(AvAppButtons userControl)
+    {
+        UpdateLaunchButton(userControl);
+        UpdateButtons(userControl);
     }
     public AvAppButtons()
     {
         InitializeComponent();
+    }
+
+    private void UC_Root_Loaded(object sender, RoutedEventArgs e)
+    {
+        UpdateControl(this);
     }
 }

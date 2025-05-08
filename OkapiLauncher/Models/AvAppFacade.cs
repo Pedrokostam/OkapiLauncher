@@ -116,7 +116,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     public bool CanOpenLicenseFolder => Directory.Exists(Brand.GetLicenseKeyFolderPath());
     public bool CanOpenLogFolder => Directory.Exists(LogFolderPath);
 
-    [RelayCommand]
+    [RelayCommand(CanExecute =nameof(IsExecutable))]
     private void ShowProcessOverview()
     {
         if (_windowManagerService.Value is null)

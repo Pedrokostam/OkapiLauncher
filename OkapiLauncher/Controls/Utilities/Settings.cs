@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using System.Windows.Controls;
 
 namespace OkapiLauncher.Controls.Utilities;
 [StructLayout(LayoutKind.Sequential)]
@@ -13,6 +14,12 @@ public readonly record struct Settings
         VisibleButtons = visibleButtons;
         ShowDisabledButtons = showDisabledButtons;
         Order = order;
+    }
+    public Settings()
+    {
+        VisibleButtons = ButtonVisibility.Default;
+        ShowDisabledButtons = false;
+        Order = "01234567";
     }
     public int GetPosition(ButtonVisibility button)
     {
