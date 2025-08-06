@@ -14,6 +14,10 @@ internal static class ExplorerHelper
     /// <param name="path"></param>
     public static void OpenExplorerAndSelect(string path)
     {
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return;
+        }
         Process.Start(new ProcessStartInfo()
         {
             FileName = "explorer.exe",
@@ -22,6 +26,10 @@ internal static class ExplorerHelper
     }
     public static void OpenExplorer(string path)
     {
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return;
+        }
         Process.Start(new ProcessStartInfo()
         {
             FileName = "explorer.exe",
