@@ -43,7 +43,7 @@ internal static class AppContextMenu
         return (IValueConverter)element.TryFindResource(key) ?? throw new ArgumentNullException(nameof(key), $"Converter {key} could not be found in {element.GetType().FullName}");
     }
 
-    private static MenuItem ButtonOpenInstallation(this FrameworkElement element, AvAppFacade appFacade)
+    private static MenuItem ButtonOpenInstallation(AvAppFacade appFacade)
     {
         return new MenuItem
         {
@@ -53,7 +53,7 @@ internal static class AppContextMenu
         };
     }
 
-    private static MenuItem ButtonCopyExecutablePath(this FrameworkElement element, AvAppFacade appFacade)
+    private static MenuItem ButtonCopyExecutablePath(AvAppFacade appFacade)
     {
         return new MenuItem
         {
@@ -63,32 +63,40 @@ internal static class AppContextMenu
         };
     }
 
-    private static MenuItem ButtonLaunch(this FrameworkElement element, AvAppFacade appFacade, ICommand? customLaunchCommand)
+    private static MenuItem ButtonLaunch(AvAppFacade appFacade)
     {
-        var launchItem = new MenuItem
+        return new MenuItem
         {
             Header = Properties.Resources.AvAppLaunchWithNoProgram,
             Icon = new MaterialIcon { Kind = IconLaunch },
             Tag = true,
-            Command = customLaunchCommand ?? appFacade.LaunchWithoutProgramCommand,
+            Command = appFacade.LaunchWithoutProgramCommand,
         };
-        //launchItem.SetBinding(UIElement.VisibilityProperty, isExecutableBinding);
-        return launchItem;
     }
 
-    private static MenuItem ButtonOpenProcessOverview(this FrameworkElement element, AvAppFacade appFacade)
+    private static MenuItem ButtonLaunch(AvAppFacade appFacade, ICommand customLaunchCommand)
     {
-        var processItem = new MenuItem
+        return new MenuItem
+        {
+            Header = Properties.Resources.AvAppLaunchWithProgram,
+            Icon = new MaterialIcon { Kind = MaterialIconKind.Powershell },
+            Tag = true,
+            Command = customLaunchCommand,
+            CommandParameter = appFacade,
+        };
+    }
+
+    private static MenuItem ButtonOpenProcessOverview(AvAppFacade appFacade)
+    {
+        return new MenuItem
         {
             Header = "Open process overview window",
             Command = GetPropertyCommand(appFacade, "ShowProcessOverviewCommand"),
             Icon = new MaterialIcon { Kind = IconProcess },
         };
-        //processItem.SetBinding(UIElement.VisibilityProperty, isExecutableBinding);
-        return processItem;
     }
 
-    private static MenuItem ButtonOpenLicenseFolder(this FrameworkElement element, AvAppFacade appFacade)
+    private static MenuItem ButtonOpenLicenseFolder(AvAppFacade appFacade)
     {
         var licenseItem = new MenuItem
         {
@@ -100,23 +108,23 @@ internal static class AppContextMenu
         return licenseItem;
     }
 
-    private static MenuItem ButtonOpenLogFolder(this FrameworkElement element, AvAppFacade appFacade)
+    private static MenuItem ButtonOpenLogFolder(AvAppFacade appFacade)
     {
-        var logItem = new MenuItem
+        return new MenuItem
         {
             Header = Properties.Resources.AvAppOpenLogFolder,
             Command = GetPropertyCommand(appFacade, "OpenLogFolderCommand"),
             Icon = new MaterialIcon { Kind = IconLogFolder },
         };
-        return logItem;
     }
+
 
     /// <summary>
     /// Create a context menu for <paramref name="appFacade"/> and applies it to <paramref name="target"/>.
     /// </summary>
     /// <param name="target"></param>
     /// <param name="appFacade"></param>
-    /// <param name="customLaunchCommand"></param>
+    /// <param name="customLaunchCommand">Custom command to launch an application, which should receive <paramref name="appFacade"/> as the parameter.</param>
     /// <returns>Created <see cref="ContextMenu"/> which has already been added to <paramref name="target"/>.</returns>
     public static ContextMenu CreateAppContextMenu(
         FrameworkElement target,
@@ -137,17 +145,23 @@ internal static class AppContextMenu
         }
         var contextMenu = new ContextMenu();
 
-        //
-        contextMenu.Items.Add(target.ButtonOpenInstallation(appFacade));
-        contextMenu.Items.Add(target.ButtonCopyExecutablePath(appFacade));
-        //
+        contextMenu.Items.Add(ButtonOpenInstallation(appFacade));
+        contextMenu.Items.Add(ButtonCopyExecutablePath(appFacade));
+
         contextMenu.Items.Add(new Separator());
-        contextMenu.Items.Add(target.ButtonLaunch(appFacade, customLaunchCommand));
-        contextMenu.Items.Add(target.ButtonOpenProcessOverview(appFacade));
-        //
+        contextMenu.Items.Add(ButtonLaunch(appFacade));
+        if (customLaunchCommand is not null)
+        {
+            contextMenu.Items.Add(new Separator());
+            contextMenu.Items.Add(ButtonLaunch(appFacade, customLaunchCommand));
+        }
+
         contextMenu.Items.Add(new Separator());
-        contextMenu.Items.Add(target.ButtonOpenLicenseFolder(appFacade));
-        contextMenu.Items.Add(target.ButtonOpenLogFolder(appFacade));
+        contextMenu.Items.Add(ButtonOpenProcessOverview(appFacade));
+
+        contextMenu.Items.Add(new Separator());
+        contextMenu.Items.Add(ButtonOpenLicenseFolder(appFacade));
+        contextMenu.Items.Add(ButtonOpenLogFolder(appFacade));
 
         target.ContextMenu = contextMenu;
         return contextMenu;

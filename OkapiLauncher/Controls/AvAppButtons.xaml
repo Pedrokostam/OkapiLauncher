@@ -38,6 +38,7 @@
                 Grid.Column="0"
                 Width="45"
                 Click="LaunchButton_Click"
+                Command="{Binding LaunchCommand}"
                 DisplayWarning="{Binding AppFacade.WarnAboutNewProcess}"
                 Style="{StaticResource SymbolButton}"
                 Tag="{x:Static utils:ButtonVisibility.Launch}"

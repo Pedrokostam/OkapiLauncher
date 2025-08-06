@@ -123,7 +123,7 @@ namespace OkapiLauncher.Controls
         {
             if (AppFacade is not null)
             {
-                AppContextMenu.CreateAppContextMenu((sender as Grid)!, AppFacade, LaunchButton_Click);
+                AppContextMenu.CreateAppContextMenu((sender as Grid)!, AppFacade, LaunchCommand);
             }
         }
     }
