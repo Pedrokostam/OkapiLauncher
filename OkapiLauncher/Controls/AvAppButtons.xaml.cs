@@ -33,15 +33,15 @@ public partial class AvAppButtons : UserControl
         DependencyProperty.Register(nameof(LaunchCommand), typeof(ICommand), typeof(AvAppButtons), new PropertyMetadata(defaultValue: null, OnLaunchCommandChanged));
 
 
-    public Settings ButtonSettings
+    public ButtonSettings ButtonSettings
     {
-        get { return (Settings)GetValue(ButtonSettingsProperty); }
+        get { return (ButtonSettings)GetValue(ButtonSettingsProperty); }
         set { SetValue(ButtonSettingsProperty, value); }
     }
 
     // Using a DependencyProperty as the backing store for ButtonSettings.  This enables animation, styling, binding, etc...
     public static readonly DependencyProperty ButtonSettingsProperty =
-        DependencyProperty.Register("ButtonSettings", typeof(Settings), typeof(AvAppButtons), new PropertyMetadata(new Settings(), OnButtonSettingsChanged));
+        DependencyProperty.Register("ButtonSettings", typeof(ButtonSettings), typeof(AvAppButtons), new PropertyMetadata(new ButtonSettings(), OnButtonSettingsChanged));
 
 
 
@@ -97,19 +97,19 @@ public partial class AvAppButtons : UserControl
 
     private static void OnButtonSettingsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        if (d is AvAppButtons userControl && e.NewValue is Settings s)
+        if (d is AvAppButtons userControl && e.NewValue is ButtonSettings s)
         {
             userControl.ButtonSettings = s;
             UpdateControl(userControl);
-
         }
     }
 
     private static void UpdateButtons(AvAppButtons userControl)
     {
+        var ordered = userControl.ButtonGrid.Children.OfType<Button>().Select(x => ((VisibleButtons)x.Tag, userControl.ButtonSettings.GetPosition((VisibleButtons)x.Tag)));
         foreach (var but in userControl.ButtonGrid.Children.OfType<Button>())
         {
-            var tag = (ButtonVisibility)but.Tag;
+            var tag = (VisibleButtons)but.Tag;
             Grid.SetColumn(but, userControl.ButtonSettings.GetPosition(tag));
             bool isVisible = userControl.ButtonSettings.VisibleButtons.HasFlag(tag) && (but.IsEnabled || userControl.ButtonSettings.ShowDisabledButtons);
             but.Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;

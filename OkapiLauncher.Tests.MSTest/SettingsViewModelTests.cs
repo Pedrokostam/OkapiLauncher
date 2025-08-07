@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Moq;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace OkapiLauncher.Tests.MSTest;
 
@@ -30,16 +31,21 @@ public class SettingsViewModelTests
         var mockFileAssociationService = new Mock<IFileAssociationService>();
         var mockCustomAppSourceService = new Mock<ICustomAppSourceService>();
         var mockContentDialogService = new Mock<IContentDialogService>();
+        var mockAvAppFacadeFactory = new Mock<IAvAppFacadeFactory>();
+        var mockMessenger = new Mock<IMessenger>();
 
-        var settingsVm = new SettingsViewModel(mockAppConfig.Object,
+        var settingsVm = new SettingsViewModel(
+            mockAppConfig.Object,
             mockThemeSelectorService.Object,
             mockSystemService.Object,
             mockApplicationInfoService.Object,
             mockFileAssociationService.Object,
             mockFileUpdateService.Object,
             mockCustomAppSourceService.Object,
-            mockContentDialogService.Object
-            );
+            mockContentDialogService.Object,
+            mockAvAppFacadeFactory.Object,
+            mockMessenger.Object
+        );
         settingsVm.OnNavigatedTo(null);
 
         Assert.AreEqual(AppTheme.Light, settingsVm.Theme);
@@ -54,15 +60,25 @@ public class SettingsViewModelTests
         var mockApplicationInfoService = new Mock<IApplicationInfoService>();
         var mockFileAssociationService = new Mock<IFileAssociationService>();
         var mockFileUpdateService = new Mock<IUpdateCheckService>();
+        var mockCustomAppSourceService = new Mock<ICustomAppSourceService>();
+        var mockContentDialogService = new Mock<IContentDialogService>();
+        var mockAvAppFacadeFactory = new Mock<IAvAppFacadeFactory>();
+        var mockMessenger = new Mock<IMessenger>();
         var testVersion = new Version(1, 2, 3, 4);
         mockApplicationInfoService.Setup(mock => mock.GetVersion()).Returns(testVersion);
 
-        var settingsVm = new SettingsViewModel(mockAppConfig.Object,
+        var settingsVm = new SettingsViewModel(
+            mockAppConfig.Object,
             mockThemeSelectorService.Object,
             mockSystemService.Object,
             mockApplicationInfoService.Object,
             mockFileAssociationService.Object,
-            mockFileUpdateService.Object);
+            mockFileUpdateService.Object,
+            mockCustomAppSourceService.Object,
+            mockContentDialogService.Object,
+            mockAvAppFacadeFactory.Object,
+            mockMessenger.Object
+        );
         settingsVm.OnNavigatedTo(null);
 
         Assert.AreEqual($"Aurora Vision Launcher - {testVersion}", settingsVm.VersionDescription);
@@ -77,13 +93,23 @@ public class SettingsViewModelTests
         var mockSystemService = new Mock<ISystemService>();
         var mockApplicationInfoService = new Mock<IApplicationInfoService>();
         var mockFileAssociationService = new Mock<IFileAssociationService>();
+        var mockCustomAppSourceService = new Mock<ICustomAppSourceService>();
+        var mockContentDialogService = new Mock<IContentDialogService>();
+        var mockAvAppFacadeFactory = new Mock<IAvAppFacadeFactory>();
+        var mockMessenger = new Mock<IMessenger>();
 
-        var settingsVm = new SettingsViewModel(mockAppConfig.Object,
+        var settingsVm = new SettingsViewModel(
+            mockAppConfig.Object,
             mockThemeSelectorService.Object,
             mockSystemService.Object,
             mockApplicationInfoService.Object,
             mockFileAssociationService.Object,
-            mockFileUpdateService.Object);
+            mockFileUpdateService.Object,
+            mockCustomAppSourceService.Object,
+            mockContentDialogService.Object,
+            mockAvAppFacadeFactory.Object,
+            mockMessenger.Object
+        );
         settingsVm.SetThemeCommand.Execute(AppTheme.Light.ToString());
 
         mockThemeSelectorService.Verify(mock => mock.SetTheme(AppTheme.Light, null));

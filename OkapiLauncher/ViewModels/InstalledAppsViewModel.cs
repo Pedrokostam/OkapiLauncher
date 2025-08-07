@@ -1,16 +1,17 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Text.RegularExpressions;
+using System.Windows.Data;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.Options;
+using Microsoft.VisualBasic;
 using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Converters;
 using OkapiLauncher.Core.Models.Apps;
 using OkapiLauncher.Models;
 using OkapiLauncher.Services;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using System.ComponentModel;
-using System.Windows.Data;
-using OkapiLauncher.Converters;
-using System.Text.RegularExpressions;
-using CommunityToolkit.Mvvm.Messaging;
-using Microsoft.VisualBasic;
 using OkapiLauncher.Views;
 
 namespace OkapiLauncher.ViewModels;
@@ -23,7 +24,8 @@ public sealed partial class InstalledAppsViewModel : ProcessRefreshViewModel
                                   IProcessManagerService processManagerService,
                                   IWindowManagerService windowManagerService,
                                   IContentDialogService contentDialogService,
-                                  IMessenger messenger) : base(processManagerService, appFactory, messenger)
+                                  IMessenger messenger,
+                                  IOptions<AppConfig> appConfig) : base(processManagerService, appFactory, messenger, appConfig)
     {
         RawApps = new List<AvAppFacade>(_appFactory.CreateAllFacades());
         _apps = CollectionViewSource.GetDefaultView(RawApps);
@@ -51,7 +53,7 @@ public sealed partial class InstalledAppsViewModel : ProcessRefreshViewModel
         Apps.GroupDescriptions.Add(gd);
     }
 
-   
+
 
     [RelayCommand]
     private async Task ShowDialog()

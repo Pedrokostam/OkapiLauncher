@@ -135,7 +135,7 @@
                     </TextBlock.Style>
                 </TextBlock>
             </StackPanel>
-            <local:AvAppButtons Grid.Column="2" AppFacade="{Binding AppFacade}" />
+            <local:AvAppButtons Grid.Column="2" AppFacade="{Binding AppFacade}" LaunchCommand="{Binding LaunchCommand}" />
         </Grid>
     </Grid>
 </UserControl>

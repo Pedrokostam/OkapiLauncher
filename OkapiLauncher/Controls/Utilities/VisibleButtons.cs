@@ -1,6 +1,6 @@
 ﻿namespace OkapiLauncher.Controls.Utilities;
 [Flags]
-public enum ButtonVisibility
+public enum VisibleButtons
 {
     None = 0,
     //
@@ -10,11 +10,9 @@ public enum ButtonVisibility
     License = 1 << 3,
     Log = 1 << 4,
     Overview = 1 << 5,
-    Kill = 1 << 6,
-    KillAll = 1 << 7,
+    KillAll = 1 << 6,
     //
     All = (KillAll << 1) - 1,
     //
     Default = Launch | Copy | Open | License | Log,
-    BothKills = Kill | KillAll,
 }

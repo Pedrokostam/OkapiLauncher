@@ -12,7 +12,8 @@
     xmlns:properties="clr-namespace:OkapiLauncher.Properties"
     xmlns:utils="clr-namespace:OkapiLauncher.Controls.Utilities"
     Name="UC_Root"
-    mc:Ignorable="d" Loaded="UC_Root_Loaded">
+    Loaded="UC_Root_Loaded"
+    mc:Ignorable="d">
     <Grid DataContext="{Binding ElementName=UC_Root}">
         <Grid.Resources>
             <converters:BoolSelectorConverter
@@ -32,16 +33,17 @@
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
             <controls:WarningLaunchButton
                 x:Name="LaunchButton"
                 Grid.Column="0"
                 Width="45"
                 Click="LaunchButton_Click"
-                Command="{Binding LaunchCommand}"
                 DisplayWarning="{Binding AppFacade.WarnAboutNewProcess}"
                 Style="{StaticResource SymbolButton}"
-                Tag="{x:Static utils:ButtonVisibility.Launch}"
+                Tag="{x:Static utils:VisibleButtons.Launch}"
                 Visibility="{Binding AppFacade.IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <mdicons:MaterialIcon Kind="{StaticResource IconLaunch}" />
             </controls:WarningLaunchButton>
@@ -50,7 +52,7 @@
                 Width="45"
                 Command="{Binding AppFacade.CopyExecutablePathCommand}"
                 Style="{StaticResource SymbolButton}"
-                Tag="{x:Static utils:ButtonVisibility.Copy}"
+                Tag="{x:Static utils:VisibleButtons.Copy}"
                 ToolTip="{x:Static properties:Resources.AvAppCopyPath}">
                 <mdicons:MaterialIcon Kind="{StaticResource IconCopy}" />
             </Button>
@@ -59,7 +61,7 @@
                 Width="45"
                 Command="{Binding AppFacade.OpenContainingFolderCommand}"
                 Style="{StaticResource SymbolButton}"
-                Tag="{x:Static utils:ButtonVisibility.Open}"
+                Tag="{x:Static utils:VisibleButtons.Open}"
                 ToolTip="{x:Static properties:Resources.AvAppOpenInstallationFolder}">
                 <mdicons:MaterialIcon Kind="{StaticResource IconOpenFolder}" />
             </Button>
@@ -68,7 +70,7 @@
                 Width="45"
                 Command="{Binding AppFacade.OpenLicenseFolderCommand}"
                 Style="{StaticResource SymbolButton}"
-                Tag="{x:Static utils:ButtonVisibility.License}"
+                Tag="{x:Static utils:VisibleButtons.License}"
                 ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource LicenseTooltipConverter}}"
                 ToolTipService.ShowOnDisabled="True">
                 <mdicons:MaterialIcon Kind="{StaticResource IconLicenseFolder}" />
@@ -78,11 +80,33 @@
                 Width="45"
                 Command="{Binding AppFacade.OpenLogFolderCommand}"
                 Style="{StaticResource SymbolButton}"
-                Tag="{x:Static utils:ButtonVisibility.Log}"
+                Tag="{x:Static utils:VisibleButtons.Log}"
                 ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource LogTooltipConverter}}"
                 ToolTipService.ShowOnDisabled="True"
                 Visibility="{Binding AppFacade.LogFolderPath, Converter={StaticResource NullVisibilityConverter}}">
                 <mdicons:MaterialIcon Kind="{StaticResource IconLogFolder}" />
+            </Button>
+            <Button
+                Grid.Column="5"
+                Width="45"
+                Command="{Binding AppFacade.ShowProcessOverviewCommand}"
+                Style="{StaticResource SymbolButton}"
+                Tag="{x:Static utils:VisibleButtons.Overview}"
+                ToolTip="{x:Static properties:Resources.AvAppOpenOverview}"
+                ToolTipService.ShowOnDisabled="True"
+                Visibility="{Binding AppFacade.LogFolderPath, Converter={StaticResource NullVisibilityConverter}}">
+                <mdicons:MaterialIcon Kind="{StaticResource IconProcess}" />
+            </Button>
+            <Button
+                Grid.Column="6"
+                Width="45"
+                Command="{Binding AppFacade.KillAllProcessesCommand}"
+                Style="{StaticResource SymbolButton}"
+                Tag="{x:Static utils:VisibleButtons.KillAll}"
+                ToolTip="{x:Static properties:Resources.AvAppKillAllProcesses}"
+                ToolTipService.ShowOnDisabled="True"
+                Visibility="{Binding AppFacade.LogFolderPath, Converter={StaticResource NullVisibilityConverter}}">
+                <mdicons:MaterialIcon Kind="{StaticResource IconKillAll}" />
             </Button>
         </Grid>
     </Grid>

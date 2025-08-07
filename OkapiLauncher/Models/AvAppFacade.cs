@@ -107,11 +107,12 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
             ExplorerHelper.OpenExplorer(LogFolderPath);
 
     }
-    //[RelayCommand]
-    //private void KillAllProcesses()
-    //{
-    //    _messenger.Send(new KillAllProcessesRequest(this,));
-    //}
+    [RelayCommand(CanExecute =nameof(IsExecutable))]
+    private void KillAllProcesses()
+    {
+        _messenger.Send(new KillAllProcessesRequest(this,null));
+    }
+    
 
     public bool CanOpenLicenseFolder => Directory.Exists(Brand.GetLicenseKeyFolderPath());
     public bool CanOpenLogFolder => Directory.Exists(LogFolderPath);

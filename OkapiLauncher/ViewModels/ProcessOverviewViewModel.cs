@@ -9,21 +9,24 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Accessibility;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.Options;
 using OkapiLauncher.Contracts;
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Contracts.ViewModels;
+using OkapiLauncher.Controls.Utilities;
 using OkapiLauncher.Helpers;
 using OkapiLauncher.Models;
 using OkapiLauncher.Models.Messages;
 using OkapiLauncher.Services;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
 
 namespace OkapiLauncher.ViewModels;
 public partial class ProcessOverviewViewModel : ObservableRecipient, INavigationAware, ITransientWindow, IRecipient<FreshAppProcesses>
 {
     private readonly IProcessManagerService _processManagerService;
+    private readonly AppConfig _appConfig;
     [ObservableProperty]
     private AvAppFacade _avApp = default!;
     /// <summary>
@@ -31,9 +34,12 @@ public partial class ProcessOverviewViewModel : ObservableRecipient, INavigation
     /// </summary>
     //private readonly DispatcherTimer _auxTimer;
 
-    public ProcessOverviewViewModel(IProcessManagerService processManagerService, IMessenger messenger) : base(messenger)
+    public ButtonSettings OverviewButtons { get; }
+    public ProcessOverviewViewModel(IProcessManagerService processManagerService, IMessenger messenger, IOptions<AppConfig> appConfig) : base(messenger)
     {
         _processManagerService = processManagerService;
+        _appConfig = appConfig.Value;
+        OverviewButtons = _appConfig.ButtonSettings with { VisibleButtons = VisibleButtons.All, ShowDisabledButtons = true };
     }
 
     private void Update()

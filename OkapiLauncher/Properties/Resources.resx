@@ -604,4 +604,7 @@ All trademarks, service marks, logos, and copyrights related to the applications
   <data name="ShellViewButtonSettingHeader" xml:space="preserve">
     <value>Settings</value>
   </data>
+  <data name="AvAppOpenOverview" xml:space="preserve">
+    <value>Open process overview window</value>
+  </data>
 </root>

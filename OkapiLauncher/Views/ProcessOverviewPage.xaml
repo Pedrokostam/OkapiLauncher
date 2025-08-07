@@ -12,17 +12,18 @@
     xmlns:mod="clr-namespace:OkapiLauncher.Models"
     xmlns:properties="clr-namespace:OkapiLauncher.Properties"
     xmlns:usercontrol="clr-namespace:OkapiLauncher.Controls"
+    xmlns:utils="clr-namespace:OkapiLauncher.Controls.Utilities"
     xmlns:vms="clr-namespace:OkapiLauncher.ViewModels"
     x:Name="RootPage"
     Title="ProcessOverviewPage"
     MinWidth="600"
-    Loaded="RootPage_Loaded"
     controls:DialogParticipation.Register="{Binding}"
     d:Background="Gray"
     d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False,
                                      Type={x:Type vms:ProcessOverviewViewModel}}"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    Loaded="RootPage_Loaded"
     mc:Ignorable="d">
 
     <Grid Background="{DynamicResource MahApps.Brushes.Gray10}">
@@ -48,21 +49,15 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
             <ContentControl
                 Grid.Column="0"
                 Content="{Binding}"
                 ContentTemplate="{StaticResource AppHeaderProcess}" />
-            <usercontrol:AvAppButtons AppFacade="{Binding}" Grid.Column="1"/>
-            <Button
-                Grid.Column="2"
-                Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
-                Command="{Binding DataContext.KillAllProcessesCommand, ElementName=RootPage}"
-                Style="{StaticResource SymbolButton}"
-                ToolTip="{x:Static properties:Resources.AvAppKillAllProcesses}">
-                <mdicons:MaterialIcon Kind="{StaticResource IconKillAll}" />
-            </Button>
+            <usercontrol:AvAppButtons
+                Grid.Column="1"
+                AppFacade="{Binding}"
+                ButtonSettings="{Binding ElementName=RootPage, Path=DataContext.OverviewButtons}" />
         </Grid>
         <ListView
             Grid.Row="1"

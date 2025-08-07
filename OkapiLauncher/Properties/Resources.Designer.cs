@@ -261,6 +261,15 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open process overview window.
+        /// </summary>
+        public static string AvAppOpenOverview {
+            get {
+                return ResourceManager.GetString("AvAppOpenOverview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Active processes: {0}.
         /// </summary>
         public static string AvAppProcessesActive {

@@ -23,6 +23,7 @@ internal static class AppContextMenu
     private static MaterialIconKind IconProcess;
     private static MaterialIconKind IconLicenseFolder;
     private static MaterialIconKind IconLogFolder;
+    private static MaterialIconKind IconKillAll;
     private static bool IconInitialized = false;
     private static ICommand GetPropertyCommand(this object source, string propertyName)
     {
@@ -48,7 +49,7 @@ internal static class AppContextMenu
         return new MenuItem
         {
             Header = Properties.Resources.AvAppOpenInstallationFolder,
-            Command = GetPropertyCommand(appFacade, "OpenContainingFolderCommand"),
+            Command = GetPropertyCommand(appFacade, nameof(AvAppFacade.OpenContainingFolderCommand)),
             Icon = new MaterialIcon { Kind = IconOpenFolder },
         };
     }
@@ -58,7 +59,7 @@ internal static class AppContextMenu
         return new MenuItem
         {
             Header = Properties.Resources.AvAppCopyPath,
-            Command = GetPropertyCommand(appFacade, "CopyExecutablePathCommand"),
+            Command = GetPropertyCommand(appFacade, nameof(AvAppFacade.CopyExecutablePathCommand)),
             Icon = new MaterialIcon { Kind = IconCopy },
         };
     }
@@ -90,22 +91,22 @@ internal static class AppContextMenu
     {
         return new MenuItem
         {
-            Header = "Open process overview window",
-            Command = GetPropertyCommand(appFacade, "ShowProcessOverviewCommand"),
+            Header = Properties.Resources.AvAppOpenOverview,
+            Command = GetPropertyCommand(appFacade, nameof(AvAppFacade.ShowProcessOverviewCommand)),
             Icon = new MaterialIcon { Kind = IconProcess },
         };
     }
 
     private static MenuItem ButtonOpenLicenseFolder(AvAppFacade appFacade)
     {
-        var licenseItem = new MenuItem
+        var killItem = new MenuItem
         {
             Header = Properties.Resources.AvAppOpenLicenseFolder,
-            Command = GetPropertyCommand(appFacade, "OpenLicenseFolderCommand"),
+            Command = GetPropertyCommand(appFacade, nameof(AvAppFacade.OpenLicenseFolderCommand)),
             Icon = new MaterialIcon { Kind = IconLicenseFolder },
         };
-        licenseItem.SetBinding(MenuItem.IsEnabledProperty, appFacade.Bind("CanOpenLicenseFolder"));
-        return licenseItem;
+        killItem.SetBinding(MenuItem.IsEnabledProperty, appFacade.Bind(nameof(AvAppFacade.CanOpenLicenseFolder)));
+        return killItem;
     }
 
     private static MenuItem ButtonOpenLogFolder(AvAppFacade appFacade)
@@ -113,9 +114,21 @@ internal static class AppContextMenu
         return new MenuItem
         {
             Header = Properties.Resources.AvAppOpenLogFolder,
-            Command = GetPropertyCommand(appFacade, "OpenLogFolderCommand"),
+            Command = GetPropertyCommand(appFacade, nameof(AvAppFacade.OpenLogFolderCommand)),
             Icon = new MaterialIcon { Kind = IconLogFolder },
         };
+    }
+
+    private static MenuItem ButtonKillAll(AvAppFacade appFacade)
+    {
+        var licenseItem = new MenuItem
+        {
+            Header = Properties.Resources.AvAppKillAllProcesses,
+            Command = GetPropertyCommand(appFacade, nameof(AvAppFacade.KillAllProcessesCommand)),
+            Icon = new MaterialIcon { Kind = IconKillAll },
+        };
+        licenseItem.SetBinding(MenuItem.IsEnabledProperty, appFacade.Bind(nameof(AvAppFacade.IsExecutable)));
+        return licenseItem;
     }
 
 
@@ -141,6 +154,7 @@ internal static class AppContextMenu
             IconProcess = (MaterialIconKind)target.ResolveResource_Throw("IconProcess");
             IconLicenseFolder = (MaterialIconKind)target.ResolveResource_Throw("IconLicenseFolder");
             IconLogFolder = (MaterialIconKind)target.ResolveResource_Throw("IconLogFolder");
+            IconKillAll = (MaterialIconKind)target.ResolveResource_Throw("IconKillAll");
             IconInitialized = true;
         }
         var contextMenu = new ContextMenu();
@@ -162,7 +176,8 @@ internal static class AppContextMenu
         contextMenu.Items.Add(new Separator());
         contextMenu.Items.Add(ButtonOpenLicenseFolder(appFacade));
         contextMenu.Items.Add(ButtonOpenLogFolder(appFacade));
-
+        contextMenu.Items.Add(new Separator());
+        contextMenu.Items.Add(ButtonKillAll(appFacade));
         target.ContextMenu = contextMenu;
         return contextMenu;
     }
