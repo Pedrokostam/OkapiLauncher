@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -97,15 +98,21 @@ public partial class AvAppButtons : UserControl
 
     private static void OnButtonSettingsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
+
         if (d is AvAppButtons userControl && e.NewValue is ButtonSettings s)
         {
-            userControl.ButtonSettings = s;
+        Debug.WriteLine("Buttons");
+            //userControl.ButtonSettings = s;
             UpdateControl(userControl);
         }
     }
 
     private static void UpdateButtons(AvAppButtons userControl)
     {
+        if (userControl.ButtonSettings.Order.IsDefaultOrEmpty)
+        {
+            return;
+        }
         var ordered = userControl.ButtonGrid.Children.OfType<Button>().Select(x => ((VisibleButtons)x.Tag, userControl.ButtonSettings.GetPosition((VisibleButtons)x.Tag)));
         foreach (var but in userControl.ButtonGrid.Children.OfType<Button>())
         {
@@ -139,6 +146,10 @@ public partial class AvAppButtons : UserControl
     public AvAppButtons()
     {
         InitializeComponent();
+        this.DataContextChanged += (s, e) =>
+        {
+            Debug.WriteLine($"BUTTONS DataContext changed from {e.OldValue} to {e.NewValue}");
+        };
     }
 
     private void UC_Root_Loaded(object sender, RoutedEventArgs e)

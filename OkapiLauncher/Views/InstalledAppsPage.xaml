@@ -9,6 +9,7 @@
     xmlns:mod="clr-namespace:OkapiLauncher.Models"
     xmlns:properties="clr-namespace:OkapiLauncher.Properties"
     xmlns:vms="clr-namespace:OkapiLauncher.ViewModels"
+    x:Name="ThisAppPage"
     d:Background="Gray"
     d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False,
                                      Type={x:Type vms:InstalledAppsViewModel}}"
@@ -75,7 +76,7 @@
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <controls:AvAppFacadeListItem AppFacade="{Binding}"/>
+                        <controls:AvAppFacadeListItem AppFacade="{Binding}" ButtonSettings="{Binding ElementName=ThisAppPage, Path=DataContext.ButtonSettings}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
                 <ListView.GroupStyle>

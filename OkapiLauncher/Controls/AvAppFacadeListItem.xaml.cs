@@ -28,6 +28,16 @@ namespace OkapiLauncher.Controls
     public partial class AvAppFacadeListItem : UserControl
     {
 
+        public ButtonSettings ButtonSettings
+        {
+            get { return (ButtonSettings)GetValue(ButtonSettingsProperty); }
+            set { SetValue(ButtonSettingsProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for LaunchCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ButtonSettingsProperty =
+            DependencyProperty.Register(nameof(ButtonSettings), typeof(ButtonSettings), typeof(AvAppFacadeListItem), new PropertyMetadata(defaultValue: new ButtonSettings(), PLC));
+
 
         public ICommand LaunchCommand
         {
@@ -88,13 +98,44 @@ namespace OkapiLauncher.Controls
                 else
                 {
                     userControl.RootGrid.ContextMenu = null;
+
                 }
             }
         }
+        private static void PLC(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is AvAppFacadeListItem userControl && e.NewValue is ButtonSettings s)
+            {
+                Debug.WriteLine("PLC");
+            }
+        }
+
+        //private static void OnButtonSettingsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        //{
+        //    if (d is AvAppFacadeListItem userControl && !Equals(userControl.ButtonSettings, e.NewValue))
+        //    {
+        //        var but = (ButtonSettings)e.NewValue;
+        //        // When the UserControlDataContext changes, update the DataContext of the root element
+        //        userControl.butt
+        //        if (but is not null)
+        //        {
+        //            AppContextMenu.CreateAppContextMenu(userControl.RootGrid, but, userControl.LaunchCommand);
+        //        }
+        //        else
+        //        {
+        //            userControl.RootGrid.ContextMenu = null;
+        //        }
+        //    }
+        //}
 
         public AvAppFacadeListItem()
         {
             InitializeComponent();
+            this.DataContextChanged += (s, e) =>
+            {
+                Debug.WriteLine($"ITEM DataContext changed from {e.OldValue} to {e.NewValue}");
+            };
+
         }
 
         private void LaunchButton_Click(object sender, RoutedEventArgs e)

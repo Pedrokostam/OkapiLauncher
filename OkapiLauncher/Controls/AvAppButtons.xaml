@@ -14,7 +14,7 @@
     Name="UC_Root"
     Loaded="UC_Root_Loaded"
     mc:Ignorable="d">
-    <Grid DataContext="{Binding ElementName=UC_Root}">
+    <Grid DataContext="{Binding ., RelativeSource={RelativeSource AncestorType=UserControl}}">
         <Grid.Resources>
             <converters:BoolSelectorConverter
                 x:Key="LicenseTooltipConverter"

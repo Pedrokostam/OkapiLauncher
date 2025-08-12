@@ -13,7 +13,7 @@ public readonly record struct ButtonSettings
     public static readonly ImmutableArray<VisibleButtons> Defaulto;
     public VisibleButtons VisibleButtons { get; init; }
     public bool ShowDisabledButtons { get; init; }
-    public ImmutableArray<VisibleButtons> Order { get; init; }
+    public ImmutableArray<VisibleButtons> Order { get; init; } = new();
     public IEnumerable<VisibleButtons> ListOrder
     {
         get => Order;

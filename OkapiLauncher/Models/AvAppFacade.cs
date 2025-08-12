@@ -21,6 +21,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Windows.ApplicationModel.VoiceCommands;
 using ObservableCollections;
 using System.Diagnostics.CodeAnalysis;
+using OkapiLauncher.Controls.Utilities;
 
 namespace OkapiLauncher.Models;
 public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFacade>, IEquatable<AvAppFacade>
@@ -40,6 +41,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     public string? Description => _avApp.Description ?? Name;
     public bool IsCustom => _avApp.IsCustom;
 
+    public ButtonSettings Susu { get; }
     public bool WarnAboutNewProcess => Type == ProductType.Professional && IsLaunched;
     public AvVersionFacade? SecondaryVersion { get; }
 
