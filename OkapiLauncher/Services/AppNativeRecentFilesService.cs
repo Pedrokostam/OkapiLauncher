@@ -23,7 +23,7 @@ namespace OkapiLauncher.Services
         {
             _avAppFacadeFactory = avAppFacadeFactory;
         }
-        private Dictionary<string, DateList> _modificationDates = new Dictionary<string, DateList>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, DateList> _modificationDates = new(StringComparer.OrdinalIgnoreCase);
         private readonly IAvAppFacadeFactory _avAppFacadeFactory;
 
         private IEnumerable<string> ReadAppRecentFiles(AvApp app)
@@ -39,7 +39,7 @@ namespace OkapiLauncher.Services
             }
             var dateList = _modificationDates[settingsFilePath];
             // skip checking if we checked no too long ago
-            if(DateTime.UtcNow - dateList.ModificationDate < TimeSpan.FromSeconds(20))
+            if (DateTime.UtcNow - dateList.ModificationDate < TimeSpan.FromSeconds(20))
             {
                 return dateList.FilePaths;
             }
@@ -65,7 +65,11 @@ namespace OkapiLauncher.Services
 
         public IEnumerable<IAppNativeRecentFilesService.RecentAppFiles> GetAllAppsFiles()
         {
-            return _avAppFacadeFactory.AvApps.Where(x=>x.Type.HasFlag(AvType.Professional)).Select(x=>GetAppFiles(x));
+            var proffs = _avAppFacadeFactory.AvApps.Where(x => !x.IsCustom && x.Type.HasFlag(AvType.Professional)).ToList();
+            var usedPaths = new HashSet<string>(proffs.Select(x => x.AppDataPath), StringComparer.OrdinalIgnoreCase);
+            var customProffs = _avAppFacadeFactory.AvApps.Where(x => x.IsCustom && x.Type.HasFlag(AvType.Professional) && !usedPaths.Contains(x.AppDataPath)).ToList();
+            proffs.AddRange(customProffs);
+            return proffs.OrderByDescending(x=>x.Version).Select(x => GetAppFiles(x));
         }
     }
 }
