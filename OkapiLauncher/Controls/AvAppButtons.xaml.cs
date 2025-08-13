@@ -42,7 +42,7 @@ public partial class AvAppButtons : UserControl
 
     // Using a DependencyProperty as the backing store for ButtonSettings.  This enables animation, styling, binding, etc...
     public static readonly DependencyProperty ButtonSettingsProperty =
-        DependencyProperty.Register("ButtonSettings", typeof(ButtonSettings), typeof(AvAppButtons), new PropertyMetadata(new ButtonSettings(), OnButtonSettingsChanged));
+        DependencyProperty.Register("ButtonSettings", typeof(ButtonSettings), typeof(AvAppButtons), new PropertyMetadata(ButtonSettings.Default, OnButtonSettingsChanged));
 
 
 
@@ -101,8 +101,6 @@ public partial class AvAppButtons : UserControl
 
         if (d is AvAppButtons userControl && e.NewValue is ButtonSettings s)
         {
-        Debug.WriteLine("Buttons");
-            //userControl.ButtonSettings = s;
             UpdateControl(userControl);
         }
     }
@@ -146,10 +144,6 @@ public partial class AvAppButtons : UserControl
     public AvAppButtons()
     {
         InitializeComponent();
-        this.DataContextChanged += (s, e) =>
-        {
-            Debug.WriteLine($"BUTTONS DataContext changed from {e.OldValue} to {e.NewValue}");
-        };
     }
 
     private void UC_Root_Loaded(object sender, RoutedEventArgs e)

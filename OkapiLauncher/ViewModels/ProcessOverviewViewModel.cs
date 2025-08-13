@@ -26,7 +26,7 @@ namespace OkapiLauncher.ViewModels;
 public partial class ProcessOverviewViewModel : ObservableRecipient, INavigationAware, ITransientWindow, IRecipient<FreshAppProcesses>
 {
     private readonly IProcessManagerService _processManagerService;
-    private readonly AppConfig _appConfig;
+    private readonly IGeneralSettingsService _generalSettingsService;
     [ObservableProperty]
     private AvAppFacade _avApp = default!;
     /// <summary>
@@ -35,11 +35,11 @@ public partial class ProcessOverviewViewModel : ObservableRecipient, INavigation
     //private readonly DispatcherTimer _auxTimer;
 
     public ButtonSettings OverviewButtons { get; }
-    public ProcessOverviewViewModel(IProcessManagerService processManagerService, IMessenger messenger, IOptions<AppConfig> appConfig) : base(messenger)
+    public ProcessOverviewViewModel(IProcessManagerService processManagerService, IMessenger messenger, IGeneralSettingsService generalSettingsService) : base(messenger)
     {
         _processManagerService = processManagerService;
-        _appConfig = appConfig.Value;
-        OverviewButtons = _appConfig.ButtonSettings with { VisibleButtons = VisibleButtons.All, ShowDisabledButtons = true };
+        _generalSettingsService = generalSettingsService;
+        OverviewButtons = _generalSettingsService.ButtonSettings with { VisibleButtons = VisibleButtons.All, ShowDisabledButtons = true };
     }
 
     private void Update()

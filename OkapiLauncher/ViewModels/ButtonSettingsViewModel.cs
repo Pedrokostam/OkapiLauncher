@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using OkapiLauncher.Controls.Utilities;
+using OkapiLauncher.Services;
 
 namespace OkapiLauncher.ViewModels;
 public partial class ButtonSettingsViewModel : ObservableObject
@@ -38,22 +39,33 @@ public partial class ButtonSettingsViewModel : ObservableObject
     [ObservableProperty]
     private bool _showDisabledButtons;
     [ObservableProperty]
+    private int _iconSize;
+    [ObservableProperty]
     private ButtonSettings _settings;
+    private readonly IGeneralSettingsService _generalSettingsService;
+
     public ObservableCollection<CheckedButton> ButtonOrdering { get; }
-    public ButtonSettingsViewModel(ButtonSettings donor)
+    public ButtonSettingsViewModel(IGeneralSettingsService generalSettingsService)
     {
-        ShowDisabledButtons = donor.ShowDisabledButtons;
-        var checkeds = donor.ListOrder.Select(x => new CheckedButton(x, donor.VisibleButtons.HasFlag(x),this));
+        _showDisabledButtons = generalSettingsService.ButtonSettings.ShowDisabledButtons;
+        _iconSize = generalSettingsService.ButtonSettings.IconSize;
+        var checkeds = generalSettingsService.ButtonSettings.ListOrder.Select(x => new CheckedButton(x, generalSettingsService.ButtonSettings.VisibleButtons.HasFlag(x),this));
         ButtonOrdering = new ObservableCollection<CheckedButton>(checkeds);
         foreach (var c in ButtonOrdering)
         {
             c.PropertyChanged += ButtonCheckedChanged;
         }
         ButtonOrdering.CollectionChanged += ButtonOrdering_CollectionChanged;
+        _generalSettingsService = generalSettingsService;
+        UpdateSettings();
     }
-
+   
     private void UpdateSettings()
     {
+        if(ButtonOrdering is null)
+        {
+            return;
+        }
         var visible = VisibleButtons.None;
         foreach (var c in ButtonOrdering)
         {
@@ -67,9 +79,18 @@ public partial class ButtonSettingsViewModel : ObservableObject
             ListOrder = ButtonOrdering.Select(x => x.Button),
             VisibleButtons = visible,
             ShowDisabledButtons = ShowDisabledButtons,
+            IconSize = IconSize,
         };
+        _generalSettingsService.ButtonSettings = Settings;
     }
-
+    partial void OnIconSizeChanged(int value)
+    {
+        UpdateSettings();
+    }
+    partial void OnShowDisabledButtonsChanged(bool value)
+    {
+        UpdateSettings();
+    }
     private void ButtonOrdering_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
         UpdateSettings();
@@ -96,5 +117,22 @@ public partial class ButtonSettingsViewModel : ObservableObject
     internal void MoveButtonDown(CheckedButton button)
     {
         MoveButtonOrdering(button, +1);
+    }
+    [RelayCommand]
+    private void Reset()
+    {
+        var checkeds = ButtonSettings.Default.ListOrder.Select(x => new CheckedButton(x, ButtonSettings.Default.VisibleButtons.HasFlag(x), this));
+        foreach(var b in ButtonOrdering)
+        {
+            b.PropertyChanged -= ButtonCheckedChanged;
+        }
+        ButtonOrdering.Clear();
+        foreach(var b in checkeds)
+        {
+            ButtonOrdering.Add(b);
+            b.PropertyChanged += ButtonCheckedChanged;
+        }
+        ShowDisabledButtons = ButtonSettings.Default.ShowDisabledButtons;
+        IconSize = ButtonSettings.Default.IconSize;
     }
 }

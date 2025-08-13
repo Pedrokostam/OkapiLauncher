@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
+using System.Text.Json.Serialization;
 using System.Windows.Controls;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
@@ -8,23 +9,24 @@ namespace OkapiLauncher.Controls.Utilities;
 [StructLayout(LayoutKind.Sequential)]
 public readonly record struct ButtonSettings
 {
-    private const string DefaultOrder = "1234567";
-    private readonly string _order = DefaultOrder;
-    public static readonly ImmutableArray<VisibleButtons> Defaulto;
+    public static readonly ImmutableArray<VisibleButtons> DefaultOrder;
     public VisibleButtons VisibleButtons { get; init; }
     public bool ShowDisabledButtons { get; init; }
+    public int IconSize { get; init; } = 45;
     public ImmutableArray<VisibleButtons> Order { get; init; } = new();
+    [JsonIgnore]
     public IEnumerable<VisibleButtons> ListOrder
     {
         get => Order;
         init
         {
             var valueList = value.ToList();
-            var missing = Defaulto.Where(x => !valueList.Contains(x)).ToList();
+            var missing = DefaultOrder.Where(x => !valueList.Contains(x)).ToList();
             valueList.AddRange(missing);
             Order = valueList.ToImmutableArray();
         }
     }
+    [JsonIgnore]
     public string StringOrder
     {
         get => new([.. Order.Cast<int>().Select(x => x.ToString("X")[0])]);
@@ -45,13 +47,21 @@ public readonly record struct ButtonSettings
         VisibleButtons.Overview,
         VisibleButtons.KillAll,
         ];
-        Defaulto = l.ToImmutableArray();
+        DefaultOrder = l.ToImmutableArray();
+        Default = new()
+        {
+            Order = DefaultOrder,
+            ShowDisabledButtons = false,
+            VisibleButtons = VisibleButtons.Default,
+            IconSize = 45,
+        };
     }
     public ButtonSettings()
     {
         VisibleButtons = VisibleButtons.Default;
         ShowDisabledButtons = false;
-        Order = Defaulto;
+        Order = DefaultOrder;
     }
+    public static readonly ButtonSettings Default;
     public int GetPosition(VisibleButtons button) => Order.IndexOf(button);
 }

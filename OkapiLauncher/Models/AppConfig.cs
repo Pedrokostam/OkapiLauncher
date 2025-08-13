@@ -12,5 +12,4 @@ public class AppConfig
     /// Link to the latest release on GitHub (only full releases, no pre-releases, no drafts)
     /// </summary>
     public string UpdateLink { get; set; } = default!;
-    public ButtonSettings ButtonSettings { get; set; } = new ButtonSettings();
 }

@@ -18,16 +18,16 @@ public abstract class ProcessRefreshViewModel : ObservableRecipient, INavigation
     abstract protected IList<AvAppFacade> RawApps { get; }
     protected readonly IProcessManagerService _processManagerService;
     protected readonly IAvAppFacadeFactory _appFactory;
-    private readonly AppConfig _appConfig;
-    public ButtonSettings ButtonSettings => _appConfig.ButtonSettings;
+    private readonly IGeneralSettingsService _generalSettingsService;
+    public ButtonSettings ButtonSettings => _generalSettingsService.ButtonSettings;
     protected ProcessRefreshViewModel(IProcessManagerService processManagerService,
                                       IAvAppFacadeFactory appFactory,
                                       IMessenger messenger,
-                                      IOptions<AppConfig> appConfig) : base(messenger)
+                                      IGeneralSettingsService generalSettingsService) : base(messenger)
     {
         _processManagerService = processManagerService;
         _appFactory = appFactory;
-        _appConfig = appConfig.Value;
+        _generalSettingsService = generalSettingsService;
     }
 
     public virtual void OnNavigatedTo(object parameter)

@@ -84,13 +84,13 @@
             <i:InvokeCommandAction Command="{Binding UnloadedCommand}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <controls:MetroWindow.LeftWindowCommands>
+    <!--<controls:MetroWindow.LeftWindowCommands>
         <controls:WindowCommands>
             <Button Command="{Binding KillAllChildrenCommand}" ToolTip="{x:Static properties:Resources.ShellKillChildrenButton}">
                 <mdicons:MaterialIcon Kind="Skull" />
             </Button>
         </controls:WindowCommands>
-    </controls:MetroWindow.LeftWindowCommands>
+    </controls:MetroWindow.LeftWindowCommands>-->
     <controls:MetroWindow.Content>
         <Grid>
             <controls:SplitView

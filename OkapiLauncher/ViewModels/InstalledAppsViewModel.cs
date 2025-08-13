@@ -25,7 +25,7 @@ public sealed partial class InstalledAppsViewModel : ProcessRefreshViewModel
                                   IWindowManagerService windowManagerService,
                                   IContentDialogService contentDialogService,
                                   IMessenger messenger,
-                                  IOptions<AppConfig> appConfig) : base(processManagerService, appFactory, messenger, appConfig)
+                                  IGeneralSettingsService generalSettingsService) : base(processManagerService, appFactory, messenger, generalSettingsService)
     {
         RawApps = new List<AvAppFacade>(_appFactory.CreateAllFacades());
         _apps = CollectionViewSource.GetDefaultView(RawApps);

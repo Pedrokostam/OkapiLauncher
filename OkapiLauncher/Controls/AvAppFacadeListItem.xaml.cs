@@ -36,7 +36,7 @@ namespace OkapiLauncher.Controls
 
         // Using a DependencyProperty as the backing store for LaunchCommand.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ButtonSettingsProperty =
-            DependencyProperty.Register(nameof(ButtonSettings), typeof(ButtonSettings), typeof(AvAppFacadeListItem), new PropertyMetadata(defaultValue: new ButtonSettings(), PLC));
+            DependencyProperty.Register(nameof(ButtonSettings), typeof(ButtonSettings), typeof(AvAppFacadeListItem), new PropertyMetadata(defaultValue: ButtonSettings.Default));
 
 
         public ICommand LaunchCommand
@@ -102,14 +102,6 @@ namespace OkapiLauncher.Controls
                 }
             }
         }
-        private static void PLC(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (d is AvAppFacadeListItem userControl && e.NewValue is ButtonSettings s)
-            {
-                Debug.WriteLine("PLC");
-            }
-        }
-
         //private static void OnButtonSettingsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         //{
         //    if (d is AvAppFacadeListItem userControl && !Equals(userControl.ButtonSettings, e.NewValue))
@@ -131,11 +123,6 @@ namespace OkapiLauncher.Controls
         public AvAppFacadeListItem()
         {
             InitializeComponent();
-            this.DataContextChanged += (s, e) =>
-            {
-                Debug.WriteLine($"ITEM DataContext changed from {e.OldValue} to {e.NewValue}");
-            };
-
         }
 
         private void LaunchButton_Click(object sender, RoutedEventArgs e)

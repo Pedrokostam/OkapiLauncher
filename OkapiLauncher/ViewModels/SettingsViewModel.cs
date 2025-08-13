@@ -36,6 +36,7 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     private readonly IContentDialogService _contentDialogService;
     private readonly IAvAppFacadeFactory _avAppFacadeFactory;
     private readonly IMessenger _messenger;
+    private readonly IGeneralSettingsService _generalSettingsService;
 
     public SettingsViewModel(
         IOptions<AppConfig> appConfig,
@@ -47,7 +48,8 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
         ICustomAppSourceService customAppSourceService,
         IContentDialogService contentDialogService,
         IAvAppFacadeFactory avAppFacadeFactory,
-        IMessenger messenger)
+        IMessenger messenger,
+        IGeneralSettingsService generalSettingsService)
     {
         _appConfig = appConfig.Value;
         Link = _appConfig.GithubLink;
@@ -60,6 +62,7 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
         _contentDialogService = contentDialogService;
         _avAppFacadeFactory = avAppFacadeFactory;
         _messenger = messenger;
+        _generalSettingsService = generalSettingsService;
         _autoCheckForUpdates = _updateCheckService.AutoCheckForUpdatesEnabled;
         var app = AvApp.Dummy("AdoptedVisionStudio.exe",
                               new(2, 0, 0, 8),
@@ -75,7 +78,7 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
                                 windowManagerService: null,
                                _messenger);
         //ButtonSettings = _appConfig.ButtonSettings with { VisibleButtons = VisibleButtons.All };
-        ButtonSettingsVm = new ButtonSettingsViewModel(_appConfig.ButtonSettings);
+        ButtonSettingsVm = new ButtonSettingsViewModel(_generalSettingsService);
         //ButtonSettings = ButtonSettingsVm.Settings;
         //ButtonSettings = new ButtonSettings() { ListOrder = [], ShowDisabledButtons = true, VisibleButtons = VisibleButtons.All };
         OnPropertyChanged(nameof(ButtonSettingsVm));
@@ -84,21 +87,13 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     //[ObservableProperty]
     //private ButtonSettings _buttonSettings;
     public ButtonSettings ButtonSettings => ButtonSettingsVm.Settings;
-    [RelayCommand]
-    private void AAA()
-    {
-        //ButtonSettings = ButtonSettings with { VisibleButtons = VisibleButtons.None };
-    }
     private void ButtonSettingsVm_SettingsChanges(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (!string.Equals(e.PropertyName, nameof(ButtonSettingsViewModel.Settings), StringComparison.Ordinal))
         {
             return;
         }
-        _appConfig.ButtonSettings = ButtonSettingsVm.Settings;
-        //ButtonSettings = ButtonSettingsVm.Settings;
         OnPropertyChanged(nameof(this.ButtonSettings));
-        //ButtonSettings = ButtonSettingsVm.Settings;
     }
 
     [ObservableProperty]

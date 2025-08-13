@@ -14,5 +14,5 @@ public enum VisibleButtons
     //
     All = (KillAll << 1) - 1,
     //
-    Default = Launch | Copy | Open | License | Log,
+    Default = All,
 }

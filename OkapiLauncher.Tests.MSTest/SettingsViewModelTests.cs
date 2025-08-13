@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Moq;
 using CommunityToolkit.Mvvm.Messaging;
+using OkapiLauncher.Services;
 
 namespace OkapiLauncher.Tests.MSTest;
 
@@ -25,6 +26,7 @@ public class SettingsViewModelTests
         var mockThemeSelectorService = new Mock<IThemeSelectorService>();
         mockThemeSelectorService.Setup(mock => mock.GetCurrentTheme()).Returns(AppTheme.Light);
         var mockAppConfig = new Mock<IOptions<AppConfig>>();
+        var mockGenSettings = new Mock<IGeneralSettingsService>();
         var mockSystemService = new Mock<ISystemService>();
         var mockFileUpdateService = new Mock<IUpdateCheckService>();
         var mockApplicationInfoService = new Mock<IApplicationInfoService>();
@@ -44,7 +46,8 @@ public class SettingsViewModelTests
             mockCustomAppSourceService.Object,
             mockContentDialogService.Object,
             mockAvAppFacadeFactory.Object,
-            mockMessenger.Object
+            mockMessenger.Object,
+            mockGenSettings.Object
         );
         settingsVm.OnNavigatedTo(null);
 
@@ -55,6 +58,7 @@ public class SettingsViewModelTests
     public void TestSettingsViewModel_SetCurrentVersion()
     {
         var mockThemeSelectorService = new Mock<IThemeSelectorService>();
+        var mockGenSettings = new Mock<IGeneralSettingsService>();
         var mockAppConfig = new Mock<IOptions<AppConfig>>();
         var mockSystemService = new Mock<ISystemService>();
         var mockApplicationInfoService = new Mock<IApplicationInfoService>();
@@ -77,7 +81,8 @@ public class SettingsViewModelTests
             mockCustomAppSourceService.Object,
             mockContentDialogService.Object,
             mockAvAppFacadeFactory.Object,
-            mockMessenger.Object
+            mockMessenger.Object,
+            mockGenSettings.Object
         );
         settingsVm.OnNavigatedTo(null);
 
@@ -88,6 +93,7 @@ public class SettingsViewModelTests
     public void TestSettingsViewModel_SetThemeCommand()
     {
         var mockThemeSelectorService = new Mock<IThemeSelectorService>();
+        var mockGenSettings = new Mock<IGeneralSettingsService>();
         var mockAppConfig = new Mock<IOptions<AppConfig>>();
         var mockFileUpdateService = new Mock<IUpdateCheckService>();
         var mockSystemService = new Mock<ISystemService>();
@@ -108,7 +114,8 @@ public class SettingsViewModelTests
             mockCustomAppSourceService.Object,
             mockContentDialogService.Object,
             mockAvAppFacadeFactory.Object,
-            mockMessenger.Object
+            mockMessenger.Object,
+            mockGenSettings.Object
         );
         settingsVm.SetThemeCommand.Execute(AppTheme.Light.ToString());
 

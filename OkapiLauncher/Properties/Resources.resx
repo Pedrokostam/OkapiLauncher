@@ -607,4 +607,37 @@ All trademarks, service marks, logos, and copyrights related to the applications
   <data name="AvAppOpenOverview" xml:space="preserve">
     <value>Open process overview window</value>
   </data>
+  <data name="SettingsPageButtonsHeader" xml:space="preserve">
+    <value>App buttons</value>
+  </data>
+  <data name="SettingsPageButtonsShowDisabled" xml:space="preserve">
+    <value>Show disabled buttons</value>
+  </data>
+  <data name="SettingsPageButtonsReset" xml:space="preserve">
+    <value>Reset buttons to default</value>
+  </data>
+  <data name="AppButtonLaunchName" xml:space="preserve">
+    <value>Launch app</value>
+  </data>
+  <data name="AppButtonKillAllName" xml:space="preserve">
+    <value>Close all processes</value>
+  </data>
+  <data name="AppButtonCopyName" xml:space="preserve">
+    <value>Copy executable path</value>
+  </data>
+  <data name="AppButtonOpenName" xml:space="preserve">
+    <value>Open app folder</value>
+  </data>
+  <data name="AppButtonLicenseName" xml:space="preserve">
+    <value>Open license folder</value>
+  </data>
+  <data name="AppButtonLogName" xml:space="preserve">
+    <value>Open log folder</value>
+  </data>
+  <data name="AppButtonOverviewName" xml:space="preserve">
+    <value>Open process overview window</value>
+  </data>
+  <data name="AppButtonIconSize" xml:space="preserve">
+    <value>Button size</value>
+  </data>
 </root>

@@ -13,7 +13,7 @@ public class ButtonSettingsTests
     [TestMethod]
     public void EnsureDefaultOrderHasAllBuyttons()
     {
-        var orders = ButtonSettings.Defaulto.OrderBy(x => x);
+        var orders = ButtonSettings.DefaultOrder.OrderBy(x => x);
         var allFlags = OkapiLauncher.Helpers.EnumExtensions.GetAllStandaloneFlags<VisibleButtons>().OrderBy(x => x).ToList();
         Assert.IsTrue(orders.SequenceEqual(allFlags));
     }

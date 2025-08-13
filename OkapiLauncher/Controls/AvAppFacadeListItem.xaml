@@ -135,7 +135,7 @@
                     </TextBlock.Style>
                 </TextBlock>
             </StackPanel>
-            <local:AvAppButtons
+            <local:AvAppButtons VerticalAlignment="Center"
                 x:Name="AllButtons"
                 Grid.Column="2"
                 AppFacade="{Binding AppFacade, RelativeSource={RelativeSource AncestorType=UserControl}}"

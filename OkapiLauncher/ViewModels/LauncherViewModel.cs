@@ -37,7 +37,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
                              IRecentlyOpenedFilesService lastOpenedFilesService,
                              IProcessManagerService processManagerService, IContentDialogService contentDialogService,
                              IMessenger messenger,
-                             IOptions<AppConfig> appConfig) : base(processManagerService, appProvider, messenger,appConfig)
+                             IGeneralSettingsService generalSettingsService) : base(processManagerService, appProvider, messenger, generalSettingsService)
     {
         _lastOpenedFilesService = lastOpenedFilesService;
         _contentDialogService = contentDialogService;
