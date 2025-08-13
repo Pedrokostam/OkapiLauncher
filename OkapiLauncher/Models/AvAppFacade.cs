@@ -21,12 +21,13 @@ using CommunityToolkit.Mvvm.Messaging;
 using Windows.ApplicationModel.VoiceCommands;
 using ObservableCollections;
 using System.Diagnostics.CodeAnalysis;
+using OkapiLauncher.Controls.Utilities;
 
 namespace OkapiLauncher.Models;
 public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFacade>, IEquatable<AvAppFacade>
 {
     readonly private AvApp _avApp;
-    private readonly Lazy<IWindowManagerService> _windowManagerService;
+    private readonly Lazy<IWindowManagerService?> _windowManagerService;
 
     public string Name => _avApp.Name;
     public string Path => _avApp.Path;
@@ -40,6 +41,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     public string? Description => _avApp.Description ?? Name;
     public bool IsCustom => _avApp.IsCustom;
 
+    public ButtonSettings Susu { get; }
     public bool WarnAboutNewProcess => Type == ProductType.Professional && IsLaunched;
     public AvVersionFacade? SecondaryVersion { get; }
 
@@ -57,7 +59,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
 
     public bool IsLaunched => ActiveProcesses.Count > 0;
 
-    public AvAppFacade(AvApp avApp, IWindowManagerService windowManagerService, IMessenger messenger)
+    public AvAppFacade(AvApp avApp, IWindowManagerService? windowManagerService, IMessenger messenger)
     {
         _avApp = avApp;
         _windowManagerService = new(windowManagerService);
@@ -107,18 +109,23 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
             ExplorerHelper.OpenExplorer(LogFolderPath);
 
     }
-    //[RelayCommand]
-    //private void KillAllProcesses()
-    //{
-    //    _messenger.Send(new KillAllProcessesRequest(this,));
-    //}
+    [RelayCommand(CanExecute =nameof(IsExecutable))]
+    private void KillAllProcesses()
+    {
+        _messenger.Send(new KillAllProcessesRequest(this,null));
+    }
+    
 
     public bool CanOpenLicenseFolder => Directory.Exists(Brand.GetLicenseKeyFolderPath());
     public bool CanOpenLogFolder => Directory.Exists(LogFolderPath);
 
-    [RelayCommand]
+    [RelayCommand(CanExecute =nameof(IsExecutable))]
     private void ShowProcessOverview()
     {
+        if (_windowManagerService.Value is null)
+        {
+            return;
+        }
         _windowManagerService.Value.OpenInNewWindow(typeof(ProcessOverviewViewModel).FullName!, this);
     }
 

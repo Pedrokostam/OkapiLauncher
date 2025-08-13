@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using OkapiLauncher.Controls.Utilities;
 using OkapiLauncher.ViewModels;
 
 namespace OkapiLauncher.Views;
@@ -26,5 +27,11 @@ public partial class ProcessOverviewPage : Page
         DataContext = viewModel;
     }
 
-  
+    private void RootPage_Loaded(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is ProcessOverviewViewModel povm)
+        {
+            AppContextMenu.CreateAppContextMenu(this.HeaderGrid, povm.AvApp, null);
+        }
+    }
 }

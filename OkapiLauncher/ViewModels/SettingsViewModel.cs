@@ -6,18 +6,21 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using ControlzEx.Theming;
+using MahApps.Metro.Controls;
+using Microsoft.Extensions.Options;
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Contracts.ViewModels;
+using OkapiLauncher.Controls.Utilities;
 using OkapiLauncher.Core.Models;
+using OkapiLauncher.Core.Models.Apps;
 using OkapiLauncher.Helpers;
 using OkapiLauncher.Models;
 using OkapiLauncher.Services;
 using OkapiLauncher.Views;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using ControlzEx.Theming;
-using MahApps.Metro.Controls;
-using Microsoft.Extensions.Options;
 
 namespace OkapiLauncher.ViewModels;
 
@@ -32,17 +35,21 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     private readonly ICustomAppSourceService _customAppSourceService;
     private readonly IContentDialogService _contentDialogService;
     private readonly IAvAppFacadeFactory _avAppFacadeFactory;
+    private readonly IMessenger _messenger;
+    private readonly IGeneralSettingsService _generalSettingsService;
 
-    public SettingsViewModel(IOptions<AppConfig> appConfig,
-                             IThemeSelectorService themeSelectorService,
-                             ISystemService systemService,
-                             IApplicationInfoService applicationInfoService,
-                             IFileAssociationService fileAssociationService,
-                             IUpdateCheckService updateCheckService,
-                             ICustomAppSourceService customAppSourceService,
-                             IContentDialogService contentDialogService,
-                             IAvAppFacadeFactory avAppFacadeFactory
-                             )
+    public SettingsViewModel(
+        IOptions<AppConfig> appConfig,
+        IThemeSelectorService themeSelectorService,
+        ISystemService systemService,
+        IApplicationInfoService applicationInfoService,
+        IFileAssociationService fileAssociationService,
+        IUpdateCheckService updateCheckService,
+        ICustomAppSourceService customAppSourceService,
+        IContentDialogService contentDialogService,
+        IAvAppFacadeFactory avAppFacadeFactory,
+        IMessenger messenger,
+        IGeneralSettingsService generalSettingsService)
     {
         _appConfig = appConfig.Value;
         Link = _appConfig.GithubLink;
@@ -54,16 +61,55 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
         _customAppSourceService = customAppSourceService;
         _contentDialogService = contentDialogService;
         _avAppFacadeFactory = avAppFacadeFactory;
+        _messenger = messenger;
+        _generalSettingsService = generalSettingsService;
         _autoCheckForUpdates = _updateCheckService.AutoCheckForUpdatesEnabled;
+        var app = AvApp.Dummy("AdoptedVisionStudio.exe",
+                              new(2, 0, 0, 8),
+                              new(2, 0, 2, 3),
+                              "Adopted Vision Studio",
+                              AvType.Professional,
+                              AvBrand.Adaptive,
+                              "Fake app",
+                              "",
+                              "",
+                              "");
+        _avAppFacadeDummy = new(app,
+                                windowManagerService: null,
+                               _messenger);
+        //ButtonSettings = _appConfig.ButtonSettings with { VisibleButtons = VisibleButtons.All };
+        ButtonSettingsVm = new ButtonSettingsViewModel(_generalSettingsService);
+        //ButtonSettings = ButtonSettingsVm.Settings;
+        //ButtonSettings = new ButtonSettings() { ListOrder = [], ShowDisabledButtons = true, VisibleButtons = VisibleButtons.All };
+        OnPropertyChanged(nameof(ButtonSettingsVm));
+        ButtonSettingsVm.PropertyChanged += ButtonSettingsVm_SettingsChanges;
     }
+    //[ObservableProperty]
+    //private ButtonSettings _buttonSettings;
+    public ButtonSettings ButtonSettings => ButtonSettingsVm.Settings;
+    private void ButtonSettingsVm_SettingsChanges(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (!string.Equals(e.PropertyName, nameof(ButtonSettingsViewModel.Settings), StringComparison.Ordinal))
+        {
+            return;
+        }
+        OnPropertyChanged(nameof(this.ButtonSettings));
+    }
+
+    [ObservableProperty]
+    private AvAppFacade _avAppFacadeDummy;
 
     [ObservableProperty]
     private string _link;
 
     [ObservableProperty]
     private AppTheme _theme;
+
     [ObservableProperty]
     private string _versionDescription = string.Empty;
+
+    //[ObservableProperty]
+    //private ButtonSettings _buttonSettings;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(ResetColorCommand))]
@@ -79,7 +125,6 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
         Theme = _themeSelectorService.GetCurrentTheme();
         CurrentAccent = _themeSelectorService.GetCurrentAccent();
         UpdateStatus();
-
     }
 
     [RelayCommand]
@@ -95,9 +140,15 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
         Theme = _themeSelectorService.GetCurrentTheme();
     }
 
+    //partial void OnButtonSettingsChanged(ButtonSettings value)
+    //{
+    //    _appConfig.ButtonSettings = value;
+    //}
+
     public ObservableCollection<FileAssociationStatus> FileAssociationStatus { get; } = [];
     public ObservableCollection<CustomAppSource> CustomSources => _customAppSourceService.CustomSources;
-
+    [ObservableProperty]
+    private ButtonSettingsViewModel _buttonSettingsVm;
     partial void OnCurrentAccentChanged(System.Windows.Media.Color? value) => OnSetTheme(Theme.ToString());
 
     private bool CanResetColor() => CurrentAccent != null;

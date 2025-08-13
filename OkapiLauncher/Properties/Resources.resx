@@ -298,7 +298,7 @@
     <value>Could not determine version</value>
   </data>
   <data name="SettingsPageSetFileAssociationsButton" xml:space="preserve">
-    <value>Set this app as default for all related extensions</value>
+    <value>Associate all</value>
   </data>
   <data name="SettingsPageSetFileAssociationsButtonTooltip" xml:space="preserve">
     <value>Sets this app as the default app to open all vision project and runtime files</value>
@@ -600,5 +600,44 @@ All trademarks, service marks, logos, and copyrights related to the applications
   </data>
   <data name="ShellMenuNativeRecentFilesTooltip" xml:space="preserve">
     <value>Items that were recently opened by each available app (including those not coming from Okapi).</value>
+  </data>
+  <data name="ShellViewButtonSettingHeader" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="AvAppOpenOverview" xml:space="preserve">
+    <value>Open process overview window</value>
+  </data>
+  <data name="SettingsPageButtonsHeader" xml:space="preserve">
+    <value>App buttons</value>
+  </data>
+  <data name="SettingsPageButtonsShowDisabled" xml:space="preserve">
+    <value>Show disabled buttons</value>
+  </data>
+  <data name="SettingsPageButtonsReset" xml:space="preserve">
+    <value>Reset buttons to default</value>
+  </data>
+  <data name="AppButtonLaunchName" xml:space="preserve">
+    <value>Launch app</value>
+  </data>
+  <data name="AppButtonKillAllName" xml:space="preserve">
+    <value>Close all processes</value>
+  </data>
+  <data name="AppButtonCopyName" xml:space="preserve">
+    <value>Copy executable path</value>
+  </data>
+  <data name="AppButtonOpenName" xml:space="preserve">
+    <value>Open app folder</value>
+  </data>
+  <data name="AppButtonLicenseName" xml:space="preserve">
+    <value>Open license folder</value>
+  </data>
+  <data name="AppButtonLogName" xml:space="preserve">
+    <value>Open log folder</value>
+  </data>
+  <data name="AppButtonOverviewName" xml:space="preserve">
+    <value>Open process overview window</value>
+  </data>
+  <data name="AppButtonIconSize" xml:space="preserve">
+    <value>Button size</value>
   </data>
 </root>

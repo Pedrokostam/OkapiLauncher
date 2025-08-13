@@ -94,6 +94,7 @@ public partial class App : Application
         services.AddSingleton<IMessenger, StrongReferenceMessenger>();
         services.AddSingleton<IAvAppFacadeFactory, AvAppFacadeFactory>();
         services.AddSingleton<IRecentlyOpenedFilesService, RecentlyOpenedFilesService>();
+        services.AddSingleton<IGeneralSettingsService, GeneralSettingsService>();
         services.AddSingleton<IFileAssociationService, FileAssociationService>();
         services.AddSingleton<IUpdateCheckService, UpdateCheckService>();
         services.AddSingleton<FileOpenerBroker>();

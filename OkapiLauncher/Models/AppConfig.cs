@@ -1,4 +1,6 @@
-﻿namespace OkapiLauncher.Models;
+﻿using OkapiLauncher.Controls.Utilities;
+
+namespace OkapiLauncher.Models;
 
 public class AppConfig
 {

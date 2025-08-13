@@ -1,26 +1,27 @@
-﻿using System.IO;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows;
-using OkapiLauncher.Contracts.Services;
-using OkapiLauncher.Models.Messages;
+using System.Windows.Input;
+using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using OkapiLauncher.Core.Models.Apps;
-using System.Collections.ObjectModel;
-using System.Windows.Input;
-using System.Diagnostics;
-using Windows.Storage;
-using OkapiLauncher.Models;
-using OkapiLauncher.Core.Models.Projects;
-using System.Windows.Threading;
-using OkapiLauncher.Services;
-using OkapiLauncher.Contracts.ViewModels;
-using OkapiLauncher.Helpers;
+using Microsoft.Extensions.Options;
 using Microsoft.VisualBasic;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Contracts.ViewModels;
 using OkapiLauncher.Core.Models;
+using OkapiLauncher.Core.Models.Apps;
+using OkapiLauncher.Core.Models.Projects;
+using OkapiLauncher.Helpers;
+using OkapiLauncher.Models;
+using OkapiLauncher.Models.Messages;
 using OkapiLauncher.Properties;
+using OkapiLauncher.Services;
 using OkapiLauncher.Views;
-using System.Text.RegularExpressions;
+using Windows.Storage;
 
 namespace OkapiLauncher.ViewModels;
 
@@ -35,7 +36,8 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
                              INavigationService navigationService,
                              IRecentlyOpenedFilesService lastOpenedFilesService,
                              IProcessManagerService processManagerService, IContentDialogService contentDialogService,
-                             IMessenger messenger) : base(processManagerService, appProvider, messenger)
+                             IMessenger messenger,
+                             IGeneralSettingsService generalSettingsService) : base(processManagerService, appProvider, messenger, generalSettingsService)
     {
         _lastOpenedFilesService = lastOpenedFilesService;
         _contentDialogService = contentDialogService;
@@ -53,7 +55,6 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
     private LaunchOptions? _launchOptions;
     public ObservableCollection<AvAppFacade> Apps { get; } = [];
     protected override IList<AvAppFacade> RawApps => Apps;
-
     private bool CanLaunch()
     {
         return SelectedApp is not null && (VisionProject?.Exists ?? false);
@@ -62,6 +63,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
     [RelayCommand(CanExecute = nameof(CanLaunch))]
     private void Launch(object? app)
     {
+        bool isAppNull = app is null;
         IAvApp? appToLaunch = app as IAvApp;
         appToLaunch ??= SelectedApp;
         if (appToLaunch is null || !(VisionProject?.Exists ?? false))
@@ -75,7 +77,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
             return;
         }
         Messenger.Send(new OpenAppRequest(appToLaunch, args));
-        if (ShouldCloseAfterLaunching)
+        if (ShouldCloseAfterLaunching && isAppNull)
         {
             Application.Current.Shutdown();
         }
