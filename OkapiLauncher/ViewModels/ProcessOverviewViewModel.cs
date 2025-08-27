@@ -65,6 +65,10 @@ public partial class ProcessOverviewViewModel : ObservableRecipient, INavigation
 
     public void Receive(FreshAppProcesses message)
     {
+        if (!IsActive)
+        {
+            return;
+        }
         Application.Current?.Dispatcher.Invoke(() => message.UpdateState(AvApp));
     }
     [RelayCommand]

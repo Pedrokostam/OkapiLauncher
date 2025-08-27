@@ -55,7 +55,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     private Compatibility? _compatibility = null;
     private readonly IMessenger _messenger;
 
-    public ObservableCollection<SimpleProcess> ActiveProcesses { get; } = [];
+    public DatedObservableCollection<SimpleProcess> ActiveProcesses { get; } = [];
 
     public bool IsLaunched => ActiveProcesses.Count > 0;
 

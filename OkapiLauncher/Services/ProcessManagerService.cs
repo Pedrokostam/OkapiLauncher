@@ -38,7 +38,6 @@ namespace OkapiLauncher.Services
         /// Above this threshold updated should not be forced.
         /// </summary>
         private static readonly TimeSpan _recheckThreshold = _timerPeriod - _gracePeriod;
-        public FreshAppProcesses GetCurrentState => new FreshAppProcesses(_dictionary);
 
         public ProcessManagerService(IMessenger messenger, IAvAppFacadeFactory avAppFacadeFactory,IContentDialogService contentDialogService)
         {

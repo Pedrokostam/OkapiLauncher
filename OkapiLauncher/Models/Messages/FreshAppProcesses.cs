@@ -16,20 +16,36 @@ using System.Windows;
 namespace OkapiLauncher.Models.Messages;
 public class FreshAppProcesses
 {
-    private readonly Dictionary<string, HashSet<SimpleProcess>> _dict;
+    private readonly Dictionary<string, IList<SimpleProcess>> _dict= new Dictionary<string, IList<SimpleProcess>>(StringComparer.OrdinalIgnoreCase);
+
+    public FreshAppProcesses(IEnumerable<SimpleProcess> processes)
+    {
+        foreach (var process in processes)
+        { 
+            if(_dict.TryGetValue(process.ProcessName,out var list))
+            {
+                list.Add(process);
+            }
+            else
+            {
+                _dict[process.ProcessName] = [process];
+            }
+        }
+        foreach (var v in _dict.Values)
+        { 
+        v.or}
+    }
 
     public FreshAppProcesses(IDictionary<string, IEnumerable<SimpleProcess>> newState)
     {
-        _dict = new Dictionary<string, HashSet<SimpleProcess>>(StringComparer.OrdinalIgnoreCase);
         foreach (var kvp in newState)
         {
-            _dict[kvp.Key] = kvp.Value.ToHashSet();
+            _dict[kvp.Key] = [.. kvp.Value];
         }
     }
 
     public FreshAppProcesses(IDictionary<string, HashSet<SimpleProcess>> newState)
     {
-        _dict = new Dictionary<string, HashSet<SimpleProcess>>(StringComparer.OrdinalIgnoreCase);
         foreach (var kvp in newState)
         {
             _dict[kvp.Key] = [.. kvp.Value];
@@ -47,7 +63,11 @@ public class FreshAppProcesses
     public void UpdateState(AvAppFacade app)
     {
         ArgumentNullException.ThrowIfNull(app);
-
+        if (!app.ActiveProcesses.NeedsUpdate())
+        {
+            Debug.WriteLine("Skipped update of facade");
+            return;
+        }
         if (!_dict.TryGetValue(app.Path, out var newProcs))
         {
             return;
@@ -82,7 +102,5 @@ public class FreshAppProcesses
             app.ActiveProcesses.Insert(insertionIndex, proc.Clone());
         }
     }
-
-    public IReadOnlyDictionary<string, HashSet<SimpleProcess>> State => new ReadOnlyDictionary<string, HashSet<SimpleProcess>>(_dict);
 
 }

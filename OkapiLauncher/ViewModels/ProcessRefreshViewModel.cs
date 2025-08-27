@@ -43,6 +43,10 @@ public abstract class ProcessRefreshViewModel : ObservableRecipient, INavigation
 
     public void Receive(FreshAppProcesses message)
     {
+        if (!IsActive)
+        {
+            return;
+        }
         Application.Current?.Dispatcher.Invoke(() => message.UpdateStates(RawApps));
     }
 }
