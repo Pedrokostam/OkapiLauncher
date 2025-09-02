@@ -16,13 +16,24 @@ using System.Windows;
 namespace OkapiLauncher.Models.Messages;
 public class FreshAppProcesses
 {
-    private readonly Dictionary<string, IList<SimpleProcess>> _dict= new Dictionary<string, IList<SimpleProcess>>(StringComparer.OrdinalIgnoreCase);
-
+    private readonly Dictionary<string, HashSet<SimpleProcess>> _dict = new Dictionary<string, HashSet<SimpleProcess>>(StringComparer.OrdinalIgnoreCase);
+    public int GetHash()
+    {
+        var hash = 04092025;
+        foreach (var kvp in _dict.Values)
+        {
+            foreach (var item in kvp)
+            {
+                hash = HashCode.Combine(hash, item.MainWindowTitle, item.Id);
+            }
+        }
+        return hash;
+    }
     public FreshAppProcesses(IEnumerable<SimpleProcess> processes)
     {
         foreach (var process in processes)
-        { 
-            if(_dict.TryGetValue(process.ProcessName,out var list))
+        {
+            if (_dict.TryGetValue(process.ProcessName, out var list))
             {
                 list.Add(process);
             }
@@ -31,27 +42,45 @@ public class FreshAppProcesses
                 _dict[process.ProcessName] = [process];
             }
         }
-        foreach (var v in _dict.Values)
-        { 
-        v.or}
+        foreach (var kvp in _dict)
+        {
+            _dict[kvp.Key] = [.. kvp.Value];
+        }
     }
 
+    public FreshAppProcesses(IReadOnlyDictionary<string, IEnumerable<SimpleProcess>> newState)
+    {
+        foreach (var kvp in newState)
+        {
+            _dict[kvp.Key] = [.. kvp.Value];
+        }
+    }
+    public FreshAppProcesses(IReadOnlyDictionary<string, IList<SimpleProcess>> newState)
+    {
+        foreach (var kvp in newState)
+        {
+            _dict[kvp.Key] = [.. kvp.Value];
+        }
+    }
     public FreshAppProcesses(IDictionary<string, IEnumerable<SimpleProcess>> newState)
     {
         foreach (var kvp in newState)
         {
-            _dict[kvp.Key] = [.. kvp.Value];
+            _dict[kvp.Key] = [.. kvp.Value.OrderBy(x => x.StartTime)];
         }
     }
-
-    public FreshAppProcesses(IDictionary<string, HashSet<SimpleProcess>> newState)
+    public FreshAppProcesses(IDictionary<string, IList<SimpleProcess>> newState)
     {
         foreach (var kvp in newState)
         {
-            _dict[kvp.Key] = [.. kvp.Value];
+            _dict[kvp.Key] = [.. kvp.Value.OrderBy(x => x.StartTime)];
         }
     }
-
+   
+    /// <summary>
+    /// Modifies all items in <paramref name="apps"/> so that their <see cref="AvAppFacade.ActiveProcesses">ActiveProcesses</see> reflects state from this instance.
+    /// </summary>
+    /// <param name="apps"></param>
     public void UpdateStates(IEnumerable<AvAppFacade> apps)
     {
         foreach (var app in apps)
@@ -60,14 +89,18 @@ public class FreshAppProcesses
         }
     }
 
+    /// <summary>
+    /// Modifies the given instance of <paramref name="app"/> so that its <see cref="AvAppFacade.ActiveProcesses">ActiveProcesses</see> reflects state from this instance.
+    /// </summary>
+    /// <param name="app"></param>
     public void UpdateState(AvAppFacade app)
     {
         ArgumentNullException.ThrowIfNull(app);
-        if (!app.ActiveProcesses.NeedsUpdate())
-        {
-            Debug.WriteLine("Skipped update of facade");
-            return;
-        }
+        //if (!app.ActiveProcesses.NeedsUpdate())
+        //{
+        //    Debug.WriteLine("Skipped update of facade");
+        //    return;
+        //}
         if (!_dict.TryGetValue(app.Path, out var newProcs))
         {
             return;

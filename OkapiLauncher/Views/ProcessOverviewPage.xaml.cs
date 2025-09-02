@@ -34,4 +34,9 @@ public partial class ProcessOverviewPage : Page
             AppContextMenu.CreateAppContextMenu(this.HeaderGrid, povm.AvApp, null);
         }
     }
+
+    private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+
+    }
 }

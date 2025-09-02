@@ -21,8 +21,6 @@ using OkapiLauncher.Services;
 using OkapiLauncher.ViewModels;
 using OkapiLauncher.Views;
 
-using Windows.ApplicationModel.Resources.Core;
-
 namespace OkapiLauncher;
 
 // For more information about application lifecycle events see https://docs.microsoft.com/dotnet/framework/wpf/app-development/application-management-overview

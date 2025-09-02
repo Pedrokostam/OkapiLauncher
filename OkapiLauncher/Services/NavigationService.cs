@@ -1,10 +1,8 @@
-﻿using System.Diagnostics;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System.Windows.Navigation;
 using OkapiLauncher.Contracts.EventArgs;
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Contracts.ViewModels;
-using Windows.Media.Playback;
 
 namespace OkapiLauncher.Services;
 

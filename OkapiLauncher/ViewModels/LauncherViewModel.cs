@@ -1,27 +1,18 @@
 ﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Input;
-using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using Microsoft.Extensions.Options;
-using Microsoft.VisualBasic;
 using OkapiLauncher.Contracts.Services;
-using OkapiLauncher.Contracts.ViewModels;
 using OkapiLauncher.Core.Models;
 using OkapiLauncher.Core.Models.Apps;
 using OkapiLauncher.Core.Models.Projects;
-using OkapiLauncher.Helpers;
 using OkapiLauncher.Models;
 using OkapiLauncher.Models.Messages;
 using OkapiLauncher.Properties;
 using OkapiLauncher.Services;
-using OkapiLauncher.Views;
-using Windows.Storage;
 
 namespace OkapiLauncher.ViewModels;
 
@@ -158,7 +149,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
             }
             _lastOpenedFilesService.AddLastFile(project.Path);
             _navigationService.NavigateTo(GetType().FullName!);
-            _processManagerService.GetCurrentState.UpdateStates(Apps);
+            _processManagerService.ProcessState.UpdateStates(Apps);
             return true;
         }
         catch (FileNotFoundException)

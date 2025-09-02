@@ -5,6 +5,6 @@ using OkapiLauncher.Models.Messages;
 namespace OkapiLauncher.Services;
 public interface IProcessManagerService
 {
-    FreshAppProcesses GetCurrentState { get; }
+    FreshAppProcesses? ProcessState { get; }
 
 }

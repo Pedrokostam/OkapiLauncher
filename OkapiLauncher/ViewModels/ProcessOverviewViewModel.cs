@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -48,7 +49,7 @@ public partial class ProcessOverviewViewModel : ObservableRecipient, INavigation
         {
             return;
         }
-        _processManagerService.GetCurrentState.UpdateState(AvApp);
+        _processManagerService.ProcessState.UpdateState(AvApp);
     }
 
     public void OnNavigatedFrom()

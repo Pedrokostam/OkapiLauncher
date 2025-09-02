@@ -13,6 +13,9 @@ using OkapiLauncher.Core.Models.Apps;
 using OkapiLauncher.Models;
 using OkapiLauncher.Models.Messages;
 using CommunityToolkit.Mvvm.Messaging;
+using System.Collections.Immutable;
+using OkapiLauncher.Services.Processes;
+using System.Collections;
 
 namespace OkapiLauncher.Services
 {
@@ -23,37 +26,50 @@ namespace OkapiLauncher.Services
         /// Since the process name is the key, it is quite fast to look it up
         /// ExecutablePath - simpleprocesses
         /// </summary>
-        private readonly Dictionary<string, HashSet<SimpleProcess>> _dictionary = new(StringComparer.OrdinalIgnoreCase);
         private readonly IMessenger _messenger;
         private readonly IAvAppFacadeFactory _avAppFacadeFactory;
         private readonly IContentDialogService _contentDialogService;
         private readonly System.Timers.Timer _timer;
-        private DateTime _lastUpdate;
         /// <summary>
         /// How much time at minimum there must to the next scheduled updated to force it.
         /// </summary>
-        private static readonly TimeSpan _gracePeriod = TimeSpan.FromMilliseconds(300);
-        private static readonly TimeSpan _timerPeriod = TimeSpan.FromMilliseconds(2000);
         /// <summary>
         /// Above this threshold updated should not be forced.
         /// </summary>
-        private static readonly TimeSpan _recheckThreshold = _timerPeriod - _gracePeriod;
+        private IProcessQuerer? Querer
+        {
+            get => _querer;
+            set
+            {
+                _timer?.Stop();
+                _querer = value;
+                if (value is not null)
+                {
+                    if (_timer is not null)
+                    {
+                        _timer.Interval = value.TimerPeriod.TotalMilliseconds;
+                        Update(_avAppFacadeFactory.AvApps);
+                        _timer.Start();
+                    }
+                }
+            }
+        }
+        public FreshAppProcesses? ProcessState { get; private set; }
 
-        public ProcessManagerService(IMessenger messenger, IAvAppFacadeFactory avAppFacadeFactory,IContentDialogService contentDialogService)
+        public ProcessManagerService(IMessenger messenger, IAvAppFacadeFactory avAppFacadeFactory, IContentDialogService contentDialogService)
         {
             _messenger = messenger;
             _avAppFacadeFactory = avAppFacadeFactory;
             _contentDialogService = contentDialogService;
-            _timer = new(_timerPeriod.TotalMilliseconds);
+            _timer = new() { AutoReset = true };
             _timer.Elapsed += _timer_Elapsed;
-            _timer.AutoReset = true;
+            Querer = new DiagnosticQuerer(_messenger);
             Update(_avAppFacadeFactory.AvApps);
-            _timer.Start();
             _messenger.RegisterAll(this);
-
         }
 
         private readonly object _lock = new();
+        private IProcessQuerer? _querer;
 
         private void _timer_Elapsed(object? sender, ElapsedEventArgs e)
         {
@@ -64,161 +80,49 @@ namespace OkapiLauncher.Services
 
         private void Update(IReadOnlyCollection<IAvApp> apps)
         {
-            //var full = Stopwatch.StartNew();
-            if (Monitor.TryEnter(_lock))
+            if (Querer is not null && !Querer.ShouldUpdate())
             {
-                try
-                {
-                    Update_Impl(apps);
-                }
-                finally
-                {
-                    Monitor.Exit(_lock);
-                }
-            }
-            //Trace.WriteLine($"FULL_{full.Elapsed.TotalMilliseconds}");
-        }
-
-        private void Update_Impl(IReadOnlyCollection<IAvApp> apps)
-        {
-            var rawProcesses = Process.GetProcesses();
-            var stateDict = GetNewStateDict(rawProcesses, apps);
-            var missings = _dictionary.Keys.ToHashSet(StringComparer.OrdinalIgnoreCase);
-
-            foreach (var kvp in stateDict)
-            {
-                UpdateOneExe(kvp);
-                missings.Remove(kvp.Key);
-            }
-
-            foreach (var missing in missings)
-            {
-                if (_dictionary.TryGetValue(missing, out var value))
-                {
-                    value.Clear();
-                }
-            }
-            foreach (var proc in rawProcesses)
-            {
-                proc.Dispose();
-            }
-            _messenger.Send<FreshAppProcesses>(GetCurrentState);
-            _lastUpdate = DateTime.UtcNow;
-        }
-
-        private void UpdateSingle(IAvApp app)
-        {
-            var diff = DateTime.UtcNow - _lastUpdate;
-            if (diff > _recheckThreshold)
-            {
-                // It's gonna be updated son enough, no need to force it
                 return;
             }
-            if (Monitor.TryEnter(_lock))
+            try
             {
-                try
+                if (Querer?.GetProcesses(apps) is FreshAppProcesses fap)
                 {
-                    UpdateSingle_Impl(app);
-                }
-                finally
-                {
-                    Monitor.Exit(_lock);
-                }
-            }
-        }
 
-        private void UpdateSingle_Impl(IAvApp app)
-        {
-            var rawProcesses = Process.GetProcessesByName(app.ProcessName);
-            List<SimpleProcess> simples = new List<SimpleProcess>(rawProcesses.Length);
+                    ProcessState = fap;
+                    _messenger.Send<FreshAppProcesses>(ProcessState);
+                }
 
-            foreach (var proc in rawProcesses)
-            {
-                if (!string.Equals(proc.MainModule?.FileName, app.Path,StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
-                try
-                {
-                    var simple = new SimpleProcess(proc, _messenger, app.Path);
-                    simples.Add(simple);
-
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e);
-                }
-                finally
-                {
-                    proc.Dispose();
-                }
             }
-            UpdateOneExe(app.Path, simples);
-            _messenger.Send<FreshAppProcesses>(GetCurrentState);
-        }
-
-        private Dictionary<string, List<SimpleProcess>> GetNewStateDict(Process[] rawProcesses, IReadOnlyCollection<IAvApp> apps)
-        {
-            var full = Stopwatch.StartNew();
-            int count = apps.Count;
-            var stateDict = new Dictionary<string, List<SimpleProcess>>(count, StringComparer.OrdinalIgnoreCase);
-            var processNames = new HashSet<string>(count, StringComparer.OrdinalIgnoreCase);
-            foreach (var app in apps)
+            catch (ProcessException e)
             {
-                processNames.Add(app.ProcessName);
-                stateDict[app.Path] = [];
-            }
-            foreach (var process in rawProcesses)
-            {
-                if (!(processNames.Contains(process.ProcessName)
-                    && process.MainModule?.FileName is string filepath
-                    && stateDict.ContainsKey(filepath)))
+                if (Querer is DiagnosticQuerer d)
                 {
-                    continue;
-                }
-                try
-                {
-                    var sp = new SimpleProcess(process, _messenger, filepath);
-                    stateDict[filepath].Add(sp);
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e);
-                }
-            }
-            return stateDict;
-        }
-
-        private void UpdateOneExe(KeyValuePair<string, List<SimpleProcess>> exePathGroup)
-        {
-            UpdateOneExe(exePathGroup.Key, exePathGroup.Value);
-        }
-        private void UpdateOneExe(string filepath, IEnumerable<SimpleProcess> newProcesses)
-        {
-            if (!_dictionary.TryGetValue(filepath, out var set))
-            {
-                set = [];
-                _dictionary[filepath] = set;
-            }
-            var freshSimples = newProcesses.ToHashSet();
-            foreach (var newProc in freshSimples)
-            {
-                if (set.TryGetValue(newProc, out var oldProc))
-                {
-                    oldProc.UpdateFrom(newProc);
+                    Querer = new WmiQuerer(_messenger);
                 }
                 else
                 {
-                    set.Add(newProc);
+                    Querer = null;
+                    _contentDialogService.ShowError($"The application is unable to get information about currently running processes\n{e.Exception?.Message}", "Unable to query for processes");
                 }
             }
-            set.IntersectWith(freshSimples);
         }
 
-        public void Receive(KillProcessRequest message) => Kill(message.Process,message.ViewModel);
+
+        private void UpdateSingle(IAvApp app)
+        {
+            //if (!(Querer?.ShouldUpdate() ?? false))
+            //{
+            //    return;
+            //}
+            ProcessState = Querer?.UpdateSingleApp(app) ?? new FreshAppProcesses([]);
+            _messenger.Send<FreshAppProcesses>(ProcessState);
+        }
+
+        public void Receive(KillProcessRequest message) => Kill(message.Process, message.ViewModel);
         private async void Kill(SimpleProcess process, object context)
         {
-            var res = await _contentDialogService.ShowProcessKillDialog(context,process);
+            var res = await _contentDialogService.ShowProcessKillDialog(context, process);
             if (!res)
             {
                 return;
@@ -261,8 +165,8 @@ namespace OkapiLauncher.Services
             }
             UpdateSingle(App);
         }
-        public void Receive(KillAllProcessesRequest message) => KillAll(message.AvApp,message.ViewModel);
-        private async void KillAll(AvAppFacade avApp,object? viewModel)
+        public void Receive(KillAllProcessesRequest message) => KillAll(message.AvApp, message.ViewModel);
+        private async void KillAll(AvAppFacade avApp, object? viewModel)
         {
             var res = await _contentDialogService.ShowAllProcessesKillDialog(viewModel, avApp);
             if (!res)
@@ -280,9 +184,16 @@ namespace OkapiLauncher.Services
             List<Process> procs = [];
             foreach (var active in avApp.ActiveProcesses)
             {
-                var proc = Process.GetProcessById(active.Id);
-                procs.Add(proc);
-                proc.Kill();
+                try
+                {
+                    var proc = Process.GetProcessById(active.Id);
+                    procs.Add(proc);
+                    proc.Kill();
+
+                }
+                catch (ArgumentException)
+                {
+                }
             }
             foreach (var proc in procs)
             {

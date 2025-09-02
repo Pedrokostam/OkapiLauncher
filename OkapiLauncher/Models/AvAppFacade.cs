@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Windows;
-using ABI.Windows.Foundation;
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Core.Models;
 using OkapiLauncher.Core.Models.Apps;
@@ -18,9 +10,6 @@ using OkapiLauncher.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using Windows.ApplicationModel.VoiceCommands;
-using ObservableCollections;
-using System.Diagnostics.CodeAnalysis;
 using OkapiLauncher.Controls.Utilities;
 
 namespace OkapiLauncher.Models;

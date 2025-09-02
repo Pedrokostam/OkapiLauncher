@@ -1,24 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Security.AccessControl;
-using System.Security.Principal;
 using System.Text;
-using System.Windows;
-using OkapiLauncher.Contracts.Services;
-using OkapiLauncher.Helpers;
-using OkapiLauncher.Models;
+using System.Text.Json;
 using Microsoft.Extensions.Options;
 using Microsoft.Win32;
-using Windows.Networking.NetworkOperators;
-using System.Text.Json;
-using CommunityToolkit.Mvvm.Messaging.Messages;
-using OkapiLauncher.Core.Models.Apps;
+using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Core.Models;
-using System.Security.Policy;
+using OkapiLauncher.Helpers;
+using OkapiLauncher.Models;
 
 namespace OkapiLauncher.Services;
 public partial class FileAssociationService : IFileAssociationService
