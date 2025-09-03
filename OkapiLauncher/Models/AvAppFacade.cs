@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Windows;
-using ABI.Windows.Foundation;
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Core.Models;
 using OkapiLauncher.Core.Models.Apps;
@@ -18,15 +10,13 @@ using OkapiLauncher.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using Windows.ApplicationModel.VoiceCommands;
-using ObservableCollections;
-using System.Diagnostics.CodeAnalysis;
+using OkapiLauncher.Controls.Utilities;
 
 namespace OkapiLauncher.Models;
 public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFacade>, IEquatable<AvAppFacade>
 {
     readonly private AvApp _avApp;
-    private readonly Lazy<IWindowManagerService> _windowManagerService;
+    private readonly Lazy<IWindowManagerService?> _windowManagerService;
 
     public string Name => _avApp.Name;
     public string Path => _avApp.Path;
@@ -35,11 +25,12 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     public string NameWithVersion => $"{Name} {Version}";
     public bool IsDevelopmentVersion => Version.IsDevelopmentVersion;
     public bool IsExecutable => _avApp.IsExecutable;
-    public string  LogFolderPath=> _avApp.LogFolderPath;
+    public string? LogFolderPath => _avApp.LogFolderPath;
 
     public string? Description => _avApp.Description ?? Name;
     public bool IsCustom => _avApp.IsCustom;
 
+    public ButtonSettings Susu { get; }
     public bool WarnAboutNewProcess => Type == ProductType.Professional && IsLaunched;
     public AvVersionFacade? SecondaryVersion { get; }
 
@@ -51,13 +42,16 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
 
     [ObservableProperty]
     private Compatibility? _compatibility = null;
+    [ObservableProperty]
+    private bool _processInfoAvailable=false;
+    public bool ShowProcessInfo => IsExecutable && ProcessInfoAvailable;
     private readonly IMessenger _messenger;
 
-    public ObservableCollection<SimpleProcess> ActiveProcesses { get; } = new();
+    public DatedObservableCollection<SimpleProcess> ActiveProcesses { get; } = [];
 
     public bool IsLaunched => ActiveProcesses.Count > 0;
 
-    public AvAppFacade(AvApp avApp, IWindowManagerService windowManagerService, IMessenger messenger)
+    public AvAppFacade(AvApp avApp, IWindowManagerService? windowManagerService, IMessenger messenger)
     {
         _avApp = avApp;
         _windowManagerService = new(windowManagerService);
@@ -71,6 +65,13 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     {
         OnPropertyChanged(nameof(IsLaunched));
         OnPropertyChanged(nameof(WarnAboutNewProcess));
+        KillAllProcessesCommand.NotifyCanExecuteChanged();
+    }
+    partial void OnProcessInfoAvailableChanged(bool value)
+    {
+        OnPropertyChanged(nameof(ShowProcessInfo));
+        KillAllProcessesCommand.NotifyCanExecuteChanged();
+        ShowProcessOverviewCommand.NotifyCanExecuteChanged();
     }
 
     public ProductBrand Brand => _avApp.Brand;
@@ -94,30 +95,36 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
         Clipboard.SetText(Path);
     }
 
-    [RelayCommand(CanExecute =nameof(CanOpenLicenseFolder))]
+    [RelayCommand(CanExecute = nameof(CanOpenLicenseFolder))]
     private void OpenLicenseFolder()
     {
         ExplorerHelper.OpenExplorer(Brand.GetLicenseKeyFolderPath());
     }
 
-    [RelayCommand(CanExecute =nameof(CanOpenLogFolder))]
+    [RelayCommand(CanExecute = nameof(CanOpenLogFolder))]
     private void OpenLogFolder()
     {
-        ExplorerHelper.OpenExplorer(LogFolderPath);
+        if (LogFolderPath is not null)
+            ExplorerHelper.OpenExplorer(LogFolderPath);
 
     }
-    //[RelayCommand]
-    //private void KillAllProcesses()
-    //{
-    //    _messenger.Send(new KillAllProcessesRequest(this,));
-    //}
+    [RelayCommand(CanExecute =nameof(IsLaunched))]
+    private void KillAllProcesses()
+    {
+        _messenger.Send(new KillAllProcessesRequest(this,ViewModel:null));
+    }
+    
 
     public bool CanOpenLicenseFolder => Directory.Exists(Brand.GetLicenseKeyFolderPath());
     public bool CanOpenLogFolder => Directory.Exists(LogFolderPath);
 
-    [RelayCommand]
+    [RelayCommand(CanExecute =nameof(ShowProcessInfo))]
     private void ShowProcessOverview()
     {
+        if (_windowManagerService.Value is null)
+        {
+            return;
+        }
         _windowManagerService.Value.OpenInNewWindow(typeof(ProcessOverviewViewModel).FullName!, this);
     }
 
@@ -158,4 +165,24 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     }
 
     public override string ToString() => _avApp.ToString();
+
+    public static bool operator <(AvAppFacade left, AvAppFacade right)
+    {
+        return left is null ? right is not null : left.CompareTo(right) < 0;
+    }
+
+    public static bool operator <=(AvAppFacade left, AvAppFacade right)
+    {
+        return left is null || left.CompareTo(right) <= 0;
+    }
+
+    public static bool operator >(AvAppFacade left, AvAppFacade right)
+    {
+        return left is not null && left.CompareTo(right) > 0;
+    }
+
+    public static bool operator >=(AvAppFacade left, AvAppFacade right)
+    {
+        return left is null ? right is null : left.CompareTo(right) >= 0;
+    }
 }

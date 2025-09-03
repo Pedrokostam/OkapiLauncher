@@ -29,9 +29,11 @@ namespace OkapiLauncher.Models
         public string Path { get; }
 
 
-        public SimpleProcess(Process proc, IMessenger messenger) : this(proc, messenger, proc.MainModule!.FileName ?? throw new ArgumentNullException("path"))
+        public SimpleProcess(Process proc, IMessenger messenger) : this(proc, messenger, proc.MainModule!.FileName ?? throw new ArgumentNullException(nameof(proc)))
         {
         }
+
+       
 
         /// <summary>
         /// 
@@ -59,6 +61,15 @@ namespace OkapiLauncher.Models
             Path = other.Path;
         }
 
+        public SimpleProcess(int id, string mainWindowTitle, string processName, DateTime startTime, IMessenger messenger, string path)
+        {
+            _id = id;
+            _mainWindowTitle = mainWindowTitle;
+            _processName = processName;
+            _startTime = startTime;
+            _messenger = messenger;
+            Path = path;
+        }
 
         public string TrimmedTitle
         {
