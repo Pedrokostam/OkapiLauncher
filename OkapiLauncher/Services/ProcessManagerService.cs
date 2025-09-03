@@ -16,10 +16,11 @@ using CommunityToolkit.Mvvm.Messaging;
 using System.Collections.Immutable;
 using OkapiLauncher.Services.Processes;
 using System.Collections;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace OkapiLauncher.Services
 {
-    public class ProcessManagerService : IProcessManagerService, IRecipient<OpenAppRequest>, IRecipient<KillProcessRequest>, IRecipient<KillAllProcessesRequest>
+    public partial class ProcessManagerService :ObservableObject, IProcessManagerService, IRecipient<OpenAppRequest>, IRecipient<KillProcessRequest>, IRecipient<KillAllProcessesRequest>
     {
         /// <summary>
         /// Each records holds a list of all apps that share the process name.
@@ -43,6 +44,7 @@ namespace OkapiLauncher.Services
             {
                 _timer?.Stop();
                 _querer = value;
+                QuererType = value?.GetType();
                 if (value is not null)
                 {
                     if (_timer is not null)
@@ -52,9 +54,16 @@ namespace OkapiLauncher.Services
                         _timer.Start();
                     }
                 }
+                else
+                {
+                    _messenger.Send<FreshAppProcesses>(FreshAppProcesses.Empty);
+                }
             }
         }
-        public FreshAppProcesses? ProcessState { get; private set; }
+        [ObservableProperty]
+        private Type? _quererType = null;
+        [ObservableProperty]
+        public FreshAppProcesses? _processState;
 
         public ProcessManagerService(IMessenger messenger, IAvAppFacadeFactory avAppFacadeFactory, IContentDialogService contentDialogService)
         {
@@ -80,8 +89,9 @@ namespace OkapiLauncher.Services
 
         private void Update(IReadOnlyCollection<IAvApp> apps)
         {
-            if (Querer is not null && !Querer.ShouldUpdate())
+            if (Querer is null || Querer.IsScheduledUpdateNear())
             {
+                // A timer-based update will soon happen
                 return;
             }
             try
@@ -92,9 +102,8 @@ namespace OkapiLauncher.Services
                     ProcessState = fap;
                     _messenger.Send<FreshAppProcesses>(ProcessState);
                 }
-
             }
-            catch (ProcessException e)
+            catch (ProcessException)
             {
                 if (Querer is DiagnosticQuerer d)
                 {
@@ -103,7 +112,6 @@ namespace OkapiLauncher.Services
                 else
                 {
                     Querer = null;
-                    _contentDialogService.ShowError($"The application is unable to get information about currently running processes\n{e.Exception?.Message}", "Unable to query for processes");
                 }
             }
         }
@@ -111,10 +119,14 @@ namespace OkapiLauncher.Services
 
         private void UpdateSingle(IAvApp app)
         {
-            //if (!(Querer?.ShouldUpdate() ?? false))
-            //{
-            //    return;
-            //}
+            if (Querer is null)
+            {
+                return;
+            }
+            if (Querer is not null && Querer.IsScheduledUpdateNear())
+            {
+                return;
+            }
             ProcessState = Querer?.UpdateSingleApp(app) ?? new FreshAppProcesses([]);
             _messenger.Send<FreshAppProcesses>(ProcessState);
         }

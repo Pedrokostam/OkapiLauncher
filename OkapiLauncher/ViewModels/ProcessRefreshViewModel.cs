@@ -32,7 +32,7 @@ public abstract class ProcessRefreshViewModel : ObservableRecipient, INavigation
 
     public virtual void OnNavigatedTo(object parameter)
     {
-        _processManagerService.ProcessState.UpdateStates(RawApps);
+        _processManagerService.ProcessState?.UpdateStates(RawApps);
         IsActive = true;
     }
 

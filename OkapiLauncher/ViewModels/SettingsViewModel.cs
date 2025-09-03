@@ -20,6 +20,7 @@ using OkapiLauncher.Core.Models.Apps;
 using OkapiLauncher.Helpers;
 using OkapiLauncher.Models;
 using OkapiLauncher.Services;
+using OkapiLauncher.Services.Processes;
 using OkapiLauncher.Views;
 
 namespace OkapiLauncher.ViewModels;
@@ -37,6 +38,7 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     private readonly IAvAppFacadeFactory _avAppFacadeFactory;
     private readonly IMessenger _messenger;
     private readonly IGeneralSettingsService _generalSettingsService;
+    private readonly IProcessManagerService _processManagerService;
 
     public SettingsViewModel(
         IOptions<AppConfig> appConfig,
@@ -49,7 +51,8 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
         IContentDialogService contentDialogService,
         IAvAppFacadeFactory avAppFacadeFactory,
         IMessenger messenger,
-        IGeneralSettingsService generalSettingsService)
+        IGeneralSettingsService generalSettingsService,
+        IProcessManagerService processManagerService)
     {
         _appConfig = appConfig.Value;
         Link = _appConfig.GithubLink;
@@ -63,6 +66,7 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
         _avAppFacadeFactory = avAppFacadeFactory;
         _messenger = messenger;
         _generalSettingsService = generalSettingsService;
+        _processManagerService = processManagerService;
         _autoCheckForUpdates = _updateCheckService.AutoCheckForUpdatesEnabled;
         var app = AvApp.Dummy("AdoptedVisionStudio.exe",
                               new(2, 0, 0, 8),
@@ -82,8 +86,18 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
         //ButtonSettings = ButtonSettingsVm.Settings;
         //ButtonSettings = new ButtonSettings() { ListOrder = [], ShowDisabledButtons = true, VisibleButtons = VisibleButtons.All };
         OnPropertyChanged(nameof(ButtonSettingsVm));
+        ProcessQuererType = _processManagerService.QuererType;
         ButtonSettingsVm.PropertyChanged += ButtonSettingsVm_SettingsChanges;
     }
+
+    private void _processManagerService_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (string.Equals(e.PropertyName, nameof(IProcessManagerService.QuererType), StringComparison.Ordinal))
+        {
+            ProcessQuererType = _processManagerService.QuererType;
+        }
+    }
+
     //[ObservableProperty]
     //private ButtonSettings _buttonSettings;
     public ButtonSettings ButtonSettings => ButtonSettingsVm.Settings;
@@ -106,6 +120,9 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
     private AppTheme _theme;
 
     [ObservableProperty]
+    private Type? _processQuererType;
+
+    [ObservableProperty]
     private string _versionDescription = string.Empty;
 
     //[ObservableProperty]
@@ -124,12 +141,14 @@ public partial class SettingsViewModel : ObservableObject, INavigationAware
         VersionDescription = $"{Properties.Resources.AppDisplayName} - {_applicationInfoService.GetVersion()}";
         Theme = _themeSelectorService.GetCurrentTheme();
         CurrentAccent = _themeSelectorService.GetCurrentAccent();
+        _processManagerService.PropertyChanged += _processManagerService_PropertyChanged;
         UpdateStatus();
     }
 
     [RelayCommand]
     public void OnNavigatedFrom()
     {
+        _processManagerService.PropertyChanged -= _processManagerService_PropertyChanged;
     }
     [RelayCommand]
     private void OnSetTheme(string themeName)

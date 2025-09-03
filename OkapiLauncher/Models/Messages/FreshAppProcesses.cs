@@ -17,6 +17,7 @@ namespace OkapiLauncher.Models.Messages;
 public class FreshAppProcesses
 {
     private readonly Dictionary<string, HashSet<SimpleProcess>> _dict = new Dictionary<string, HashSet<SimpleProcess>>(StringComparer.OrdinalIgnoreCase);
+    public static readonly FreshAppProcesses Empty = new([]);
     public int GetHash()
     {
         var hash = 04092025;
@@ -103,6 +104,7 @@ public class FreshAppProcesses
         //}
         if (!_dict.TryGetValue(app.Path, out var newProcs))
         {
+            app.ActiveProcesses.Clear();
             return;
         }
         if (newProcs.Count == 0)
