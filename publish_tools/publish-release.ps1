@@ -68,7 +68,8 @@ dotnet @dotnetParams
 
 # VERSION
 $exeItem = Get-Item $ExePath
-$version = $exeItem.VersionInfo.FileVersion # Reads version from built exe. Assumes GitVersion is run as task during build.
+$version = $exeItem.VersionInfo.FileVersionRaw # Reads version from built exe. Assumes GitVersion is run as task during build.
+$version="$($version.Major).$($version.Minor).$($version.Build)"
 
 # VARIABLES CONT'D
 $ZipPath = Join-Path $BaseOutputDir "$($AppName)_$($Version).zip"
