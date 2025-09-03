@@ -27,8 +27,6 @@
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <converters:AppButtonToTextConverter x:Key="ButtonToTextConverter" />
         <converters:AppButtonToIconConverter x:Key="ButtonToIconConverter" />
-        <converters:QuererTypeToDescriptionConverter x:Key="QuererToTextConverter" />
-        <converters:QuererTypeToIconConverter x:Key="QuererToIconConverter" />
 
     </Page.Resources>
     <DockPanel>
@@ -437,12 +435,35 @@
                                     Grid.ColumnSpan="2"
                                     Style="{StaticResource SubtitleTextStyle}"
                                     Text="{x:Static properties:Resources.SettingsPageProcessMonitorHeader}" />
-                                <mdicons:MaterialIcon Grid.Row="1" Kind="{Binding ProcessQuererType, Converter={StaticResource QuererToIconConverter}}" Margin="15" />
-                                <TextBlock VerticalAlignment="Center"
+                                <mdicons:MaterialIcon Grid.Row="1" Margin="15">
+                                    <mdicons:MaterialIcon.Style>
+                                        <Style TargetType="mdicons:MaterialIcon">
+                                            <Setter Property="Kind" Value="Tick" />
+                                            <Setter Property="Foreground" Value="Green" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ProcessQuererType}" Value="{x:Null}">
+                                                    <Setter Property="Kind" Value="Exclamation" />
+                                                    <Setter Property="Foreground" Value="Red" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </mdicons:MaterialIcon.Style>
+                                </mdicons:MaterialIcon>
+                                <TextBlock
                                     Grid.Row="1"
                                     Grid.Column="1"
-                                    Style="{StaticResource BodyTextStyle}"
-                                    Text="{Binding ProcessQuererType, Converter={StaticResource QuererToTextConverter}}" />
+                                    VerticalAlignment="Center">
+                                    <TextBlock.Style>
+                                        <Style BasedOn="{StaticResource BodyTextStyle}" TargetType="TextBlock">
+                                            <Setter Property="Text" Value="{x:Static properties:Resources.SettingsPageProcessMonitorDiagnostics}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ProcessQuererType}" Value="{x:Null}">
+                                                    <Setter Property="Text" Value="{x:Static properties:Resources.SettingsPageProcessMonitorNone}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
                             </Grid>
                         </Border>
                     </StackPanel>
