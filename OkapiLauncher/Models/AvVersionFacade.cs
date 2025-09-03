@@ -1,27 +1,37 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using OkapiLauncher.Core.Models;
+using CommunityToolkit.Mvvm.ComponentModel;
+using Windows.Security.Cryptography.Core;
 
 namespace OkapiLauncher.Models
 {
-    public sealed partial class AvVersionFacade(int major, int minor, int build, int revision)
-        : ObservableObject
-        , IAvVersion
-        , IComparable<AvVersionFacade>
-        , IEquatable<AvVersionFacade>
-        , IComparable
+    public sealed partial class AvVersionFacade : ObservableObject, IAvVersion, IComparable<AvVersionFacade>, IComparable
     {
-        public readonly static AvVersionFacade MissingVersion = new(AvVersion.MissingVersionBase);
+        public readonly static AvVersionFacade MissingVersion = new AvVersionFacade(AvVersion.MissingVersionBase);
 
         public AvVersionFacade(Version version)
             : this(version.Major, version.Minor, version.Build, version.Revision) { }
         public AvVersionFacade(IAvVersion version)
             : this(version.Major, version.Minor, version.Build, version.Revision) { }
-
-        public int Major { get; } = major;
-        public int Minor { get; } = minor;
-        public int Build { get; } = build;
-        public int Revision { get; } = revision;
+        public AvVersionFacade(int major, int minor, int build, int revision)
+        {
+            Major = major;
+            Minor = minor;
+            Build = build;
+            Revision = revision;
+        }
+        public int Major { get; }
+        public int Minor { get; }
+        public int Build { get; }
+        public int Revision { get; }
         public bool IsDevelopmentVersion => AvVersion.CheckIfDevelopmentVersion(this);
         public bool IsUnknown => AvVersion.IsMissingVersion(this);
         public override int GetHashCode() => AvVersion.GetHashCode(this);
@@ -39,48 +49,6 @@ namespace OkapiLauncher.Models
 
         public int CompareTo(object? obj) => AvVersion.CompareTo(this, obj as IAvVersion);
 
-        public Version InterfaceVersion => new(Major, Minor, Build);
-
-        public bool Equals(AvVersionFacade? other)
-        {
-            return this.CompareTo(other) == 0;
-        }
-        public override bool Equals(object? obj) => Equals(obj as AvVersionFacade);
-
-
-        public static bool operator ==(AvVersionFacade left, AvVersionFacade right)
-        {
-            if (left is null)
-            {
-                return right is null;
-            }
-
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(AvVersionFacade left, AvVersionFacade right)
-        {
-            return !(left == right);
-        }
-
-        public static bool operator <(AvVersionFacade left, AvVersionFacade right)
-        {
-            return left is null ? right is not null : left.CompareTo(right) < 0;
-        }
-
-        public static bool operator <=(AvVersionFacade left, AvVersionFacade right)
-        {
-            return left is null || left.CompareTo(right) <= 0;
-        }
-
-        public static bool operator >(AvVersionFacade left, AvVersionFacade right)
-        {
-            return left is not null && left.CompareTo(right) > 0;
-        }
-
-        public static bool operator >=(AvVersionFacade left, AvVersionFacade right)
-        {
-            return left is null ? right is null : left.CompareTo(right) >= 0;
-        }
+        public Version InterfaceVersion => new Version(Major, Minor, Build);
     }
 }

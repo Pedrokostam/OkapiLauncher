@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.Windows;
 using System.Windows.Input;
 
@@ -9,7 +8,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 
 using MahApps.Metro.Controls.Dialogs;
-using OkapiLauncher.Contracts.EventArgs;
+
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Models;
 using OkapiLauncher.Models.Messages;
@@ -26,7 +25,6 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
     private readonly INavigationService _navigationService;
     private readonly IRightPaneService _rightPaneService;
     private readonly IUpdateCheckService _updateCheckService;
-    private readonly IAppNativeRecentFilesService _appNativeRecentFilesService;
     private readonly Lazy<IWindowManagerService> _windowManagerService;
     private readonly IRecentlyOpenedFilesService _lastOpenedFilesService;
 
@@ -35,22 +33,17 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
                           IMessenger messenger,
                           IWindowManagerService windowManagerService,
                           IUpdateCheckService updateCheckService,
-                          IAppNativeRecentFilesService appNativeRecentFilesService,
+
                           IRecentlyOpenedFilesService lastOpenedFilesService) : base(messenger)
     {
         _navigationService = navigationService;
         _rightPaneService = rightPaneService;
         _updateCheckService = updateCheckService;
-        _appNativeRecentFilesService = appNativeRecentFilesService;
         _windowManagerService = new Lazy<IWindowManagerService>(windowManagerService);
         _lastOpenedFilesService = lastOpenedFilesService;
         RecentlyOpenedFiles = new ObservableCollection<RecentlyOpenedFileFacade>(_lastOpenedFilesService.GetLastOpenedFiles());
-        NativeRecentFiles = [];
         messenger.Register<RecentFilesChangedMessage>(this);
     }
-    [ObservableProperty]
-    private bool _isFileMenuOpen;
-    public ObservableCollection<IAppNativeRecentFilesService.RecentAppFiles> NativeRecentFiles { get; } = [];
     public ObservableCollection<RecentlyOpenedFileFacade> RecentlyOpenedFiles { get; }
     [RelayCommand]
     private void OnLoaded()
@@ -76,16 +69,15 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
     private void OnGoBack()
         => _navigationService.GoBack();
 
-    private void OnNavigated(object? sender, NavigatedToEventArgs? navArgs)
+    private void OnNavigated(object? sender, string? viewModelName)
     {
         GoBackCommand.NotifyCanExecuteChanged();
-        CurrentViewModel = Type.GetType(navArgs?.DataContextFullName!);
+        CurrentViewModel = Type.GetType(viewModelName ?? string.Empty);
     }
     [ObservableProperty]
     private Type? _currentViewModel;
 
     [RelayCommand()]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Can't static a relay command")]
     private void OnMenuFileExit()
         => Application.Current.Shutdown();
 
@@ -97,7 +89,7 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
     //=> _navigationService.NavigateTo(typeof(LauncherViewModel).FullName!, parameter: null, clearNavigation: true);
 
     [RelayCommand()]
-    private void OnMenuViewsSettings()
+    private void OnMenuFileSettings()
         => _navigationService.NavigateTo(typeof(SettingsViewModel).FullName!, parameter: null);
     //=> _rightPaneService.OpenInRightPane(typeof(SettingsViewModel).FullName!);
 
@@ -117,7 +109,7 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
         {
             Filter = "All Files (*.*)|*.*|Aurora Vision Files|*.avproj;*.avexe|FabImage Files|*.fiproj;*.fiexe|Project Files|*.avproj;*.fiproj|Runtime Files|*.avexe;*.fiexe",
             Multiselect = false,
-            DereferenceLinks = true,
+            DereferenceLinks= true,
         };
         var result = dialog.ShowDialog();
         if (result == true)
@@ -125,11 +117,6 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
             //_navigationService.NavigateTo(typeof(LauncherViewModel).FullName!);
             OpenProject(dialog.FileName);
         }
-    }
-    [RelayCommand()]
-    private void MenuOpenRecentNativeFile(string filepath)
-    {
-        OpenProject(filepath);
     }
     [RelayCommand()]
     private void MenuOpenRecentFile(RecentlyOpenedFileFacade file)
@@ -141,9 +128,9 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
     {
         int intIndex = index switch
         {
-            string strindex => int.Parse(strindex, provider: CultureInfo.InvariantCulture),
+            string strindex => int.Parse(strindex,null),
             int i => i,
-            _ => -1,
+            _ => -1
         };
         if (RecentlyOpenedFiles.Count <= intIndex)
         {
@@ -165,10 +152,9 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
             RecentlyOpenedFiles.Add(item);
         }
     }
-
+    
 
     [RelayCommand]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Can't static a relay command")]
     private void Collect()
     {
         GC.Collect();
@@ -177,24 +163,5 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
     private void KillAllChildren()
     {
         _windowManagerService.Value.CloseChildWindows();
-    }
-
-    partial void OnIsFileMenuOpenChanged(bool value)
-    {
-        var newFiles = _appNativeRecentFilesService.GetAllAppsFiles().ToArray();
-        if (NativeRecentFiles.Count == newFiles.Length)
-        {
-            var newHashes = newFiles.Select(x => x.GetHashCode());
-            var oldHashes = NativeRecentFiles.Select(x => x.GetHashCode());
-            if (oldHashes.SequenceEqual(newHashes))
-            {
-                return;
-            }
-        }
-        NativeRecentFiles.Clear();
-        foreach (var item in newFiles)
-        {
-            NativeRecentFiles.Add(item);
-        }
     }
 }

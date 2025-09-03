@@ -99,101 +99,11 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copy executable path.
-        /// </summary>
-        public static string AppButtonCopyName {
-            get {
-                return ResourceManager.GetString("AppButtonCopyName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Button size.
-        /// </summary>
-        public static string AppButtonIconSize {
-            get {
-                return ResourceManager.GetString("AppButtonIconSize", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Close all processes.
-        /// </summary>
-        public static string AppButtonKillAllName {
-            get {
-                return ResourceManager.GetString("AppButtonKillAllName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Launch app.
-        /// </summary>
-        public static string AppButtonLaunchName {
-            get {
-                return ResourceManager.GetString("AppButtonLaunchName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Open license folder.
-        /// </summary>
-        public static string AppButtonLicenseName {
-            get {
-                return ResourceManager.GetString("AppButtonLicenseName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Open log folder.
-        /// </summary>
-        public static string AppButtonLogName {
-            get {
-                return ResourceManager.GetString("AppButtonLogName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Open app folder.
-        /// </summary>
-        public static string AppButtonOpenName {
-            get {
-                return ResourceManager.GetString("AppButtonOpenName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Open process overview window.
-        /// </summary>
-        public static string AppButtonOverviewName {
-            get {
-                return ResourceManager.GetString("AppButtonOverviewName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Okapi Launcher.
         /// </summary>
         public static string AppDisplayName {
             get {
                 return ResourceManager.GetString("AppDisplayName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Deep Learning CPU.
-        /// </summary>
-        public static string AppProductTypeDeepLearningCPULabel {
-            get {
-                return ResourceManager.GetString("AppProductTypeDeepLearningCPULabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Deep Learning GPU.
-        /// </summary>
-        public static string AppProductTypeDeepLearningGPULabel {
-            get {
-                return ResourceManager.GetString("AppProductTypeDeepLearningGPULabel", resourceCulture);
             }
         }
         
@@ -329,15 +239,6 @@ namespace OkapiLauncher.Properties {
         public static string AvAppOpenLogFolderDisabled {
             get {
                 return ResourceManager.GetString("AvAppOpenLogFolderDisabled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Open process overview window.
-        /// </summary>
-        public static string AvAppOpenOverview {
-            get {
-                return ResourceManager.GetString("AvAppOpenOverview", resourceCulture);
             }
         }
         
@@ -567,15 +468,6 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No applicable file found in the folder..
-        /// </summary>
-        public static string ErrorNoApplicableFileInFolder {
-            get {
-                return ResourceManager.GetString("ErrorNoApplicableFileInFolder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Could not determine type of project..
         /// </summary>
         public static string ErrorUnknownFileType {
@@ -608,15 +500,6 @@ namespace OkapiLauncher.Properties {
         public static string InstalledAppsPageTitle {
             get {
                 return ResourceManager.GetString("InstalledAppsPageTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Launch {0}.
-        /// </summary>
-        public static string JumplistLaunchAppDescription {
-            get {
-                return ResourceManager.GetString("JumplistLaunchAppDescription", resourceCulture);
             }
         }
         
@@ -954,15 +837,6 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Deep Learning model.
-        /// </summary>
-        public static string ProjectProductTypeDeepLearningLabel {
-            get {
-                return ResourceManager.GetString("ProjectProductTypeDeepLearningLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Studio professional project.
         /// </summary>
         public static string ProjectProductTypeProfessionalLabel {
@@ -1008,33 +882,6 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to App buttons.
-        /// </summary>
-        public static string SettingsPageButtonsHeader {
-            get {
-                return ResourceManager.GetString("SettingsPageButtonsHeader", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Reset buttons to default.
-        /// </summary>
-        public static string SettingsPageButtonsReset {
-            get {
-                return ResourceManager.GetString("SettingsPageButtonsReset", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Show disabled buttons.
-        /// </summary>
-        public static string SettingsPageButtonsShowDisabled {
-            get {
-                return ResourceManager.GetString("SettingsPageButtonsShowDisabled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Check for updates (once a day).
         /// </summary>
         public static string SettingsPageCheckForUpdatesOnStartup {
@@ -1067,24 +914,6 @@ namespace OkapiLauncher.Properties {
         public static string SettingsPageChooseThemeText {
             get {
                 return ResourceManager.GetString("SettingsPageChooseThemeText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Clear missing recent files.
-        /// </summary>
-        public static string SettingsPageClearMissingRecentsButton {
-            get {
-                return ResourceManager.GetString("SettingsPageClearMissingRecentsButton", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Removes files that are no longer available from both recent files lists..
-        /// </summary>
-        public static string SettingsPageClearMissingRecentsTooltip {
-            get {
-                return ResourceManager.GetString("SettingsPageClearMissingRecentsTooltip", resourceCulture);
             }
         }
         
@@ -1197,34 +1026,6 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The application is monitoring running processes..
-        /// </summary>
-        public static string SettingsPageProcessMonitorDiagnostics {
-            get {
-                return ResourceManager.GetString("SettingsPageProcessMonitorDiagnostics", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Process monitoring.
-        /// </summary>
-        public static string SettingsPageProcessMonitorHeader {
-            get {
-                return ResourceManager.GetString("SettingsPageProcessMonitorHeader", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The application is unable to monitor running processes.
-        ///Consider launching it with higher privileges..
-        /// </summary>
-        public static string SettingsPageProcessMonitorNone {
-            get {
-                return ResourceManager.GetString("SettingsPageProcessMonitorNone", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Dark.
         /// </summary>
         public static string SettingsPageRadioButtonDarkTheme {
@@ -1252,7 +1053,7 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Associate all.
+        ///   Looks up a localized string similar to Set this app as default for all related extensions.
         /// </summary>
         public static string SettingsPageSetFileAssociationsButton {
             get {
@@ -1342,7 +1143,7 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _About.
+        ///   Looks up a localized string similar to About.
         /// </summary>
         public static string ShellMenuItemViewsAboutPageHeader {
             get {
@@ -1351,38 +1152,11 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Recent files per _App.
-        /// </summary>
-        public static string ShellMenuNativeRecentFiles {
-            get {
-                return ResourceManager.GetString("ShellMenuNativeRecentFiles", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Items that were recently opened by each available app (including those not coming from Okapi)..
-        /// </summary>
-        public static string ShellMenuNativeRecentFilesTooltip {
-            get {
-                return ResourceManager.GetString("ShellMenuNativeRecentFilesTooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to _Recently opened files.
+        ///   Looks up a localized string similar to Recently opened files.
         /// </summary>
         public static string ShellMenuRecentFiles {
             get {
                 return ResourceManager.GetString("ShellMenuRecentFiles", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Items that were recently open in Okapi Launcher..
-        /// </summary>
-        public static string ShellMenuRecentFilesTooltip {
-            get {
-                return ResourceManager.GetString("ShellMenuRecentFilesTooltip", resourceCulture);
             }
         }
         
@@ -1428,15 +1202,6 @@ namespace OkapiLauncher.Properties {
         public static string ShellViewButtonLauncherTooltipEnabled {
             get {
                 return ResourceManager.GetString("ShellViewButtonLauncherTooltipEnabled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Settings.
-        /// </summary>
-        public static string ShellViewButtonSettingHeader {
-            get {
-                return ResourceManager.GetString("ShellViewButtonSettingHeader", resourceCulture);
             }
         }
         

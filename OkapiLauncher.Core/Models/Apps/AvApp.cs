@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Timers;
@@ -16,15 +15,11 @@ public record AvApp : IAvApp
     public string Path { get; }
     public string RootPath { get; }
     public string? LogFolderPath { get; }
-    public string? AppDataPath { get; }
     public AvVersion Version { get; }
     public AvVersion? SecondaryVersion { get; }
     public string Name { get; }
-    public string NameWithVersion => $"{Name} {Version}";
     public string? Description { get; }
     public bool IsCustom => Description is not null;
-    
-    public bool IsDummy { get; }= false;
     public string ProcessName { get; }
     public bool IsExecutable => Type.IsExecutable;
     public bool IsDevelopmentVersion => Version.Build >= 1000;
@@ -52,40 +47,15 @@ public record AvApp : IAvApp
         Path = mainInfo.FileName;
         Version = AvVersion.Parse(mainInfo) ?? throw new VersionNotFoundException("The ProductVersion field is empty");
         SecondaryVersion = secondaryVersion;
-        Name = GetName(mainInfo, type);
+        Name = mainInfo.ProductName ?? "N/A";
         ProcessName = System.IO.Path.GetFileNameWithoutExtension(mainInfo.InternalName!);
         Type = type;
         Brand = brand;
         Description = description;
         RootPath = rootInstallationPath;
         LogFolderPath = GetLogFolderPath(this);
-        AppDataPath = GetAppDataPath(this);
     }
-    private AvApp(string filename, AvVersion mainVersion, AvVersion? secondaryVersion, string name, AvType type, AvBrand brand, string description, string rootInstallationPath, string logFolderPath, string appDataPath)
-    {
-        Path = filename;
-        Version = mainVersion;
-        SecondaryVersion = secondaryVersion;
-        Name = name;
-        ProcessName = "Okapi_Dummy_App";
-        Type = ProductType.FromAvType(type);
-        Brand = ProductBrand.FromAvBrand(brand);
-        Description = description;
-        RootPath = rootInstallationPath;
-        LogFolderPath = logFolderPath;
-        AppDataPath = appDataPath;
-        IsDummy = true;
-    }
-    private static string GetName(FileVersionInfo finfo, ProductType type)
-    {
-        string baseName = finfo.ProductName ?? type.Name;
-        return type.Type switch
-        {
-            AvType.DeepLearningGPU => $"{baseName} GPU",
-            AvType.DeepLearningCPU => $"{baseName} CPU",
-            _ => baseName,
-        };
-    }
+  
     public bool CanOpen(IVisionProject project)
     {
         return SupportedProgramTypes.Contains(project.Type) && Brand.SupportsBrand(project.Brand);
@@ -99,10 +69,9 @@ public record AvApp : IAvApp
         // different builds denotes changes in the API, so runtime cannot be lauched for example
         balance += (version.Build - baseVersion.Build) * 10;
         // minor indicate some larger changes, but noting too ground breaking
-        // has to be more than 1000x larger than build because of trunk's 1000's
-        balance += (version.Minor - baseVersion.Minor) * 100_000;
+        balance += (version.Minor - baseVersion.Minor) * 10_000;
         // hoo boy
-        balance += (version.Major - baseVersion.Major) * 10_000_000;
+        balance += (version.Major - baseVersion.Major) * 1_000_000;
         /*
         the goal is to find a version that gets the value closes to 0
         negative values mean the app is outdated, but may still be able to load the program
@@ -120,7 +89,7 @@ public record AvApp : IAvApp
         if (project.Type.Type == AvType.Runtime)
         {
             // Avexes dont have a version, so we just select the newest available runtime
-            return apps.IndexOfMax(x => x.Version);
+             return apps.IndexOfMax(x=>x.Version);
         }
         var weights = new List<double>();
         bool hasPositive = false;
@@ -147,10 +116,6 @@ public record AvApp : IAvApp
         {
             return -1;
         }
-        if (project.Type.HasFlag(AvType.DeepLearning))
-        {
-            return weights.IndexOfMax();
-        }
         if (hasPositive)
         {
             // negative values are set to the highest possible value, so they will not be considered
@@ -170,7 +135,7 @@ public record AvApp : IAvApp
     public bool IsNativeApp(IVisionProject type) => IsNativeApp(this, type);
     public static bool IsNativeApp(IAvApp app, IVisionProject project)
     {
-        return app.Type == project.Type || (project.Type.HasFlag(AvType.DeepLearning) && app.Type.HasFlag(AvType.DeepLearning));
+        return app.Type == project.Type;
     }
 
     public int CompareTo(IAvApp? other)
@@ -197,25 +162,12 @@ public record AvApp : IAvApp
 
     private static string? GetLogFolderPath(IAvApp app)
     {
+        var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         return app.Type.Type switch
         {
-            AvType.Professional or AvType.Runtime => System.IO.Path.Join(GetAppDataPath(app), "Logs"),
-            AvType.DeepLearningGPU => GetAppDataPath(app),
+            AvType.Professional or AvType.Runtime => System.IO.Path.Join(localAppData, app.Brand.Name, System.IO.Path.GetFileName(app.RootPath), "Logs"),
+            AvType.DeepLearning => System.IO.Path.Join(localAppData, app.Brand.Name, System.IO.Path.GetFileName(app.RootPath)),
             _ => null,
         };
-    }
-
-    private static string? GetAppDataPath(IAvApp app)
-    {
-        if (app.IsCustom)
-        {
-            return null;
-        }
-        var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-        return System.IO.Path.Join(localAppData, app.Brand.Name, System.IO.Path.GetFileName(app.RootPath));
-    }
-    public static AvApp Dummy(string filename, AvVersion mainVersion, AvVersion? secondaryVersion, string name, AvType type, AvBrand brand, string description, string rootInstallationPath, string logFolderPath, string appDataPath)
-    {
-        return new AvApp(filename, mainVersion, secondaryVersion, name, type, brand, description, rootInstallationPath, logFolderPath, appDataPath);
     }
 }

@@ -1,11 +1,10 @@
-﻿using System.ComponentModel;
-using System.Windows.Threading;
+﻿using System.Windows.Threading;
 using OkapiLauncher.Models;
 using OkapiLauncher.Models.Messages;
 
-namespace OkapiLauncher.Contracts.Services;
-public interface IProcessManagerService: INotifyPropertyChanged
+namespace OkapiLauncher.Services;
+public interface IProcessManagerService
 {
-    IAppProcessInformationPacket ProcessState { get; }
-    Type? QuererType { get; }
+    FreshAppProcesses GetCurrentState { get; }
+
 }

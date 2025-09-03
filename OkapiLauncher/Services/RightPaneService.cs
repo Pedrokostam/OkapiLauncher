@@ -5,22 +5,20 @@ using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Contracts.ViewModels;
 
 using MahApps.Metro.Controls;
-using OkapiLauncher.Contracts.EventArgs;
 
 namespace OkapiLauncher.Services;
 
 public class RightPaneService : IRightPaneService
 {
     private readonly IPageService _pageService;
-    private Frame _frame =default!;
+    private Frame _frame;
     private object? _lastParameterUsed;
-    private SplitView _splitView = default!;
+    private SplitView _splitView;
 
-    public event EventHandler PaneOpened = default!;
+    public event EventHandler PaneOpened;
 
-    public event EventHandler PaneClosed = default!;
+    public event EventHandler PaneClosed;
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0290:Use primary constructor", Justification = "The fields should be readonly")]
     public RightPaneService(IPageService pageService)
     {
         _pageService = pageService;
@@ -59,7 +57,7 @@ public class RightPaneService : IRightPaneService
         }
 
         _splitView.IsPaneOpen = true;
-        PaneOpened?.Invoke(this, EventArgs.Empty);
+        PaneOpened?.Invoke(_splitView, EventArgs.Empty);
     }
 
     private void OnNavigated(object? sender, NavigationEventArgs e)
@@ -76,7 +74,7 @@ public class RightPaneService : IRightPaneService
     }
 
     private void OnPaneClosed(object? sender, EventArgs e)
-        => PaneClosed?.Invoke(this, e);
+        => PaneClosed?.Invoke(sender, e);
 
     public void OpenInRightPane<T>(object? parameter = null)=>OpenInRightPane(typeof(T).FullName!, parameter);
    

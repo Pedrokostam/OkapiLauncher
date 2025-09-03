@@ -18,14 +18,13 @@ using CommunityToolkit.Mvvm.Messaging;
 namespace OkapiLauncher.Services;
 public class RecentlyOpenedFilesService : ObservableRecipient, IRecentlyOpenedFilesService
 {
-    private const string Key = "LastOpenedFiles";
+    private readonly string Key = "LastOpenedFiles";
     const int FileCountLimit = 30;
     private List<RecentlyOpenedFile> LastOpenedPaths => (List<RecentlyOpenedFile>)App.Current.Properties[Key]!;
     /// <summary>
     /// Is a dependency to ensure its instantiated before.
     /// </summary>
     private readonly IPersistAndRestoreService _persistAndRestoreService;
-
     public string? LastOpenedFile { get; private set; }
 
     public RecentlyOpenedFilesService(IMessenger messenger, IPersistAndRestoreService persistAndRestoreService) : base(messenger)

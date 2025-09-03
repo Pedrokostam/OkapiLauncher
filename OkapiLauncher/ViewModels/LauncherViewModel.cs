@@ -1,18 +1,25 @@
-﻿using System.Collections.ObjectModel;
-using System.IO;
-using System.Text.RegularExpressions;
+﻿using System.IO;
 using System.Windows;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Models.Messages;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using OkapiLauncher.Contracts.Services;
-using OkapiLauncher.Core.Models;
 using OkapiLauncher.Core.Models.Apps;
-using OkapiLauncher.Core.Models.Projects;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
+using System.Diagnostics;
+using Windows.Storage;
 using OkapiLauncher.Models;
-using OkapiLauncher.Models.Messages;
-using OkapiLauncher.Properties;
+using OkapiLauncher.Core.Models.Projects;
+using System.Windows.Threading;
 using OkapiLauncher.Services;
+using OkapiLauncher.Contracts.ViewModels;
+using OkapiLauncher.Helpers;
+using Microsoft.VisualBasic;
+using OkapiLauncher.Core.Models;
+using OkapiLauncher.Properties;
+using OkapiLauncher.Views;
 
 namespace OkapiLauncher.ViewModels;
 
@@ -27,8 +34,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
                              INavigationService navigationService,
                              IRecentlyOpenedFilesService lastOpenedFilesService,
                              IProcessManagerService processManagerService, IContentDialogService contentDialogService,
-                             IMessenger messenger,
-                             IGeneralSettingsService generalSettingsService) : base(processManagerService, appProvider, messenger, generalSettingsService)
+                             IMessenger messenger) : base(processManagerService, appProvider, messenger)
     {
         _lastOpenedFilesService = lastOpenedFilesService;
         _contentDialogService = contentDialogService;
@@ -46,6 +52,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
     private LaunchOptions? _launchOptions;
     public ObservableCollection<AvAppFacade> Apps { get; } = [];
     protected override IList<AvAppFacade> RawApps => Apps;
+
     private bool CanLaunch()
     {
         return SelectedApp is not null && (VisionProject?.Exists ?? false);
@@ -54,7 +61,6 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
     [RelayCommand(CanExecute = nameof(CanLaunch))]
     private void Launch(object? app)
     {
-        bool isAppNull = app is null;
         IAvApp? appToLaunch = app as IAvApp;
         appToLaunch ??= SelectedApp;
         if (appToLaunch is null || !(VisionProject?.Exists ?? false))
@@ -62,13 +68,13 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
             return;
         }
 
-        var args = LaunchOptions.Get(appToLaunch, VisionProject.Path)?.GetCommandLineArgs();
-        if (args is null)
+        var args = LaunchOptions.Get(appToLaunch,VisionProject.Path)?.GetCommandLineArgs();
+        if(args is null)
         {
             return;
         }
         Messenger.Send(new OpenAppRequest(appToLaunch, args));
-        if (ShouldCloseAfterLaunching && isAppNull)
+        if (ShouldCloseAfterLaunching)
         {
             Application.Current.Shutdown();
         }
@@ -92,34 +98,11 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
     [RelayCommand(CanExecute = nameof(CanCopyArgumentString))]
     private void CopyArgumentString()
     {
+        var t = Thread.CurrentThread;
         if (LaunchOptions?.ArgumentString is not null)
         {
             Clipboard.SetText(LaunchOptions.ArgumentString);
         }
-    }
-    static readonly Regex FileDetector = new(@"(?<NORMAL>\.(avproj|avexe|fiproj|fiexe))|(?<DL>pluginconfig.xml)", RegexOptions.Compiled | RegexOptions.IgnoreCase|RegexOptions.ExplicitCapture, TimeSpan.FromMilliseconds(500));
-
-    /// <summary>
-    /// Either returns <paramref name="path"/> as is if it is a directory, or attempts to find one of applicable files.
-    /// </summary>
-    /// <param name="path">Path to a project/exe/pluginconfig file.</param>
-    /// <returns></returns>
-    /// <exception cref="Exception">If the path was a folder and no applicable file was found.</exception>
-    private static string HandleDirectories(string path)
-    {
-        if (Directory.Exists(path))
-        {
-            var files = Directory.EnumerateFiles(path);
-            foreach (var file in files)
-            {
-                if (FileDetector.IsMatch(Path.GetFileName(file)))
-                {
-                    return file;
-                }
-            }
-            throw new NoApplicableFileException(path);
-        }
-        return path;
     }
 
     public async Task<bool> OpenProject(string filepath)
@@ -127,9 +110,9 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
 
         try
         {
-            filepath = HandleDirectories(filepath);
             var project = ProjectReader.OpenProject(filepath);
             VisionProject = new VisionProjectFacade(project);
+
             var matchingApps = _appFactory.AvApps
                 .Where(x => x.CanOpen(VisionProject))
                 .OrderByDescending(x => x.Version);
@@ -146,9 +129,9 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
             {
                 SelectedApp = null;
             }
-            _lastOpenedFilesService.AddLastFile(project.Path);
+            _lastOpenedFilesService.AddLastFile(filepath);
             _navigationService.NavigateTo(GetType().FullName!);
-            _processManagerService.ProcessState.UpdateStates(Apps);
+            _processManagerService.GetCurrentState.UpdateStates(Apps);
             return true;
         }
         catch (FileNotFoundException)
@@ -169,11 +152,6 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
         catch (UnknownProjectTypeException)
         {
             await _contentDialogService.ShowError(Resources.ErrorUnknownFileType);
-            return false;
-        }
-        catch (NoApplicableFileException)
-        {
-            await _contentDialogService.ShowError(Resources.ErrorNoApplicableFileInFolder);
             return false;
         }
 
@@ -216,6 +194,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
     }
     public override async void OnNavigatedTo(object parameter)
     {
+        var t = Thread.CurrentThread;
         base.OnNavigatedTo(parameter);
 
         var lastFile = _lastOpenedFilesService.LastOpenedFile;

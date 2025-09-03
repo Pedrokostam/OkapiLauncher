@@ -17,7 +17,7 @@ public class EnumBindingSourceExtension : MarkupExtension
                 {
                     Type enumType = Nullable.GetUnderlyingType(value) ?? value;
                     if (!enumType.IsEnum)
-                        throw new ArgumentException("Type must be for an Enum.",nameof(value));
+                        throw new ArgumentException("Type must be for an Enum.");
                 }
 
                 this._enumType = value;

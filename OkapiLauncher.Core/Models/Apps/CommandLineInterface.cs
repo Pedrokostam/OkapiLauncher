@@ -34,5 +34,4 @@ public enum CommandLineInterface
     /// </code>
     /// </summary>
     Executor,
-    DeepLearning,
 }

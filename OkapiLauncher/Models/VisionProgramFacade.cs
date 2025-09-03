@@ -22,7 +22,7 @@ public partial class VisionProjectFacade : ObservableObject, IVisionProject
     public ProductBrand Brand { get; }
     public DateTime DateModified { get; }
 
-    public bool Exists => File.Exists(Path) || Directory.Exists(Path);
+    public bool Exists => File.Exists(Path);
 
     IAvVersion IProduct.Version => Version;
 
@@ -30,7 +30,6 @@ public partial class VisionProjectFacade : ObservableObject, IVisionProject
         : this(visprog.Name, visprog.Version, visprog.Path, visprog.Type, visprog.Brand, visprog.DateModified)
     {
     }
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0290:Use primary constructor", Justification = "The fields should be readonly")]
     public VisionProjectFacade(string name, IAvVersion version, string path, ProductType type, ProductBrand brand, DateTime dateModified)/*:this(new VisionProgram(name,new(version),path,type))*/
     {
         Name = name;

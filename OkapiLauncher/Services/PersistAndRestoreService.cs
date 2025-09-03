@@ -6,7 +6,6 @@ using OkapiLauncher.Core.Contracts.Services;
 using OkapiLauncher.Models;
 
 using Microsoft.Extensions.Options;
-using System.Diagnostics;
 
 namespace OkapiLauncher.Services;
 
@@ -15,6 +14,7 @@ public class PersistAndRestoreService : IPersistAndRestoreService
     private readonly IFileService _fileService;
     private readonly AppConfig _appConfig;
     private readonly string _localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+
     public PersistAndRestoreService(IFileService fileService, IOptions<AppConfig> appConfig)
     {
         _fileService = fileService;

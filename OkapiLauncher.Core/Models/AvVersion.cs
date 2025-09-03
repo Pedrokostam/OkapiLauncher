@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using OkapiLauncher.Core.Models.Apps;
 
 namespace OkapiLauncher.Core.Models;
-public class AvVersion(int major, int minor, int build, int revision) : IAvVersion
+public class AvVersion : IAvVersion
 {
     public static readonly Version MissingVersionBase = new(0, 0, 0, 0);
     public static readonly AvVersion MissingVersion = new(MissingVersionBase);
@@ -16,16 +16,22 @@ public class AvVersion(int major, int minor, int build, int revision) : IAvVersi
         : this(version.Major, version.Minor, version.Build, version.Revision) { }
     public AvVersion(IAvVersion version)
         : this(version.Major, version.Minor, version.Build, version.Revision) { }
-
-    public int Major { get; } = major;
-    public int Minor { get; } = minor;
-    public int Build { get; } = build;
-    public int Revision { get; } = revision;
+    public AvVersion(int major, int minor, int build, int revision)
+    {
+        Major = major;
+        Minor = minor;
+        Build = build;
+        Revision = revision;
+    }
+    public int Major { get; }
+    public int Minor { get; }
+    public int Build { get; }
+    public int Revision { get; }
     public bool IsDevelopmentVersion => CheckIfDevelopmentVersion(this);
 
     public bool IsUnknown => IsMissingVersion(this);
 
-    public Version InterfaceVersion => new(Major, Minor, Build);
+    public Version InterfaceVersion => new Version(Major, Minor, Build);
 
     public static bool TryParse(string? versionString, [NotNullWhen(true)] out AvVersion? version)
     {

@@ -3,7 +3,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 
 using OkapiLauncher.Contracts.Services;
-using OkapiLauncher.Exceptions;
 using OkapiLauncher.ViewModels;
 using OkapiLauncher.Views;
 
@@ -11,7 +10,7 @@ namespace OkapiLauncher.Services;
 
 public class PageService : IPageService
 {
-    private readonly Dictionary<string, Type> _pages = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, Type> _pages = new Dictionary<string, Type>(StringComparer.Ordinal);
     private readonly IServiceProvider _serviceProvider;
 
     public PageService(IServiceProvider serviceProvider)
@@ -31,7 +30,7 @@ public class PageService : IPageService
         {
             if (!_pages.TryGetValue(key, out pageType))
             {
-                throw new PageNotFoundException(key);
+                throw new ArgumentException($"Page not found: {key}. Did you forget to call PageService.Configure?");
             }
         }
 
@@ -51,10 +50,16 @@ public class PageService : IPageService
         lock (_pages)
         {
             var key = typeof(VM).FullName!;
-            PageException.ThrowOnDuplicateKey<VM>(_pages);
+            if (_pages.ContainsKey(key))
+            {
+                throw new ArgumentException($"The key {key} is already configured in PageService");
+            }
 
             var type = typeof(V);
-            PageException.ThrowOnDuplicateView<V>(_pages);
+            if (_pages.Any(p => p.Value == type))
+            {
+                throw new ArgumentException($"This type is already configured with key {_pages.First(p => p.Value == type).Key}");
+            }
 
             _pages.Add(key, type);
         }

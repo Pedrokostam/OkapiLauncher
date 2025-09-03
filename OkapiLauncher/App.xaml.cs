@@ -21,6 +21,8 @@ using OkapiLauncher.Services;
 using OkapiLauncher.ViewModels;
 using OkapiLauncher.Views;
 
+using Windows.ApplicationModel.Resources.Core;
+
 namespace OkapiLauncher;
 
 // For more information about application lifecycle events see https://docs.microsoft.com/dotnet/framework/wpf/app-development/application-management-overview
@@ -41,17 +43,17 @@ public partial class App : Application
     }
     public bool ShouldCloseAfterLaunching { get;  set; } = false;
 
-    private async void OnStartup(object sender, StartupEventArgs startupArgs)
+    private async void OnStartup(object sender, StartupEventArgs e)
     {
-        if (startupArgs.Args.Length > 1)
+        if (e.Args.Length > 1)
         {
-            MessageBox.Show($"Launcher expects at most one argument.\nProvided arguments: {startupArgs.Args.Length}.", "Invalid startup arguments", MessageBoxButton.OK, MessageBoxImage.Error);
-            throw new ArgumentException("Received too many arguments.",nameof(startupArgs));
+            MessageBox.Show($"Launcher expects at most one argument.\nProvided arguments: {e.Args.Length}.", "Invalid startup arguments", MessageBoxButton.OK, MessageBoxImage.Error);
+            throw new ArgumentException("Received too many arguments.");
         }
         var appLocation = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location)!;
 
         // For more information about .NET generic host see  https://docs.microsoft.com/aspnet/core/fundamentals/host/generic-host?view=aspnetcore-3.0
-        _host = Host.CreateDefaultBuilder(startupArgs.Args)
+        _host = Host.CreateDefaultBuilder(e.Args)
                 .ConfigureAppConfiguration(c =>
                 {
                     c.SetBasePath(appLocation);
@@ -61,15 +63,17 @@ public partial class App : Application
         await _host.StartAsync();
         // initialize launcher vm, so that it can start listening to FileRequestMessages
         GetService<FileOpenerBroker>();
-        if (startupArgs.Args.Length == 1)
+        if (e.Args.Length == 1)
         {
             ShouldCloseAfterLaunching = true;
-            GetService<IMessenger>().Send(new FileRequestedMessage(startupArgs.Args[0]));
+            GetService<IMessenger>().Send(new FileRequestedMessage(e.Args[0]));
         }
     }
 
     private void ConfigureServices(HostBuilderContext context, IServiceCollection services)
     {
+        // TODO: Register your services, viewmodels and pages here
+
         // App Host
         services.AddHostedService<ApplicationHostService>();
 
@@ -92,13 +96,10 @@ public partial class App : Application
         services.AddSingleton<IMessenger, StrongReferenceMessenger>();
         services.AddSingleton<IAvAppFacadeFactory, AvAppFacadeFactory>();
         services.AddSingleton<IRecentlyOpenedFilesService, RecentlyOpenedFilesService>();
-        services.AddSingleton<IGeneralSettingsService, GeneralSettingsService>();
         services.AddSingleton<IFileAssociationService, FileAssociationService>();
         services.AddSingleton<IUpdateCheckService, UpdateCheckService>();
         services.AddSingleton<FileOpenerBroker>();
         services.AddSingleton<ICustomAppSourceService,CustomAppSourceService>();
-        services.AddSingleton<IJumpListService,JumpListService>();
-        services.AddSingleton<IAppNativeRecentFilesService, AppNativeRecentFilesService>();
 
         services.AddSingleton<IProcessManagerService, ProcessManagerService>();
         // Views and ViewModels

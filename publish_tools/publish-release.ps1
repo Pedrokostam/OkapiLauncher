@@ -5,23 +5,22 @@ param (
     $NoZip
 )
 
-$SolutionDir = Split-Path $PSScriptRoot -Parent                        # ./OkapiLauncher
-$ErrorActionPreference = 'Stop'                                        # any error should stop the procedure
+$SolutionDir = Split-Path $PSScriptRoot -Parent
+$ErrorActionPreference = 'Stop' # any error should stop the procedure
 
 # VARIABLES
-$PublishTools = Join-Path $SolutionDir 'publish_tools'                 # ./OkapiLauncher/publish_tools
-$outputInfoFile = Join-Path $PublishTools 'output_info.json'           # ./OkapiLauncher/publish_tools/output_info.json
-$innoCompilerPath = 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe'     # {INNO}
-$AppName = 'Okapi Launcher'                                            # Okapi Launcher
-$ProjectName = 'OkapiLauncher'                                         # OkapiLauncher
-$ProjectDir = Join-Path $SolutionDir $ProjectName                      # ./OkapiLauncher/OkapiLauncher
-$CsProjName = "$($ProjectName).csproj"                                 # ./OkapiLauncher/OkapiLauncher.csproj
-$AppExeName = "$($ProjectName).exe"                                    # ./OkapiLauncher/OkapiLauncher.exe
-$ProjPath = Join-Path $ProjectDir $CsProjName                          # ./OkapiLauncher/OkapiLauncher/OkapiLauncher.csproj
-$BaseOutputDir = Join-Path $SolutionDir 'Release'                      # ./OkapiLauncher/Release
-$Binaries = Join-Path $BaseOutputDir $AppName                          # ./OkapiLauncher/Release/Okapi Lancher
-$ExePath = Join-Path $Binaries $AppExeName                             # ./OkapiLauncher/Release/Okapi Lancher/OkapiLauncher.exe
-$InnoScriptPath = Join-Path $PublishTools 'inno_installer_script.iss'  # 
+$outputInfoFile = Join-Path $PSScriptRoot 'output_info.json'
+$PublishTools = Join-Path $SolutionDir 'publish_tools'
+$innoCompilerPath = 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe'
+$AppName = 'Okapi Launcher'
+$ProjectName = 'OkapiLauncher'
+$ProjectDir = Join-Path $SolutionDir $ProjectName
+$CsProjName = "$($ProjectName).csproj"
+$AppExeName = "$($ProjectName).exe"
+$ProjPath = Join-Path $ProjectDir $CsProjName
+$BaseOutputDir = Join-Path $SolutionDir 'Release'
+$Binaries = Join-Path $BaseOutputDir $AppName
+$InnoScriptPath = Join-Path $PublishTools 'inno_installer_script.iss'
 
 ## TEST PATHS
 if (-not (Test-Path $innoCompilerPath)) {
@@ -33,6 +32,10 @@ if (Test-Path $BaseOutputDir) {
 if (Test-Path $outputInfoFile) {
     Remove-Item -Force $outputInfoFile
 }
+
+# VERSION
+[xml]$csproj = Get-Content $ProjPath
+$version = $csproj.SelectSingleNode('/Project/PropertyGroup/Version').InnerText
 
 # GUID
 $assemblyInfoPath = Join-Path $ProjectDir Properties AssemblyInfo.cs
@@ -47,11 +50,11 @@ if ($matchedGuid) {
 $appSettingsPath = Join-Path $ProjectDir appsettings.json 
 $json = Get-Content $appSettingsPath | ConvertFrom-Json
 $repoUrl = $json.AppConfig.githubLink
+
+# VARIABLES CONT'D
+$ZipPath = Join-Path $BaseOutputDir "$($AppName)_$($Version).zip"
     
 # ---   DOTNET   ---
-Write-Host ""
-Write-Host "================== PERFORMING BUILD =================="
-Write-Host ""
 $dotnetParams = @(
     'publish'
     $ProjPath
@@ -66,17 +69,7 @@ $dotnetParams = @(
 )
 dotnet @dotnetParams
 
-# VERSION
-$exeItem = Get-Item $ExePath
-$version = $exeItem.VersionInfo.FileVersion # Reads version from built exe. Assumes GitVersion is run as task during build.
-
-# VARIABLES CONT'D
-$ZipPath = Join-Path $BaseOutputDir "$($AppName)_$($Version).zip"
-
 # ---   COMPRESS   ---
-Write-Host ""
-Write-Host "================== COMPRESSING =================="
-Write-Host ""
 if (-not $NoZip.IsPresent) {
     $compressParams = @{
         LiteralPath      = $Binaries
@@ -87,9 +80,6 @@ if (-not $NoZip.IsPresent) {
 }
 
 # ---   INNO   ---
-Write-Host ""
-Write-Host "================== CREATING INSTALLER =================="
-Write-Host ""
 $retries = 5
 while ($true) {
     # repeat creation until there is no error

@@ -5,7 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace OkapiLauncher.Core.Exceptions;
-public class InvalidAppTypeNameException(string name) : Exception($"Given name does not match any app type: {name}")
+public class InvalidAppTypeNameException:Exception
 {
-    public string Name { get; } = name;
+    public InvalidAppTypeNameException(string name) : base($"Given name does not match any app type: {name}")
+    {
+        Name = name;
+    }
+
+    public string Name { get; }
 }
