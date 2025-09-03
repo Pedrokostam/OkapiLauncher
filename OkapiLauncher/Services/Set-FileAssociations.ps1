@@ -47,7 +47,6 @@ class RegistryAssocation {
         $this.IconPath = $jsonObject.IconPath
     }
 }
-Set-Clipboard $ProtoAssociations
 $jsons = $ProtoAssociations | ConvertFrom-Json
 $Associations = foreach ($json in $jsons) {
     [RegistryAssocation]::new($json)
@@ -171,6 +170,7 @@ function Set-AppShellKey {
     $registryKeyPath = concat HKCU: Software Classes $registryName
     Remove-KeyRobust $registryKeyPath 
 
+    Write-Host ''
     Write-Host 'Created key: ' -NoNewline -ForegroundColor Magenta
     Write-Host $registryKeyPath
 
@@ -193,6 +193,7 @@ function Set-Association {
     $registryName = $RegistryAppName + $Association.Extension
     $registryKeyPath = concat HKCU: Software Classes $Association.Extension
     Remove-KeyRobust $registryKeyPath
+    Write-Host ''
     Write-Host 'Created key: ' -NoNewline -ForegroundColor Magenta
     Write-Host $registryKeyPath
     New-Item $registryKeyPath -Force -Value $registryName | Format-NewItem -base $registryKeyPath
@@ -203,11 +204,11 @@ foreach ($association in $Associations) {
     $null = Remove-ExplorerAssociation $association
     Write-Host ' - Gone'
 }
-Write-Host "`n--------  Setting app shell keys ---------`n" -foreground Cyan
+Write-Host "`n--------  Setting app shell keys ---------" -foreground Cyan
 foreach ($association in $Associations) {
     Set-AppShellKey $association
 }
-Write-Host "`n---------  Setting associations  ---------`n" -ForegroundColor Cyan
+Write-Host "`n---------  Setting associations  ---------" -ForegroundColor Cyan
 foreach ($association in $Associations) {
     Set-Association $association
 }

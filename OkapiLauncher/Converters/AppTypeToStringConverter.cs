@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 using System.Windows.Data;
 using OkapiLauncher.Core.Models;
 using OkapiLauncher.Properties;
-using Windows.ApplicationModel.Resources.Core;
 
 namespace OkapiLauncher.Converters;
 public class AppTypeToStringConverter : IValueConverter
@@ -19,7 +13,7 @@ public class AppTypeToStringConverter : IValueConverter
         {
             return value;
         }
-        string key = $"AppProductType{productType.Name}Label";
+        string key = $"AppProductType{productType.Name}Label".Replace(" ","");
         return Resources.ResourceManager.GetString(key, culture: null) ?? "UNKNOWN TYPE";
     }
 

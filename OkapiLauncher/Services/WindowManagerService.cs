@@ -1,20 +1,16 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Navigation;
 using OkapiLauncher.Contracts;
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Contracts.ViewModels;
 using OkapiLauncher.Contracts.Views;
-using OkapiLauncher.Core.Models.Apps;
 using OkapiLauncher.Models;
 using OkapiLauncher.ViewModels;
 using OkapiLauncher.Views;
-using CommunityToolkit.Mvvm.ComponentModel;
 using ControlzEx.Theming;
 using MahApps.Metro.Controls;
-using Microsoft.Extensions.DependencyInjection;
-using Windows.ApplicationModel.VoiceCommands;
+using OkapiLauncher.Helpers;
 
 namespace OkapiLauncher.Services;
 
@@ -26,12 +22,13 @@ public class WindowManagerService : IWindowManagerService
     public Window MainWindow
         => Application.Current.MainWindow;
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0290:Use primary constructor", Justification = "The fields should be readonly")]
     public WindowManagerService(IServiceProvider serviceProvider, IPageService pageService)
     {
         _serviceProvider = serviceProvider;
         _pageService = pageService;
     }
-    private string GetWindowTitle(string key, object? parameter)
+    private static string GetWindowTitle(string key, object? parameter)
     {
         if(string.Equals(key,typeof(ProcessOverviewViewModel).FullName, StringComparison.Ordinal))
         {

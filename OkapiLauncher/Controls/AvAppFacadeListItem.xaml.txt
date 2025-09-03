@@ -1,0 +1,188 @@
+﻿<UserControl
+    x:Class="OkapiLauncher.Controls.AvAppFacadeListItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:OkapiLauncher.Controls"
+    xmlns:converters="clr-namespace:OkapiLauncher.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:OkapiLauncher.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mdicons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
+    xmlns:models="clr-namespace:OkapiLauncher.Models"
+    xmlns:properties="clr-namespace:OkapiLauncher.Properties"
+    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+    Name="UC_Root"
+    d:DesignWidth="800"
+    MouseDoubleClick="UserControl_MouseDoubleClick"
+    mc:Ignorable="d">
+    <Grid
+        x:Name="RootGrid"
+        HorizontalAlignment="Stretch"
+        d:DataContext="{d:DesignInstance Type=models:AvAppFacade,
+                                         IsDesignTimeCreatable=False}">
+        <Grid.Resources>
+            <converters:BoolSelectorConverter
+                x:Key="LicenseTooltipConverter"
+                FalseValue="{x:Static properties:Resources.AvAppOpenLicenseFolderDisabled}"
+                TrueValue="{x:Static properties:Resources.AvAppOpenLicenseFolder}" />
+            <converters:BoolSelectorConverter
+                x:Key="LogTooltipConverter"
+                FalseValue="{x:Static properties:Resources.AvAppOpenLogFolderDisabled}"
+                TrueValue="{x:Static properties:Resources.AvAppOpenLogFolder}" />
+        </Grid.Resources>
+        <Grid.ToolTip>
+            <ToolTip>
+                <ContentPresenter Content="{Binding AppFacade, ElementName=UC_Root}" ContentTemplate="{StaticResource FullAppInfo}" />
+            </ToolTip>
+        </Grid.ToolTip>
+        <Grid.ContextMenu>
+            <ContextMenu>
+                <MenuItem Command="{Binding AppFacade.OpenContainingFolderCommand, ElementName=UC_Root}" Header="{x:Static properties:Resources.AvAppOpenInstallationFolder}">
+                    <MenuItem.Icon>
+                        <mdicons:MaterialIcon Kind="{StaticResource IconOpenFolder}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Command="{Binding AppFacade.CopyExecutablePathCommand, ElementName=UC_Root}" Header="{x:Static properties:Resources.AvAppCopyPath}">
+                    <MenuItem.Icon>
+                        <mdicons:MaterialIcon Kind="{StaticResource IconCopy}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator Visibility="{Binding AppFacade.IsExecutable, ElementName=UC_Root, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <MenuItem
+                    Click="LaunchButton_Click"
+                    Header="{x:Static properties:Resources.AvAppLaunchWithNoProgram}"
+                    Visibility="{Binding AppFacade.IsExecutable, ElementName=UC_Root, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Tag>
+                        <sys:Boolean>true</sys:Boolean>
+                    </MenuItem.Tag>
+                    <MenuItem.Icon>
+                        <mdicons:MaterialIcon Kind="{StaticResource IconLaunch}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    Command="{Binding ShowProcessOverviewCommand}"
+                    Header="Open process overview window"
+                    Visibility="{Binding AppFacade.IsExecutable, ElementName=UC_Root, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <mdicons:MaterialIcon Kind="{StaticResource IconProcess}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem
+                    Command="{Binding OpenLicenseFolderCommand}"
+                    Header="{x:Static properties:Resources.AvAppOpenLicenseFolder}"
+                    IsEnabled="{Binding CanOpenLicenseFolder}">
+                    <MenuItem.Icon>
+                        <mdicons:MaterialIcon Kind="{StaticResource IconLicenseFolder}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    Command="{Binding OpenLogFolderCommand}"
+                    Header="{x:Static properties:Resources.AvAppOpenLogFolder}"
+                    IsEnabled="{Binding AppFacade.CanOpenLogFolder, ElementName=UC_Root}"
+                    Visibility="{Binding AppFacade.LogFolderPath, ElementName=UC_Root, Converter={StaticResource NullVisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <mdicons:MaterialIcon Kind="{StaticResource IconLogFolder}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </ContextMenu>
+        </Grid.ContextMenu>
+        <Rectangle Fill="Transparent" />
+        <Grid Margin="15,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <ContentControl
+                Grid.Column="0"
+                Content="{Binding}"
+                ContentTemplate="{DynamicResource AppHeader}" />
+            <StackPanel
+                Grid.Column="1"
+                Margin="5,0,10,0"
+                VerticalAlignment="Center"
+                DataContext="{Binding ElementName=RootGrid, Path=DataContext}"
+                Orientation="Horizontal"
+                Visibility="{Binding AppFacade.IsExecutable, ElementName=UC_Root, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <!--<mdicons:MaterialIcon Width="22" VerticalAlignment="Center">
+                    <mdicons:MaterialIcon.Style>
+                        <Style TargetType="{x:Type mdicons:MaterialIcon}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding AppFacade.IsLaunched, ElementName=UC_Root}" Value="False">
+                                    <Setter Property="Kind" Value="{StaticResource IconIsNotLaunched}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding AppFacade.IsLaunched, ElementName=UC_Root}" Value="True">
+                                    <Setter Property="Kind" Value="{StaticResource IconIsLaunched}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </mdicons:MaterialIcon.Style>
+                </mdicons:MaterialIcon>-->
+                <TextBlock Margin="5,0,0,0">
+                    <TextBlock.Style>
+                        <Style BasedOn="{StaticResource BaseTextBlockStyle}" TargetType="{x:Type TextBlock}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding AppFacade.IsLaunched, ElementName=UC_Root}" Value="False">
+                                    <Setter Property="Text" Value="Not running" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding AppFacade.IsLaunched, ElementName=UC_Root}" Value="True">
+                                    <Setter Property="Text" Value="{Binding AppFacade.ActiveProcesses.Count, ElementName=UC_Root, StringFormat={x:Static properties:Resources.AvAppProcessesActive}}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </StackPanel>
+            <controls:WarningLaunchButton
+                x:Name="LaunchButton"
+                Grid.Column="2"
+                Width="45"
+                Click="LaunchButton_Click"
+                DisplayWarning="{Binding WarnAboutNewProcess}"
+                Style="{StaticResource SymbolButton}"
+                Visibility="{Binding AppFacade.IsExecutable, ElementName=UC_Root, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <mdicons:MaterialIcon Kind="{StaticResource IconLaunch}" />
+            </controls:WarningLaunchButton>
+            <Button
+                Grid.Column="3"
+                Width="45"
+                Command="{Binding AppFacade.CopyExecutablePathCommand, ElementName=UC_Root}"
+                Style="{StaticResource SymbolButton}"
+                ToolTip="{x:Static properties:Resources.AvAppCopyPath}">
+                <mdicons:MaterialIcon Kind="{StaticResource IconCopy}" />
+            </Button>
+            <Button
+                Grid.Column="4"
+                Width="45"
+                Command="{Binding AppFacade.OpenContainingFolderCommand, ElementName=UC_Root}"
+                Style="{StaticResource SymbolButton}"
+                ToolTip="{x:Static properties:Resources.AvAppOpenInstallationFolder}">
+                <mdicons:MaterialIcon Kind="{StaticResource IconOpenFolder}" />
+            </Button>
+            <Button
+                Grid.Column="5"
+                Width="45"
+                Command="{Binding AppFacade.OpenLicenseFolderCommand, ElementName=UC_Root}"
+                Style="{StaticResource SymbolButton}"
+                ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource LicenseTooltipConverter}}"
+                ToolTipService.ShowOnDisabled="True">
+                <mdicons:MaterialIcon Kind="{StaticResource IconLicenseFolder}" />
+            </Button>
+            <Button
+                Grid.Column="6"
+                Width="45"
+                Command="{Binding AppFacade.OpenLogFolderCommand, ElementName=UC_Root}"
+                Style="{StaticResource SymbolButton}"
+                ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource LogTooltipConverter}}"
+                ToolTipService.ShowOnDisabled="True"
+                Visibility="{Binding AppFacade.LogFolderPath, ElementName=UC_Root, Converter={StaticResource NullVisibilityConverter}}">
+                <mdicons:MaterialIcon Kind="{StaticResource IconLogFolder}" />
+            </Button>
+        </Grid>
+    </Grid>
+</UserControl>
