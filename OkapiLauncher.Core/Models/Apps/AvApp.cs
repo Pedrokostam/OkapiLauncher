@@ -99,9 +99,10 @@ public record AvApp : IAvApp
         // different builds denotes changes in the API, so runtime cannot be lauched for example
         balance += (version.Build - baseVersion.Build) * 10;
         // minor indicate some larger changes, but noting too ground breaking
-        balance += (version.Minor - baseVersion.Minor) * 10_000;
+        // has to be more than 1000x larger than build because of trunk's 1000's
+        balance += (version.Minor - baseVersion.Minor) * 100_000;
         // hoo boy
-        balance += (version.Major - baseVersion.Major) * 1_000_000;
+        balance += (version.Major - baseVersion.Major) * 10_000_000;
         /*
         the goal is to find a version that gets the value closes to 0
         negative values mean the app is outdated, but may still be able to load the program
@@ -146,6 +147,10 @@ public record AvApp : IAvApp
         {
             return -1;
         }
+        if (project.Type.HasFlag(AvType.DeepLearning))
+        {
+            return weights.IndexOfMax();
+        }
         if (hasPositive)
         {
             // negative values are set to the highest possible value, so they will not be considered
@@ -165,7 +170,7 @@ public record AvApp : IAvApp
     public bool IsNativeApp(IVisionProject type) => IsNativeApp(this, type);
     public static bool IsNativeApp(IAvApp app, IVisionProject project)
     {
-        return app.Type == project.Type;
+        return app.Type == project.Type || (project.Type.HasFlag(AvType.DeepLearning) && app.Type.HasFlag(AvType.DeepLearning));
     }
 
     public int CompareTo(IAvApp? other)
