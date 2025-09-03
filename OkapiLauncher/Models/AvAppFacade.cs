@@ -65,6 +65,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     {
         OnPropertyChanged(nameof(IsLaunched));
         OnPropertyChanged(nameof(WarnAboutNewProcess));
+        KillAllProcessesCommand.NotifyCanExecuteChanged();
     }
     partial void OnProcessInfoAvailableChanged(bool value)
     {
@@ -107,7 +108,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
             ExplorerHelper.OpenExplorer(LogFolderPath);
 
     }
-    [RelayCommand(CanExecute =nameof(ShowProcessInfo))]
+    [RelayCommand(CanExecute =nameof(IsLaunched))]
     private void KillAllProcesses()
     {
         _messenger.Send(new KillAllProcessesRequest(this,ViewModel:null));
