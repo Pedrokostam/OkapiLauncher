@@ -52,6 +52,7 @@
                 <ResourceDictionary Source="/Styles/TextBlock.xaml" />
                 <ResourceDictionary Source="/Styles/Button.xaml" />
                 <ResourceDictionary Source="/Styles/Dialog.xaml" />
+                <ResourceDictionary Source="/Styles/Border.xaml" />
 
                 <ResourceDictionary Source="/DataTemplates/AvAppFacade.xaml" />
                 <ResourceDictionary Source="/DataTemplates/CommandLineOptions.xaml" />

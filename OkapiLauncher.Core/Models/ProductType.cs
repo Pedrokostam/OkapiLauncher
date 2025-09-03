@@ -4,21 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OkapiLauncher.Core.Exceptions;
-using Windows.ApplicationModel;
 
 namespace OkapiLauncher.Core.Models;
+[Flags]
 public enum AvType
 {
-    Professional,
-    Runtime,
-    DeepLearning,
-    Library
+    None = 0,
+    Professional = 1,
+    Runtime = 2,
+    Library = 4,
+    DeepLearning = 8,
+    CPU = 16,
+    GPU = 32,
+    DeepLearningGPU = DeepLearning + GPU,
+    DeepLearningCPU = DeepLearning + CPU,
 }
 public class ProductType : IComparable<ProductType>, IComparable
 {
     public static readonly ProductType Professional = new("Professional", AvType.Professional);
     public static readonly ProductType Runtime = new("Runtime", AvType.Runtime);
-    public static readonly ProductType DeepLearning = new("DeepLearning", AvType.DeepLearning);
+    public static readonly ProductType DeepLearningGPU = new("DeepLearning GPU", AvType.DeepLearningGPU);
+    public static readonly ProductType DeepLearningCPU = new("DeepLearning CPU", AvType.DeepLearningCPU);
+    public static readonly ProductType AnyDeepLearning = new("DeepLearning", AvType.DeepLearning);
     public static readonly ProductType Library = new("Library", AvType.Library);
     public string Name { get; }
     private readonly List<ProductType> _supportedAvTypes = [];
@@ -31,8 +38,10 @@ public class ProductType : IComparable<ProductType>, IComparable
         {
             AvType.Professional => Professional,
             AvType.Runtime => Runtime,
-            AvType.DeepLearning => DeepLearning,
             AvType.Library => Library,
+            AvType.DeepLearningGPU => DeepLearningGPU,
+            AvType.DeepLearningCPU => DeepLearningCPU,
+            AvType.DeepLearning => AnyDeepLearning,
             _ => throw new NotSupportedException()
         };
     }
@@ -56,7 +65,7 @@ public class ProductType : IComparable<ProductType>, IComparable
         {
             AvType.Professional => 1,
             AvType.Runtime => 1,
-            AvType.DeepLearning => 3,
+            AvType.DeepLearningGPU or AvType.DeepLearningCPU => 3,
             AvType.Library => 3,
             _ => throw new NotSupportedException(),
         };
@@ -73,7 +82,17 @@ public class ProductType : IComparable<ProductType>, IComparable
         Runtime._supportedAvTypes.Add(Runtime);
         Runtime._supportedAvTypes.Add(Professional);
 
-        DeepLearning._supportedAvTypes.Add(DeepLearning);
+        DeepLearningGPU._supportedAvTypes.Add(AnyDeepLearning);
+        DeepLearningGPU._supportedAvTypes.Add(DeepLearningGPU);
+        DeepLearningGPU._supportedAvTypes.Add(DeepLearningCPU);
+
+        DeepLearningCPU._supportedAvTypes.Add(AnyDeepLearning);
+        DeepLearningCPU._supportedAvTypes.Add(DeepLearningGPU);
+        DeepLearningCPU._supportedAvTypes.Add(DeepLearningCPU);
+
+        AnyDeepLearning._supportedAvTypes.Add(AnyDeepLearning);
+        AnyDeepLearning._supportedAvTypes.Add(DeepLearningGPU);
+        AnyDeepLearning._supportedAvTypes.Add(DeepLearningCPU);
 
         Library._supportedAvTypes.Add(Library);
     }
@@ -114,9 +133,16 @@ public class ProductType : IComparable<ProductType>, IComparable
             "avl.dll" => AvType.Library,
             "fil.dll" => AvType.Library,
             //
-            "deeplearningeditor.exe" => AvType.DeepLearning,
+            "deeplearningeditor.exe" => CheckDlType(filepath),
             _ => throw new InvalidAppTypeNameException(name)
         };
+    }
+    private static AvType CheckDlType(string filepath)
+    {
+        var root = new FileInfo(filepath).Directory!.Parent!.Parent!.FullName;
+        var deps = Path.Join(root, "Deps_x64");
+        var cudaPresent = Directory.EnumerateFiles(deps, "cublas*.dll").Any();
+        return cudaPresent ? AvType.DeepLearningGPU : AvType.DeepLearningCPU;
     }
     /// <summary>
     /// Find matching <see cref="ProductType"/> based on the filename.
@@ -126,6 +152,10 @@ public class ProductType : IComparable<ProductType>, IComparable
     public static ProductType FromFilepath(string filepath) => FromAvType(GetAvTypeFromFilename(filepath));
     public bool IsExecutable => Type != AvType.Library;
     public int CompareTo(object? obj) => CompareTo(obj as ProductType);
+    public static implicit operator AvType(ProductType type) => type.Type;
 
- 
+    public bool HasFlag(AvType type)
+    {
+        return Type.HasFlag(type);
+    }
 }

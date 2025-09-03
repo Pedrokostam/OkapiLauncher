@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
+		<TargetFramework>net6.0-windows</TargetFramework>
 		<RootNamespace>OkapiLauncher</RootNamespace>
 		<LangVersion>latest</LangVersion>
 		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
@@ -11,29 +11,39 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<ApplicationIcon>Resources\Icons\AppIcon.ico</ApplicationIcon>
-		<Version>1.6.0.2</Version>
 		<PublishReadyToRun>true</PublishReadyToRun>
 		<InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);Microsoft.Extensions.Configuration.Binder.SourceGeneration</InterceptorsPreviewNamespaces>
 	</PropertyGroup>
-
+	<PropertyGroup>
+		<!--Needed for AOT and trimming on array operations-->
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
 	<ItemGroup>
+		<None Remove="Resources\Icons\AdaptiveVisionDeepLearning.ico" />
 		<None Remove="Resources\Icons\AdaptiveVisionExecutor.ico" />
 		<None Remove="Resources\Icons\AdaptiveVisionStudio.ico" />
+		<None Remove="Resources\Icons\AuroraVisionDeepLearning.ico" />
 		<None Remove="Resources\Icons\AuroraVisionExecutor.ico" />
 		<None Remove="Resources\Icons\AuroraVisionStudio.ico" />
-		<None Remove="Resources\Icons\FabImageRuntime.ico" />
+		<None Remove="Resources\Icons\FabImageDeepLearning.ico" />
 		<None Remove="Resources\Icons\FabImageStudio.ico" />
 		<None Remove="Resources\Symbols\AdaptiveVisionDeepLearning.png" />
+		<None Remove="Resources\Symbols\AdaptiveVisionDeepLearningCPU.png" />
+		<None Remove="Resources\Symbols\AdaptiveVisionDeepLearningGPU.png" />
 		<None Remove="Resources\Symbols\AdaptiveVisionExecutor.png" />
 		<None Remove="Resources\Symbols\AdaptiveVisionLibrary.png" />
 		<None Remove="Resources\Symbols\AdaptiveVisionProfessional.png" />
 		<None Remove="Resources\Symbols\AdaptiveVisionRuntime.png" />
 		<None Remove="Resources\Symbols\AuroraVisionDeepLearning.png" />
+		<None Remove="Resources\Symbols\AuroraVisionDeepLearningCPU.png" />
+		<None Remove="Resources\Symbols\AuroraVisionDeepLearningGPU.png" />
 		<None Remove="Resources\Symbols\AuroraVisionExecutor.png" />
 		<None Remove="Resources\Symbols\AuroraVisionLibrary.png" />
 		<None Remove="Resources\Symbols\AuroraVisionProfessional.png" />
 		<None Remove="Resources\Symbols\AuroraVisionRuntime.png" />
 		<None Remove="Resources\Symbols\FabImageDeepLearning.png" />
+		<None Remove="Resources\Symbols\FabImageDeepLearningCPU.png" />
+		<None Remove="Resources\Symbols\FabImageDeepLearningGPU.png" />
 		<None Remove="Resources\Symbols\FabImageLibrary.png" />
 		<None Remove="Resources\Symbols\FabImageProfessional.png" />
 		<None Remove="Resources\Symbols\FabImageRuntime.png" />
@@ -57,22 +67,28 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Resource Include="Resources\Icons\AdaptiveVisionDeepLearning.ico" />
 		<Resource Include="Resources\Icons\AppIcon.ico" />
 		<Resource Include="Resources\Icons\AdaptiveVisionExecutor.ico" />
 		<Resource Include="Resources\Icons\AdaptiveVisionStudio.ico" />
+		<Resource Include="Resources\Icons\AuroraVisionDeepLearning.ico" />
 		<Resource Include="Resources\Icons\AuroraVisionExecutor.ico" />
 		<Resource Include="Resources\Icons\AuroraVisionStudio.ico" />
-		<Resource Include="Resources\Icons\FabImageRuntime.ico" />
+		<Resource Include="Resources\Icons\FabImageDeepLearning.ico" />
+		<Resource Include="Resources\Icons\FabImageExecutor.ico" />
 		<Resource Include="Resources\Icons\FabImageStudio.ico" />
-		<Resource Include="Resources\Symbols\AdaptiveVisionDeepLearning.png" />
+		<Resource Include="Resources\Symbols\AdaptiveVisionDeepLearningCPU.png" />
+		<Resource Include="Resources\Symbols\AdaptiveVisionDeepLearningGPU.png" />
 		<Resource Include="Resources\Symbols\AdaptiveVisionLibrary.png" />
 		<Resource Include="Resources\Symbols\AdaptiveVisionRuntime.png" />
 		<Resource Include="Resources\Symbols\AdaptiveVisionProfessional.png" />
-		<Resource Include="Resources\Symbols\AuroraVisionDeepLearning.png" />
+		<Resource Include="Resources\Symbols\AuroraVisionDeepLearningCPU.png" />
+		<Resource Include="Resources\Symbols\AuroraVisionDeepLearningGPU.png" />
 		<Resource Include="Resources\Symbols\AuroraVisionLibrary.png" />
 		<Resource Include="Resources\Symbols\AuroraVisionRuntime.png" />
 		<Resource Include="Resources\Symbols\AuroraVisionProfessional.png" />
-		<Resource Include="Resources\Symbols\FabImageDeepLearning.png" />
+		<Resource Include="Resources\Symbols\FabImageDeepLearningCPU.png" />
+		<Resource Include="Resources\Symbols\FabImageDeepLearningGPU.png" />
 		<Resource Include="Resources\Symbols\FabImageLibrary.png" />
 		<Resource Include="Resources\Symbols\FabImageRuntime.png" />
 		<Resource Include="Resources\Symbols\FabImageProfessional.png" />
@@ -80,6 +96,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
+		<PackageReference Include="GitVersion.MsBuild" Version="6.3.0">
+			<PrivateAssets>all</PrivateAssets>
+			<!--<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>-->
+		</PackageReference>
 		<PackageReference Include="MahApps.Metro" Version="2.4.10" />
 		<PackageReference Include="Material.Icons.WPF" Version="2.1.10" />
 		<PackageReference Include="Meziantou.Analyzer" Version="2.0.169">
@@ -89,9 +109,14 @@
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
 		<PackageReference Include="ObservableCollections" Version="3.1.1" />
 		<PackageReference Include="System.Drawing.Common" Version="8.0.10" />
+		<PackageReference Include="System.Management" Version="7.0.2" />
 		<PackageReference Include="System.Text.Json" Version="8.0.5" />
-		<PackageReference Include="WindowsAPICodePack-Core" Version="1.1.2" />
-		<PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
+		<PackageReference Include="WindowsAPICodePack-Core" Version="1.1.2">
+			<NoWarn>NU1701</NoWarn>
+		</PackageReference>
+		<PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1">
+			<NoWarn>NU1701</NoWarn>
+		</PackageReference>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -107,6 +132,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<EmbeddedResource Update="Properties\Resources - Copy.resx">
+		  <SubType>Designer</SubType>
+		  <LastGenOutput>Resources - Copy.Designer.cs</LastGenOutput>
+		  <Generator>PublicResXFileCodeGenerator</Generator>
+		</EmbeddedResource>
 		<EmbeddedResource Update="Properties\Resources.resx">
 			<Generator>PublicResXFileCodeGenerator</Generator>
 			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -116,6 +146,9 @@
 	<ItemGroup>
 		<None Update="appsettings.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Helpers\Create-LaunchScript.ps1">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
 

@@ -13,6 +13,7 @@
     <SolidColorBrush x:Key="Custom.Brushes.Compatibility.Outdated" Color="Orange" />
     <SolidColorBrush x:Key="Custom.Brushes.Compatibility.Unknown" Color="Gray" />
     <SolidColorBrush x:Key="Custom.Brushes.TextBlock.NotImportant" Color="#FF757575" />
+    <SolidColorBrush x:Key="Custom.Brushes.Background.Lowlight" Color="#0BFFFFFF" />
 
 
     <SolidColorBrush x:Key="Custom.Brushes.Commandline.App" Color="#98c379" />

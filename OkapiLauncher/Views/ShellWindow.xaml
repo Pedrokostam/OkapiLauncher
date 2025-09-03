@@ -84,13 +84,13 @@
             <i:InvokeCommandAction Command="{Binding UnloadedCommand}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <controls:MetroWindow.LeftWindowCommands>
+    <!--<controls:MetroWindow.LeftWindowCommands>
         <controls:WindowCommands>
             <Button Command="{Binding KillAllChildrenCommand}" ToolTip="{x:Static properties:Resources.ShellKillChildrenButton}">
                 <mdicons:MaterialIcon Kind="Skull" />
             </Button>
         </controls:WindowCommands>
-    </controls:MetroWindow.LeftWindowCommands>
+    </controls:MetroWindow.LeftWindowCommands>-->
     <controls:MetroWindow.Content>
         <Grid>
             <controls:SplitView
@@ -157,12 +157,21 @@
                                     IconKind="{StaticResource IconInstalledApps}"
                                     Text="{x:Static properties:Resources.ShellViewButtonInstalledAppsHeader}"
                                     ToolTip="{x:Static properties:Resources.ShellViewButtonInstalledAppsTooltip}" />
+                                <usercontrols:ViewSwitchButton
+                                    Width="250"
+                                    Margin="10,0,10,0"
+                                    Command="{Binding MenuViewsSettingsCommand}"
+                                    CurrentObject="{Binding CurrentViewModel}"
+                                    ExpectedObject="{x:Type vms:SettingsViewModel}"
+                                    IconKind="{StaticResource IconSettings}"
+                                    Text="{x:Static properties:Resources.ShellViewButtonSettingHeader}" />
                             </StackPanel>
                             <Menu Focusable="False">
                                 <MenuItem
                                     x:Name="FileMenu"
                                     AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
-                                    Header="{x:Static properties:Resources.ShellMenuFileHeader}">
+                                    Header="{x:Static properties:Resources.ShellMenuFileHeader}"
+                                    IsSubmenuOpen="{Binding IsFileMenuOpen}">
                                     <MenuItem
                                         AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
                                         Command="{Binding MenuFileOpenProjectCommand}"
@@ -172,11 +181,16 @@
                                             <mdicons:MaterialIcon Kind="FolderOpen" />
                                         </MenuItem.Icon>
                                     </MenuItem>
+                                    <Separator />
                                     <MenuItem
                                         AlternationCount="2"
                                         AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
                                         Header="{x:Static properties:Resources.ShellMenuRecentFiles}"
-                                        ItemsSource="{Binding RecentlyOpenedFiles}">
+                                        ItemsSource="{Binding RecentlyOpenedFiles}"
+                                        ToolTip="{x:Static properties:Resources.ShellMenuRecentFilesTooltip}">
+                                        <MenuItem.Icon>
+                                            <mdicons:MaterialIcon Kind="{StaticResource IconRecentFiles}" />
+                                        </MenuItem.Icon>
                                         <MenuItem.ItemContainerStyle>
                                             <Style BasedOn="{StaticResource MahApps.Styles.MenuItem}" TargetType="MenuItem">
                                                 <Setter Property="Header" Value="{Binding FilePath, Converter={StaticResource PathToFilenameConverter}, ConverterParameter=50}" />
@@ -199,10 +213,42 @@
                                             </Style>
                                         </MenuItem.ItemContainerStyle>
                                     </MenuItem>
+                                    <MenuItem
+                                        AlternationCount="2"
+                                        AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
+                                        Header="{x:Static properties:Resources.ShellMenuNativeRecentFiles}"
+                                        ItemsSource="{Binding NativeRecentFiles}"
+                                        ToolTip="{x:Static properties:Resources.ShellMenuNativeRecentFilesTooltip}">
+                                        <MenuItem.Icon>
+                                            <mdicons:MaterialIcon Kind="{StaticResource IconRecentNativeFiles}" />
+                                        </MenuItem.Icon>
+                                        <MenuItem.ItemContainerStyle>
+                                            <Style BasedOn="{StaticResource MahApps.Styles.MenuItem}" TargetType="MenuItem">
+                                                <Setter Property="Header" Value="{Binding App.NameWithVersion}" />
+                                                <Setter Property="ItemsSource" Value="{Binding Filepaths}" />
+                                                <Setter Property="ItemContainerStyle">
+                                                    <Setter.Value>
+                                                        <Style BasedOn="{StaticResource MahApps.Styles.MenuItem}" TargetType="MenuItem">
+                                                            <Setter Property="Header" Value="{Binding ., Converter={StaticResource PathToFilenameConverter}, ConverterParameter=50}" />
+                                                            <Setter Property="Command" Value="{Binding DataContext.MenuOpenRecentNativeFileCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                                                            <Setter Property="CommandParameter" Value="{Binding}" />
+                                                            <Setter Property="ToolTip">
+                                                                <Setter.Value>
+                                                                    <StackPanel>
+                                                                        <TextBlock Text="{Binding}" />
+                                                                    </StackPanel>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </MenuItem.ItemContainerStyle>
+                                    </MenuItem>
                                     <Separator />
                                     <MenuItem
                                         AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource Self}}"
-                                        Command="{Binding MenuFileSettingsCommand}"
+                                        Command="{Binding MenuViewsSettingsCommand}"
                                         Header="{x:Static properties:Resources.ShellMenuItemFileSettingsPageHeader}">
                                         <MenuItem.Icon>
                                             <mdicons:MaterialIcon Kind="{StaticResource IconSettings}" />

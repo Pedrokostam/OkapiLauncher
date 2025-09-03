@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 using System.Windows.Data;
 using OkapiLauncher.Core.Models;
 using OkapiLauncher.Properties;
-using Windows.ApplicationModel.Resources.Core;
 
 namespace OkapiLauncher.Converters;
 public class ProjectTypeToStringConverter : IValueConverter

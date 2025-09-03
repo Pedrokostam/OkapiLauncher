@@ -12,6 +12,8 @@ using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Core.Models.Apps;
 using OkapiLauncher.Models;
 using CommunityToolkit.Mvvm.Messaging;
+using System.Windows.Shell;
+using Microsoft.WindowsAPICodePack.Taskbar;
 
 namespace OkapiLauncher.Services;
 public class AvAppFacadeFactory : IAvAppFacadeFactory
@@ -22,11 +24,13 @@ public class AvAppFacadeFactory : IAvAppFacadeFactory
     private readonly IWindowManagerService _windowManagerService;
     private readonly IMessenger _messenger;
     private readonly ICustomAppSourceService _customAppSourceService;
+    private readonly IJumpListService _jumpListService;
 
     public IReadOnlyList<AvApp> AvApps => _avApps.AsReadOnly();
-    public AvAppFacadeFactory(IWindowManagerService windowManagerService, IMessenger messenger, ICustomAppSourceService customAppSourceService)
+    public AvAppFacadeFactory(IWindowManagerService windowManagerService, IMessenger messenger, ICustomAppSourceService customAppSourceService, IJumpListService jumpListService)
     {
         _customAppSourceService = customAppSourceService;
+        _jumpListService = jumpListService;
         _windowManagerService = windowManagerService;
         _messenger = messenger;
         RediscoverApps();
@@ -58,6 +62,7 @@ public class AvAppFacadeFactory : IAvAppFacadeFactory
         _avApps.Clear();
         var detected = AppReader.GetInstalledAvApps(_customAppSourceService.CustomSources);
         _avApps.AddRange(detected);
+        _jumpListService.SetTasks(_avApps);
     }
 
     public IEnumerable<AvAppFacade> CreateAllFacades() => AvApps.Select(Create);
