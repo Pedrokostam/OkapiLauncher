@@ -16,7 +16,7 @@ public record AvApp : IAvApp
     public string Path { get; }
     public string RootPath { get; }
     public string? LogFolderPath { get; }
-    public string AppDataPath { get; }
+    public string? AppDataPath { get; }
     public AvVersion Version { get; }
     public AvVersion? SecondaryVersion { get; }
     public string Name { get; }
@@ -200,8 +200,12 @@ public record AvApp : IAvApp
         };
     }
 
-    private static string GetAppDataPath(IAvApp app)
+    private static string? GetAppDataPath(IAvApp app)
     {
+        if (app.IsCustom)
+        {
+            return null;
+        }
         var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         return System.IO.Path.Join(localAppData, app.Brand.Name, System.IO.Path.GetFileName(app.RootPath));
     }

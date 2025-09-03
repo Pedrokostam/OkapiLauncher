@@ -26,13 +26,17 @@ namespace OkapiLauncher.Services
         private readonly Dictionary<string, DateList> _modificationDates = new(StringComparer.OrdinalIgnoreCase);
         private readonly IAvAppFacadeFactory _avAppFacadeFactory;
 
-        private IEnumerable<string> ReadAppRecentFiles(AvApp app)
+        private IEnumerable<string>? ReadAppRecentFiles(AvApp app)
         {
             if (app.Type != ProductType.Professional)
             {
                 return [];
             }
             string settingsFilePath = Path.Join(app.AppDataPath, "settings.xml");
+            if (!File.Exists(settingsFilePath))
+            {
+                return null;
+            }
             if (!_modificationDates.ContainsKey(settingsFilePath))
             {
                 _modificationDates[settingsFilePath] = new();
@@ -58,18 +62,20 @@ namespace OkapiLauncher.Services
             }
             return dateList.FilePaths;
         }
-        public IAppNativeRecentFilesService.RecentAppFiles GetAppFiles(AvApp app)
+        public IAppNativeRecentFilesService.RecentAppFiles? GetAppFiles(AvApp app)
         {
-            return new IAppNativeRecentFilesService.RecentAppFiles(app, ReadAppRecentFiles(app));
+            var enumeration = ReadAppRecentFiles(app);
+            if (enumeration is null)
+            {
+                return null;
+            }
+            return new IAppNativeRecentFilesService.RecentAppFiles(app, enumeration);
         }
 
         public IEnumerable<IAppNativeRecentFilesService.RecentAppFiles> GetAllAppsFiles()
         {
-            var proffs = _avAppFacadeFactory.AvApps.Where(x => !x.IsCustom && x.Type.HasFlag(AvType.Professional)).ToList();
-            var usedPaths = new HashSet<string>(proffs.Select(x => x.AppDataPath), StringComparer.OrdinalIgnoreCase);
-            var customProffs = _avAppFacadeFactory.AvApps.Where(x => x.IsCustom && x.Type.HasFlag(AvType.Professional) && !usedPaths.Contains(x.AppDataPath)).ToList();
-            proffs.AddRange(customProffs);
-            return proffs.OrderByDescending(x=>x.Version).Select(x => GetAppFiles(x));
+            var proffs = _avAppFacadeFactory.AvApps.Where(x => !x.IsCustom && x.Type.HasFlag(AvType.Professional) && x.AppDataPath is not null).ToList();
+            return proffs.OrderByDescending(x => x.Version).Select(x => GetAppFiles(x)).OfType<IAppNativeRecentFilesService.RecentAppFiles>();
         }
     }
 }
