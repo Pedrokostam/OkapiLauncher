@@ -14,5 +14,5 @@ $ExePath = Join-Path $Binaries "$ProjectName.exe"
 
 # VERSION
 $exeItem = Get-Item $ExePath
-$version = $exeItem.VersionInfo.FileVersion # Reads version from built exe. Assumes GitVersion is run as task during build.
-$version
+$version = $exeItem.VersionInfo.FileVersionRaw # Reads version from built exe. Assumes GitVersion is run as task during build.
+"$($version.Major).$($version.Minor).$($version.Build)"
