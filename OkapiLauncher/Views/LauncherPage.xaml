@@ -101,7 +101,7 @@
                     <DataTemplate>
                         <controls:AvAppFacadeListItem
                             AppFacade="{Binding}"
-                            ButtonSettings="{Binding ElementName=ThisAppPage, Path=DataContext.ButtonSettings}"
+                            ButtonSettings="{Binding ElementName=ThisLauncherPage, Path=DataContext.ButtonSettings}"
                             LaunchCommand="{Binding ElementName=ThisLauncherPage, Path=DataContext.LaunchCommand}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>

@@ -90,17 +90,19 @@
                 Grid.Column="5"
                 Width="{Binding ButtonSettings.IconSize}"
                 Command="{Binding AppFacade.ShowProcessOverviewCommand}"
+                IsEnabledChanged="Button_IsEnabledChanged"
                 Style="{StaticResource SymbolButton}"
                 Tag="{x:Static utils:VisibleButtons.Overview}"
                 ToolTip="{x:Static properties:Resources.AvAppOpenOverview}"
                 ToolTipService.ShowOnDisabled="True"
-                Visibility="{Binding AppFacade.LogFolderPath, Converter={StaticResource NullVisibilityConverter}}">
+                Visibility="{Binding AppFacade.LogFolderPath, Converter={StaticResource NullVisibilityConverter}}" Click="Button_Click">
                 <mdicons:MaterialIcon Kind="{StaticResource IconProcess}" />
             </Button>
             <Button
                 Grid.Column="6"
                 Width="{Binding ButtonSettings.IconSize}"
                 Command="{Binding AppFacade.KillAllProcessesCommand}"
+                IsEnabledChanged="Button_IsEnabledChanged"
                 Style="{StaticResource SymbolButton}"
                 Tag="{x:Static utils:VisibleButtons.KillAll}"
                 ToolTip="{x:Static properties:Resources.AvAppKillAllProcesses}"

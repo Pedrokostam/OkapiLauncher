@@ -69,6 +69,8 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     partial void OnProcessInfoAvailableChanged(bool value)
     {
         OnPropertyChanged(nameof(ShowProcessInfo));
+        KillAllProcessesCommand.NotifyCanExecuteChanged();
+        ShowProcessOverviewCommand.NotifyCanExecuteChanged();
     }
 
     public ProductBrand Brand => _avApp.Brand;
@@ -105,7 +107,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
             ExplorerHelper.OpenExplorer(LogFolderPath);
 
     }
-    [RelayCommand(CanExecute =nameof(IsExecutable))]
+    [RelayCommand(CanExecute =nameof(ShowProcessInfo))]
     private void KillAllProcesses()
     {
         _messenger.Send(new KillAllProcessesRequest(this,ViewModel:null));
@@ -115,7 +117,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     public bool CanOpenLicenseFolder => Directory.Exists(Brand.GetLicenseKeyFolderPath());
     public bool CanOpenLogFolder => Directory.Exists(LogFolderPath);
 
-    [RelayCommand(CanExecute =nameof(IsExecutable))]
+    [RelayCommand(CanExecute =nameof(ShowProcessInfo))]
     private void ShowProcessOverview()
     {
         if (_windowManagerService.Value is null)

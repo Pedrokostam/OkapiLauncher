@@ -150,4 +150,17 @@ public partial class AvAppButtons : UserControl
     {
         UpdateControl(this);
     }
+
+    private void Button_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+        if (sender is Button butt)
+        {
+            butt.Visibility = butt.IsEnabled || (ButtonSettings.ShowDisabledButtons) ? Visibility.Visible : Visibility.Collapsed;
+        }
+    }
+
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
 }

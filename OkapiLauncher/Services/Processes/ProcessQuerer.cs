@@ -14,7 +14,7 @@ public abstract class ProcessQuerer(IMessenger messenger) : IProcessQuerer
     private int LashHash { get; set; }
     protected DateTime LastUpdate { get; set; } = DateTime.MinValue;
     private static readonly TimeSpan GracePeriod = TimeSpan.FromMilliseconds(300);
-    virtual public TimeSpan TimerPeriod { get; } = TimeSpan.FromMilliseconds(4000);
+    virtual public TimeSpan TimerPeriod { get; } = TimeSpan.FromMilliseconds(2500);
 
     public abstract AppProcessInformation? GetProcesses(IEnumerable<IAvApp> apps);
     public abstract AppProcessInformation? UpdateSingleApp(IAvApp app);

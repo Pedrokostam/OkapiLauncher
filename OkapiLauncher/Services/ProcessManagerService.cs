@@ -204,6 +204,10 @@ namespace OkapiLauncher.Services
         public void Receive(KillAllProcessesRequest message) => KillAll(message.AvApp, message.ViewModel);
         private async void KillAll(AvAppFacade avApp, object? viewModel)
         {
+            if(Querer is null)
+            {
+                return;
+            }
             var res = await _contentDialogService.ShowAllProcessesKillDialog(viewModel, avApp);
             if (!res)
             {
