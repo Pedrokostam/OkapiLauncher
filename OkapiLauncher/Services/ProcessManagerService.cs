@@ -20,7 +20,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace OkapiLauncher.Services
 {
-    public partial class ProcessManagerService :ObservableObject, IProcessManagerService, IRecipient<OpenAppRequest>, IRecipient<KillProcessRequest>, IRecipient<KillAllProcessesRequest>
+    public partial class ProcessManagerService : ObservableObject, IProcessManagerService, IRecipient<OpenAppRequest>, IRecipient<KillProcessRequest>, IRecipient<KillAllProcessesRequest>
     {
         /// <summary>
         /// Each records holds a list of all apps that share the process name.
@@ -105,14 +105,7 @@ namespace OkapiLauncher.Services
             }
             catch (ProcessException)
             {
-                if (Querer is DiagnosticQuerer d)
-                {
-                    Querer = new WmiQuerer(_messenger);
-                }
-                else
-                {
-                    Querer = null;
-                }
+                ReplaceQuerer();
             }
         }
 
@@ -127,8 +120,36 @@ namespace OkapiLauncher.Services
             {
                 return;
             }
-            ProcessState = Querer?.UpdateSingleApp(app) ?? new FreshAppProcesses([]);
-            _messenger.Send<FreshAppProcesses>(ProcessState);
+            try
+            {
+                if (Querer?.UpdateSingleApp(app) is FreshAppProcesses fap)
+                {
+
+                    ProcessState = fap;
+                    _messenger.Send<FreshAppProcesses>(ProcessState);
+                }
+            }
+            catch (ProcessException)
+            {
+                ReplaceQuerer();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        private void ReplaceQuerer()
+        {
+            if (Querer is DiagnosticQuerer)
+            {
+                Querer = new WmiQuerer(_messenger);
+            }
+            else
+            {
+                Querer = null;
+            }
         }
 
         public void Receive(KillProcessRequest message) => Kill(message.Process, message.ViewModel);
