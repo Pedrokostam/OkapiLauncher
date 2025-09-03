@@ -1197,6 +1197,45 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The application is using the more efficient approach to monitor running processes.
+        /// </summary>
+        public static string SettingsPageProcessMonitorDiagnostics {
+            get {
+                return ResourceManager.GetString("SettingsPageProcessMonitorDiagnostics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Process monitoring.
+        /// </summary>
+        public static string SettingsPageProcessMonitorHeader {
+            get {
+                return ResourceManager.GetString("SettingsPageProcessMonitorHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The application is unable to monitor running processes.
+        ///Consider launching it with higher privileges.
+        /// </summary>
+        public static string SettingsPageProcessMonitorNone {
+            get {
+                return ResourceManager.GetString("SettingsPageProcessMonitorNone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The application does not have enough privileges to use the optimal process monitoring method.
+        ///It is currently using a less efficient, albeit still functional, approach.
+        ///Consider running the application with Administrator privileges..
+        /// </summary>
+        public static string SettingsPageProcessMonitorWMI {
+            get {
+                return ResourceManager.GetString("SettingsPageProcessMonitorWMI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dark.
         /// </summary>
         public static string SettingsPageRadioButtonDarkTheme {

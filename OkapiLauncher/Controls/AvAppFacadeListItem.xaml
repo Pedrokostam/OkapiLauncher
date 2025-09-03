@@ -105,7 +105,7 @@
                 Margin="5,0,10,0"
                 VerticalAlignment="Center"
                 Orientation="Horizontal"
-                Visibility="{Binding AppFacade.IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                Visibility="{Binding AppFacade.ShowProcessInfo, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource AncestorType=UserControl}}">
                 <mdicons:MaterialIcon Width="22" VerticalAlignment="Center">
                     <mdicons:MaterialIcon.Style>
                         <Style TargetType="{x:Type mdicons:MaterialIcon}">
@@ -135,9 +135,10 @@
                     </TextBlock.Style>
                 </TextBlock>
             </StackPanel>
-            <local:AvAppButtons VerticalAlignment="Center"
+            <local:AvAppButtons
                 x:Name="AllButtons"
                 Grid.Column="2"
+                VerticalAlignment="Center"
                 AppFacade="{Binding AppFacade, RelativeSource={RelativeSource AncestorType=UserControl}}"
                 ButtonSettings="{Binding ButtonSettings, RelativeSource={RelativeSource AncestorType=UserControl}}"
                 LaunchCommand="{Binding LaunchCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />

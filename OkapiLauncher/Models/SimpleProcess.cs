@@ -29,11 +29,11 @@ namespace OkapiLauncher.Models
         public string Path { get; }
 
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "Good luck with compound properties")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MA0015:Specify the parameter name in ArgumentException", Justification = "Good luck with compound properties")]
-        public SimpleProcess(Process proc, IMessenger messenger) : this(proc, messenger, proc.MainModule!.FileName ?? throw new ArgumentNullException("Filename of MainModule"))
+        public SimpleProcess(Process proc, IMessenger messenger) : this(proc, messenger, proc.MainModule!.FileName ?? throw new ArgumentNullException(nameof(proc)))
         {
         }
+
+       
 
         /// <summary>
         /// 
@@ -61,6 +61,15 @@ namespace OkapiLauncher.Models
             Path = other.Path;
         }
 
+        public SimpleProcess(int id, string mainWindowTitle, string processName, DateTime startTime, IMessenger messenger, string path)
+        {
+            _id = id;
+            _mainWindowTitle = mainWindowTitle;
+            _processName = processName;
+            _startTime = startTime;
+            _messenger = messenger;
+            Path = path;
+        }
 
         public string TrimmedTitle
         {

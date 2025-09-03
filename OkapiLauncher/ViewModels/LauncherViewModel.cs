@@ -1,27 +1,18 @@
 ﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Input;
-using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using Microsoft.Extensions.Options;
-using Microsoft.VisualBasic;
 using OkapiLauncher.Contracts.Services;
-using OkapiLauncher.Contracts.ViewModels;
 using OkapiLauncher.Core.Models;
 using OkapiLauncher.Core.Models.Apps;
 using OkapiLauncher.Core.Models.Projects;
-using OkapiLauncher.Helpers;
 using OkapiLauncher.Models;
 using OkapiLauncher.Models.Messages;
 using OkapiLauncher.Properties;
 using OkapiLauncher.Services;
-using OkapiLauncher.Views;
-using Windows.Storage;
 
 namespace OkapiLauncher.ViewModels;
 
@@ -101,13 +92,12 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
     [RelayCommand(CanExecute = nameof(CanCopyArgumentString))]
     private void CopyArgumentString()
     {
-        var t = Thread.CurrentThread;
         if (LaunchOptions?.ArgumentString is not null)
         {
             Clipboard.SetText(LaunchOptions.ArgumentString);
         }
     }
-    static readonly Regex FileDetector = new(@"(?<NORMAL>\.(avproj|avexe|fiproj|fiexe))|(?<DL>pluginconfig.xml)", RegexOptions.Compiled | RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(500));
+    static readonly Regex FileDetector = new(@"(?<NORMAL>\.(avproj|avexe|fiproj|fiexe))|(?<DL>pluginconfig.xml)", RegexOptions.Compiled | RegexOptions.IgnoreCase|RegexOptions.ExplicitCapture, TimeSpan.FromMilliseconds(500));
 
     /// <summary>
     /// Either returns <paramref name="path"/> as is if it is a directory, or attempts to find one of applicable files.
@@ -115,7 +105,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
     /// <param name="path">Path to a project/exe/pluginconfig file.</param>
     /// <returns></returns>
     /// <exception cref="Exception">If the path was a folder and no applicable file was found.</exception>
-    private string HandleDirectories(string path)
+    private static string HandleDirectories(string path)
     {
         if (Directory.Exists(path))
         {
@@ -158,7 +148,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
             }
             _lastOpenedFilesService.AddLastFile(project.Path);
             _navigationService.NavigateTo(GetType().FullName!);
-            _processManagerService.GetCurrentState.UpdateStates(Apps);
+            _processManagerService.ProcessState.UpdateStates(Apps);
             return true;
         }
         catch (FileNotFoundException)
@@ -226,7 +216,6 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
     }
     public override async void OnNavigatedTo(object parameter)
     {
-        var t = Thread.CurrentThread;
         base.OnNavigatedTo(parameter);
 
         var lastFile = _lastOpenedFilesService.LastOpenedFile;

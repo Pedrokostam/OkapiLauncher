@@ -13,7 +13,7 @@ using OkapiLauncher.Services;
 
 namespace OkapiLauncher.ViewModels;
 
-public abstract class ProcessRefreshViewModel : ObservableRecipient, INavigationAware, IRecipient<FreshAppProcesses>
+public abstract class ProcessRefreshViewModel : ObservableRecipient, INavigationAware, IRecipient<IAppProcessInformationPacket>
 {
     abstract protected IList<AvAppFacade> RawApps { get; }
     protected readonly IProcessManagerService _processManagerService;
@@ -32,7 +32,7 @@ public abstract class ProcessRefreshViewModel : ObservableRecipient, INavigation
 
     public virtual void OnNavigatedTo(object parameter)
     {
-        _processManagerService.GetCurrentState.UpdateStates(RawApps);
+        _processManagerService.ProcessState?.UpdateStates(RawApps);
         IsActive = true;
     }
 
@@ -41,8 +41,26 @@ public abstract class ProcessRefreshViewModel : ObservableRecipient, INavigation
         IsActive = false;
     }
 
-    public void Receive(FreshAppProcesses message)
+    public void Receive(IAppProcessInformationPacket message)
     {
-        Application.Current?.Dispatcher.Invoke(() => message.UpdateStates(RawApps));
+        if (!IsActive)
+        {
+            return;
+        }
+
+        Application.Current?.Dispatcher.Invoke(() =>
+        {
+            if (message is null)
+            {
+                foreach (var app in RawApps)
+                {
+                    app.ActiveProcesses.Clear();
+                }
+            }
+            else
+            {
+                message.UpdateStates(RawApps);
+            }
+        });
     }
 }

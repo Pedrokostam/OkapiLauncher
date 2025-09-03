@@ -1,22 +1,16 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Navigation;
 using OkapiLauncher.Contracts;
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Contracts.ViewModels;
 using OkapiLauncher.Contracts.Views;
-using OkapiLauncher.Core.Models.Apps;
 using OkapiLauncher.Models;
 using OkapiLauncher.ViewModels;
 using OkapiLauncher.Views;
-using CommunityToolkit.Mvvm.ComponentModel;
 using ControlzEx.Theming;
 using MahApps.Metro.Controls;
-using Microsoft.Extensions.DependencyInjection;
-using Windows.ApplicationModel.VoiceCommands;
 using OkapiLauncher.Helpers;
-using OkapiLauncher.Contracts.EventArgs;
 
 namespace OkapiLauncher.Services;
 

@@ -27,6 +27,8 @@
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <converters:AppButtonToTextConverter x:Key="ButtonToTextConverter" />
         <converters:AppButtonToIconConverter x:Key="ButtonToIconConverter" />
+        <converters:QuererTypeToDescriptionConverter x:Key="QuererToTextConverter" />
+        <converters:QuererTypeToIconConverter x:Key="QuererToIconConverter" />
 
     </Page.Resources>
     <DockPanel>
@@ -149,12 +151,9 @@
                                     </Grid>
                                 </StackPanel>
                             </Border>
-                            <Border Style="{StaticResource SettingsItem}"  ToolTip="{x:Static properties:Resources.SettingsPageCustomSourcesTooltip}">
+                            <Border Style="{StaticResource SettingsItem}" ToolTip="{x:Static properties:Resources.SettingsPageCustomSourcesTooltip}">
                                 <StackPanel>
-                                    <TextBlock
-                                        Style="{StaticResource SubtitleTextStyle}"
-                                        Text="{x:Static properties:Resources.SettingsPageCustomSourcesHeader}"
-                                        />
+                                    <TextBlock Style="{StaticResource SubtitleTextStyle}" Text="{x:Static properties:Resources.SettingsPageCustomSourcesHeader}" />
                                     <ListView
                                         d:ItemsSource="{d:SampleData ItemCount=5}"
                                         ItemsSource="{Binding CustomSources}"
@@ -424,7 +423,28 @@
                                     Visibility="{Binding AssociationInProgress, Converter={StaticResource BoolToVisibilityConverter}}" />
                             </Grid>
                         </Border>
-
+                        <Border Style="{StaticResource SettingsItem}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    Grid.ColumnSpan="2"
+                                    Style="{StaticResource SubtitleTextStyle}"
+                                    Text="{x:Static properties:Resources.SettingsPageProcessMonitorHeader}" />
+                                <mdicons:MaterialIcon Grid.Row="1" Kind="{Binding ProcessQuererType, Converter={StaticResource QuererToIconConverter}}" Margin="15" />
+                                <TextBlock VerticalAlignment="Center"
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Style="{StaticResource BodyTextStyle}"
+                                    Text="{Binding ProcessQuererType, Converter={StaticResource QuererToTextConverter}}" />
+                            </Grid>
+                        </Border>
                     </StackPanel>
                 </Grid>
             </ScrollViewer>

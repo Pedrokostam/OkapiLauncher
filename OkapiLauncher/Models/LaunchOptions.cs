@@ -3,7 +3,6 @@ using OkapiLauncher.Core.Models;
 using OkapiLauncher.Core.Models.Apps;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Windows.System.RemoteDesktop;
 
 namespace OkapiLauncher.Models;
 

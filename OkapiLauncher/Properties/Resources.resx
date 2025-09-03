@@ -640,4 +640,19 @@ All trademarks, service marks, logos, and copyrights related to the applications
   <data name="AppButtonIconSize" xml:space="preserve">
     <value>Button size</value>
   </data>
+  <data name="SettingsPageProcessMonitorHeader" xml:space="preserve">
+    <value>Process monitoring</value>
+  </data>
+  <data name="SettingsPageProcessMonitorDiagnostics" xml:space="preserve">
+    <value>The application is using the more efficient approach to monitor running processes</value>
+  </data>
+  <data name="SettingsPageProcessMonitorWMI" xml:space="preserve">
+    <value>The application does not have enough privileges to use the optimal process monitoring method.
+It is currently using a less efficient, albeit still functional, approach.
+Consider running the application with Administrator privileges.</value>
+  </data>
+  <data name="SettingsPageProcessMonitorNone" xml:space="preserve">
+    <value>The application is unable to monitor running processes.
+Consider launching it with higher privileges</value>
+  </data>
 </root>

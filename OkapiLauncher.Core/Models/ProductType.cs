@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OkapiLauncher.Core.Exceptions;
-using Windows.ApplicationModel;
 
 namespace OkapiLauncher.Core.Models;
 [Flags]

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -23,7 +24,7 @@ using OkapiLauncher.Models.Messages;
 using OkapiLauncher.Services;
 
 namespace OkapiLauncher.ViewModels;
-public partial class ProcessOverviewViewModel : ObservableRecipient, INavigationAware, ITransientWindow, IRecipient<FreshAppProcesses>
+public partial class ProcessOverviewViewModel : ObservableRecipient, INavigationAware, ITransientWindow, IRecipient<AppProcessInformation>
 {
     private readonly IProcessManagerService _processManagerService;
     private readonly IGeneralSettingsService _generalSettingsService;
@@ -48,7 +49,7 @@ public partial class ProcessOverviewViewModel : ObservableRecipient, INavigation
         {
             return;
         }
-        _processManagerService.GetCurrentState.UpdateState(AvApp);
+        _processManagerService.ProcessState.UpdateState(AvApp);
     }
 
     public void OnNavigatedFrom()
@@ -63,8 +64,12 @@ public partial class ProcessOverviewViewModel : ObservableRecipient, INavigation
         Update();
     }
 
-    public void Receive(FreshAppProcesses message)
+    public void Receive(AppProcessInformation message)
     {
+        if (!IsActive)
+        {
+            return;
+        }
         Application.Current?.Dispatcher.Invoke(() => message.UpdateState(AvApp));
     }
     [RelayCommand]

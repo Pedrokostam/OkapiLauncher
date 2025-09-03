@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Windows;
-using ABI.Windows.Foundation;
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Core.Models;
 using OkapiLauncher.Core.Models.Apps;
@@ -18,9 +10,6 @@ using OkapiLauncher.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using Windows.ApplicationModel.VoiceCommands;
-using ObservableCollections;
-using System.Diagnostics.CodeAnalysis;
 using OkapiLauncher.Controls.Utilities;
 
 namespace OkapiLauncher.Models;
@@ -53,9 +42,12 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
 
     [ObservableProperty]
     private Compatibility? _compatibility = null;
+    [ObservableProperty]
+    private bool _processInfoAvailable=false;
+    public bool ShowProcessInfo => IsExecutable && ProcessInfoAvailable;
     private readonly IMessenger _messenger;
 
-    public ObservableCollection<SimpleProcess> ActiveProcesses { get; } = [];
+    public DatedObservableCollection<SimpleProcess> ActiveProcesses { get; } = [];
 
     public bool IsLaunched => ActiveProcesses.Count > 0;
 
@@ -73,6 +65,10 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     {
         OnPropertyChanged(nameof(IsLaunched));
         OnPropertyChanged(nameof(WarnAboutNewProcess));
+    }
+    partial void OnProcessInfoAvailableChanged(bool value)
+    {
+        OnPropertyChanged(nameof(ShowProcessInfo));
     }
 
     public ProductBrand Brand => _avApp.Brand;
@@ -112,7 +108,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     [RelayCommand(CanExecute =nameof(IsExecutable))]
     private void KillAllProcesses()
     {
-        _messenger.Send(new KillAllProcessesRequest(this,null));
+        _messenger.Send(new KillAllProcessesRequest(this,ViewModel:null));
     }
     
 
