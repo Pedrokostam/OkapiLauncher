@@ -1215,7 +1215,8 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The application is unable to monitor running processes..
+        ///   Looks up a localized string similar to The application is unable to monitor running processes.
+        ///Consider launching it with higher privileges.
         /// </summary>
         public static string SettingsPageProcessMonitorNone {
             get {

@@ -29,7 +29,7 @@ namespace OkapiLauncher.Models
         public string Path { get; }
 
 
-        public SimpleProcess(Process proc, IMessenger messenger) : this(proc, messenger, proc.MainModule!.FileName ?? throw new ArgumentNullException("Filename of MainModule"))
+        public SimpleProcess(Process proc, IMessenger messenger) : this(proc, messenger, proc.MainModule!.FileName ?? throw new ArgumentNullException(nameof(proc)))
         {
         }
 

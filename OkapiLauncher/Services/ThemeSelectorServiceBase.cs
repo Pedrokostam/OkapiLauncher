@@ -8,7 +8,6 @@ public abstract class ThemeSelectorServiceBase
     /// Is a dependency to ensure its instantiated before.
     /// </summary>
     private readonly IPersistAndRestoreService _persistAndRestoreService;
-    private bool _initialized;
     protected ThemeSelectorServiceBase(IPersistAndRestoreService persistAndRestoreService)
     {
         _persistAndRestoreService = persistAndRestoreService;

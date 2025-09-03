@@ -42,6 +42,9 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
 
     [ObservableProperty]
     private Compatibility? _compatibility = null;
+    [ObservableProperty]
+    private bool _processInfoAvailable=false;
+    public bool ShowProcessInfo => IsExecutable && ProcessInfoAvailable;
     private readonly IMessenger _messenger;
 
     public DatedObservableCollection<SimpleProcess> ActiveProcesses { get; } = [];
@@ -62,6 +65,10 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     {
         OnPropertyChanged(nameof(IsLaunched));
         OnPropertyChanged(nameof(WarnAboutNewProcess));
+    }
+    partial void OnProcessInfoAvailableChanged(bool value)
+    {
+        OnPropertyChanged(nameof(ShowProcessInfo));
     }
 
     public ProductBrand Brand => _avApp.Brand;
@@ -101,7 +108,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     [RelayCommand(CanExecute =nameof(IsExecutable))]
     private void KillAllProcesses()
     {
-        _messenger.Send(new KillAllProcessesRequest(this,null));
+        _messenger.Send(new KillAllProcessesRequest(this,ViewModel:null));
     }
     
 

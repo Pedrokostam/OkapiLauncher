@@ -269,6 +269,9 @@ dotnet_diagnostic.MA0004.severity = none
 # IDE0079: Remove unnecessary suppression
 dotnet_diagnostic.IDE0079.severity = none
 
+# CA1416: Validate platform compatibility
+dotnet_diagnostic.CA1416.severity = none
+
 [*.{cs,vb}]
 dotnet_style_operator_placement_when_wrapping = beginning_of_line
 tab_width = 4

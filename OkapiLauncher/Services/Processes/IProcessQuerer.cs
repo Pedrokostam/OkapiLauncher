@@ -18,15 +18,15 @@ public interface IProcessQuerer
     /// </summary>
     /// <param name="apps"></param>
     /// <exception cref="ProcessException"/>
-    /// <returns><see cref="FreshAppProcesses"/> if the processes where queried, <see langword="null"/> if they weren't or there were no chang</returns>
-    FreshAppProcesses? GetProcesses(IEnumerable<IAvApp> apps);
+    /// <returns><see cref="AppProcessInformation"/> if the processes where queried, <see langword="null"/> if they weren't or there were no chang</returns>
+    AppProcessInformation? GetProcesses(IEnumerable<IAvApp> apps);
     /// <summary>
     /// Checks running processes for a single app.
     /// </summary>
     /// <param name="app"></param>
     /// <exception cref="ProcessException"/>
-    /// <returns><see cref="FreshAppProcesses"/> if the processes where queried, <see langword="null"/> if they weren't or there were no chang</returns>
-    FreshAppProcesses? UpdateSingleApp(IAvApp app);
+    /// <returns><see cref="AppProcessInformation"/> if the processes where queried, <see langword="null"/> if they weren't or there were no chang</returns>
+    AppProcessInformation? UpdateSingleApp(IAvApp app);
 
     bool IsScheduledUpdateNear();
 }

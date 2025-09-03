@@ -24,7 +24,7 @@ public sealed  class WmiQuerer(IMessenger messenger) : ProcessQuerer(messenger)
     {
         return "'" + Slasher.Replace(app.Path, @"\\") + "'";
     }
-    public override FreshAppProcesses? GetProcesses(IEnumerable<IAvApp> apps)
+    public override AppProcessInformation? GetProcesses(IEnumerable<IAvApp> apps)
     {
         if (!Monitor.TryEnter(_lock))
         {
@@ -82,6 +82,11 @@ public sealed  class WmiQuerer(IMessenger messenger) : ProcessQuerer(messenger)
     }
     private SimpleProcess MakeProcess(ManagementBaseObject obj)
     {
+        var exP = obj["ExecutablePath"] as string;
+        if (string.IsNullOrEmpty(exP))
+        {
+            throw new Win32Exception(5);
+        }
         var id = (int)(uint)obj["ProcessId"];
         using var proc = Process.GetProcessById(id);
         return new SimpleProcess(
@@ -90,10 +95,10 @@ public sealed  class WmiQuerer(IMessenger messenger) : ProcessQuerer(messenger)
             proc.ProcessName,
             proc.StartTime,
             _messenger,
-            (string)obj["ExecutablePath"]
+            exP
             );
     }
-    public override FreshAppProcesses? UpdateSingleApp(IAvApp app)
+    public override AppProcessInformation? UpdateSingleApp(IAvApp app)
     {
         if (!Monitor.TryEnter(_lock))
         {

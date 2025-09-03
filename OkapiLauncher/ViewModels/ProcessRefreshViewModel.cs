@@ -13,7 +13,7 @@ using OkapiLauncher.Services;
 
 namespace OkapiLauncher.ViewModels;
 
-public abstract class ProcessRefreshViewModel : ObservableRecipient, INavigationAware, IRecipient<FreshAppProcesses?>
+public abstract class ProcessRefreshViewModel : ObservableRecipient, INavigationAware, IRecipient<IAppProcessInformationPacket>
 {
     abstract protected IList<AvAppFacade> RawApps { get; }
     protected readonly IProcessManagerService _processManagerService;
@@ -41,7 +41,7 @@ public abstract class ProcessRefreshViewModel : ObservableRecipient, INavigation
         IsActive = false;
     }
 
-    public void Receive(FreshAppProcesses? message)
+    public void Receive(IAppProcessInformationPacket message)
     {
         if (!IsActive)
         {

@@ -14,14 +14,14 @@ public abstract class ProcessQuerer(IMessenger messenger) : IProcessQuerer
     private int LashHash { get; set; }
     protected DateTime LastUpdate { get; set; } = DateTime.MinValue;
     private static readonly TimeSpan GracePeriod = TimeSpan.FromMilliseconds(300);
-    virtual public TimeSpan TimerPeriod { get; } = TimeSpan.FromMilliseconds(2000);
+    virtual public TimeSpan TimerPeriod { get; } = TimeSpan.FromMilliseconds(4000);
 
-    public abstract FreshAppProcesses? GetProcesses(IEnumerable<IAvApp> apps);
-    public abstract FreshAppProcesses? UpdateSingleApp(IAvApp app);
+    public abstract AppProcessInformation? GetProcesses(IEnumerable<IAvApp> apps);
+    public abstract AppProcessInformation? UpdateSingleApp(IAvApp app);
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "MA0064:Avoid locking on publicly accessible instance", Justification = "<Pending>")]
-    protected FreshAppProcesses DictToFAP()
+    protected AppProcessInformation DictToFAP()
     {
-        var fap = new FreshAppProcesses(_dict);
+        var fap = new AppProcessInformation(_dict);
         return fap;
     }
 

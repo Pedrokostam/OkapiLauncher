@@ -50,20 +50,21 @@ namespace OkapiLauncher.Services
                     if (_timer is not null)
                     {
                         _timer.Interval = value.TimerPeriod.TotalMilliseconds;
-                        Update(_avAppFacadeFactory.AvApps);
+                        //Update(_avAppFacadeFactory.AvApps);
                         _timer.Start();
                     }
                 }
                 else
                 {
-                    _messenger.Send<FreshAppProcesses>(FreshAppProcesses.Empty);
+                    ProcessState = InvalidAppProcesses.Instance;
+                    _messenger.Send<IAppProcessInformationPacket>(ProcessState);
                 }
             }
         }
         [ObservableProperty]
         private Type? _quererType = null;
         [ObservableProperty]
-        public FreshAppProcesses? _processState;
+        public IAppProcessInformationPacket _processState = InvalidAppProcesses.Instance;
 
         public ProcessManagerService(IMessenger messenger, IAvAppFacadeFactory avAppFacadeFactory, IContentDialogService contentDialogService)
         {
@@ -71,16 +72,15 @@ namespace OkapiLauncher.Services
             _avAppFacadeFactory = avAppFacadeFactory;
             _contentDialogService = contentDialogService;
             _timer = new() { AutoReset = true };
-            _timer.Elapsed += _timer_Elapsed;
+            _timer.Elapsed += Timer_Elapsed;
             Querer = new DiagnosticQuerer(_messenger);
-            Update(_avAppFacadeFactory.AvApps);
             _messenger.RegisterAll(this);
         }
 
         private readonly object _lock = new();
         private IProcessQuerer? _querer;
 
-        private void _timer_Elapsed(object? sender, ElapsedEventArgs e)
+        private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
         {
             Update(_avAppFacadeFactory.AvApps);
         }
@@ -89,6 +89,7 @@ namespace OkapiLauncher.Services
 
         private void Update(IReadOnlyCollection<IAvApp> apps)
         {
+            var q = Stopwatch.StartNew();
             if (Querer is null || Querer.IsScheduledUpdateNear())
             {
                 // A timer-based update will soon happen
@@ -96,17 +97,18 @@ namespace OkapiLauncher.Services
             }
             try
             {
-                if (Querer?.GetProcesses(apps) is FreshAppProcesses fap)
+                if (Querer?.GetProcesses(apps) is AppProcessInformation fap)
                 {
 
                     ProcessState = fap;
-                    _messenger.Send<FreshAppProcesses>(ProcessState);
+                    _messenger.Send<IAppProcessInformationPacket>(ProcessState);
                 }
             }
             catch (ProcessException)
             {
                 ReplaceQuerer();
             }
+            Debug.WriteLine("Process Monitor time: {0:f2} ms",q.Elapsed.TotalMilliseconds);
         }
 
 
@@ -122,11 +124,11 @@ namespace OkapiLauncher.Services
             }
             try
             {
-                if (Querer?.UpdateSingleApp(app) is FreshAppProcesses fap)
+                if (Querer?.UpdateSingleApp(app) is AppProcessInformation fap)
                 {
 
                     ProcessState = fap;
-                    _messenger.Send<FreshAppProcesses>(ProcessState);
+                    _messenger.Send<IAppProcessInformationPacket>(ProcessState);
                 }
             }
             catch (ProcessException)
@@ -142,14 +144,15 @@ namespace OkapiLauncher.Services
 
         private void ReplaceQuerer()
         {
-            if (Querer is DiagnosticQuerer)
-            {
-                Querer = new WmiQuerer(_messenger);
-            }
-            else
-            {
-                Querer = null;
-            }
+            Querer = null;
+            //if (Querer is DiagnosticQuerer)
+            //{
+            //    Querer = new WmiQuerer(_messenger);
+            //}
+            //else
+            //{
+            //    Querer = null;
+            //}
         }
 
         public void Receive(KillProcessRequest message) => Kill(message.Process, message.ViewModel);

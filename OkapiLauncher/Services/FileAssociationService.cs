@@ -249,7 +249,6 @@ public partial class FileAssociationService : IFileAssociationService
     }
     public async Task SetAssociationsToApp(string? mainAppExecutablePath = null)
     {
-        var t = CheckCurrentAssociations(mainAppExecutablePath);
         mainAppExecutablePath ??= Environment.ProcessPath!;
         RestoreIconFiles();
         //RemoveExplorerAssociations();

@@ -35,6 +35,7 @@ public class SettingsViewModelTests
         var mockContentDialogService = new Mock<IContentDialogService>();
         var mockAvAppFacadeFactory = new Mock<IAvAppFacadeFactory>();
         var mockMessenger = new Mock<IMessenger>();
+        var mockProcess = new Mock<IProcessManagerService>();
 
         var settingsVm = new SettingsViewModel(
             mockAppConfig.Object,
@@ -47,7 +48,8 @@ public class SettingsViewModelTests
             mockContentDialogService.Object,
             mockAvAppFacadeFactory.Object,
             mockMessenger.Object,
-            mockGenSettings.Object
+            mockGenSettings.Object,
+            mockProcess.Object
         );
         settingsVm.OnNavigatedTo(null);
 
@@ -69,6 +71,8 @@ public class SettingsViewModelTests
         var mockAvAppFacadeFactory = new Mock<IAvAppFacadeFactory>();
         var mockMessenger = new Mock<IMessenger>();
         var testVersion = new Version(1, 2, 3, 4);
+        var mockProcess = new Mock<IProcessManagerService>();
+
         mockApplicationInfoService.Setup(mock => mock.GetVersion()).Returns(testVersion);
 
         var settingsVm = new SettingsViewModel(
@@ -82,7 +86,8 @@ public class SettingsViewModelTests
             mockContentDialogService.Object,
             mockAvAppFacadeFactory.Object,
             mockMessenger.Object,
-            mockGenSettings.Object
+            mockGenSettings.Object,
+            mockProcess.Object
         );
         settingsVm.OnNavigatedTo(null);
 
@@ -102,6 +107,7 @@ public class SettingsViewModelTests
         var mockCustomAppSourceService = new Mock<ICustomAppSourceService>();
         var mockContentDialogService = new Mock<IContentDialogService>();
         var mockAvAppFacadeFactory = new Mock<IAvAppFacadeFactory>();
+        var mockProcess = new Mock<IProcessManagerService>();
         var mockMessenger = new Mock<IMessenger>();
 
         var settingsVm = new SettingsViewModel(
@@ -115,7 +121,8 @@ public class SettingsViewModelTests
             mockContentDialogService.Object,
             mockAvAppFacadeFactory.Object,
             mockMessenger.Object,
-            mockGenSettings.Object
+            mockGenSettings.Object,
+            mockProcess.Object
         );
         settingsVm.SetThemeCommand.Execute(AppTheme.Light.ToString());
 

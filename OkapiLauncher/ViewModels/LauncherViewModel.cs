@@ -92,13 +92,12 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
     [RelayCommand(CanExecute = nameof(CanCopyArgumentString))]
     private void CopyArgumentString()
     {
-        var t = Thread.CurrentThread;
         if (LaunchOptions?.ArgumentString is not null)
         {
             Clipboard.SetText(LaunchOptions.ArgumentString);
         }
     }
-    static readonly Regex FileDetector = new(@"(?<NORMAL>\.(avproj|avexe|fiproj|fiexe))|(?<DL>pluginconfig.xml)", RegexOptions.Compiled | RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(500));
+    static readonly Regex FileDetector = new(@"(?<NORMAL>\.(avproj|avexe|fiproj|fiexe))|(?<DL>pluginconfig.xml)", RegexOptions.Compiled | RegexOptions.IgnoreCase|RegexOptions.ExplicitCapture, TimeSpan.FromMilliseconds(500));
 
     /// <summary>
     /// Either returns <paramref name="path"/> as is if it is a directory, or attempts to find one of applicable files.
@@ -106,7 +105,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
     /// <param name="path">Path to a project/exe/pluginconfig file.</param>
     /// <returns></returns>
     /// <exception cref="Exception">If the path was a folder and no applicable file was found.</exception>
-    private string HandleDirectories(string path)
+    private static string HandleDirectories(string path)
     {
         if (Directory.Exists(path))
         {
@@ -217,7 +216,6 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
     }
     public override async void OnNavigatedTo(object parameter)
     {
-        var t = Thread.CurrentThread;
         base.OnNavigatedTo(parameter);
 
         var lastFile = _lastOpenedFilesService.LastOpenedFile;
