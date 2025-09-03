@@ -3,7 +3,7 @@ namespace OkapiLauncher.Contracts.Services
 {
     public interface IAppNativeRecentFilesService
     {
-        RecentAppFiles GetAppFiles(AvApp app);
+        RecentAppFiles? GetAppFiles(AvApp app);
         IEnumerable<RecentAppFiles> GetAllAppsFiles();
 
         record RecentAppFiles:IEquatable<RecentAppFiles>
