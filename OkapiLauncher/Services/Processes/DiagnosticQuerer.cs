@@ -41,15 +41,16 @@ public sealed class DiagnosticQuerer(IMessenger messenger) : ProcessQuerer(messe
         }
         foreach (var proc in rawProcesses)
         {
-            if (!string.Equals(proc.MainModule?.FileName, app.Path, StringComparison.OrdinalIgnoreCase))
-            {
-                continue;
-            }
             try
             {
+                var mainModule = proc.MainModule;
+                var mainModulePath = mainModule?.FileName;
+                if (!string.Equals(mainModulePath, app.Path, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
                 var simple = new SimpleProcess(proc.Id, proc.MainWindowTitle, proc.ProcessName, proc.StartTime, _messenger, app.Path);
                 simples.Add(simple);
-
             }
             catch (Win32Exception w32)
             {
