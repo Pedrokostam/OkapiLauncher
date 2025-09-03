@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -10,24 +9,21 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Accessibility;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
-using Microsoft.Extensions.Options;
 using OkapiLauncher.Contracts;
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Contracts.ViewModels;
-using OkapiLauncher.Controls.Utilities;
 using OkapiLauncher.Helpers;
 using OkapiLauncher.Models;
 using OkapiLauncher.Models.Messages;
 using OkapiLauncher.Services;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace OkapiLauncher.ViewModels;
-public partial class ProcessOverviewViewModel : ObservableRecipient, INavigationAware, ITransientWindow, IRecipient<AppProcessInformation>
+public partial class ProcessOverviewViewModel : ObservableRecipient, INavigationAware, ITransientWindow, IRecipient<FreshAppProcesses>
 {
     private readonly IProcessManagerService _processManagerService;
-    private readonly IGeneralSettingsService _generalSettingsService;
     [ObservableProperty]
     private AvAppFacade _avApp = default!;
     /// <summary>
@@ -35,12 +31,9 @@ public partial class ProcessOverviewViewModel : ObservableRecipient, INavigation
     /// </summary>
     //private readonly DispatcherTimer _auxTimer;
 
-    public ButtonSettings OverviewButtons { get; }
-    public ProcessOverviewViewModel(IProcessManagerService processManagerService, IMessenger messenger, IGeneralSettingsService generalSettingsService) : base(messenger)
+    public ProcessOverviewViewModel(IProcessManagerService processManagerService, IMessenger messenger) : base(messenger)
     {
         _processManagerService = processManagerService;
-        _generalSettingsService = generalSettingsService;
-        OverviewButtons = _generalSettingsService.ButtonSettings with { VisibleButtons = VisibleButtons.All, ShowDisabledButtons = true };
     }
 
     private void Update()
@@ -49,7 +42,7 @@ public partial class ProcessOverviewViewModel : ObservableRecipient, INavigation
         {
             return;
         }
-        _processManagerService.ProcessState.UpdateState(AvApp);
+        _processManagerService.GetCurrentState.UpdateState(AvApp);
     }
 
     public void OnNavigatedFrom()
@@ -64,12 +57,8 @@ public partial class ProcessOverviewViewModel : ObservableRecipient, INavigation
         Update();
     }
 
-    public void Receive(AppProcessInformation message)
+    public void Receive(FreshAppProcesses message)
     {
-        if (!IsActive)
-        {
-            return;
-        }
         Application.Current?.Dispatcher.Invoke(() => message.UpdateState(AvApp));
     }
     [RelayCommand]

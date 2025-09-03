@@ -15,13 +15,13 @@ public static class ProjectReader
         public byte[] MagicBytes { get; }
         public ProductType Type { get; }
         public ProductBrand Brand { get; }
-        public bool IsProjectXml { get; }
+        public bool IsXml { get; }
         public Header(ReadOnlySpan<byte> magicByte, ProductType type, ProductBrand brand, bool isXml)
         {
             MagicBytes = magicByte.ToArray();
             Type = type;
             Brand = brand;
-            IsProjectXml = isXml;
+            IsXml = isXml;
         }
         public bool MatchesHeader(ReadOnlySpan<byte> headerBytes)
         {
@@ -34,27 +34,8 @@ public static class ProjectReader
             new("<FabImageProject"u8,ProductType.Professional,ProductBrand.FabImage,true),
             new("AVEXE"u8,ProductType.Runtime,ProductBrand.Aurora,false),
             new("FIEXE"u8,ProductType.Runtime,ProductBrand.FabImage,false),
-            new("FIEXE"u8,ProductType.Runtime,ProductBrand.FabImage,false),
-            new("""<?xml version="1.0"?>"""u8,ProductType.AnyDeepLearning,ProductBrand.AnyBrand,false),
         ];
-    private static int _longestHeader = -1;
-    private static int LongestHeader
-    {
-        get
-        {
-            if (_longestHeader == -1)
-            {
-                foreach (var entry in _headers)
-                {
-                    if (entry.MagicBytes.Length > _longestHeader)
-                    {
-                        _longestHeader = entry.MagicBytes.Length;
-                    }
-                }
-            }
-            return _longestHeader;
-        }
-    }
+
     static readonly byte[] _utf8Preamble = Encoding.UTF8.GetPreamble();
     private static Header GetHeader(string path)
     {
@@ -69,7 +50,7 @@ public static class ProjectReader
         }
         using var stream = finfo.OpenRead();
         Span<byte> preambleBuffer = stackalloc byte[3];
-        Span<byte> headerBuffer = stackalloc byte[LongestHeader];
+        Span<byte> headerBuffer = stackalloc byte[25];
         stream.Seek(0, SeekOrigin.Begin);
         stream.Read(preambleBuffer);
         if (!preambleBuffer.SequenceEqual(_utf8Preamble))
@@ -111,16 +92,11 @@ public static class ProjectReader
         var header = GetHeader(filepath);
         AvVersion version;
         string name;
-        if (header.IsProjectXml)
+        if (header.IsXml)
         {
             var xml = GetVersionFromXml(filepath);
             name = xml.Name;
             version = xml.Version;
-        }
-        else if (header.Type.HasFlag(AvType.DeepLearning))
-        {
-            name = Path.GetFileName(Path.GetDirectoryName(filepath) ?? "OOPS");
-            version = AvVersion.MissingVersion;
         }
         else
         {
@@ -130,12 +106,12 @@ public static class ProjectReader
         }
 
         VisionProject project = new(
-            path: header.Type.HasFlag(AvType.DeepLearning) ? Path.GetDirectoryName(filepath)! : filepath,
+            path: filepath,
             brand: header.Brand,
             type: header.Type,
             name: name,
             version: version,
-            dateModified: dateModified
+            dateModified:dateModified
             );
         return project;
     }

@@ -1,8 +1,10 @@
-﻿using System.Windows.Controls;
+﻿using System.Diagnostics;
+using System.Windows.Controls;
 using System.Windows.Navigation;
-using OkapiLauncher.Contracts.EventArgs;
+
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Contracts.ViewModels;
+using Windows.Media.Playback;
 
 namespace OkapiLauncher.Services;
 
@@ -12,13 +14,12 @@ public class NavigationService : INavigationService
     private Frame _frame=default!;
     private object? _lastParameterUsed;
 
-    public event EventHandler<NavigatedToEventArgs>? Navigated;
+    public event EventHandler<string>? Navigated;
 
     public bool CanGoBack => _frame.CanGoBack;
 
     public object? CurrentDataContext => _frame.GetDataContext();
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0290:Use primary constructor", Justification = "The fields should be readonly")]
     public NavigationService(IPageService pageService)
     {
         _pageService = pageService;
@@ -97,7 +98,7 @@ public class NavigationService : INavigationService
             {
                 navigationAware.OnNavigatedTo(e.ExtraData);
             }
-            Navigated?.Invoke(this, NavigatedToEventArgs.FromDataContext(dataContext));
+            Navigated?.Invoke(sender, dataContext!.GetType().FullName!);
         }
     }
 

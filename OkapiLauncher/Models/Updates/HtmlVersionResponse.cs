@@ -32,8 +32,6 @@ public record HtmlVersionResponse
     public string? InstallerDownloadLink { get; }
     public static HtmlVersionResponse? FromJsonDocument(JsonDocument document)
     {
-        // Only proper releases are considered here
-        // Drafts and prereleseases are ignored
         JsonElement releaseInfo = document.RootElement;
         // Extract specific information
         string? tagName = releaseInfo.GetProperty("tag_name").GetString();

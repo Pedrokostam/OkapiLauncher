@@ -48,7 +48,7 @@ public class ContentDialogService : IContentDialogService
         var vm = new KillProcessDialogViewModel(process);
        return await ShowMetroDialog(vm, dialog,context);
     }
-    public async Task<bool> ShowAllProcessesKillDialog(object? context, IAvApp app)
+    public async Task<bool> ShowAllProcessesKillDialog(object context, IAvApp app)
     {
         var dialog = new KillAllProcessDialog();
         var vm = new KillAllProcesessDialogViewModel(app);

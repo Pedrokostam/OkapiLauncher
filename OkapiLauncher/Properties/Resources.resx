@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ShellMenuItemViewsAboutPageHeader" xml:space="preserve">
-    <value>_About</value>
+    <value>About</value>
   </data>
   <data name="AboutPageTitle" xml:space="preserve">
     <value>About</value>
@@ -259,7 +259,7 @@
     <value>Copy the command-line string</value>
   </data>
   <data name="ShellMenuRecentFiles" xml:space="preserve">
-    <value>_Recently opened files</value>
+    <value>Recently opened files</value>
   </data>
   <data name="LaunchOptionsResetButton" xml:space="preserve">
     <value>Reset</value>
@@ -298,7 +298,7 @@
     <value>Could not determine version</value>
   </data>
   <data name="SettingsPageSetFileAssociationsButton" xml:space="preserve">
-    <value>Associate all</value>
+    <value>Set this app as default for all related extensions</value>
   </data>
   <data name="SettingsPageSetFileAssociationsButtonTooltip" xml:space="preserve">
     <value>Sets this app as the default app to open all vision project and runtime files</value>
@@ -326,6 +326,9 @@
   </data>
   <data name="ShellKillChildrenButton" xml:space="preserve">
     <value>Kill all child windows</value>
+  </data>
+  <data name="AppProductTypeDeepLearningLabel" xml:space="preserve">
+    <value>Deep Learning</value>
   </data>
   <data name="AppProductTypeLibraryLabel" xml:space="preserve">
     <value>Library</value>
@@ -567,87 +570,5 @@ All trademarks, service marks, logos, and copyrights related to the applications
   </data>
   <data name="AvAppOpenLogFolderDisabled" xml:space="preserve">
     <value>The log folder for this app does not exist</value>
-  </data>
-  <data name="AppProductTypeDeepLearningCPULabel" xml:space="preserve">
-    <value>Deep Learning CPU</value>
-  </data>
-  <data name="JumplistLaunchAppDescription" xml:space="preserve">
-    <value>Launch {0}</value>
-  </data>
-  <data name="AppProductTypeDeepLearningGPULabel" xml:space="preserve">
-    <value>Deep Learning GPU</value>
-  </data>
-  <data name="ErrorNoApplicableFileInFolder" xml:space="preserve">
-    <value>No applicable file found in the folder.</value>
-  </data>
-  <data name="AppProductTypeDeepLearningLabel" xml:space="preserve">
-    <value>Deep Learning</value>
-  </data>
-  <data name="ProjectProductTypeDeepLearningLabel" xml:space="preserve">
-    <value>Deep Learning model</value>
-  </data>
-  <data name="ShellMenuNativeRecentFiles" xml:space="preserve">
-    <value>Recent files per _App</value>
-  </data>
-  <data name="SettingsPageClearMissingRecentsTooltip" xml:space="preserve">
-    <value>Removes files that are no longer available from both recent files lists.</value>
-  </data>
-  <data name="SettingsPageClearMissingRecentsButton" xml:space="preserve">
-    <value>Clear missing recent files</value>
-  </data>
-  <data name="ShellMenuRecentFilesTooltip" xml:space="preserve">
-    <value>Items that were recently open in Okapi Launcher.</value>
-  </data>
-  <data name="ShellMenuNativeRecentFilesTooltip" xml:space="preserve">
-    <value>Items that were recently opened by each available app (including those not coming from Okapi).</value>
-  </data>
-  <data name="ShellViewButtonSettingHeader" xml:space="preserve">
-    <value>Settings</value>
-  </data>
-  <data name="AvAppOpenOverview" xml:space="preserve">
-    <value>Open process overview window</value>
-  </data>
-  <data name="SettingsPageButtonsHeader" xml:space="preserve">
-    <value>App buttons</value>
-  </data>
-  <data name="SettingsPageButtonsShowDisabled" xml:space="preserve">
-    <value>Show disabled buttons</value>
-  </data>
-  <data name="SettingsPageButtonsReset" xml:space="preserve">
-    <value>Reset buttons to default</value>
-  </data>
-  <data name="AppButtonLaunchName" xml:space="preserve">
-    <value>Launch app</value>
-  </data>
-  <data name="AppButtonKillAllName" xml:space="preserve">
-    <value>Close all processes</value>
-  </data>
-  <data name="AppButtonCopyName" xml:space="preserve">
-    <value>Copy executable path</value>
-  </data>
-  <data name="AppButtonOpenName" xml:space="preserve">
-    <value>Open app folder</value>
-  </data>
-  <data name="AppButtonLicenseName" xml:space="preserve">
-    <value>Open license folder</value>
-  </data>
-  <data name="AppButtonLogName" xml:space="preserve">
-    <value>Open log folder</value>
-  </data>
-  <data name="AppButtonOverviewName" xml:space="preserve">
-    <value>Open process overview window</value>
-  </data>
-  <data name="AppButtonIconSize" xml:space="preserve">
-    <value>Button size</value>
-  </data>
-  <data name="SettingsPageProcessMonitorHeader" xml:space="preserve">
-    <value>Process monitoring</value>
-  </data>
-  <data name="SettingsPageProcessMonitorDiagnostics" xml:space="preserve">
-    <value>The application is monitoring running processes.</value>
-  </data>
-  <data name="SettingsPageProcessMonitorNone" xml:space="preserve">
-    <value>The application is unable to monitor running processes.
-Consider launching it with higher privileges.</value>
   </data>
 </root>
