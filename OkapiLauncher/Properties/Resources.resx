@@ -528,7 +528,7 @@ Delete this installation and launch the official app to proceed with the update.
     <value>Load any project to enable this view</value>
   </data>
   <data name="AboutPageBuiltOn" xml:space="preserve">
-    <value>Built on {0:yyyy-MM-dd}</value>
+    <value>Built on {0:yyyy-MM-dd HH:mm:ss}</value>
   </data>
   <data name="AboutPageDisclaimer" xml:space="preserve">
     <value>The Okapi Launcher application is an independent tool designed to facilitate access to applications based on the Aurora Vision environment. Please note that Okapi Launcher is not affiliated with, endorsed by, or in any way associated with the owners, developers, or companies of the third-party applications it supports.

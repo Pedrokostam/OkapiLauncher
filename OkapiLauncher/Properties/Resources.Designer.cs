@@ -61,7 +61,7 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Built on {0:yyyy-MM-dd}.
+        ///   Looks up a localized string similar to Built on {0:yyyy-MM-dd HH:mm:ss}.
         /// </summary>
         public static string AboutPageBuiltOn {
             get {
