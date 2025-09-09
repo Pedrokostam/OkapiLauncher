@@ -29,11 +29,46 @@ public class JumpListService : IJumpListService
             CustomCategory = "Recent";
         }
     }
+    private static string GetAcronym(IAvApp app)
+    {
+        var t = app.Type.Type;
+        var b = app.Brand.Brand;
+        if (t.HasFlag(AvType.DeepLearning)){
+            return b switch
+            {
+                AvBrand.Aurora => $"AV Deep Learning {app.Version}",
+                AvBrand.Adaptive => $"AV Deep Learning {app.Version}",
+                AvBrand.FabImage => $"FI Deep Learning {app.Version}",
+                _ => app.NameWithVersion,
+            };
+        }
+        if (t == AvType.Runtime)
+        {
+            return b switch
+            {
+                AvBrand.Aurora => $"AVS Runtime {app.Version}",
+                AvBrand.Adaptive => $"AVS Runtime {app.Version}",
+                AvBrand.FabImage => $"FIS Runtime {app.Version}",
+                _ => app.NameWithVersion,
+            };
+        }
+        if (t == AvType.Professional)
+        {
+            return b switch
+            {
+                AvBrand.Aurora => $"AVS Professional {app.Version}",
+                AvBrand.Adaptive => $"AVS Professional {app.Version}",
+                AvBrand.FabImage => $"FIS Professional {app.Version}",
+                _ => app.NameWithVersion,
+            };
+        }
+        return app.NameWithVersion;
+    }
     internal class AppJumpItem : JumpTask
     {
         public AppJumpItem(AvApp app, IFileAssociationService fileAssociationService)
         {
-            var name = $"{app.Name} {app.Version}";
+            var name = GetAcronym(app);
             Title = name;
             Arguments = null;
             Description = string.Format(ResourceHelper.GetTextResource("JumplistLaunchAppDescription")!, name);
@@ -57,7 +92,8 @@ public class JumpListService : IJumpListService
             _iconsRestored = true;
         }
         AppJumpList.JumpItems.RemoveAll(x => x is AppJumpItem);
-        foreach (var app in tasks.Where(x => x.IsExecutable).OrderBy(x=>x))
+        AppJumpList.Apply();
+        foreach (var app in tasks.Where(x => x.IsExecutable).OrderBy(x => x))
         {
             AppJumpList.JumpItems.Insert(0, new AppJumpItem(app, _fileAssociationService));
         }

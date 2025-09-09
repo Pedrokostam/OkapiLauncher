@@ -16,4 +16,5 @@ public interface IAvApp : IProduct, IComparable<IAvApp>
     public bool IsExecutable { get; }
     string? Description { get; }
     bool IsCustom { get; }
+    string NameWithVersion => $"{Name} {Version}";
 }
