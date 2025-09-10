@@ -1,1 +1,38 @@
-﻿workflow: GitHubFlow/v1
+﻿workflow: GitFlow/v1
+mode: ContinuousDeployment
+
+branches:
+  main:
+    regex: ^main$
+    increment: Patch
+    is-main-branch: true
+    prevent-increment:
+      of-merged-branch: true
+
+  release:
+    regex: ^release[\/-]
+    increment: Minor
+    is-release-branch: true
+    prevent-increment:
+      of-merged-branch: true
+    track-merge-target: true
+
+  hotfix:
+    regex: ^hotfix[\/-]
+    increment: Patch
+    source-branches: [main, release]
+
+  bugfix:
+    regex: ^bugfix[\/-]
+    increment: Patch
+    source-branches: [release]
+
+  feature:
+    regex: ^feature[\/-]
+    increment: Minor
+    source-branches: [release]
+
+  repo:
+    regex: ^(repo|meta)[\/-]
+    increment: None
+    source-branches: [main, release]
