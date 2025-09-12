@@ -2,7 +2,7 @@
 
 namespace OkapiLauncher.Core.Models;
 
-public interface IAvVersion : IComparable<IAvVersion>
+public interface IAvVersion : IComparable<IAvVersion>, IEquatable<IAvVersion>
 {
     int Major { get; }
     int Minor { get; }

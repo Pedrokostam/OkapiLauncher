@@ -9,6 +9,7 @@ using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Core.Models;
 using OkapiLauncher.Core.Models.Apps;
 using OkapiLauncher.Core.Models.Projects;
+using OkapiLauncher.Helpers;
 using OkapiLauncher.Models;
 using OkapiLauncher.Models.Messages;
 using OkapiLauncher.Properties;
@@ -97,7 +98,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
             Clipboard.SetText(LaunchOptions.ArgumentString);
         }
     }
-    static readonly Regex FileDetector = new(@"(?<NORMAL>\.(avproj|avexe|fiproj|fiexe))|(?<DL>pluginconfig.xml)", RegexOptions.Compiled | RegexOptions.IgnoreCase|RegexOptions.ExplicitCapture, TimeSpan.FromMilliseconds(500));
+    static readonly Regex FileDetector = new(@"(?<NORMAL>\.(avproj|avexe|fiproj|fiexe))|(?<DL>pluginconfig.xml)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture, TimeSpan.FromMilliseconds(500));
 
     /// <summary>
     /// Either returns <paramref name="path"/> as is if it is a directory, or attempts to find one of applicable files.
@@ -130,22 +131,28 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
             filepath = HandleDirectories(filepath);
             var project = ProjectReader.OpenProject(filepath);
             VisionProject = new VisionProjectFacade(project);
-            var matchingApps = _appFactory.AvApps
-                .Where(x => x.CanOpen(VisionProject))
-                .OrderByDescending(x => x.Version);
+            var comparer = new CompatibilitySorter(VisionProject, _appFactory, Apps);
+            var index = comparer.Getto(_appFactory.AvApps);
+            //var matchingApps = _appFactory.AvApps
+            //    .Where(x => x.CanOpen(VisionProject))
+            //    .OrderByDescending(x => x.Version);
             SelectedApp = null;
-            _appFactory.Populate(matchingApps,
-                Apps,
-                perItemAction: UpdateCompatibility);
-            var closestVersion = AvApp.GetClosestApp(Apps, VisionProject);
-            if (closestVersion >= 0)
+            if (index >= 0)
             {
-                SelectedApp = Apps[closestVersion];
+                SelectedApp = Apps[index];
             }
-            else
-            {
-                SelectedApp = null;
-            }
+            //_appFactory.Populate(matchingApps,
+            //    Apps,
+            //    perItemAction: UpdateCompatibility);
+            //var closestVersion = AvApp.GetClosestApp(Apps, VisionProject);
+            //if (closestVersion >= 0)
+            //{
+            //    SelectedApp = Apps[closestVersion];
+            //}
+            //else
+            //{
+            //    SelectedApp = null;
+            //}
             _lastOpenedFilesService.AddLastFile(project.Path);
             _navigationService.NavigateTo(GetType().FullName!);
             _processManagerService.ProcessState.UpdateStates(Apps);

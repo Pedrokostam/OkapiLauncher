@@ -90,6 +90,12 @@
             </ContextMenu>
         </Grid.ContextMenu>-->
         <Rectangle Fill="Transparent" />
+        <Ellipse
+            Width="5"
+            Margin="2"
+            HorizontalAlignment="Left"
+            Fill="Red"
+            Visibility="{Binding AppFacade.MostCompatible, Converter={StaticResource BooleanToVisibilityConverter}}" />
         <Grid Margin="15,0,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
