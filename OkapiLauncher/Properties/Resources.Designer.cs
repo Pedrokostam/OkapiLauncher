@@ -1441,6 +1441,15 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New version available: {0}!.
+        /// </summary>
+        public static string ShellViewUpdateButton {
+            get {
+                return ResourceManager.GetString("ShellViewUpdateButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Argument must be a string..
         /// </summary>
         public static string ValidationArgumentHasToBeString {
@@ -1486,7 +1495,7 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ignore.
+        ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string VersionCheckDialogCancelButtonContent {
             get {

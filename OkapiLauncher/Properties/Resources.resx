@@ -418,7 +418,7 @@
     <value>What do you want to do?</value>
   </data>
   <data name="VersionCheckDialogCancelButtonContent" xml:space="preserve">
-    <value>Ignore</value>
+    <value>Cancel</value>
   </data>
   <data name="VersionCheckDialogSkipVersionButtonContent" xml:space="preserve">
     <value>Skip this version</value>
@@ -649,5 +649,8 @@ All trademarks, service marks, logos, and copyrights related to the applications
   <data name="SettingsPageProcessMonitorNone" xml:space="preserve">
     <value>The application is unable to monitor running processes.
 Consider launching it with higher privileges.</value>
+  </data>
+  <data name="ShellViewUpdateButton" xml:space="preserve">
+    <value>New version available: {0}!</value>
   </data>
 </root>

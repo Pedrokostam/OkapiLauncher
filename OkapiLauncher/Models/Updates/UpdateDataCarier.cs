@@ -20,11 +20,15 @@ public class UpdateDataCarier
         IgnoredVersions = ignoredVersions;
         AppVersion = appVersion;
     }
-
+    public string? RemoteVersion => HtmlResponse?.VersionTag;
     public HtmlVersionResponse? HtmlResponse { get; }
     public bool IsAutomaticUpdateCheck { get; }
     public DateTime AppBuildDate { get; }
     public Version AppVersion { get; }
+    public bool IsIgnoredVersion()
+    {
+        return IgnoredVersions.Contains(HtmlResponse?.VersionTag ?? "N/A", StringComparer.OrdinalIgnoreCase);
+    }
     public bool IsConflictedInstallation => InstallationScope == IApplicationInfoService.InstallationScope.Conflict;
     public IApplicationInfoService.InstallationScope InstallationScope { get; }
     public string[] IgnoredVersions { get; }
@@ -39,16 +43,15 @@ public class UpdateDataCarier
         var ignored = ignoredVersions.OfType<string>().ToArray();
         return new UpdateDataCarier(html, isAutomaticCheck, buildDate, isRegistered, ignored, version);
     }
-
     public PromptAction ShouldPromptUser()
     {
         if (HtmlResponse is null)
         {
             return IsAutomaticUpdateCheck ? PromptAction.DontShowDialog : PromptAction.ShowNoUpdatesMessageDialog;
         }
-        if (CheckLastReleaseIsNewer())
+        if (AreUpdatesAvailable())
         {
-            if (IsAutomaticUpdateCheck && IgnoredVersions.Contains(HtmlResponse.VersionTag, StringComparer.OrdinalIgnoreCase))
+            if (IsAutomaticUpdateCheck && IsIgnoredVersion())
             {
                 // if version is ignored, dont show dialog if it is automatic check
                 // otherwise show an update prompt
@@ -59,7 +62,7 @@ public class UpdateDataCarier
         return IsAutomaticUpdateCheck ? PromptAction.DontShowDialog : PromptAction.ShowNoUpdatesMessageDialog;
     }
     private static readonly TimeSpan UploadTolerance = TimeSpan.FromHours(6);
-    private bool CheckLastReleaseIsNewer()
+    public bool AreUpdatesAvailable()
     {
         if (HtmlResponse is null)
         {
