@@ -39,6 +39,7 @@
                     Text="{x:Static properties:Resources.AvAppDevelopmentVersion}"
                     Visibility="{Binding IsDevelopmentVersion, Converter={StaticResource BoolVisibilityConverter}}" />
             </Border>
+
         </StackPanel>
     </DataTemplate>
     <DataTemplate x:Key="Header_NameRow" DataType="{x:Type mod:AvAppFacade}">
@@ -71,7 +72,18 @@
             </Border>
             <StackPanel Grid.Column="1">
                 <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource Header_NameRow}" />
-                <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource Header_VersionRow}" />
+                <StackPanel Orientation="Horizontal">
+                    <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource Header_VersionRow}" />
+                    <TextBlock
+                        Grid.Column="1"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="{StaticResource MediumLeftMargin}"
+                        Style="{DynamicResource ExactVersionStyle}"
+                        Text="{x:Static properties:Resources.AppFacadeExactVersion}"
+                        Visibility="{Binding MostCompatible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                </StackPanel>
             </StackPanel>
         </Grid>
     </DataTemplate>

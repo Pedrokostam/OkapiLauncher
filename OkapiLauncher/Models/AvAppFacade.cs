@@ -30,7 +30,6 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     public string? Description => _avApp.Description ?? Name;
     public bool IsCustom => _avApp.IsCustom;
 
-    public ButtonSettings Susu { get; }
     public bool WarnAboutNewProcess => Type == ProductType.Professional && IsLaunched;
     public AvVersionFacade? SecondaryVersion { get; }
 
@@ -39,11 +38,17 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     IAvVersion? IAvApp.SecondaryVersion => SecondaryVersion;
 
     public string ProcessName => _avApp.ProcessName;
+    
 
     [ObservableProperty]
     private Compatibility? _compatibility = null;
     [ObservableProperty]
     private bool _processInfoAvailable=false;
+    /// <summary>
+    /// Denotes that this app has exactly the same version as some loaded project
+    /// </summary>
+    [ObservableProperty]
+    private bool _mostCompatible=false;
     public bool ShowProcessInfo => IsExecutable && ProcessInfoAvailable;
     private readonly IMessenger _messenger;
 

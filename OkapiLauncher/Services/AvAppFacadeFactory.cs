@@ -36,14 +36,26 @@ public class AvAppFacadeFactory : IAvAppFacadeFactory
         RediscoverApps();
     }
 
-    public AvAppFacade Create(AvApp app)
+    public AvAppFacade? Create(IAvApp app)
     {
-        return new(app, _windowManagerService, _messenger);
+        if (app is null)
+        {
+            return null;
+        }
+        if (app is not AvApp concrete)
+        {
+            concrete = _avApps.Find(x => x.Path.Equals(app.Path, StringComparison.OrdinalIgnoreCase) && x.NameWithVersion.Equals(app.NameWithVersion, StringComparison.OrdinalIgnoreCase))!;
+        }
+        if (concrete is null)
+        {
+            return null;
+        }
+        return new(concrete, _windowManagerService, _messenger);
     }
 
     public void Populate(IList<AvAppFacade> appFacades, bool clear = true, Action<AvAppFacade>? perItemAction = null) => Populate(_avApps, appFacades, clear, perItemAction);
 
-    public void Populate(IEnumerable<AvApp> apps, IList<AvAppFacade> appFacades, bool clear = true, Action<AvAppFacade>? perItemAction = null)
+    public void Populate(IEnumerable<IAvApp> apps, IList<AvAppFacade> appFacades, bool clear = true, Action<AvAppFacade>? perItemAction = null)
     {
         if (clear)
         {
@@ -52,6 +64,10 @@ public class AvAppFacadeFactory : IAvAppFacadeFactory
         foreach (var app in apps)
         {
             var facade = Create(app);
+            if (facade is null)
+            {
+                continue;
+            }
             appFacades.Add(facade);
             perItemAction?.Invoke(facade);
         }
@@ -65,7 +81,7 @@ public class AvAppFacadeFactory : IAvAppFacadeFactory
         _jumpListService.SetTasks(_avApps);
     }
 
-    public IEnumerable<AvAppFacade> CreateAllFacades() => AvApps.Select(Create);
+    public IEnumerable<AvAppFacade> CreateAllFacades() => AvApps.Select(Create).OfType<AvAppFacade>();
 
     public bool TryGetAppByPath(string path, [NotNullWhen(true)] out AvAppFacade? appFacade)
     {
@@ -73,7 +89,7 @@ public class AvAppFacadeFactory : IAvAppFacadeFactory
         if (found is not null)
         {
             appFacade = Create(found);
-            return true;
+            return appFacade is not null;
         }
         appFacade = null;
         return false;

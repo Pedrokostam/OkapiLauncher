@@ -100,6 +100,24 @@
     </Style>
 
     <Style
+        x:Key="ExactVersionStyle"
+        BasedOn="{StaticResource AppTitleStyle}"
+        TargetType="TextBlock">
+        <Setter Property="FontWeight" Value="DemiBold" />
+        <Setter Property="FontStyle" Value="Italic" />
+        <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.SystemControlErrorTextForeground}" />
+        <Setter Property="FontSize" Value="{StaticResource MediumFontSize}" />
+        <Setter Property="Typography.Capitals" Value="SmallCaps" />
+        <Setter Property="Opacity" Value="0.85" />
+        <Setter Property="LayoutTransform">
+            <Setter.Value>
+                <ScaleTransform ScaleX="1.35" />
+            </Setter.Value>
+        </Setter>
+
+    </Style>
+
+    <Style
         x:Key="AppTypeStyle"
         BasedOn="{StaticResource SubtitleTextStyle}"
         TargetType="TextBlock">

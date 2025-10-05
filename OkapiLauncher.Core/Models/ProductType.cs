@@ -18,6 +18,7 @@ public enum AvType
     GPU = 32,
     DeepLearningGPU = DeepLearning + GPU,
     DeepLearningCPU = DeepLearning + CPU,
+    NonVersionableTypes = Runtime | DeepLearning|Library
 }
 public class ProductType : IComparable<ProductType>, IComparable
 {

@@ -180,6 +180,15 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exact Version.
+        /// </summary>
+        public static string AppFacadeExactVersion {
+            get {
+                return ResourceManager.GetString("AppFacadeExactVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deep Learning CPU.
         /// </summary>
         public static string AppProductTypeDeepLearningCPULabel {

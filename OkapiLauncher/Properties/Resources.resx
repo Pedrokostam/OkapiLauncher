@@ -650,6 +650,9 @@ All trademarks, service marks, logos, and copyrights related to the applications
     <value>The application is unable to monitor running processes.
 Consider launching it with higher privileges.</value>
   </data>
+  <data name="AppFacadeExactVersion" xml:space="preserve">
+    <value>Exact Version</value>
+  </data>
   <data name="ShellViewUpdateButton" xml:space="preserve">
     <value>New version available: {0}!</value>
   </data>
