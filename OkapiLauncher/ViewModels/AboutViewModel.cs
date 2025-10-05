@@ -19,7 +19,7 @@ public partial class AboutViewModel : ObservableObject
         _systemService = systemService;
         _applicationInfoService = applicationInfoService;
         this.Link = _appConfig.GithubLink;
-        BuildDate = _applicationInfoService.GetBuildDatetime();
+        BuildDate = _applicationInfoService.GetBuildDatetime().ToLocalTime();
         Version = _applicationInfoService.GetVersion();
     }
     [ObservableProperty]
