@@ -51,9 +51,6 @@ internal sealed class CompatibilitySorter(IVisionProject project, IAvAppFacadeFa
                     largerCustom = i;
                     continue;
                 }
-
-                // found exact version
-                return i;
             }
         }
         if(exactVersionCustom is int custom)
