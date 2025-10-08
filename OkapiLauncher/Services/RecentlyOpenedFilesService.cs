@@ -41,8 +41,6 @@ public class RecentlyOpenedFilesService : ObservableRecipient, IRecentlyOpenedFi
             // otherwise wait for restore
             _persistAndRestoreService.DataRestored += _persistAndRestoreService_DataRestored;
         }
-
-
         IsActive = true;
     }
 

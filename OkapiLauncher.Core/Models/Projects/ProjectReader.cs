@@ -107,36 +107,38 @@ public static class ProjectReader
 
     public static VisionProject OpenProject(string filepath)
     {
-        var dateModified = File.GetLastWriteTimeUtc(filepath);
-        var header = GetHeader(filepath);
+        var finfo = new FileInfo(filepath);
+        var dateModified = finfo.LastWriteTimeUtc;
+        var header = GetHeader(finfo.FullName);
         AvVersion version;
         string name;
         if (header.IsProjectXml)
         {
-            var xml = GetVersionFromXml(filepath);
+            var xml = GetVersionFromXml(finfo.FullName);
             name = xml.Name;
             version = xml.Version;
         }
         else if (header.Type.HasFlag(AvType.DeepLearning))
         {
-            name = Path.GetFileName(Path.GetDirectoryName(filepath) ?? "OOPS");
+            name = finfo?.Directory?.Name ?? "OOPS";
             version = AvVersion.MissingVersion;
         }
         else
         {
             // must be avexe, cant read the version
             version = AvVersion.MissingVersion;
-            name = Path.GetFileNameWithoutExtension(filepath);
+            name = Path.GetFileNameWithoutExtension(finfo.Name);
         }
 
         VisionProject project = new(
-            path: header.Type.HasFlag(AvType.DeepLearning) ? Path.GetDirectoryName(filepath)! : filepath,
+            path: header.Type.HasFlag(AvType.DeepLearning) ? finfo!.DirectoryName! : finfo!.FullName,
             brand: header.Brand,
             type: header.Type,
             name: name,
             version: version,
             dateModified: dateModified
             );
+
         return project;
     }
 }
