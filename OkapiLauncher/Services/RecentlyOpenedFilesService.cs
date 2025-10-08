@@ -71,11 +71,25 @@ public class RecentlyOpenedFilesService : ObservableRecipient, IRecentlyOpenedFi
         LastOpenedFile = file;
         Messenger.Send(new RecentFilesChangedMessage(enumerable));
     }
-
     private IEnumerable<RecentlyOpenedFileFacade> GetFacades()
     {
         return LastOpenedPaths.Select(
                     (x, i) => new RecentlyOpenedFileFacade(x, i)
                     );
+    }
+
+    public void RemoveInvalidPath(string path)
+    {
+        LastOpenedPaths.RemoveAll(x => x.FilePath.Equals(path, StringComparison.OrdinalIgnoreCase));
+        if (LastOpenedPaths.Count == 0)
+        {
+            LastOpenedFile = null;
+        }
+        else
+        {
+            LastOpenedFile = LastOpenedPaths.MaxBy(x => x.OpenedOn).FilePath;
+        }
+        IEnumerable<RecentlyOpenedFileFacade> enumerable = GetFacades();
+        Messenger.Send(new RecentFilesChangedMessage(enumerable));
     }
 }
