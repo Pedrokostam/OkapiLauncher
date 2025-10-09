@@ -1,8 +1,9 @@
-﻿using System.IO;
+﻿using System.CommandLine;
+using System.CommandLine.Help;
+using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
-
 using CommunityToolkit.Mvvm.Messaging;
 
 using MahApps.Metro.Controls.Dialogs;
@@ -30,14 +31,6 @@ namespace OkapiLauncher;
 // Tracking issue for improving this is https://github.com/dotnet/wpf/issues/1946
 public partial class App : Application
 {
-    [Flags]
-    private enum ArgumentType
-    {
-        None,
-        File=1,
-        AutoLoad =2,
-        Help =4,
-    }
     private IHost? _host;
 
     public T GetService<T>()
@@ -48,29 +41,50 @@ public partial class App : Application
     {
     }
     public bool ShouldCloseAfterLaunching { get; set; } = false;
-
-    private static ArgumentType CheckArguments(string[] args)
+    private static Option<bool> OptionAutoLoad = new Option<bool>("--autoload", "-a")
     {
-        ArgumentType types = ArgumentType.None;
-        string []  names = ["AUTOLOAD", "HELP"];
-        foreach (var arg in args)
-        {
-            foreach (var name in names)
-            {
-                if (arg.Trim('-', '/').Equals(name, StringComparison.OrdinalIgnoreCase))
-                {
+        Description = "If specified, automatically loads the file upon launch. Requires a project path to be specified.",
+        DefaultValueFactory = (_) => false,
+    };
 
-                }
+    private static Argument<FileInfo> ArgumentFile = new Argument<FileInfo>("file")
+    {
+        Arity = ArgumentArity.ZeroOrOne,
+        Description = "File path pointing to a vision project to load upon launching the application.",
+    };
+
+    private static RootCommand GetParser()
+    {
+        var rc = new RootCommand("Application that parses vision projects, detects installed vision apps, recommend most suitable version and provides utilities related to vision applications.")
+        {
+           ArgumentFile,OptionAutoLoad
+        };
+        rc.Validators.Add((r) =>
+        {
+            bool noFile = r.GetValue(ArgumentFile) is null;
+            if (r.GetValue(OptionAutoLoad) && noFile)
+            {
+                r.AddError("Cannot specify the flag --autoload without a project to load.");
             }
-        }
+        });
+        rc.Validators.Add((r) =>
+        {
+            if (r.GetValue(ArgumentFile) is FileInfo finfo && !finfo.Exists)
+            {
+                r.AddError($"Provided file does not exist: {finfo.FullName}");
+            }
+        });
+        rc.TreatUnmatchedTokensAsErrors = true;
+        return rc;
     }
 
     private async void OnStartup(object sender, StartupEventArgs startupArgs)
     {
-        if (startupArgs.Args.Length > 1 && )
+        var parsed = GetParser().Parse(startupArgs.Args);
+        if (parsed.Errors.Count != 0)
         {
-            MessageBox.Show($"Launcher expects at most one argument.\nProvided arguments: {startupArgs.Args.Length}.", "Invalid startup arguments", MessageBoxButton.OK, MessageBoxImage.Error);
-            throw new ArgumentException("Received too many arguments.", nameof(startupArgs));
+            MessageBox.Show(string.Join(Environment.NewLine, parsed.Errors), "Invalid startup arguments", MessageBoxButton.OK, MessageBoxImage.Error);
+            Shutdown(13);
         }
         var appLocation = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location)!;
 
@@ -85,15 +99,14 @@ public partial class App : Application
         await _host.StartAsync();
         // initialize launcher vm, so that it can start listening to FileRequestMessages
         GetService<FileOpenerBroker>();
-        if (startupArgs.Args.Length >= 1)
+        if (parsed.GetValue(ArgumentFile) is FileInfo file)
         {
             ShouldCloseAfterLaunching = true;
-            var msg = new FileRequestedMessage(startupArgs.Args[0]);
-            if (startupArgs.Args.Length == 2)
+            var msg = new FileRequestedMessage(file.FullName)
             {
-
-            }
-            GetService<IMessenger>().Send(new FileRequestedMessage(startupArgs.Args[0]));
+                AutoLoad = parsed.GetValue(OptionAutoLoad)
+            };
+            GetService<IMessenger>().Send(msg);
         }
     }
 

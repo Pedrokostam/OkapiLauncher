@@ -22,13 +22,13 @@ public class FileOpenerBroker : ObservableRecipient, IRecipient<FileRequestedMes
 
     public async void Receive(FileRequestedMessage message)
     {
-        if (_navigationService.NavigateTo<LauncherViewModel>(message.Value))
+        if (_navigationService.NavigateTo<LauncherViewModel>(message))
         {
             return;
         }
         if (_navigationService.CurrentDataContext is LauncherViewModel viewModel)
         {
-           await viewModel.OpenProject(message.Value);
+           await viewModel.OpenProject(message.Value,message.AutoLoad);
         }
     }
 }
