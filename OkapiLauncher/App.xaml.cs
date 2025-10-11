@@ -1,6 +1,4 @@
-﻿using System.CommandLine;
-using System.CommandLine.Help;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
@@ -11,7 +9,7 @@ using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
+using OkapiLauncher.Commandline;
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Contracts.Views;
 using OkapiLauncher.Core.Contracts.Services;
@@ -41,53 +39,15 @@ public partial class App : Application
     {
     }
     public bool ShouldCloseAfterLaunching { get; set; } = false;
-    private static Option<bool> OptionAutoLoad = new Option<bool>("--autoload", "-a")
-    {
-        Description = "If specified, automatically loads the file upon launch. Requires a project path to be specified.",
-        DefaultValueFactory = (_) => false,
-    };
-
-    private static Argument<FileInfo> ArgumentFile = new Argument<FileInfo>("file")
-    {
-        Arity = ArgumentArity.ZeroOrOne,
-        Description = "File path pointing to a vision project to load upon launching the application.",
-    };
-
-    private static RootCommand GetParser()
-    {
-        var rc = new RootCommand("Application that parses vision projects, detects installed vision apps, recommend most suitable version and provides utilities related to vision applications.")
-        {
-           ArgumentFile,OptionAutoLoad
-        };
-        rc.Validators.Add((r) =>
-        {
-            bool noFile = r.GetValue(ArgumentFile) is null;
-            if (r.GetValue(OptionAutoLoad) && noFile)
-            {
-                r.AddError("Cannot specify the flag --autoload without a project to load.");
-            }
-        });
-        rc.Validators.Add((r) =>
-        {
-            if (r.GetValue(ArgumentFile) is FileInfo finfo && !finfo.Exists)
-            {
-                r.AddError($"Provided file does not exist: {finfo.FullName}");
-            }
-        });
-        rc.TreatUnmatchedTokensAsErrors = true;
-        return rc;
-    }
-
     private async void OnStartup(object sender, StartupEventArgs startupArgs)
     {
-        var parsed = GetParser().Parse(startupArgs.Args);
-        if (parsed.Errors.Count != 0)
+        var args = CliArguments.CustomParse();
+        if(args is null)
         {
-            MessageBox.Show(string.Join(Environment.NewLine, parsed.Errors), "Invalid startup arguments", MessageBoxButton.OK, MessageBoxImage.Error);
             Shutdown(13);
+            return;
         }
         var appLocation = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location)!;
-
         // For more information about .NET generic host see  https://docs.microsoft.com/aspnet/core/fundamentals/host/generic-host?view=aspnetcore-3.0
         _host = Host.CreateDefaultBuilder(startupArgs.Args)
                 .ConfigureAppConfiguration(c =>
@@ -99,12 +59,12 @@ public partial class App : Application
         await _host.StartAsync();
         // initialize launcher vm, so that it can start listening to FileRequestMessages
         GetService<FileOpenerBroker>();
-        if (parsed.GetValue(ArgumentFile) is FileInfo file)
+        if (args.File is not null)
         {
             ShouldCloseAfterLaunching = true;
-            var msg = new FileRequestedMessage(file.FullName)
+            var msg = new FileRequestedMessage(args.File)
             {
-                AutoLoad = parsed.GetValue(OptionAutoLoad)
+                AutoLoad = args.AutoLoad,
             };
             GetService<IMessenger>().Send(msg);
         }

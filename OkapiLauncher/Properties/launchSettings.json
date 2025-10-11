@@ -2,7 +2,7 @@
   "profiles": {
     "OkapiLauncher": {
       "commandName": "Project",
-      "commandLineArgs": "--autoload  \"C:\\ProgramData\\Aurora Vision\\Aurora Deep Learning 5.4\\Examples\\Deep Learning - Bee Detection (Points Location)\\Deep Learning - Points Location (bees).avproj\""
+      "commandLineArgs": "\"xd.xdf\""
     }
   }
 }
