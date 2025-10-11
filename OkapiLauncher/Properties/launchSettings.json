@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "OkapiLauncher": {
+      "commandName": "Project",
+      "commandLineArgs": "\"xd.xdf\""
+    }
+  }
+}

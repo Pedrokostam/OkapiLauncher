@@ -123,7 +123,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
         return path;
     }
 
-    public async Task<bool> OpenProject(string filepath)
+    public async Task<bool> OpenProject(string filepath, bool autoload = false)
     {
         bool success = false;
         try
@@ -143,6 +143,11 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
             _navigationService.NavigateTo(GetType().FullName!);
             _processManagerService.ProcessState.UpdateStates(Apps);
             success = true;
+            if (autoload && SelectedApp is not null)
+            {
+                Launch(SelectedApp);
+                App.Current.Shutdown(0);
+            }
             return true;
         }
         catch (FileNotFoundException)
@@ -219,9 +224,20 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
         base.OnNavigatedTo(parameter);
 
         var lastFile = _lastOpenedFilesService.LastOpenedFile;
-        if (parameter is string path)
+        string? path = null;
+        bool autoload=false;
+        if (parameter is string _path)
         {
-            bool loadGood = await OpenProject(path);
+            path = _path;
+        }
+        if (parameter is FileRequestedMessage msg)
+        {
+            path = msg.Value;
+            autoload = msg.AutoLoad;
+        }
+        if (!string.IsNullOrWhiteSpace(path))
+        {
+            bool loadGood = await OpenProject(path, autoload);
             if (!loadGood)
             {
                 if (lastFile is string s)
