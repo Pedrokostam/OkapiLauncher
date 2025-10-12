@@ -116,6 +116,7 @@
                     Grid.Column="1"
                     Height="{Binding ActualHeight, ElementName=TextBlockPath}"
                     Command="{Binding OpenProgramFolderCommand}"
+                    Focusable="False"
                     Style="{StaticResource InlineSettingsButton}"
                     ToolTip="{x:Static properties:Resources.ProgramDetailsOpenFolder}">
                     <mdicons:MaterialIcon Kind="{StaticResource IconOpenFolder}" />
@@ -124,6 +125,7 @@
                     Grid.Column="2"
                     Height="{Binding ActualHeight, ElementName=TextBlockPath}"
                     Command="{Binding CopyPathToClipboardCommand}"
+                    Focusable="False"
                     Style="{StaticResource InlineSettingsButton}"
                     ToolTip="{x:Static properties:Resources.ProgramDetailsCopyPath}">
                     <mdicons:MaterialIcon Kind="{StaticResource IconCopy}" />
