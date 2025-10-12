@@ -61,7 +61,7 @@ public record HtmlVersionResponse
             var downloadUrl = asset.GetProperty("browser_download_url").GetString();
             var name = asset.GetProperty("name").GetString() ?? "";
 
-            bool isExe = string.Equals(contentType, "application/x-msdownload", StringComparison.OrdinalIgnoreCase);
+            bool isExe = !string.Equals(contentType, "application/zip", StringComparison.OrdinalIgnoreCase ) && ".exe".Equals(Path.GetExtension(name),StringComparison.OrdinalIgnoreCase);
             bool hasInstallInName = name.Contains("install", StringComparison.OrdinalIgnoreCase);
             if (isExe && hasInstallInName)
             {
