@@ -32,6 +32,19 @@ jobs:
           restore-keys: |
             nuget-${{ runner.os }}-
 
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v4.1.0
+        with:
+          versionSpec: '6.0.0'
+
+      - name: Determine version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v4.1.0
+
+      - name: Expose version to workflow
+        run: echo "Git version is ${{ steps.gitversion.outputs.FullSemVer }}" >> $env:GITHUB_OUTPUT
+        id: version
+
       - name: Confirm PowerShell 7 is available
         run: pwsh -v
 
@@ -39,16 +52,6 @@ jobs:
         run: |
           choco install innosetup --no-progress -y
           echo "Inno Setup installed" >> $env:GITHUB_STEP_SUMMARY
-
-      - name: Determine version
-        id: gitversion
-        uses: gittools/actions/gitversion/execute@v1
-        with: 
-          useConfigFile: true
-
-      - name: Expose version to workflow
-        run: echo "Git version is ${{ steps.gitversion.outputs.FullSemVer }}" >> $env:GITHUB_OUTPUT
-        id: version
 
       - name: Run publish script
         run: |
