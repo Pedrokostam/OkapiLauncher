@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using OkapiLauncher.Contracts.Services;
@@ -10,55 +11,109 @@ using OkapiLauncher.Core.Models.Projects;
 using OkapiLauncher.Models;
 
 namespace OkapiLauncher.Helpers;
-internal sealed class CompatibilitySorter(IVisionProject project, IAvAppFacadeFactory factory, IList<AvAppFacade> appList) : IComparer<AvApp>
+internal sealed class CompatibilitySorter(IVisionProject project, IAvAppFacadeFactory factory, IList<AvAppFacade> appList)
 {
+    private readonly record struct Entry(IAvApp App, int Index)
+    {
+        public IAvVersion Version => App.Version;
+        public bool Custom => App.IsCustom;
+        public int CompareTo(Entry other)
+        {
+            var v = Version.CompareTo(other.Version);
+            if (v != 0)
+            {
+                return v;
+            }
+            // if they have the same version
+            return (Custom, other.Custom) switch
+            {
+                //non-custom version have priority, i.e. they are lower
+                (true, false) => 1, // this instance is custom so it goes after
+                (false, true) => -1,
+                _ => 0, // they are equal
+            };
+        }
+    }
+
     public IVisionProject Project { get; } = project;
     public IAvAppFacadeFactory Factory { get; } = factory;
     private IList<AvAppFacade> _collection = appList;
-    public int Getto(IEnumerable<AvApp> apps)
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "MA0051:Method is too long", Justification = "I don't feel like refactoring :|")]
+    public int GetClosestVersion(IEnumerable<AvApp> apps)
     {
         Factory.Populate(Filter(apps), _collection, perItemAction: UpdateCompatibility);
-        // _collection is sorted from oldest version to newest
-        var t = (int)(Project.Type.Type & AvType.NonVersionableTypes)!=0;
+        // _collection is sorted from newest version to oldest
         if ((int)(Project.Type.Type & AvType.NonVersionableTypes) != 0)
         {
             // Project has no version - takes the newest version
-            return _collection.Count - 1;
+            return 0;
         }
-
-        int? exactVersionCustom = null;
-        int? largerCustom = null;
+        Entry? exactCustomVersion = null;
+        Entry? largeVersion = null;
+        Entry? smallVersion = null;
+        // going from the newest (largest) version to the lowest
         for (int i = 0; i < _collection.Count; i++)
         {
             var app = _collection[i];
-            if (Equals(app.Version, Project.Version))
+            if (Project.Type == ProductType.Professional && app.Type == ProductType.Runtime)
             {
-                if (app.IsCustom && exactVersionCustom is null)
+                // do not suggest runtimes for studio projects
+                continue;
+            }
+            int versionComparison = app.Version.CompareTo(Project.Version);
+            if (versionComparison > 0)
+            {
+                if (!largeVersion.HasValue)
                 {
-                    // found custom version - might find non-custom still
-                    exactVersionCustom = i;
+                    largeVersion = new Entry(app, i);
                     continue;
                 }
-
-                // found exact version
+                int comparison = largeVersion.Value.Version.CompareTo(app.Version);
+                if (comparison > 0)
+                {
+                    largeVersion = new Entry(app, i);
+                }
+                if (comparison == 0 && !app.IsCustom)
+                {
+                    largeVersion = new Entry(app, i);
+                }
+                continue;
+            }
+            // if we got here, all later versions are already gone, only exact and older remain
+            if (versionComparison == 0)
+            {
+                if (app.IsCustom)
+                {
+                    exactCustomVersion = new(app, i);
+                    // found custom version - might find non-custom still
+                    continue;
+                }
+                // found the exact version
                 return i;
             }
-            if (app.Version.CompareTo(Project.Version) > 0)
+            if (versionComparison < 0)
             {
-                if (app.IsCustom && largerCustom is null)
+                if (!smallVersion.HasValue)
                 {
-                    // found custom version - might find non-custom still
-                    largerCustom = i;
+                    smallVersion = new Entry(app, i);
                     continue;
                 }
+                int comparison = smallVersion.Value.Version.CompareTo(app.Version);
+                if (comparison > 0)
+                {
+                    smallVersion = new Entry(app, i);
+                }
+                if (comparison == 0 && !app.IsCustom)
+                {
+                    smallVersion = new Entry(app, i);
+                }
+                continue;
             }
-        }
-        if(exactVersionCustom is int custom)
-        {
-            return custom;
-        }
 
-        return -1;
+        }
+        var entry = exactCustomVersion ?? largeVersion ?? smallVersion;
+
+        return entry?.Index ?? -1;
     }
     private void UpdateCompatibility(AvAppFacade avApp)
     {
@@ -100,11 +155,6 @@ internal sealed class CompatibilitySorter(IVisionProject project, IAvAppFacadeFa
             .Where(x => x.CanOpen(Project))
             .Select(Factory.Create)
             .OfType<AvAppFacade>()
-            .OrderBy(x => x.Version);
-    }
-
-    public int Compare(AvApp? x, AvApp? y)
-    {
-        throw new NotImplementedException();
+            .OrderByDescending(x => x.Version);
     }
 }

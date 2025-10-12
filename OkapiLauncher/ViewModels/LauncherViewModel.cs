@@ -132,7 +132,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
             var project = ProjectReader.OpenProject(filepath);
             VisionProject = new VisionProjectFacade(project);
             var comparer = new CompatibilitySorter(VisionProject, _appFactory, Apps);
-            var index = comparer.Getto(_appFactory.AvApps);
+            var index = comparer.GetClosestVersion(_appFactory.AvApps);
             SelectedApp = null;
             if (index >= 0)
             {
