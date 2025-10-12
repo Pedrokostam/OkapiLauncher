@@ -43,6 +43,7 @@
                 Margin="{StaticResource MediumRightMargin}"
                 VerticalAlignment="Center"
                 DockPanel.Dock="Right"
+                Focusable="False"
                 ItemsSource="{conv:EnumBindingSource {x:Type mod:AppSortProperty}}"
                 SelectedItem="{Binding SortProperty}" />
             <TextBlock
