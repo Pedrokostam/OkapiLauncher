@@ -15,7 +15,7 @@ public sealed record OpenAppRequest
     }
     public OpenAppRequest(IAvApp app) : this(app, [])
     {
-        
+
     }
     public IAvApp App { get; }
     public string[] Arguments { get; }

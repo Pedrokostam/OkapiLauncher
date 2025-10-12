@@ -9,6 +9,7 @@ using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Core.Models;
 using OkapiLauncher.Core.Models.Apps;
 using OkapiLauncher.Core.Models.Projects;
+using OkapiLauncher.Helpers;
 using OkapiLauncher.Models;
 using OkapiLauncher.Models.Messages;
 using OkapiLauncher.Properties;
@@ -34,6 +35,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
         _contentDialogService = contentDialogService;
         _navigationService = navigationService;
     }
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Bo nie")]
     public bool ShouldCloseAfterLaunching
     {
         get => ((App)App.Current).ShouldCloseAfterLaunching;
@@ -97,7 +99,6 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
             Clipboard.SetText(LaunchOptions.ArgumentString);
         }
     }
-    static readonly Regex FileDetector = new(@"(?<NORMAL>\.(avproj|avexe|fiproj|fiexe))|(?<DL>pluginconfig.xml)", RegexOptions.Compiled | RegexOptions.IgnoreCase|RegexOptions.ExplicitCapture, TimeSpan.FromMilliseconds(500));
 
     /// <summary>
     /// Either returns <paramref name="path"/> as is if it is a directory, or attempts to find one of applicable files.
@@ -112,7 +113,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
             var files = Directory.EnumerateFiles(path);
             foreach (var file in files)
             {
-                if (FileDetector.IsMatch(Path.GetFileName(file)))
+                if (FileDetector().IsMatch(Path.GetFileName(file)))
                 {
                     return file;
                 }
@@ -122,33 +123,31 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
         return path;
     }
 
-    public async Task<bool> OpenProject(string filepath)
+    public async Task<bool> OpenProject(string filepath, bool autoload = false)
     {
-
+        bool success = false;
         try
         {
             filepath = HandleDirectories(filepath);
             var project = ProjectReader.OpenProject(filepath);
             VisionProject = new VisionProjectFacade(project);
-            var matchingApps = _appFactory.AvApps
-                .Where(x => x.CanOpen(VisionProject))
-                .OrderByDescending(x => x.Version);
+            var comparer = new CompatibilitySorter(VisionProject, _appFactory, Apps);
+            var index = comparer.GetClosestVersion(_appFactory.AvApps);
             SelectedApp = null;
-            _appFactory.Populate(matchingApps,
-                Apps,
-                perItemAction: UpdateCompatibility);
-            var closestVersion = AvApp.GetClosestApp(Apps, VisionProject);
-            if (closestVersion >= 0)
+            if (index >= 0)
             {
-                SelectedApp = Apps[closestVersion];
+                SelectedApp = Apps[index];
             }
-            else
-            {
-                SelectedApp = null;
-            }
+
             _lastOpenedFilesService.AddLastFile(project.Path);
             _navigationService.NavigateTo(GetType().FullName!);
             _processManagerService.ProcessState.UpdateStates(Apps);
+            success = true;
+            if (autoload && SelectedApp is not null)
+            {
+                Launch(SelectedApp);
+                App.Current.Shutdown(0);
+            }
             return true;
         }
         catch (FileNotFoundException)
@@ -176,7 +175,13 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
             await _contentDialogService.ShowError(Resources.ErrorNoApplicableFileInFolder);
             return false;
         }
-
+        finally
+        {
+            if (!success)
+            {
+                _lastOpenedFilesService.RemoveInvalidPath(filepath);
+            }
+        }
     }
     private void UpdateCompatibility(AvAppFacade avApp)
     {
@@ -219,9 +224,20 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
         base.OnNavigatedTo(parameter);
 
         var lastFile = _lastOpenedFilesService.LastOpenedFile;
-        if (parameter is string path)
+        string? path = null;
+        bool autoload = false;
+        if (parameter is string _path)
         {
-            bool loadGood = await OpenProject(path);
+            path = _path;
+        }
+        if (parameter is FileRequestedMessage msg)
+        {
+            path = msg.Value;
+            autoload = msg.AutoLoad;
+        }
+        if (!string.IsNullOrWhiteSpace(path))
+        {
+            bool loadGood = await OpenProject(path, autoload);
             if (!loadGood)
             {
                 if (lastFile is string s)
@@ -239,4 +255,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
             await OpenProject(last);
         }
     }
+
+    [GeneratedRegex(@"(?<NORMAL>\.(avproj|avexe|fiproj|fiexe))|(?<DL>pluginconfig.xml)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture, matchTimeoutMilliseconds: 500)]
+    private static partial Regex FileDetector();
 }

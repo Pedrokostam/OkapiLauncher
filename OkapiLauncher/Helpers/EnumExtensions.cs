@@ -8,7 +8,7 @@ using OkapiLauncher.Contracts.Services;
 namespace OkapiLauncher.Helpers;
 public static class EnumExtensions
 {
-    public static  bool IsRegisteredApp(this IApplicationInfoService.InstallationScope scope)
+    public static bool IsRegisteredApp(this IApplicationInfoService.InstallationScope scope)
     {
         return scope == IApplicationInfoService.InstallationScope.LocalMachine || scope == IApplicationInfoService.InstallationScope.CurrentUser;
     }
@@ -28,6 +28,7 @@ public static class EnumExtensions
     {
         return GetAllStandaloneFlags_impl(enumType).ToList().AsReadOnly();
     }
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2021:Do not call Enumerable.Cast<T> or Enumerable.OfType<T> with incompatible types", Justification = "It will work, mate :)")]
     public static IReadOnlyList<T> GetAllStandaloneFlags<T>() where T : Enum
     {
         return GetAllStandaloneFlags_impl(typeof(T)).Cast<T>().ToList().AsReadOnly();

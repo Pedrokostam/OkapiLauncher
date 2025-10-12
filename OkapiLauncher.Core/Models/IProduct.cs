@@ -6,4 +6,3 @@ public interface IProduct
     ProductType Type { get; }
     IAvVersion Version { get; }
 }
-

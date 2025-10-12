@@ -49,7 +49,7 @@ public partial class ButtonSettingsViewModel : ObservableObject
     {
         _showDisabledButtons = generalSettingsService.ButtonSettings.ShowDisabledButtons;
         _iconSize = generalSettingsService.ButtonSettings.IconSize;
-        var checkeds = generalSettingsService.ButtonSettings.ListOrder.Select(x => new CheckedButton(x, generalSettingsService.ButtonSettings.VisibleButtons.HasFlag(x),this));
+        var checkeds = generalSettingsService.ButtonSettings.ListOrder.Select(x => new CheckedButton(x, generalSettingsService.ButtonSettings.VisibleButtons.HasFlag(x), this));
         ButtonOrdering = new ObservableCollection<CheckedButton>(checkeds);
         foreach (var c in ButtonOrdering)
         {
@@ -59,10 +59,10 @@ public partial class ButtonSettingsViewModel : ObservableObject
         _generalSettingsService = generalSettingsService;
         UpdateSettings();
     }
-   
+
     private void UpdateSettings()
     {
-        if(ButtonOrdering is null)
+        if (ButtonOrdering is null)
         {
             return;
         }
@@ -122,12 +122,12 @@ public partial class ButtonSettingsViewModel : ObservableObject
     private void Reset()
     {
         var checkeds = ButtonSettings.Default.ListOrder.Select(x => new CheckedButton(x, ButtonSettings.Default.VisibleButtons.HasFlag(x), this));
-        foreach(var b in ButtonOrdering)
+        foreach (var b in ButtonOrdering)
         {
             b.PropertyChanged -= ButtonCheckedChanged;
         }
         ButtonOrdering.Clear();
-        foreach(var b in checkeds)
+        foreach (var b in checkeds)
         {
             ButtonOrdering.Add(b);
             b.PropertyChanged += ButtonCheckedChanged;

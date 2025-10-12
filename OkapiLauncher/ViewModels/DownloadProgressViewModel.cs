@@ -5,11 +5,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Helpers;
 using OkapiLauncher.Models.Updates;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 
 namespace OkapiLauncher.ViewModels;
 public partial class DownloadProgressViewModel : ObservableObject

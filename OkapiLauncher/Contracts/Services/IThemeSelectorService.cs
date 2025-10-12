@@ -7,7 +7,7 @@ public interface IThemeSelectorService
 {
     void InitializeTheme();
 
-    void SetTheme(AppTheme theme,Color? customColor);
+    void SetTheme(AppTheme theme, Color? customColor);
 
     AppTheme GetCurrentTheme();
     Color? GetCurrentAccent();

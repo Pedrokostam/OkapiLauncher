@@ -11,6 +11,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using MahApps.Metro.Controls.Dialogs;
 using OkapiLauncher.Contracts.EventArgs;
 using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Core.Models.Apps;
 using OkapiLauncher.Models;
 using OkapiLauncher.Models.Messages;
 using OkapiLauncher.Properties;
@@ -50,17 +51,35 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
     }
     [ObservableProperty]
     private bool _isFileMenuOpen;
+
+    [ObservableProperty]
+    private string? _newAvailableVersion;
+
     public ObservableCollection<IAppNativeRecentFilesService.RecentAppFiles> NativeRecentFiles { get; } = [];
     public ObservableCollection<RecentlyOpenedFileFacade> RecentlyOpenedFiles { get; }
     [RelayCommand]
     private void OnLoaded()
     {
         _navigationService.Navigated += OnNavigated;
-        _ = _updateCheckService.AutoPromptUpdate().ContinueWith(t => Trace.WriteLine(t.Exception), TaskContinuationOptions.OnlyOnFaulted);
+        _ = CheckForUpdates();
 
     }
+    private async Task CheckForUpdates()
+    {
+        await Task.Delay(250);
+        var upd = await _updateCheckService.AutoPromptUpdate();
+        Application.Current?.Dispatcher.Invoke(() => NewAvailableVersion = upd);
+    }
+
     [RelayCommand()]
-    private async Task CheckForUpdates() => await _updateCheckService.ManualPrompUpdate();
+    private async Task ApplyUpdate()
+    {
+        if (NewAvailableVersion is null)
+        {
+            return;
+        }
+        await _updateCheckService.ManualPrompUpdate();
+    }
 
     [RelayCommand()]
     private void OnUnloaded()

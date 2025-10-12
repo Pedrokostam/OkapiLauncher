@@ -78,11 +78,11 @@ public class WarningLaunchButton : Button
             if (adornerLayer.GetAdorners(this)?.FirstOrDefault() is null)
             {
                 //var warningAdorner = new AdornerContentPresenter(this, new MaterialIcon() { Kind = Material.Icons.MaterialIconKind.Warning, ToolTip = "This app is already launched, you may not be able to launch another process", Foreground=Brushes.Yellow});
-                var warningAdorner = new IconAdorner(this, Material.Icons.MaterialIconKind.Warning,Brushes.DarkOrange)
+                var warningAdorner = new IconAdorner(this, Material.Icons.MaterialIconKind.Warning, Brushes.DarkOrange)
                 {
                     ToolTip = Properties.Resources.WarningLanchButtonWarningTooltip,
                     //Placement = new RelativePlacement(0, 0, 1, 1, DimensionType.Relative,new Thickness(10)),
-                    Placement = new RelativePlacement(0, 1, 0.5, -0.4, DimensionType.Relative, new Thickness(3,0,0,1)),
+                    Placement = new RelativePlacement(0, 1, 0.5, -0.4, DimensionType.Relative, new Thickness(3, 0, 0, 1)),
                 };
                 adornerLayer.Add(warningAdorner);
             }
@@ -106,4 +106,3 @@ public class WarningLaunchButton : Button
         ((Material.Icons.WPF.MaterialIcon)Content).Kind = kind;
     }
 }
-

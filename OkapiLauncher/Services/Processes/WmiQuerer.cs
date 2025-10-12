@@ -9,7 +9,7 @@ using OkapiLauncher.Models.Messages;
 
 namespace OkapiLauncher.Services.Processes;
 
-public sealed  class WmiQuerer(IMessenger messenger) : ProcessQuerer(messenger)
+public sealed class WmiQuerer(IMessenger messenger) : ProcessQuerer(messenger)
 {
     private readonly Dictionary<string, ManagementObjectSearcher> _queries = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, ManagementObjectSearcher> _globalQueries = new(StringComparer.Ordinal);

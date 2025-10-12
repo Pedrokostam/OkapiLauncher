@@ -1,16 +1,16 @@
 ﻿using System.IO;
 using System.Windows;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Controls.Utilities;
 using OkapiLauncher.Core.Models;
 using OkapiLauncher.Core.Models.Apps;
 using OkapiLauncher.Core.Models.Projects;
 using OkapiLauncher.Helpers;
 using OkapiLauncher.Models.Messages;
 using OkapiLauncher.ViewModels;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
-using OkapiLauncher.Controls.Utilities;
 
 namespace OkapiLauncher.Models;
 public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFacade>, IEquatable<AvAppFacade>
@@ -30,7 +30,6 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     public string? Description => _avApp.Description ?? Name;
     public bool IsCustom => _avApp.IsCustom;
 
-    public ButtonSettings Susu { get; }
     public bool WarnAboutNewProcess => Type == ProductType.Professional && IsLaunched;
     public AvVersionFacade? SecondaryVersion { get; }
 
@@ -40,10 +39,16 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
 
     public string ProcessName => _avApp.ProcessName;
 
+
     [ObservableProperty]
     private Compatibility? _compatibility = null;
     [ObservableProperty]
-    private bool _processInfoAvailable=false;
+    private bool _processInfoAvailable = false;
+    /// <summary>
+    /// Denotes that this app has exactly the same version as some loaded project
+    /// </summary>
+    [ObservableProperty]
+    private bool _mostCompatible = false;
     public bool ShowProcessInfo => IsExecutable && ProcessInfoAvailable;
     private readonly IMessenger _messenger;
 
@@ -108,17 +113,17 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
             ExplorerHelper.OpenExplorer(LogFolderPath);
 
     }
-    [RelayCommand(CanExecute =nameof(IsLaunched))]
+    [RelayCommand(CanExecute = nameof(IsLaunched))]
     private void KillAllProcesses()
     {
-        _messenger.Send(new KillAllProcessesRequest(this,ViewModel:null));
+        _messenger.Send(new KillAllProcessesRequest(this, ViewModel: null));
     }
-    
+
 
     public bool CanOpenLicenseFolder => Directory.Exists(Brand.GetLicenseKeyFolderPath());
     public bool CanOpenLogFolder => Directory.Exists(LogFolderPath);
 
-    [RelayCommand(CanExecute =nameof(ShowProcessInfo))]
+    [RelayCommand(CanExecute = nameof(ShowProcessInfo))]
     private void ShowProcessOverview()
     {
         if (_windowManagerService.Value is null)

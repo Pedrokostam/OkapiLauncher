@@ -8,7 +8,7 @@ using OkapiLauncher.Core.Models;
 
 namespace OkapiLauncher.Core.Exceptions;
 
-public class UndeterminableBrandException:Exception
+public class UndeterminableBrandException : Exception
 {
     public enum BrandSource
     {
@@ -17,7 +17,7 @@ public class UndeterminableBrandException:Exception
         License,
         AllApplicable
     }
-    public UndeterminableBrandException(string filepath, AvType? type, BrandSource checkedSource):
+    public UndeterminableBrandException(string filepath, AvType? type, BrandSource checkedSource) :
         base($"Cannot determine brand for this filepath: {filepath}")
     {
         Filepath = filepath;

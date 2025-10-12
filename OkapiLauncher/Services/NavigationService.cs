@@ -9,7 +9,7 @@ namespace OkapiLauncher.Services;
 public class NavigationService : INavigationService
 {
     private readonly IPageService _pageService;
-    private Frame _frame=default!;
+    private Frame _frame = default!;
     private object? _lastParameterUsed;
 
     public event EventHandler<NavigatedToEventArgs>? Navigated;
@@ -52,7 +52,7 @@ public class NavigationService : INavigationService
         }
     }
 
-    public bool NavigateTo<ViewModelType>(object? parameter = null)=>NavigateTo(typeof(ViewModelType).FullName!, parameter);
+    public bool NavigateTo<ViewModelType>(object? parameter = null) => NavigateTo(typeof(ViewModelType).FullName!, parameter);
     public bool NavigateTo(string pageKey, object? parameter = null)
     {
         var pageType = _pageService.GetPageType(pageKey);
@@ -101,5 +101,5 @@ public class NavigationService : INavigationService
         }
     }
 
-   
+
 }

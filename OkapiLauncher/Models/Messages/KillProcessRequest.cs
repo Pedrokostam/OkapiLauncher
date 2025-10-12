@@ -5,6 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace OkapiLauncher.Models.Messages;
-public sealed record KillProcessRequest(SimpleProcess Process,object ViewModel)
+public sealed record KillProcessRequest(SimpleProcess Process, object ViewModel)
 {
 }

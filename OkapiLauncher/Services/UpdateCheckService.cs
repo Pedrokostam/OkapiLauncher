@@ -9,12 +9,12 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
+using Microsoft.Extensions.Options;
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Helpers;
 using OkapiLauncher.Models;
 using OkapiLauncher.Models.Updates;
-using Microsoft.Extensions.Options;
-using System.Windows.Input;
 
 namespace OkapiLauncher.Services;
 public class UpdateCheckService : IUpdateCheckService
@@ -48,14 +48,17 @@ public class UpdateCheckService : IUpdateCheckService
         get => App.Current.Properties[IgnoredReleaseKey] as string;
         set => App.Current.Properties[IgnoredReleaseKey] = value;
     }
-    public async Task AutoPromptUpdate()
+    public Task<string?> AutoPromptUpdate()
     {
-        if (DebugOverride() || AutoCheckForUpdatesEnabled && LastCheckDate.Date != DateTime.UtcNow.Date)
-        {
-            await CheckForUpdates_impl(isAuto: true);
-        }
+        return CheckForUpdates_impl(isAuto: true);
     }
-    public async Task ManualPrompUpdate() => await CheckForUpdates_impl(isAuto: false);
+
+    private bool IsAutomaticUpdateScheduled()
+    {
+        return AutoCheckForUpdatesEnabled && LastCheckDate.Date != DateTime.UtcNow.Date;
+    }
+
+    public Task<string?> ManualPrompUpdate() => CheckForUpdates_impl(isAuto: false);
 
     private static bool DebugOverride()
     {
@@ -67,7 +70,7 @@ public class UpdateCheckService : IUpdateCheckService
 #endif
     }
 
-    private async Task CheckForUpdates_impl(bool isAuto)
+    private async Task<string?> CheckForUpdates_impl(bool isAuto)
     {
         using HttpClient client = new HttpClient();
         client.DefaultRequestHeaders.Add("User-Agent", "OkapiLauncher"); // GitHub requires a user-agent header
@@ -80,14 +83,20 @@ public class UpdateCheckService : IUpdateCheckService
             var updateCarrier = UpdateDataCarier.Create(_applicationInfoService, isAuto, responseDocument, IgnoredVersion);
             var shouldPrompt = updateCarrier.ShouldPromptUser();
             shouldPrompt = DebugOverride() ? PromptAction.ShowPrompUpdateDialog : shouldPrompt;
+            string? outputVersionTag = updateCarrier.IsIgnoredVersion() ? null : updateCarrier.RemoteVersion;
+            if (isAuto && !IsAutomaticUpdateScheduled())
+            {
+                // if the check is automatic but it was not scheduled, just return tag
+                return outputVersionTag;
+            }
             if (shouldPrompt == PromptAction.DontShowDialog)
             {
-                return;
+                return outputVersionTag;
             }
             if (shouldPrompt == PromptAction.ShowNoUpdatesMessageDialog)
             {
                 await _contentDialogService.ShowMessage(Properties.Resources.VersionCheckDialogNoUpdatesMessage, Properties.Resources.VersionCheckDialogNoUpdatesHeader);
-                return;
+                return outputVersionTag;
             }
             var promptResult = await _contentDialogService.ShowVersionDecisionDialog(updateCarrier);
             if (promptResult.DisableAutomaticUpdates)
@@ -107,7 +116,9 @@ public class UpdateCheckService : IUpdateCheckService
                 case UpdateDecision.LaunchUpdater:
                     _systemService.LaunchInstaller(promptResult.UpdaterFilepath);
                     break;
+
             }
+            return outputVersionTag;
         }
         catch (HttpRequestException)
         {
@@ -116,6 +127,7 @@ public class UpdateCheckService : IUpdateCheckService
         {
             LastCheckDate = DateTime.UtcNow;
         }
+        return null;
     }
 
 
@@ -149,4 +161,5 @@ public class UpdateCheckService : IUpdateCheckService
         App.Current.Properties.InitializeDictKey<DateTime>(LastCheckDateKey, defaultValue: DateTime.UnixEpoch);
         App.Current.Properties.InitializeDictKey<string>(IgnoredReleaseKey);
     }
+
 }

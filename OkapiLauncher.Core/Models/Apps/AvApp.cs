@@ -23,8 +23,8 @@ public record AvApp : IAvApp
     public string NameWithVersion => $"{Name} {Version}";
     public string? Description { get; }
     public bool IsCustom => Description is not null;
-    
-    public bool IsDummy { get; }= false;
+
+    public bool IsDummy { get; } = false;
     public string ProcessName { get; }
     public bool IsExecutable => Type.IsExecutable;
     public bool IsDevelopmentVersion => Version.Build >= 1000;

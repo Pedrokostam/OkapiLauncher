@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Data;
 
 namespace OkapiLauncher.Converters;
-public class NullToVisibilityConverter: IValueConverter
+public class NullToVisibilityConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {

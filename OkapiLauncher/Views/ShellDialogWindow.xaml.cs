@@ -1,9 +1,7 @@
 ﻿using System.Windows.Controls;
-
+using MahApps.Metro.Controls;
 using OkapiLauncher.Contracts.Views;
 using OkapiLauncher.ViewModels;
-
-using MahApps.Metro.Controls;
 
 namespace OkapiLauncher.Views;
 

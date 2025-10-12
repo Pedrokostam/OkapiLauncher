@@ -1,12 +1,12 @@
 ﻿using System.Text.RegularExpressions;
-using OkapiLauncher.Core.Models.Apps;
 using CommunityToolkit.Mvvm.ComponentModel;
+using OkapiLauncher.Core.Models.Apps;
 
 namespace OkapiLauncher.Models;
 
 public partial class ExecutorLaunchOptions : LaunchOptions
 {
-    private static readonly Regex InvalidArgumentChecker = new Regex(@"[\s'`""]",RegexOptions.ExplicitCapture,TimeSpan.FromMilliseconds(200));
+    private static readonly Regex InvalidArgumentChecker = new Regex(@"[\s'`""]", RegexOptions.ExplicitCapture, TimeSpan.FromMilliseconds(200));
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ArgumentString))]
     private bool _autoClose;
@@ -52,8 +52,8 @@ public partial class ExecutorLaunchOptions : LaunchOptions
 
     public override void Reset()
     {
-        AutoClose=false;
-        Console=false;
+        AutoClose = false;
+        Console = false;
         LogLevel = LogLevel.Pass;
         LogPipe = null;
     }

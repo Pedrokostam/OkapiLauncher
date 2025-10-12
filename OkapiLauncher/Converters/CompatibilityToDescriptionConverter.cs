@@ -9,7 +9,7 @@ using OkapiLauncher.Models;
 using OkapiLauncher.Properties;
 
 namespace OkapiLauncher.Converters;
-public class CompatibilityToDescriptionConverter:IValueConverter
+public class CompatibilityToDescriptionConverter : IValueConverter
 {
     public static readonly CompatibilityToDescriptionConverter Instance = new CompatibilityToDescriptionConverter();
     public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)

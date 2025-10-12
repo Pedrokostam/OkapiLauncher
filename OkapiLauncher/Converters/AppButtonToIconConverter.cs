@@ -17,16 +17,16 @@ namespace OkapiLauncher.Converters
             }
             var key = button switch
             {
-                VisibleButtons.Launch =>"IconLaunch",
+                VisibleButtons.Launch => "IconLaunch",
                 VisibleButtons.Copy => "IconCopy",
                 VisibleButtons.Open => "IconOpenFolder",
                 VisibleButtons.License => "IconLicenseFolder",
                 VisibleButtons.Log => "IconLogFolder",
                 VisibleButtons.Overview => "IconProcess",
                 VisibleButtons.KillAll => "IconKillAll",
-                _ =>null,
+                _ => null,
             };
-            if(key is null)
+            if (key is null)
             {
                 return MaterialIconKind.Error;
             }

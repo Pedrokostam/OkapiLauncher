@@ -3,13 +3,11 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
+using ControlzEx.Theming;
+using MahApps.Metro.Theming;
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Helpers;
 using OkapiLauncher.Models;
-
-using ControlzEx.Theming;
-
-using MahApps.Metro.Theming;
 
 namespace OkapiLauncher.Services;
 /*

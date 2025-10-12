@@ -21,7 +21,7 @@ namespace OkapiLauncher.Views;
 /// </summary>
 public partial class CustomSourceEditorDialog : CustomDialog
 {
-    public CustomSourceEditorDialog():base()
+    public CustomSourceEditorDialog() : base()
     {
         InitializeComponent();
     }

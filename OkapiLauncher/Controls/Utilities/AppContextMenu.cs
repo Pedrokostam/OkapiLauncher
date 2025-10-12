@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using Material.Icons.WPF;
-using Material.Icons;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows;
-using OkapiLauncher.Models;
-using System.Runtime.CompilerServices;
-using System.Diagnostics;
+using Material.Icons;
+using Material.Icons.WPF;
 using OkapiLauncher.Helpers;
+using OkapiLauncher.Models;
 
 namespace OkapiLauncher.Controls.Utilities;
 internal static class AppContextMenu

@@ -11,9 +11,10 @@ public class IndexToKeyShortcutIndex : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object parameter, CultureInfo culture)
     {
-        if(value is not int i)
+        if (value is not int i)
         {
-            return value; }
+            return value;
+        }
         return i switch
         {
             >= 0 and <= 9 => i + 1,

@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Effects;
+using AuroraVisionLauncher.ViewModels;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using MahApps.Metro.Controls.Dialogs;
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Contracts.ViewModels;
 using OkapiLauncher.Contracts.Views;
@@ -13,16 +17,12 @@ using OkapiLauncher.Models.Updates;
 using OkapiLauncher.Properties;
 using OkapiLauncher.ViewModels;
 using OkapiLauncher.Views;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using MahApps.Metro.Controls.Dialogs;
-using AuroraVisionLauncher.ViewModels;
 
 namespace OkapiLauncher.Services;
 public class ContentDialogService : IContentDialogService
 {
     private readonly IDialogCoordinator _dialogCoordinator;
-    private  Lazy<ShellViewModel> _context= new Lazy<ShellViewModel>(()=>((App)App.Current).GetService<ShellViewModel>());
+    private Lazy<ShellViewModel> _context = new Lazy<ShellViewModel>(() => ((App)App.Current).GetService<ShellViewModel>());
 
     public Task ShowError(string message, string? title = null)
     {
@@ -42,17 +42,17 @@ public class ContentDialogService : IContentDialogService
         var vm = new CustomSourceDialogEditorViewModel(source, async () => await Task.FromResult(true));
         await ShowMetroDialog(vm, dialog);
     }
-    public async Task<bool> ShowProcessKillDialog(object context,SimpleProcess process)
+    public async Task<bool> ShowProcessKillDialog(object context, SimpleProcess process)
     {
         var dialog = new KillProcessDialog();
         var vm = new KillProcessDialogViewModel(process);
-       return await ShowMetroDialog(vm, dialog,context);
+        return await ShowMetroDialog(vm, dialog, context);
     }
     public async Task<bool> ShowAllProcessesKillDialog(object? context, IAvApp app)
     {
         var dialog = new KillAllProcessDialog();
         var vm = new KillAllProcesessDialogViewModel(app);
-        return await ShowMetroDialog(vm, dialog,context);
+        return await ShowMetroDialog(vm, dialog, context);
     }
     public async Task<UpdatePromptResult> ShowVersionDecisionDialog(UpdateDataCarier carrier)
     {
@@ -74,7 +74,7 @@ public class ContentDialogService : IContentDialogService
         await _dialogCoordinator.HideMetroDialogAsync(ctx, dialog);
     }
 
-    private async Task<T> ShowMetroDialog<T>(IDialogViewModel<T> viewModel, BaseMetroDialog dialog, object? context=null)
+    private async Task<T> ShowMetroDialog<T>(IDialogViewModel<T> viewModel, BaseMetroDialog dialog, object? context = null)
     {
         dialog.DataContext = viewModel;
         var ctx = context ?? _context.Value;

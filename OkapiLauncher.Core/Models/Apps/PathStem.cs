@@ -18,7 +18,7 @@ namespace OkapiLauncher.Core.Models.Apps
         /// The filename of the executable.
         /// </summary>
         public string Filename => _parts[^1];
-        public int MaxDepth => _parts.Length-1;
+        public int MaxDepth => _parts.Length - 1;
         /// <summary>
         /// Folders which, if the path ends in them should be exited for their parent. If the path to match ends at one of this, its parent will be analyzed instead. Order does not matter, unlike in <see cref="Parts"/>
         /// </summary>
@@ -78,7 +78,7 @@ namespace OkapiLauncher.Core.Models.Apps
              * We can just simply combine current path with Parts and check if the file exists.
              */
             var parts = Parts.Prepend(path).ToArray();
-            var combinedPath= Path.Join(parts);
+            var combinedPath = Path.Join(parts);
             if (File.Exists(combinedPath))
             {
                 return combinedPath;

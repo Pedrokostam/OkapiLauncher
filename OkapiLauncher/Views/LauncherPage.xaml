@@ -20,6 +20,8 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     AllowDrop="True"
+    Loaded="ThisLauncherPage_Loaded"
+    PreviewKeyDown="LaunchButton_PreviewKeyDown"
     Style="{DynamicResource MahApps.Styles.Page}"
     mc:Ignorable="d">
     <Page.Resources>
@@ -72,10 +74,12 @@
                 </Grid.RowDefinitions>
                 <ContentPresenter Grid.RowSpan="2" Content="{Binding VisionProject}" />
                 <Button
+                    x:Name="LaunchButton"
                     Grid.Column="1"
                     Padding="10"
                     BorderThickness="4"
                     Command="{Binding LaunchCommand}"
+                    PreviewKeyDown="LaunchButton_PreviewKeyDown"
                     TextBlock.FontSize="20">
                     <TextBlock
                         Foreground="{DynamicResource Custom.Brushes.Compatibility.Compatible}"
@@ -92,11 +96,11 @@
                     IsChecked="{Binding ShouldCloseAfterLaunching}" />
             </Grid>
             <ListView
-                x:Name="sd"
+                x:Name="AppList"
                 Grid.Row="1"
                 d:ItemsSource="{d:SampleData ItemCount=5}"
                 ItemsSource="{Binding Source={StaticResource CustomViewSource}}"
-                SelectedItem="{Binding SelectedApp, Mode=TwoWay}">
+                SelectedItem="{Binding SelectedApp, Mode=TwoWay}" SelectionChanged="AppList_SelectionChanged">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <controls:AvAppFacadeListItem

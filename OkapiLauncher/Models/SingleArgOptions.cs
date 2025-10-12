@@ -15,6 +15,6 @@ public partial class SingleArgOptions : LaunchOptions
 
     public override void Reset()
     {
-        
+
     }
 }

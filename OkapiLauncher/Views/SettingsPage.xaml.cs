@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using OkapiLauncher.ViewModels;
 using ControlzEx.Theming;
+using OkapiLauncher.ViewModels;
 
 namespace OkapiLauncher.Views;
 

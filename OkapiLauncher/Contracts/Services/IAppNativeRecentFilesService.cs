@@ -6,7 +6,7 @@ namespace OkapiLauncher.Contracts.Services
         RecentAppFiles? GetAppFiles(AvApp app);
         IEnumerable<RecentAppFiles> GetAllAppsFiles();
 
-        record RecentAppFiles:IEquatable<RecentAppFiles>
+        record RecentAppFiles : IEquatable<RecentAppFiles>
         {
             public RecentAppFiles(AvApp app, IEnumerable<string> filepaths)
             {
@@ -15,7 +15,7 @@ namespace OkapiLauncher.Contracts.Services
                 int listHash = 1374;
                 foreach (var item in filepaths)
                 {
-                    listHash=HashCode.Combine(listHash, item);
+                    listHash = HashCode.Combine(listHash, item);
                 }
                 Uniquifier = HashCode.Combine(app.Brand, app.Version, listHash);
             }

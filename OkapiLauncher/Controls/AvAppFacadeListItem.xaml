@@ -38,58 +38,9 @@
         </Grid.ToolTip>
         <!--  CONTEXT MENU IS DONE IN CODE BEHIND  -->
         <!--<Grid.ContextMenu>
-            <ContextMenu>
-                <MenuItem Command="{Binding AppFacade.OpenContainingFolderCommand}" Header="{x:Static properties:Resources.AvAppOpenInstallationFolder}">
-                    <MenuItem.Icon>
-                        <mdicons:MaterialIcon Kind="{StaticResource IconOpenFolder}" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Command="{Binding AppFacade.CopyExecutablePathCommand}" Header="{x:Static properties:Resources.AvAppCopyPath}">
-                    <MenuItem.Icon>
-                        <mdicons:MaterialIcon Kind="{StaticResource IconCopy}" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <Separator Visibility="{Binding AppFacade.IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                <MenuItem
-                    Click="LaunchButton_Click"
-                    Header="{x:Static properties:Resources.AvAppLaunchWithNoProgram}"
-                    Visibility="{Binding AppFacade.IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <MenuItem.Tag>
-                        <sys:Boolean>true</sys:Boolean>
-                    </MenuItem.Tag>
-                    <MenuItem.Icon>
-                        <mdicons:MaterialIcon Kind="{StaticResource IconLaunch}" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem
-                    Command="{Binding AppFacade.ShowProcessOverviewCommand}"
-                    Header="Open process overview window"
-                    Visibility="{Binding AppFacade.IsExecutable, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <MenuItem.Icon>
-                        <mdicons:MaterialIcon Kind="{StaticResource IconProcess}" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <Separator />
-                <MenuItem
-                    Command="{Binding AppFacade.OpenLicenseFolderCommand}"
-                    Header="{x:Static properties:Resources.AvAppOpenLicenseFolder}"
-                    IsEnabled="{Binding CanOpenLicenseFolder}">
-                    <MenuItem.Icon>
-                        <mdicons:MaterialIcon Kind="{StaticResource IconLicenseFolder}" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem
-                    Command="{Binding AppFacade.OpenLogFolderCommand}"
-                    Header="{x:Static properties:Resources.AvAppOpenLogFolder}"
-                    IsEnabled="{Binding AppFacade.CanOpenLogFolder}"
-                    Visibility="{Binding AppFacade.LogFolderPath, Converter={StaticResource NullVisibilityConverter}}">
-                    <MenuItem.Icon>
-                        <mdicons:MaterialIcon Kind="{StaticResource IconLogFolder}" />
-                    </MenuItem.Icon>
-                </MenuItem>
-            </ContextMenu>
         </Grid.ContextMenu>-->
         <Rectangle Fill="Transparent" />
+
         <Grid Margin="15,0,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />

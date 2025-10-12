@@ -6,15 +6,15 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using OkapiLauncher.Contracts.ViewModels;
-using OkapiLauncher.Core.Models.Apps;
-using OkapiLauncher.Models;
-using OkapiLauncher.Validators;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using OkapiLauncher.Contracts.ViewModels;
+using OkapiLauncher.Core.Models.Apps;
+using OkapiLauncher.Models;
 using OkapiLauncher.Properties;
+using OkapiLauncher.Validators;
 
 namespace OkapiLauncher.ViewModels;
 
@@ -44,7 +44,7 @@ public partial class CustomSourceDialogEditorViewModel : ObservableValidator, IN
     [NotifyCanExecuteChangedFor(nameof(AcceptCommand))]
     [NotifyDataErrorInfo]
     [Required(ErrorMessageResourceName = "ValidationStringEmpty", ErrorMessageResourceType = typeof(Resources))]
-    [RegularExpression(@".*\S+.*", ErrorMessageResourceName = "ValidationStringEmpty",ErrorMessageResourceType =typeof(Resources))]
+    [RegularExpression(@".*\S+.*", ErrorMessageResourceName = "ValidationStringEmpty", ErrorMessageResourceType = typeof(Resources))]
     private string _path;
     public string SourcePath => CustomAppSource.ExpandPath(Path);
 

@@ -246,8 +246,8 @@ namespace OkapiLauncher.Controls
         private void PART_This_MouseLeave(object sender, MouseEventArgs e)
         {
             if (!GetCanExecute())
-            { 
-                return; 
+            {
+                return;
             }
             if (IsActive)
             {

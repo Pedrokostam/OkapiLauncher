@@ -107,20 +107,6 @@ public partial class FileAssociationService : IFileAssociationService
 
     private readonly AppConfig _appConfig;
 
-    //public Dictionary<string, string> GetCurrentAssociations()
-    //{
-    //    var classes = Registry.CurrentUser.OpenSubKey("Software")!.OpenSubKey("Classes")!;
-    //    Dictionary<string, string> userAssociations = [];
-    //    foreach (var extension in _extensions)
-    //    {
-    //        if (classes.OpenSubKey(extension)?.GetValue(null) is string association)
-    //        {
-    //            userAssociations[extension] = association;
-    //        }
-    //    }
-    //    return userAssociations;
-    //}
-
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0290:Use primary constructor", Justification = "The fields should be readonly")]
     public FileAssociationService(IOptions<AppConfig> appConfig)
     {
@@ -163,10 +149,6 @@ public partial class FileAssociationService : IFileAssociationService
         }
 
     }
-    //private RegistryKey GetRegistryClasses()
-    //{
-    //    return CreateOrOpenRegistryPathWritable("Software", "Classes");
-    //}
 
     private static string GetExtensionRegistryName(AssociationPackage association)
     {
@@ -251,10 +233,6 @@ public partial class FileAssociationService : IFileAssociationService
     {
         mainAppExecutablePath ??= Environment.ProcessPath!;
         RestoreIconFiles();
-        //RemoveExplorerAssociations();
-        //SetAppShellKeys(mainAppExecutablePath);
-        //SetAssociations();
-        //return;
         using var tempScript = new VanishingScript();
         var startInfo = GetStartInfo(mainAppExecutablePath, tempScript, runAsAdministrator: false);
         var process = Process.Start(startInfo);
@@ -278,25 +256,6 @@ public partial class FileAssociationService : IFileAssociationService
             try
             {
                 MegaDeleteTree(fileExts, assoc.Extension);
-                //// UserChoice is protected by default, but since its in ClassUser we can change the permissions
-                //using var userChoice = fileExts.OpenSubKey(CreateRegistryPathString(assoc.Extension, "UserChoice"), RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryRights.ChangePermissions);
-                //if (userChoice is not null)
-                //{
-                //    string username = WindowsIdentity.GetCurrent().Name;
-                //    RegistrySecurity security = userChoice.GetAccessControl();
-                //    AuthorizationRuleCollection accRules = security.GetAccessRules(true, true, typeof(NTAccount));
-
-                //    foreach (RegistryAccessRule accRule in accRules)
-                //    {
-                //        if (accRule.IdentityReference.Value.Equals(username, StringComparison.OrdinalIgnoreCase)
-                //            && accRule.AccessControlType == AccessControlType.Deny)
-                //        {
-                //            security.RemoveAccessRule(accRule);
-                //        }
-                //    }
-                //    userChoice.SetAccessControl(security);
-                //}
-                //fileExts.DeleteSubKeyTree(assoc.Extension, false);
             }
             catch (Exception e)
             {

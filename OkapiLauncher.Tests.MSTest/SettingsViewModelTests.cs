@@ -1,15 +1,13 @@
-﻿using OkapiLauncher.Contracts.Services;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.Options;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Core.Contracts.Services;
 using OkapiLauncher.Core.Services;
 using OkapiLauncher.Models;
-using OkapiLauncher.ViewModels;
-
-using Microsoft.Extensions.Options;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-using Moq;
-using CommunityToolkit.Mvvm.Messaging;
 using OkapiLauncher.Services;
+using OkapiLauncher.ViewModels;
 
 namespace OkapiLauncher.Tests.MSTest;
 

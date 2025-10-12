@@ -26,7 +26,7 @@ public class AvAppToImageSourceConverter : IValueConverter
         var type = app.Type.Name;
         var iconName = $"{brand}{type}.png";
         return "pack://application:,,,/Resources/Symbols/" + iconName;
-        
+
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

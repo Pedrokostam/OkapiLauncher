@@ -8,11 +8,11 @@ using System.Reflection;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
-using OkapiLauncher.Contracts.ViewModels;
-using OkapiLauncher.Models.Updates;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
+using OkapiLauncher.Contracts.ViewModels;
+using OkapiLauncher.Models.Updates;
 using OkapiLauncher.ViewModels;
 
 namespace AuroraVisionLauncher.ViewModels;
@@ -109,7 +109,7 @@ public partial class VersionDecisionDialogViewModel(UpdateDataCarier information
     {
         ProgressViewModel = new(UpdateInfo);
         var link = UpdateInfo.HtmlResponse?.InstallerDownloadLink;
-        if(link is null)
+        if (link is null)
         {
             return;
         }

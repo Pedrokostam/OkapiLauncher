@@ -13,7 +13,7 @@
     xmlns:usercontrols="clr-namespace:OkapiLauncher.Controls"
     xmlns:vms="clr-namespace:OkapiLauncher.ViewModels"
     Title="{x:Static properties:Resources.AppDisplayName}"
-    MinWidth="950"
+    MinWidth="1350"
     MinHeight="800"
     controls:DialogParticipation.Register="{Binding}"
     d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False,
@@ -272,6 +272,20 @@
                                         Header="{x:Static properties:Resources.ShellMenuItemViewsAboutPageHeader}" />
                                 </MenuItem>
                             </Menu>
+                            <Button
+                                Grid.Column="1"
+                                Grid.ColumnSpan="2"
+                                HorizontalAlignment="Right"
+                                Style="{StaticResource MahApps.Styles.Button.Reveal}" Command="{Binding ApplyUpdateCommand}"
+                                Visibility="{Binding NewAvailableVersion, Converter={StaticResource NullVisibilityConverter}}">
+                                <TextBlock
+                                    Margin="{StaticResource MediumLeftRightMargin}"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    Foreground="Orange"
+                                    Style="{StaticResource PageTitleStyle}"
+                                    Text="{Binding NewAvailableVersion, StringFormat={x:Static properties:Resources.ShellViewUpdateButton}}" />
+                            </Button>
                         </Grid>
                         <Frame
                             x:Name="shellFrame"

@@ -7,10 +7,10 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using OkapiLauncher.Models.Messages;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using OkapiLauncher.Models.Messages;
 
 namespace OkapiLauncher.Models
 {
@@ -33,7 +33,7 @@ namespace OkapiLauncher.Models
         {
         }
 
-       
+
 
         /// <summary>
         /// 
@@ -186,7 +186,7 @@ namespace OkapiLauncher.Models
                 return;
             }
             MainWindowTitle = donor.MainWindowTitle;
-            
+
         }
 
         public static bool operator ==(SimpleProcess left, SimpleProcess right)

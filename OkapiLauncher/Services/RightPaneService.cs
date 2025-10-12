@@ -1,18 +1,16 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Navigation;
-
-using OkapiLauncher.Contracts.Services;
-using OkapiLauncher.Contracts.ViewModels;
-
 using MahApps.Metro.Controls;
 using OkapiLauncher.Contracts.EventArgs;
+using OkapiLauncher.Contracts.Services;
+using OkapiLauncher.Contracts.ViewModels;
 
 namespace OkapiLauncher.Services;
 
 public class RightPaneService : IRightPaneService
 {
     private readonly IPageService _pageService;
-    private Frame _frame =default!;
+    private Frame _frame = default!;
     private object? _lastParameterUsed;
     private SplitView _splitView = default!;
 
@@ -78,6 +76,6 @@ public class RightPaneService : IRightPaneService
     private void OnPaneClosed(object? sender, EventArgs e)
         => PaneClosed?.Invoke(this, e);
 
-    public void OpenInRightPane<T>(object? parameter = null)=>OpenInRightPane(typeof(T).FullName!, parameter);
-   
+    public void OpenInRightPane<T>(object? parameter = null) => OpenInRightPane(typeof(T).FullName!, parameter);
+
 }

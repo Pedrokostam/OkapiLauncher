@@ -2,7 +2,6 @@
 using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
-
 using CommunityToolkit.Mvvm.Messaging;
 
 using MahApps.Metro.Controls.Dialogs;
@@ -10,7 +9,7 @@ using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
+using OkapiLauncher.Commandline;
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Contracts.Views;
 using OkapiLauncher.Core.Contracts.Services;
@@ -39,17 +38,16 @@ public partial class App : Application
     public App()
     {
     }
-    public bool ShouldCloseAfterLaunching { get;  set; } = false;
-
+    public bool ShouldCloseAfterLaunching { get; set; } = false;
     private async void OnStartup(object sender, StartupEventArgs startupArgs)
     {
-        if (startupArgs.Args.Length > 1)
+        var args = CliArguments.CustomParse();
+        if (args is null)
         {
-            MessageBox.Show($"Launcher expects at most one argument.\nProvided arguments: {startupArgs.Args.Length}.", "Invalid startup arguments", MessageBoxButton.OK, MessageBoxImage.Error);
-            throw new ArgumentException("Received too many arguments.",nameof(startupArgs));
+            Shutdown(13);
+            return;
         }
         var appLocation = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location)!;
-
         // For more information about .NET generic host see  https://docs.microsoft.com/aspnet/core/fundamentals/host/generic-host?view=aspnetcore-3.0
         _host = Host.CreateDefaultBuilder(startupArgs.Args)
                 .ConfigureAppConfiguration(c =>
@@ -61,10 +59,14 @@ public partial class App : Application
         await _host.StartAsync();
         // initialize launcher vm, so that it can start listening to FileRequestMessages
         GetService<FileOpenerBroker>();
-        if (startupArgs.Args.Length == 1)
+        if (args.File is not null)
         {
             ShouldCloseAfterLaunching = true;
-            GetService<IMessenger>().Send(new FileRequestedMessage(startupArgs.Args[0]));
+            var msg = new FileRequestedMessage(args.File)
+            {
+                AutoLoad = args.AutoLoad,
+            };
+            GetService<IMessenger>().Send(msg);
         }
     }
 
@@ -96,8 +98,8 @@ public partial class App : Application
         services.AddSingleton<IFileAssociationService, FileAssociationService>();
         services.AddSingleton<IUpdateCheckService, UpdateCheckService>();
         services.AddSingleton<FileOpenerBroker>();
-        services.AddSingleton<ICustomAppSourceService,CustomAppSourceService>();
-        services.AddSingleton<IJumpListService,JumpListService>();
+        services.AddSingleton<ICustomAppSourceService, CustomAppSourceService>();
+        services.AddSingleton<IJumpListService, JumpListService>();
         services.AddSingleton<IAppNativeRecentFilesService, AppNativeRecentFilesService>();
 
         services.AddSingleton<IProcessManagerService, ProcessManagerService>();
@@ -138,6 +140,6 @@ public partial class App : Application
 
     private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
-        MessageBox.Show(e.Exception.ToString(), "Error", MessageBoxButton.OK,MessageBoxImage.Error);
+        MessageBox.Show(e.Exception.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 }

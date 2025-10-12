@@ -1,5 +1,4 @@
-﻿using OkapiLauncher.Helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
@@ -10,6 +9,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
+using OkapiLauncher.Helpers;
 
 namespace OkapiLauncher.Converters
 {
@@ -24,7 +24,7 @@ namespace OkapiLauncher.Converters
             try
             {
 
-                var icon =Icon.ExtractAssociatedIcon(path);
+                var icon = Icon.ExtractAssociatedIcon(path);
                 if (icon is null)
                 {
                     return null;
