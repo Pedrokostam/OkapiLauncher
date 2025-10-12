@@ -15,7 +15,7 @@ public class UpdateDataCarier
     {
         HtmlResponse = htmlResponse;
         IsAutomaticUpdateCheck = isAutomaticUpdateCheck;
-        AppBuildDate = new DateTime(2025, 09, 03, 21, 41, 0);// appBuildDate;
+        AppBuildDate = appBuildDate;
         InstallationScope = isAppRegistered;
         IgnoredVersions = ignoredVersions;
         AppVersion = appVersion;
@@ -25,6 +25,7 @@ public class UpdateDataCarier
     public bool IsAutomaticUpdateCheck { get; }
     public DateTime AppBuildDate { get; }
     public Version AppVersion { get; }
+    public bool IsNewerVersionAvailable { get; set; }
     public bool IsIgnoredVersion()
     {
         return IgnoredVersions.Contains(HtmlResponse?.VersionTag ?? "N/A", StringComparer.OrdinalIgnoreCase);
@@ -49,7 +50,8 @@ public class UpdateDataCarier
         {
             return IsAutomaticUpdateCheck ? PromptAction.DontShowDialog : PromptAction.ShowNoUpdatesMessageDialog;
         }
-        if (AreUpdatesAvailable())
+        IsNewerVersionAvailable = AreUpdatesAvailable();
+        if (IsNewerVersionAvailable)
         {
             if (IsAutomaticUpdateCheck && IsIgnoredVersion())
             {

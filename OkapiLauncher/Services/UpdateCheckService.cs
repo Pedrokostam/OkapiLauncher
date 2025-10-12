@@ -84,10 +84,11 @@ public class UpdateCheckService : IUpdateCheckService
             var shouldPrompt = updateCarrier.ShouldPromptUser();
             shouldPrompt = DebugOverride() ? PromptAction.ShowPrompUpdateDialog : shouldPrompt;
             string? outputVersionTag = updateCarrier.IsIgnoredVersion() ? null : updateCarrier.RemoteVersion;
-            if (isAuto && !IsAutomaticUpdateScheduled())
+            if (isAuto)
             {
+
                 // if the check is automatic but it was not scheduled, just return tag
-                return outputVersionTag;
+                return updateCarrier.IsNewerVersionAvailable ? outputVersionTag : null;
             }
             if (shouldPrompt == PromptAction.DontShowDialog)
             {
