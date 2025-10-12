@@ -1,6 +1,12 @@
 ﻿using System.IO;
 using System.Reflection;
 using System.Windows;
+using CommunityToolkit.Mvvm.Messaging;
+using MahApps.Metro.Controls.Dialogs;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Contracts.Views;
 using OkapiLauncher.Core.Contracts.Services;
@@ -9,11 +15,6 @@ using OkapiLauncher.Models;
 using OkapiLauncher.Services;
 using OkapiLauncher.ViewModels;
 using OkapiLauncher.Views;
-using CommunityToolkit.Mvvm.Messaging;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OkapiLauncher.Tests.MSTest;
 
@@ -41,22 +42,35 @@ public class PagesTests
 
     private void ConfigureServices(HostBuilderContext context, IServiceCollection services)
     {
+        // App Host
+        services.AddHostedService<ApplicationHostService>();
+
+        // Activation Handlers
+
         // Core Services
         services.AddSingleton<IFileService, FileService>();
 
+        // Services
         services.AddSingleton<IWindowManagerService, WindowManagerService>();
+        services.AddSingleton<IDialogCoordinator, DialogCoordinator>();
         services.AddSingleton<IApplicationInfoService, ApplicationInfoService>();
         services.AddSingleton<ISystemService, SystemService>();
         services.AddSingleton<IPersistAndRestoreService, PersistAndRestoreService>();
         services.AddSingleton<IThemeSelectorService, ThemeSelectorService>();
         services.AddSingleton<IPageService, PageService>();
+        services.AddSingleton<IContentDialogService, ContentDialogService>();
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IRequestedFilesService, RequestedFilesService>();
         services.AddSingleton<IMessenger, StrongReferenceMessenger>();
         services.AddSingleton<IAvAppFacadeFactory, AvAppFacadeFactory>();
         services.AddSingleton<IRecentlyOpenedFilesService, RecentlyOpenedFilesService>();
+        services.AddSingleton<IGeneralSettingsService, GeneralSettingsService>();
         services.AddSingleton<IFileAssociationService, FileAssociationService>();
+        services.AddSingleton<IUpdateCheckService, UpdateCheckService>();
         services.AddSingleton<FileOpenerBroker>();
+        services.AddSingleton<ICustomAppSourceService, CustomAppSourceService>();
+        services.AddSingleton<IJumpListService, JumpListService>();
+        services.AddSingleton<IAppNativeRecentFilesService, AppNativeRecentFilesService>();
 
         services.AddSingleton<IProcessManagerService, ProcessManagerService>();
         // Views and ViewModels
@@ -78,8 +92,12 @@ public class PagesTests
         services.AddTransient<InstalledAppsViewModel>();
         services.AddTransient<InstalledAppsPage>();
 
+        services.AddTransient<AboutViewModel>();
+        services.AddTransient<AboutPage>();
+
         // Configuration
         services.Configure<AppConfig>(context.Configuration.GetSection(nameof(AppConfig)));
+        services.AddSingleton<IRightPaneService, RightPaneService>();
     }
 
     // TODO: Add tests for functionality you add to SettingsViewModel.
@@ -134,5 +152,5 @@ public class PagesTests
         }
     }
 
-    
+
 }

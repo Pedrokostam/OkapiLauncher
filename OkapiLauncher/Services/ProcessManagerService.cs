@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -8,15 +10,13 @@ using System.Threading.Channels;
 using System.Timers;
 using System.Windows;
 using System.Windows.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Core.Models.Apps;
 using OkapiLauncher.Models;
 using OkapiLauncher.Models.Messages;
-using CommunityToolkit.Mvvm.Messaging;
-using System.Collections.Immutable;
 using OkapiLauncher.Services.Processes;
-using System.Collections;
-using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace OkapiLauncher.Services
 {
@@ -108,7 +108,7 @@ namespace OkapiLauncher.Services
             {
                 ReplaceQuerer();
             }
-            Debug.WriteLine("Process Monitor time: {0:f2} ms",q.Elapsed.TotalMilliseconds);
+            Debug.WriteLine("Process Monitor time: {0:f2} ms", q.Elapsed.TotalMilliseconds);
         }
 
 
@@ -204,7 +204,7 @@ namespace OkapiLauncher.Services
         public void Receive(KillAllProcessesRequest message) => KillAll(message.AvApp, message.ViewModel);
         private async void KillAll(AvAppFacade avApp, object? viewModel)
         {
-            if(Querer is null)
+            if (Querer is null)
             {
                 return;
             }

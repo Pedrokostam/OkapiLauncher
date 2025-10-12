@@ -8,12 +8,12 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Shell;
+using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.WindowsAPICodePack.Taskbar;
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Core.Models.Apps;
 using OkapiLauncher.Models;
-using CommunityToolkit.Mvvm.Messaging;
-using System.Windows.Shell;
-using Microsoft.WindowsAPICodePack.Taskbar;
 
 namespace OkapiLauncher.Services;
 public class AvAppFacadeFactory : IAvAppFacadeFactory

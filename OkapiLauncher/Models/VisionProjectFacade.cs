@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using OkapiLauncher.Core.Models;
 using OkapiLauncher.Core.Models.Projects;
 using OkapiLauncher.Helpers;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 
 namespace OkapiLauncher.Models;
 public partial class VisionProjectFacade : ObservableObject, IVisionProject

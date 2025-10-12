@@ -15,7 +15,7 @@ public class UpdateDataCarier
     {
         HtmlResponse = htmlResponse;
         IsAutomaticUpdateCheck = isAutomaticUpdateCheck;
-        AppBuildDate = new DateTime(2025,09,03,21,41,0);// appBuildDate;
+        AppBuildDate = new DateTime(2025, 09, 03, 21, 41, 0);// appBuildDate;
         InstallationScope = isAppRegistered;
         IgnoredVersions = ignoredVersions;
         AppVersion = appVersion;

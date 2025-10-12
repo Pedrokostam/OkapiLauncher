@@ -35,6 +35,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
         _contentDialogService = contentDialogService;
         _navigationService = navigationService;
     }
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Bo nie")]
     public bool ShouldCloseAfterLaunching
     {
         get => ((App)App.Current).ShouldCloseAfterLaunching;
@@ -98,7 +99,6 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
             Clipboard.SetText(LaunchOptions.ArgumentString);
         }
     }
-    static readonly Regex FileDetector = new(@"(?<NORMAL>\.(avproj|avexe|fiproj|fiexe))|(?<DL>pluginconfig.xml)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture, TimeSpan.FromMilliseconds(500));
 
     /// <summary>
     /// Either returns <paramref name="path"/> as is if it is a directory, or attempts to find one of applicable files.
@@ -113,7 +113,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
             var files = Directory.EnumerateFiles(path);
             foreach (var file in files)
             {
-                if (FileDetector.IsMatch(Path.GetFileName(file)))
+                if (FileDetector().IsMatch(Path.GetFileName(file)))
                 {
                     return file;
                 }
@@ -225,7 +225,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
 
         var lastFile = _lastOpenedFilesService.LastOpenedFile;
         string? path = null;
-        bool autoload=false;
+        bool autoload = false;
         if (parameter is string _path)
         {
             path = _path;
@@ -255,4 +255,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
             await OpenProject(last);
         }
     }
+
+    [GeneratedRegex(@"(?<NORMAL>\.(avproj|avexe|fiproj|fiexe))|(?<DL>pluginconfig.xml)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture, matchTimeoutMilliseconds: 500)]
+    private static partial Regex FileDetector();
 }

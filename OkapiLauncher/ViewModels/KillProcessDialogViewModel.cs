@@ -5,10 +5,10 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using OkapiLauncher.Contracts.ViewModels;
-using OkapiLauncher.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using OkapiLauncher.Contracts.ViewModels;
+using OkapiLauncher.Models;
 
 namespace OkapiLauncher.ViewModels;
 
@@ -30,7 +30,7 @@ public partial class KillProcessDialogViewModel : ObservableValidator, INavigati
 
     public void OnNavigatedTo(object parameter)
     {
-    
+
     }
 
     public void OnNavigatedFrom()

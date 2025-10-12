@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
-using OkapiLauncher.Core.Models.Apps;
+using System.Windows;
+using System.Windows.Threading;
 using Microsoft.Extensions.Logging;
 using OkapiLauncher.Core.Helpers;
-using System.Diagnostics;
-using System.Windows.Threading;
-using System.Windows;
+using OkapiLauncher.Core.Models.Apps;
 
 namespace OkapiLauncher.Models.Messages;
 public class AppProcessInformation : IAppProcessInformationPacket

@@ -74,7 +74,7 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<RecentFile
     [RelayCommand()]
     private async Task ApplyUpdate()
     {
-        if(NewAvailableVersion is null)
+        if (NewAvailableVersion is null)
         {
             return;
         }

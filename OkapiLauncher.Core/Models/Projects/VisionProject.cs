@@ -26,8 +26,8 @@ namespace OkapiLauncher.Core.Models.Projects
         }
         public bool Exists => File.Exists(Path);
 
-        IAvVersion IProduct.Version =>Version;
+        IAvVersion IProduct.Version => Version;
 
-      
+
     }
 }

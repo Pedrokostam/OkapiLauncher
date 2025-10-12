@@ -10,7 +10,7 @@ using OkapiLauncher.Models;
 
 namespace OkapiLauncher.Services
 {
-    class GeneralSettingsService : IGeneralSettingsService
+    public class GeneralSettingsService : IGeneralSettingsService
     {
         private readonly IPersistAndRestoreService _persistAndRestoreService;
         private ButtonSettings _buttonSettings = ButtonSettings.Default;
@@ -40,7 +40,7 @@ namespace OkapiLauncher.Services
         {
             if (!_initialized && _persistAndRestoreService.IsDataRestored)
             {
-                App.Current.Properties.InitializeDictKey<ButtonSettings>(nameof(ButtonSettings),converter:null,ButtonSettings.Default);
+                App.Current.Properties.InitializeDictKey<ButtonSettings>(nameof(ButtonSettings), converter: null, ButtonSettings.Default);
                 _initialized = true;
             }
         }

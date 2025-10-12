@@ -21,7 +21,7 @@ public partial class CliArguments
     public string? File { get; set; }
     [CommandLineArgument(IsShort = true)]
     [Alias("load", IsHidden = false)]
-    [Requires(nameof(File),IncludeInUsageHelp =false)]
+    [Requires(nameof(File), IncludeInUsageHelp = false)]
     [Description("If specified, automatically loads the file upon launch. Requires a project path to be specified.")]
     public bool AutoLoad { get; set; }
     public static CliArguments? CustomParse()

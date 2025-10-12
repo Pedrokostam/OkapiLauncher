@@ -1,12 +1,12 @@
-﻿using OkapiLauncher.Core.Models.Apps;
-using CommunityToolkit.Mvvm.ComponentModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
+using OkapiLauncher.Core.Models.Apps;
 
 namespace OkapiLauncher.Models;
 public partial class CustomAppSource : ObservableObject, IAppSource

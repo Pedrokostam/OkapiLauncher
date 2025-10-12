@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
-using OkapiLauncher.Core.Models;
-using OkapiLauncher.Core.Models.Apps;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using OkapiLauncher.Core.Models;
+using OkapiLauncher.Core.Models.Apps;
 
 namespace OkapiLauncher.Models;
 
@@ -22,11 +22,11 @@ public abstract partial class LaunchOptions : ObservableObject
     /// <returns></returns>
     private static LaunchOptions Get(ProductType? productType)
     {
-        if(productType == ProductType.Professional)
+        if (productType == ProductType.Professional)
         {
-            return _singleArgOptions;  
+            return _singleArgOptions;
         }
-        if(productType?.Type.HasFlag(AvType.DeepLearning) ?? false)
+        if (productType?.Type.HasFlag(AvType.DeepLearning) ?? false)
         {
             return _singleArgOptions;
         }
@@ -49,7 +49,7 @@ public abstract partial class LaunchOptions : ObservableObject
         {
             var args = GetCommandLineArgs()
                 .Prepend(ApplicationPath!)
-                .Select(x => (x ?? "").Contains(' ',StringComparison.Ordinal) ? $"\"{x}\"" : x);
+                .Select(x => (x ?? "").Contains(' ', StringComparison.Ordinal) ? $"\"{x}\"" : x);
             return string.Join(' ', args);
         }
     }
@@ -62,8 +62,8 @@ public abstract partial class LaunchOptions : ObservableObject
     /// <param name="programPath"></param>
     public static LaunchOptions Get(IAvApp? avapp, string? programPath)
     {
-        var inst= Get(avapp?.Type);
-        inst.ApplicationPath=avapp?.Path ?? string.Empty;
+        var inst = Get(avapp?.Type);
+        inst.ApplicationPath = avapp?.Path ?? string.Empty;
         inst.ProgramPath = programPath;
         return inst;
     }

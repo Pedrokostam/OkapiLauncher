@@ -149,7 +149,7 @@ public partial class FileAssociationService : IFileAssociationService
         }
 
     }
-    
+
     private static string GetExtensionRegistryName(AssociationPackage association)
     {
         return RegistryAppName + association.Extension;

@@ -6,17 +6,16 @@ namespace OkapiLauncher.Controls;
 
 public class IconAdorner : AdornerContentPresenter
 {
-    public IconAdorner(UIElement adornedElement, Material.Icons.MaterialIconKind iconKind,Brush? foreground=null) : base(adornedElement)
+    public IconAdorner(UIElement adornedElement, Material.Icons.MaterialIconKind iconKind, Brush? foreground = null) : base(adornedElement)
     {
         var icon = new MaterialIcon()
         {
             Kind = iconKind,
         };
-        if(foreground is not null)
+        if (foreground is not null)
         {
             icon.Foreground = foreground;
         }
         Content = icon;
     }
 }
-

@@ -17,27 +17,11 @@ internal sealed class CompatibilitySorter(IVisionProject project, IAvAppFacadeFa
     {
         public IAvVersion Version => App.Version;
         public bool Custom => App.IsCustom;
-        public int CompareTo(Entry other)
-        {
-            var v = Version.CompareTo(other.Version);
-            if (v != 0)
-            {
-                return v;
-            }
-            // if they have the same version
-            return (Custom, other.Custom) switch
-            {
-                //non-custom version have priority, i.e. they are lower
-                (true, false) => 1, // this instance is custom so it goes after
-                (false, true) => -1,
-                _ => 0, // they are equal
-            };
-        }
     }
 
     public IVisionProject Project { get; } = project;
     public IAvAppFacadeFactory Factory { get; } = factory;
-    private IList<AvAppFacade> _collection = appList;
+    private readonly IList<AvAppFacade> _collection = appList;
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "MA0051:Method is too long", Justification = "I don't feel like refactoring :|")]
     public int GetClosestVersion(IEnumerable<AvApp> apps)
     {

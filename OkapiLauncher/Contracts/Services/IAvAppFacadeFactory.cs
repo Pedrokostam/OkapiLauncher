@@ -14,7 +14,7 @@ public interface IAvAppFacadeFactory
     /// <param name="apps"></param>
     /// <param name="appFacades"></param>
     /// <param name="clear">Whether to clear <paramref name="appFacades"/> before adding new items.</param>
-    void Populate(IEnumerable<IAvApp> apps, IList<AvAppFacade> appFacades, bool clear = true,Action<AvAppFacade>? perItemAction=null);
+    void Populate(IEnumerable<IAvApp> apps, IList<AvAppFacade> appFacades, bool clear = true, Action<AvAppFacade>? perItemAction = null);
     /// <summary>
     /// Populates the given <paramref name="appFacades"/> with facades of every detected installed app.
     /// </summary>
@@ -27,6 +27,5 @@ public interface IAvAppFacadeFactory
     /// </summary>
     IEnumerable<AvAppFacade> CreateAllFacades();
     void RediscoverApps();
-    public bool TryGetAppByPath(string path,[NotNullWhen(true)] out AvAppFacade? appFacade);
+    public bool TryGetAppByPath(string path, [NotNullWhen(true)] out AvAppFacade? appFacade);
 }
-

@@ -1,14 +1,12 @@
 ﻿using System.IO;
 using System.Text;
-
-using OkapiLauncher.Core.Contracts.Services;
-
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Windows.Media;
-using OkapiLauncher.Helpers;
-using System.Windows.Shell;
 using System.Windows;
+using System.Windows.Media;
+using System.Windows.Shell;
+using OkapiLauncher.Core.Contracts.Services;
+using OkapiLauncher.Helpers;
 
 namespace OkapiLauncher.Core.Services;
 

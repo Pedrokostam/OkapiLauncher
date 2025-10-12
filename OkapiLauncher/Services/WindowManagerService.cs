@@ -1,16 +1,16 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+using ControlzEx.Theming;
+using MahApps.Metro.Controls;
 using OkapiLauncher.Contracts;
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Contracts.ViewModels;
 using OkapiLauncher.Contracts.Views;
+using OkapiLauncher.Helpers;
 using OkapiLauncher.Models;
 using OkapiLauncher.ViewModels;
 using OkapiLauncher.Views;
-using ControlzEx.Theming;
-using MahApps.Metro.Controls;
-using OkapiLauncher.Helpers;
 
 namespace OkapiLauncher.Services;
 
@@ -30,7 +30,7 @@ public class WindowManagerService : IWindowManagerService
     }
     private static string GetWindowTitle(string key, object? parameter)
     {
-        if(string.Equals(key,typeof(ProcessOverviewViewModel).FullName, StringComparison.Ordinal))
+        if (string.Equals(key, typeof(ProcessOverviewViewModel).FullName, StringComparison.Ordinal))
         {
             if (parameter is AvAppFacade app)
             {
@@ -44,7 +44,7 @@ public class WindowManagerService : IWindowManagerService
     public void OpenInNewWindow(string key, object? parameter = null)
     {
         var window = GetWindow(key);
-        if (window != null )
+        if (window != null)
         {
             window.Activate();
         }
@@ -142,7 +142,7 @@ public class WindowManagerService : IWindowManagerService
             if (window.Content is Frame frame)
             {
                 frame.Navigated -= OnNavigated;
-                if(frame.GetDataContext() is INavigationAware navigationAware)
+                if (frame.GetDataContext() is INavigationAware navigationAware)
                 {
                     navigationAware.OnNavigatedFrom();
                 }

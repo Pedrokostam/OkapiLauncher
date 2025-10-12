@@ -42,7 +42,7 @@ public partial class App : Application
     private async void OnStartup(object sender, StartupEventArgs startupArgs)
     {
         var args = CliArguments.CustomParse();
-        if(args is null)
+        if (args is null)
         {
             Shutdown(13);
             return;

@@ -33,7 +33,8 @@ public class JumpListService : IJumpListService
     {
         var t = app.Type.Type;
         var b = app.Brand.Brand;
-        if (t.HasFlag(AvType.DeepLearning)){
+        if (t.HasFlag(AvType.DeepLearning))
+        {
             return b switch
             {
                 AvBrand.Aurora => $"AV Deep Learning {app.Version}",
@@ -74,7 +75,7 @@ public class JumpListService : IJumpListService
             Description = string.Format(ResourceHelper.GetTextResource("JumplistLaunchAppDescription")!, name);
             ApplicationPath = app.Path;
             IconResourcePath = fileAssociationService.GetLocalIconPath(app.Brand, app.Type);
-            CustomCategory = _appTypeToStringConverter.Convert(app.Type,typeof(string), parameter: null!,CultureInfo.InvariantCulture) as string;
+            CustomCategory = _appTypeToStringConverter.Convert(app.Type, typeof(string), parameter: null!, CultureInfo.InvariantCulture) as string;
         }
     }
     private bool _iconsRestored = false;

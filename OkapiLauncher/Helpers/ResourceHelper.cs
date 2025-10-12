@@ -66,6 +66,6 @@ public static class ResourceHelper
 
     public static string? GetTextResource(string pathToResource)
     {
-        return Resources.ResourceManager.GetString(pathToResource,CultureInfo.InvariantCulture);
+        return Resources.ResourceManager.GetString(pathToResource, CultureInfo.InvariantCulture);
     }
 }

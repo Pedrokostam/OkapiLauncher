@@ -27,7 +27,7 @@ public class SystemService : ISystemService
         }
         var requiresElevationForAppFolder = PrivilegeHelper.CheckFolderRequiresElevation(_applicationInfoService.GetFolder());
         var options = new ProcessStartInfo(installerPath);
-        if (requiresElevationForAppFolder==PrivilegeHelper.RequiredElevation.Elevated)
+        if (requiresElevationForAppFolder == PrivilegeHelper.RequiredElevation.Elevated)
         {
             options.ArgumentList.Add("/ALLUSERS");
             // this will force the app to run as admin

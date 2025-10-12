@@ -1,12 +1,11 @@
 ﻿using System.Collections;
+using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
+using Microsoft.Extensions.Options;
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Core.Contracts.Services;
 using OkapiLauncher.Models;
-
-using Microsoft.Extensions.Options;
-using System.Diagnostics;
 
 namespace OkapiLauncher.Services;
 

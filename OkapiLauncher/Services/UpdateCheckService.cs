@@ -9,12 +9,12 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
+using Microsoft.Extensions.Options;
 using OkapiLauncher.Contracts.Services;
 using OkapiLauncher.Helpers;
 using OkapiLauncher.Models;
 using OkapiLauncher.Models.Updates;
-using Microsoft.Extensions.Options;
-using System.Windows.Input;
 
 namespace OkapiLauncher.Services;
 public class UpdateCheckService : IUpdateCheckService
@@ -84,7 +84,7 @@ public class UpdateCheckService : IUpdateCheckService
             var shouldPrompt = updateCarrier.ShouldPromptUser();
             shouldPrompt = DebugOverride() ? PromptAction.ShowPrompUpdateDialog : shouldPrompt;
             string? outputVersionTag = updateCarrier.IsIgnoredVersion() ? null : updateCarrier.RemoteVersion;
-            if(isAuto && !IsAutomaticUpdateScheduled())
+            if (isAuto && !IsAutomaticUpdateScheduled())
             {
                 // if the check is automatic but it was not scheduled, just return tag
                 return outputVersionTag;

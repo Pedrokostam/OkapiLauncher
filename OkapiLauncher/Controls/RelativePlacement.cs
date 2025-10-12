@@ -18,7 +18,7 @@ public readonly record struct RelativePlacement
         TypedDimension.Full)
     { }
 
-    public RelativePlacement(TypedDimension x, TypedDimension y, TypedDimension width, TypedDimension height):this(x, y, width, height, new Thickness(0)) { }
+    public RelativePlacement(TypedDimension x, TypedDimension y, TypedDimension width, TypedDimension height) : this(x, y, width, height, new Thickness(0)) { }
     public RelativePlacement(TypedDimension x, TypedDimension y, TypedDimension width, TypedDimension height, Thickness padding)
     {
         X = x;
@@ -27,7 +27,7 @@ public readonly record struct RelativePlacement
         Height = height;
         Padding = padding;
     }
-    public RelativePlacement(double x, double y, double width, double height, DimensionType commonDimension) : this(x,y,width,height,commonDimension,new Thickness(0)) { }
+    public RelativePlacement(double x, double y, double width, double height, DimensionType commonDimension) : this(x, y, width, height, commonDimension, new Thickness(0)) { }
     public RelativePlacement(double x, double y, double width, double height, DimensionType commonDimension, Thickness padding) : this(
         new TypedDimension(x, commonDimension),
         new TypedDimension(y, commonDimension),
@@ -54,7 +54,7 @@ public readonly record struct RelativePlacement
             originY -= height;
         }
         originX += Padding.Left;
-        originY+= Padding.Top;
+        originY += Padding.Top;
         width -= Padding.Left + Padding.Right;
         height -= Padding.Top + Padding.Bottom;
         width = Math.Clamp(width, 0, double.MaxValue);
@@ -62,6 +62,5 @@ public readonly record struct RelativePlacement
         return new Rect(originX, originY, width, height);
 
     }
-    public Rect GetRect(Size containingSize)=>GetRect(containingSize.Width,containingSize.Height);
+    public Rect GetRect(Size containingSize) => GetRect(containingSize.Width, containingSize.Height);
 }
-

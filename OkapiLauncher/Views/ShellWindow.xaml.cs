@@ -1,14 +1,14 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Text;
+using System.Windows;
 using System.Windows.Controls;
-using OkapiLauncher.Contracts.Views;
-using OkapiLauncher.Models.Messages;
-using OkapiLauncher.ViewModels;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
-using System.IO;
-using System.Text;
+using OkapiLauncher.Contracts.Views;
+using OkapiLauncher.Models.Messages;
+using OkapiLauncher.ViewModels;
 
 namespace OkapiLauncher.Views;
 

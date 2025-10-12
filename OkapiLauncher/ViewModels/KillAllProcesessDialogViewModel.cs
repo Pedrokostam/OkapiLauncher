@@ -1,7 +1,7 @@
-﻿using OkapiLauncher.Contracts.ViewModels;
-using OkapiLauncher.Core.Models.Apps;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using OkapiLauncher.Contracts.ViewModels;
+using OkapiLauncher.Core.Models.Apps;
 
 namespace OkapiLauncher.ViewModels;
 
