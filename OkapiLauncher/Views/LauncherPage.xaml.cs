@@ -34,4 +34,9 @@ public partial class LauncherPage : Page
             return;
         }
     }
+
+    private void AppList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        AppList.ScrollIntoView(AppList.SelectedItem);
+    }
 }
