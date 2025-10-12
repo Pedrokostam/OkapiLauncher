@@ -7,7 +7,7 @@ branches:
     increment: Patch
     is-main-branch: true
     prevent-increment:
-      of-merged-branch: true
+      of-merged-branch: false
 
   release:
     regex: ^release[\/-]
@@ -33,6 +33,6 @@ branches:
     source-branches: [release]
 
   repo:
-    regex: ^(repo|meta)[\/-]
+    regex: ^(repo|meta|test)[\/-]
     increment: None
     source-branches: [main, release]
