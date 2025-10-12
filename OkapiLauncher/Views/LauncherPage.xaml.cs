@@ -11,6 +11,4 @@ public partial class LauncherPage : Page
         InitializeComponent();
         DataContext = viewModel;
     }
-
-   
 }

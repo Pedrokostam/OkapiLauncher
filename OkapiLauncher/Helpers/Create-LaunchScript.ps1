@@ -40,47 +40,25 @@ param (
     $ScriptName = 'Okapi'
 )
 $scriptPath = Join-Path -Path $Destination -ChildPath $ScriptName
-$scriptPath = [System.IO.Path]::ChangeExtension($scriptPath, '.bat')
 # Find executable
 $exe = Get-ChildItem $PSScriptRoot/.. -Filter '*.exe' | Select-Object -First 1
 if (-not $exe) {
     Write-Error "No executable found in the parent directory." -ErrorAction Stop
 }
 
+$scriptPath = [System.IO.Path]::ChangeExtension($scriptPath, '.bat')
 $script = @"
 @echo off
 
 rem Check if Okapi exists in the location
 if not exist "$($exe.FullName)" (
-    echo Could not find the Okapi executable. Please run Create-LaunchScript.ps1 again.
-    exit /b 1
+echo Could not find the Okapi executable. Please run Create-LaunchScript.ps1 again.
+exit /b 1
 )
-
-rem Check for help argument
-if "%~1"=="-h"     goto :help
-if "%~1"=="--help" goto :help
-if "%~1"=="/?"     goto :help
-if "%~1"=="?"      goto :help
-if "%~1"=="/h"     goto :help
-if "%~1"=="/help"  goto :help
 
 rem Execute normally, without waiting
 start "" "$($exe.FullName)" %*
 exit /b
-
-rem Write Help
-:help
-echo.
-echo This script launches Okapi Launcher, passing all arguments to it.
-echo.
-echo Okapi Launcher can accept up to one path as a parameter.
-echo It may be a path to a project file, runtime executable, Deep Learning's pluginconfig.xml, or a directory containing at least one of those.
-echo.
-echo To load an app from the current working directory, use "." as the parameter.
-echo.
-exit /b
 "@
-
 Set-Content -LiteralPath $scriptPath -Value $script -Force -Encoding utf8
-
 Write-Host "Created a batch script $scriptName at $scriptPath - call it from the command line to run the executable (accepts parameters)"
