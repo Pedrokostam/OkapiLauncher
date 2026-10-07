@@ -441,6 +441,9 @@
   <data name="ErrorInvalidXml" xml:space="preserve">
     <value>The XML file appears to be corrupted.</value>
   </data>
+  <data name="ErrorClipboard" xml:space="preserve">
+    <value>Could not copy to clipboard. Another application may be using it.</value>
+  </data>
   <data name="ErrorDialogHeader" xml:space="preserve">
     <value>Error</value>
   </data>

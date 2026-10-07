@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using OkapiLauncher.Helpers;
 
 namespace OkapiLauncher.Controls;
 /// <summary>
@@ -173,7 +174,7 @@ public class BindableRichTextBox : RichTextBox
         if (e.Key == Key.C && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
         {
             var text = (string)Formatter.ConvertBack(Document, typeof(string), Selection, null);
-            Clipboard.SetText(text);
+            ClipboardHelper.SetText(text);
             e.Handled = true;
             return;
         }

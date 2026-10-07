@@ -97,7 +97,7 @@ public partial class AvAppFacade : ObservableObject, IAvApp, IComparable<AvAppFa
     [RelayCommand]
     private void CopyExecutablePath()
     {
-        Clipboard.SetText(Path);
+        ClipboardHelper.SetText(Path);
     }
 
     [RelayCommand(CanExecute = nameof(CanOpenLicenseFolder))]

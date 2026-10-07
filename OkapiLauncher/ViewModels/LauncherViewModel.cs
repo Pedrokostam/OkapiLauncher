@@ -96,7 +96,7 @@ public sealed partial class LauncherViewModel : ProcessRefreshViewModel
     {
         if (LaunchOptions?.ArgumentString is not null)
         {
-            Clipboard.SetText(LaunchOptions.ArgumentString);
+            ClipboardHelper.SetText(LaunchOptions.ArgumentString);
         }
     }
 

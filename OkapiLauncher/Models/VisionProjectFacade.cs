@@ -43,7 +43,7 @@ public partial class VisionProjectFacade : ObservableObject, IVisionProject
     [RelayCommand]
     private void CopyPathToClipboard()
     {
-        Clipboard.SetText(Path);
+        ClipboardHelper.SetText(Path);
     }
     [RelayCommand]
     private void OpenProgramFolder() => ExplorerHelper.OpenExplorerAndSelect(Path);

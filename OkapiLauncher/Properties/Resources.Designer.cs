@@ -567,6 +567,15 @@ namespace OkapiLauncher.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not copy to clipboard. Another application may be using it..
+        /// </summary>
+        public static string ErrorClipboard {
+            get {
+                return ResourceManager.GetString("ErrorClipboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The XML file appears to be corrupted..
         /// </summary>
         public static string ErrorInvalidXml {
