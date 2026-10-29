@@ -45,17 +45,22 @@ public partial class CustomSourceDialogEditorViewModel : ObservableValidator, IN
     [NotifyDataErrorInfo]
     [Required(ErrorMessageResourceName = "ValidationStringEmpty", ErrorMessageResourceType = typeof(Resources))]
     [RegularExpression(@".*\S+.*", ErrorMessageResourceName = "ValidationStringEmpty", ErrorMessageResourceType = typeof(Resources))]
+    [MustBeDirectory]
+    [CustomValidation(typeof(CustomSourceDialogEditorViewModel), nameof(ValidateMatchedApp))]
     private string _path;
     public string SourcePath => CustomAppSource.ExpandPath(Path);
 
     partial void OnPathChanged(string value)
     {
         UpdateMatchedApp();
+        ValidateProperty(value, nameof(Path));
+
     }
 
-    private void UpdateMatchedApp()
+    private bool UpdateMatchedApp()
     {
         MatchedApp = AppReader.GetAvAppFromSource(new CustomAppSource() { Description = Description, Path = Path.Trim() });
+        return MatchedApp is null;
     }
 
     public bool PathExists => File.Exists(Path);
@@ -71,7 +76,7 @@ public partial class CustomSourceDialogEditorViewModel : ObservableValidator, IN
 
     private bool CanAccept()
     {
-        return !this.HasErrors;
+        return !this.HasErrors && MatchedApp is not null;
     }
 
     [RelayCommand(CanExecute = nameof(CanAccept))]
@@ -107,11 +112,25 @@ public partial class CustomSourceDialogEditorViewModel : ObservableValidator, IN
             InitialDirectory = initialDir,
             IsFolderPicker = true,
         };
-        picker.Title = "Select executable or dynamic library";
+        picker.Title = "Select the root directory of the application (not file)";
         var res = picker.ShowDialog();
         if (res == CommonFileDialogResult.Ok)
         {
             Path = picker.FileName;
         }
+    }
+
+    public static ValidationResult? ValidateMatchedApp(
+     string? path,
+     ValidationContext context)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+            return ValidationResult.Success;
+
+        var vm = (CustomSourceDialogEditorViewModel)context.ObjectInstance;
+
+        return vm.MatchedApp is null
+            ? new ValidationResult(Resources.CustomSourceEditorAppNotMatched)
+            : ValidationResult.Success;
     }
 }

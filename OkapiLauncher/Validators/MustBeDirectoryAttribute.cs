@@ -16,6 +16,10 @@ public sealed class MustBeDirectoryAttribute : ValidationAttribute
         {
             return new ValidationResult("Path must be a directory");
         }
+        if (!Directory.Exists(s))
+        {
+            return new ValidationResult("Path must point to a valid directory");
+        }
         return ValidationResult.Success;
     }
 }
